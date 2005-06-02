@@ -24,31 +24,31 @@ package Xt is
     use X_Lib.Resource_Manager;
     use X_System_Utilities.Command_Line_Utilities;
 
-    type Cardinal is new X_Configuration_Dependent.Unsigned_Long;
+--    type Cardinal is new X_Configuration_Dependent.Unsigned_Long;
 
     type Short_Cardinal is new X_Configuration_Dependent.Unsigned_Short;
 
-    type Position is new X_Configuration_Dependent.Short;
+--    type Position is new X_Configuration_Dependent.Short;
 
-    subtype Dimension is Short_Cardinal;
+--    subtype Dimension is Short_Cardinal;
     type Dimension_Array is array (Natural range <>) of Dimension;
     type Dimension_List is access Dimension_Array;
 
     subtype Xt_Geometry_Mask is X_Lib.Cw_Mask_Type;
 
-    subtype Xt_Pointer is X_Address;
+--    subtype Xt_Pointer is X_Address;
     subtype Opaque is Xt_Pointer;
 
-    type Widget is private;
-    type Widget_Class is private;
-
-    Null_Xt_Pointer : constant Xt_Pointer := Xt_Pointer (Null_Address);
-    Null_Widget : constant Widget;
-    Null_Widget_Class : constant Widget_Class;
-
-    type Xt_App_Context is private;
+--    type Widget is private;
+--    type Widget_Class is private;
+--
+--    Null_Xt_Pointer : constant Xt_Pointer := Xt_Pointer (Null_Address);
+--    Null_Widget : constant Widget;
+--    Null_Widget_Class : constant Widget_Class;
+--
+--    type Xt_App_Context is private;
     subtype Application_Context is Xt_App_Context;
-    Null_Xt_App_Context : constant Xt_App_Context;
+--    Null_Xt_App_Context : constant Xt_App_Context;
 
     -- This type is needed by event manager and is also needed in definition of
     -- Xt_App_Context.
@@ -69,23 +69,23 @@ package Xt is
     -- Convenient subtypes used as renamings for X_Lib types follow below:
 
     subtype Event_Mask is X_Lib.Events.Event_Mask_Type;
-    subtype X_Event is X_Lib.Events.Event_Record;
+--    subtype X_Event is X_Lib.Events.Event_Record;
     subtype X_Set_Window_Attributes is
        X_Lib_Interface.X_Set_Window_Attributes_Record;
     subtype X_Region is X_Lib.Regions.Region;
     subtype Gc is X_Lib.Graphic_Output.Graphic_Context;
     subtype X_Gc_Values is X_Lib.Graphic_Output.Gc_Value_Record;
-    subtype Xt_String is X_Lib.String_Pointer;
-    subtype Xt_String_List is X_Lib.String_Pointer_Array;
-    subtype Xt_String_List_Ptr is X_Lib.String_List;
+--    subtype Xt_String is X_Lib.String_Pointer;
+--    subtype Xt_String_List is X_Lib.String_Pointer_Array;
+--    subtype Xt_String_List_Ptr is X_Lib.String_List;
     subtype Modifiers is X_Lib.X_Mask_Type;
     subtype Xt_Value_Mask is X_Lib.Wa_Mask_Type;
     subtype Xt_Gc_Mask is X_Lib.X_Mask_Type;
     subtype Xt_Stack_Mode is X_Lib.Stack_Mode_Type;
     subtype Argv_Type is Argv_List;
 
-    Null_Xt_String_List : Xt_String_List
-       renames X_Lib.Null_String_Pointer_Array;
+--    Null_Xt_String_List : Xt_String_List
+--       renames X_Lib.Null_String_Pointer_Array;
     function Null_Event return X_Event renames X_Lib.Events.Null_Event;
 
     -- Named address subtypes follow below:
@@ -103,9 +103,9 @@ package Xt is
     subtype Xt_String_Proc is X_Address;
     subtype Xt_Set_Values_Func is X_Address;
     subtype Xt_Args_Func is X_Address;
-    subtype Xt_Callback_Proc is X_Address;
+--    subtype Xt_Callback_Proc is X_Address;
     subtype Xt_Resource_Default_Proc is X_Address;
-    subtype Xt_Language_Proc is X_Address;
+--    subtype Xt_Language_Proc is X_Address;
     subtype Xt_Error_Msg_Handler is X_Address;
     subtype Xt_Error_Handler is X_Address;
     subtype Xt_Input_Callback_Proc is X_Address;
@@ -119,7 +119,7 @@ package Xt is
     subtype Xt_Case_Proc is X_Address;
     subtype Xt_Action_Hook_Proc is X_Address;
     subtype Xt_Action_Hook_Id is X_Address;
-    subtype Xt_Action_Proc is X_Address;
+--    subtype Xt_Action_Proc is X_Address;
     subtype Xt_Selection_Callback_Proc is X_Address;
     subtype Xt_Convert_Selection_Proc is X_Address;
     subtype Xt_Lose_Selection_Proc is X_Address;
@@ -130,17 +130,17 @@ package Xt is
     subtype Xt_Convert_Selection_Incr_Proc is X_Address;
     subtype Xt_Selection_Done_Incr_Proc is X_Address;
     subtype Xt_Order_Proc is X_Address;
-    subtype Xt_Destructor is X_Address;
-    subtype Xt_Type_Converter is X_Address;
+--    subtype Xt_Destructor is X_Address;
+--    subtype Xt_Type_Converter is X_Address;
     subtype Xt_File_Predicate is X_Address;
     subtype Xt_Convert_Arg_Proc is X_Address;
 
-    subtype Xt_Cache_Type is Int;
-
-    Xt_Cache_None : constant := 16#001#;
-    Xt_Cache_All : constant := 16#002#;
-    Xt_Cache_By_Display : constant := 16#003#;
-    Xt_Cache_Ref_Count : constant := 16#100#;
+--    subtype Xt_Cache_Type is Int;
+--
+--    Xt_Cache_None : constant := 16#001#;
+--    Xt_Cache_All : constant := 16#002#;
+--    Xt_Cache_By_Display : constant := 16#003#;
+--    Xt_Cache_Ref_Count : constant := 16#100#;
 
     subtype Options_Type is Xt_System_Utilities.Options_Type;
 
@@ -163,7 +163,7 @@ package Xt is
     -- where the sizes of the types differ.
     Size_Incompatible : exception;
 
-    Xt_Unspecified_Pixmap : constant Pixmap := 2;
+--    Xt_Unspecified_Pixmap : constant Pixmap := 2;
     Xt_Unspecified_Shellint : constant := -1;
     Xt_Unspecified_Window : constant Window := 2;
     Xt_Unspecified_Windowgroup : constant Window := 3;
@@ -187,12 +187,12 @@ package Xt is
     Xt_Expose_No_Expose : constant := 16#40#;
 
     package Xt_Ancillary_Types is
-	subtype Xt_Boolean is X_Configuration_Dependent.Char;
+--	subtype Xt_Boolean is X_Configuration_Dependent.Char;
 	type Xt_Boolean_Ptr is access Xt_Boolean;
-	Xt_False : constant Xt_Boolean := 0;
-	Xt_True : constant Xt_Boolean := 1;
-
-	type Xt_Enum is new X_Configuration_Dependent.Byte;
+--	Xt_False : constant Xt_Boolean := 0;
+--	Xt_True : constant Xt_Boolean := 1;
+--
+--	type Xt_Enum is new X_Configuration_Dependent.Byte;
 
 	-- Geometry management types:
 	type Xt_Geometry_Result is (Xt_Geometry_Yes, Xt_Geometry_No,
@@ -238,49 +238,49 @@ package Xt is
 	Xt_Version : constant Xt_Version_Type := 11005;
 	Xt_Version_Dont_Check : constant Xt_Version_Type := 0;
 
-	subtype Xt_Arg_Val is X_Long_Integer;
-
-	type Xt_Arg is
-	    record
-		Name : Xt_String;
-		Value : Xt_Arg_Val;
-	    end record;
-	for Xt_Arg'Size use 64;
-	for Xt_Arg use
-	    record
-		Name at 0 range 0 .. 31;
-		Value at 0 range 32 .. 63;
-	    end record;
-
-	type Xt_Arg_List is array (Natural range <>) of Xt_Arg;
-	type Xt_Arg_List_Ptr is access Xt_Arg_List;
-	subtype Arg_List is Xt_Arg_List;
-	subtype Arg_List_Ptr is Xt_Arg_List_Ptr;
-	Null_Xt_Arg_List : Xt_Arg_List (1 .. 0);
-
-	type Xt_Resource is
-	    record
-		Resource_Name : Xt_String;
-		Resource_Class : Xt_String;
-		Resource_Type : Xt_String;
-		Resource_Size : Cardinal;
-		Resource_Offset : Cardinal;
-		Default_Type : Xt_String;
-		Default_Address : Xt_Pointer;
-	    end record;
-
-	for Xt_Resource use
-	    record
-		Resource_Name at 0 * Word_Size range 0 .. 31;
-		Resource_Class at 1 * Word_Size range 0 .. 31;
-		Resource_Type at 2 * Word_Size range 0 .. 31;
-		Resource_Size at 3 * Word_Size range 0 .. 31;
-		Resource_Offset at 4 * Word_Size range 0 .. 31;
-		Default_Type at 5 * Word_Size range 0 .. 31;
-		Default_Address at 6 * Word_Size range 0 .. 31;
-	    end record;
-
-	type Xt_Resource_Ptr is access Xt_Resource;
+--	subtype Xt_Arg_Val is X_Long_Integer;
+--
+--	type Xt_Arg is
+--	    record
+--		Name : Xt_String;
+--		Value : Xt_Arg_Val;
+--	    end record;
+--	for Xt_Arg'Size use 64;
+--	for Xt_Arg use
+--	    record
+--		Name at 0 range 0 .. 31;
+--		Value at 0 range 32 .. 63;
+--	    end record;
+--
+--	type Xt_Arg_List is array (Natural range <>) of Xt_Arg;
+--	type Xt_Arg_List_Ptr is access Xt_Arg_List;
+--	subtype Arg_List is Xt_Arg_List;
+--	subtype Arg_List_Ptr is Xt_Arg_List_Ptr;
+--	Null_Xt_Arg_List : Xt_Arg_List (1 .. 0);
+--
+--	type Xt_Resource is
+--	    record
+--		Resource_Name : Xt_String;
+--		Resource_Class : Xt_String;
+--		Resource_Type : Xt_String;
+--		Resource_Size : Cardinal;
+--		Resource_Offset : Cardinal;
+--		Default_Type : Xt_String;
+--		Default_Address : Xt_Pointer;
+--	    end record;
+--
+--	for Xt_Resource use
+--	    record
+--		Resource_Name at 0 * Word_Size range 0 .. 31;
+--		Resource_Class at 1 * Word_Size range 0 .. 31;
+--		Resource_Type at 2 * Word_Size range 0 .. 31;
+--		Resource_Size at 3 * Word_Size range 0 .. 31;
+--		Resource_Offset at 4 * Word_Size range 0 .. 31;
+--		Default_Type at 5 * Word_Size range 0 .. 31;
+--		Default_Address at 6 * Word_Size range 0 .. 31;
+--	    end record;
+--
+--	type Xt_Resource_Ptr is access Xt_Resource;
 
 	type Xrm_Resource is
 	    record
@@ -308,16 +308,16 @@ package Xt is
 	type Xrm_Resource_Array is array (Natural range <>) of Xrm_Resource;
 	type Xrm_Resource_List is access Xrm_Resource_Array;
 
-	type Xt_Address_Mode is (Xt_Address, Xt_Base_Offset, Xt_Immediate,
-				 Xt_Resource_String, Xt_Resource_Quark,
-				 Xt_Widget_Base_Offset, Xt_Procedure_Arg);
-
-	type Xt_Convert_Arg is
-	    record
-		Address_Mode : Xt_Address_Mode;
-		Address_Id : Xt_Pointer;
-		Size : Cardinal;
-	    end record;
+--	type Xt_Address_Mode is (Xt_Address, Xt_Base_Offset, Xt_Immediate,
+--				 Xt_Resource_String, Xt_Resource_Quark,
+--				 Xt_Widget_Base_Offset, Xt_Procedure_Arg);
+--
+--	type Xt_Convert_Arg is
+--	    record
+--		Address_Mode : Xt_Address_Mode;
+--		Address_Id : Xt_Pointer;
+--		Size : Cardinal;
+--	    end record;
 
 	-- List types.
 	type Xt_Offset_Rec;
@@ -335,10 +335,10 @@ package Xt is
 	type Atom_List_Ptr is access Atom_List;
 	Null_Atom_List : Atom_List (1 .. 0);
 
-	type Xt_Widget_List is array (Natural range <>) of Widget;
-	type Xt_Widget_List_Ptr is access Xt_Widget_List;
-	subtype Widget_List is Xt_Widget_List;
-	subtype Widget_List_Ptr is Xt_Widget_List_Ptr;
+--	type Xt_Widget_List is array (Natural range <>) of Widget;
+--	type Xt_Widget_List_Ptr is access Xt_Widget_List;
+--	subtype Widget_List is Xt_Widget_List;
+--	subtype Widget_List_Ptr is Xt_Widget_List_Ptr;
 
 	type Xt_Resource_Array is array (Natural range <>) of Xt_Resource;
 	type Xt_Resource_List is access Xt_Resource_Array;
@@ -407,13 +407,13 @@ package Xt is
 	   array (Natural range <>) of Xt_Substitution_Rec;
 	type Substitution is access Substitution_Array;
 
-	-- new for R4
-	-- XtName
-	function Xt_Name (Object : in Widget) return String;
-
-	-- XtNameToWidget
-	function Xt_Name_To_Widget
-		    (Reference : in Widget; Names : in String) return Widget;
+--	-- new for R4
+--	-- XtName
+--	function Xt_Name (Object : in Widget) return String;
+--
+--	-- XtNameToWidget
+--	function Xt_Name_To_Widget
+--		    (Reference : in Widget; Names : in String) return Widget;
 
 	-- Sharing graphics contexts:
 
@@ -529,8 +529,8 @@ package Xt is
 	procedure Xt_App_Warning
 		     (App_Context : in Xt_App_Context; Message : in String);
 
-	-- XtSetSensitive
-	procedure Xt_Set_Sensitive (W : in Widget; Sensitive : in Boolean);
+--	-- XtSetSensitive
+--	procedure Xt_Set_Sensitive (W : in Widget; Sensitive : in Boolean);
 
 	-- XtIsSensitive
 	function Xt_Is_Sensitive (W : in Widget) return Boolean;
@@ -571,27 +571,27 @@ package Xt is
 		     (W : in Widget;
 		      W_List : in Xt_Ancillary_Types.Xt_Widget_List);
 
-	-- new for R4
-	-- XtDisplayOfObject
-	function Xt_Display_Of_Object (Object : in Widget) return X_Lib.Display;
-
-	-- new for R4
-	-- XtScreenOfObject
-	function Xt_Screen_Of_Object (Object : in Widget) return X_Lib.Screen;
-
-	-- new for R4
-	-- XtWindowOfObject
-	function Xt_Window_Of_Object (Object : in Widget) return X_Lib.Window;
-
-	-- new for R4
-	-- XtIsObject
-	function Xt_Is_Object (Object : in Widget) return Boolean;
-
-	-- XtIsRectObj
-	function Xt_Is_Rect_Obj (Object : in Widget) return Boolean;
-
-	-- XtIsConstraint
-	function Xt_Is_Constraint (Object : in Widget) return Boolean;
+--	-- new for R4
+--	-- XtDisplayOfObject
+--	function Xt_Display_Of_Object (Object : in Widget) return X_Lib.Display;
+--
+--	-- new for R4
+--	-- XtScreenOfObject
+--	function Xt_Screen_Of_Object (Object : in Widget) return X_Lib.Screen;
+--
+--	-- new for R4
+--	-- XtWindowOfObject
+--	function Xt_Window_Of_Object (Object : in Widget) return X_Lib.Window;
+--
+--	-- new for R4
+--	-- XtIsObject
+--	function Xt_Is_Object (Object : in Widget) return Boolean;
+--
+--	-- XtIsRectObj
+--	function Xt_Is_Rect_Obj (Object : in Widget) return Boolean;
+--
+--	-- XtIsConstraint
+--	function Xt_Is_Constraint (Object : in Widget) return Boolean;
 
 	function To_Widget (Addr : in Xt_Pointer) return Widget;
 
@@ -611,44 +611,44 @@ package Xt is
 		      Argv : in out Argv_Type;
 		      Widget_Id : out Widget);
 
-	-- new for R4
-	-- XtAppInitialize
-	procedure Xt_App_Initialize
-		     (App_Context_Return : in out Xt_App_Context;
-		      Application_Class : in String;
-		      Options : in Xrm_Option_Desc_List := Null_Xrm_Options;
-		      Argc_In_Out : in out Argc_Type;
-		      Argv_In_Out : in out Argv_Type;
-		      Fallback_Resources : in Xt_String_List :=
-			 Null_Xt_String_List;
-		      Args : in Xt_Arg_List := Null_Xt_Arg_List;
-		      Widget_Id : out Widget);
-
-	-- XtToolkitInitialize
-	procedure Xt_Toolkit_Initialize;
-
-	-- XtInitializeWidgetClass
-	procedure Xt_Initialize_Widget_Class (Object_Class : in Widget_Class);
-
-	-- XtCreateApplicationContext
-	function Xt_Create_Application_Context return Xt_App_Context;
+--	-- new for R4
+--	-- XtAppInitialize
+--	procedure Xt_App_Initialize
+--		     (App_Context_Return : in out Xt_App_Context;
+--		      Application_Class : in String;
+--		      Options : in Xrm_Option_Desc_List := Null_Xrm_Options;
+--		      Argc_In_Out : in out Argc_Type;
+--		      Argv_In_Out : in out Argv_Type;
+--		      Fallback_Resources : in Xt_String_List :=
+--			 Null_Xt_String_List;
+--		      Args : in Xt_Arg_List := Null_Xt_Arg_List;
+--		      Widget_Id : out Widget);
+--
+--	-- XtToolkitInitialize
+--	procedure Xt_Toolkit_Initialize;
+--
+--	-- XtInitializeWidgetClass
+--	procedure Xt_Initialize_Widget_Class (Object_Class : in Widget_Class);
+--
+--	-- XtCreateApplicationContext
+--	function Xt_Create_Application_Context return Xt_App_Context;
 
 	-- XtDisplayToApplicationContext
 	function Xt_Display_To_Application_Context
 		    (The_Display : in X_Lib.Display) return Xt_App_Context;
 
-	-- XtDestroyApplicationContext
-	procedure Xt_Destroy_Application_Context
-		     (Context : in out Xt_App_Context);
-
-	-- XtWidgetToApplicationContext
-	function Xt_Widget_To_Application_Context
-		    (Object : in Widget) return Xt_App_Context;
-
-	function Xt_Set_Language_Proc
-		    (App_Context : in Xt_App_Context;
-		     Proc : in Xt_Language_Proc;
-		     Client_Data : in Xt_Pointer) return Xt_Language_Proc;
+--	-- XtDestroyApplicationContext
+--	procedure Xt_Destroy_Application_Context
+--		     (Context : in out Xt_App_Context);
+--
+--	-- XtWidgetToApplicationContext
+--	function Xt_Widget_To_Application_Context
+--		    (Object : in Widget) return Xt_App_Context;
+--
+--	function Xt_Set_Language_Proc
+--		    (App_Context : in Xt_App_Context;
+--		     Proc : in Xt_Language_Proc;
+--		     Client_Data : in Xt_Pointer) return Xt_Language_Proc;
 
 	-- XtDisplayInitialize
 	procedure Xt_Display_Initialize
@@ -660,27 +660,27 @@ package Xt is
 		      Argc : in out Argc_Type;
 		      Argv : in out Argv_Type);
 
-	-- XtOpenDisplay
-	procedure Xt_Open_Display
-		     (App_Context : in Xt_App_Context;
-		      Display_Name : in String;
-		      Application_Name : in String;
-		      Application_Class : in String;
-		      Options : in Xrm_Option_Desc_List := Null_Xrm_Options;
-		      Argc : in out Argc_Type;
-		      Argv : in out Argv_Type;
-		      Return_Display : out X_Lib.Display);
-
-	-- XtCloseDisplay
-	procedure Xt_Close_Display (The_Display : in out X_Lib.Display);
-
-	-- XtAppCreateShell
-	function Xt_App_Create_Shell
-		    (Application_Name : in String;
-		     Application_Class : in String;
-		     Wc : in Widget_Class;
-		     The_Display : in X_Lib.Display;
-		     Args : in Xt_Arg_List := Null_Xt_Arg_List) return Widget;
+--	-- XtOpenDisplay
+--	procedure Xt_Open_Display
+--		     (App_Context : in Xt_App_Context;
+--		      Display_Name : in String;
+--		      Application_Name : in String;
+--		      Application_Class : in String;
+--		      Options : in Xrm_Option_Desc_List := Null_Xrm_Options;
+--		      Argc : in out Argc_Type;
+--		      Argv : in out Argv_Type;
+--		      Return_Display : out X_Lib.Display);
+--
+--	-- XtCloseDisplay
+--	procedure Xt_Close_Display (The_Display : in out X_Lib.Display);
+--
+--	-- XtAppCreateShell
+--	function Xt_App_Create_Shell
+--		    (Application_Name : in String;
+--		     Application_Class : in String;
+--		     Wc : in Widget_Class;
+--		     The_Display : in X_Lib.Display;
+--		     Args : in Xt_Arg_List := Null_Xt_Arg_List) return Widget;
 
 	-- XtCreateApplicationShell
 	function Xt_Create_Application_Shell
@@ -691,41 +691,41 @@ package Xt is
 
     -- operations on widget instances
     package Xt_Instance_Management is
-	-- XtIsWidget
-	function Xt_Is_Widget (Object : in Widget) return Boolean;
-
-	-- XtCreateWidget
-	function Xt_Create_Widget
-		    (Name : in String;
-		     Of_Class : in Widget_Class;
-		     Parent : in Widget;
-		     Args : in Xt_Arg_List := Null_Xt_Arg_List) return Widget;
-
-	-- XtCreateManagedWidget
-	function Xt_Create_Managed_Widget
-		    (Name : in String;
-		     Of_Class : in Widget_Class;
-		     Parent : in Widget;
-		     Args : in Xt_Arg_List := Null_Xt_Arg_List) return Widget;
-
-	-- XtSetMappedWhenManaged
-	procedure Xt_Set_Mapped_When_Managed
-		     (W : in Widget; Map_When_Managed : in Boolean);
-
-	-- XtMapWidget
-	procedure Xt_Map_Widget (W : in Widget);
-
-	-- XtUnmapWidget
-	procedure Xt_Unmap_Widget (W : in Widget);
-
-	-- XtRealizeWidget
-	procedure Xt_Realize_Widget (W : in Widget);
-
-	-- XtUnrealizeWidget
-	procedure Xt_Unrealize_Widget (W : in Widget);
-
-	-- XtDestroyWidget
-	procedure Xt_Destroy_Widget (W : in Widget);
+--	-- XtIsWidget
+--	function Xt_Is_Widget (Object : in Widget) return Boolean;
+--
+--	-- XtCreateWidget
+--	function Xt_Create_Widget
+--		    (Name : in String;
+--		     Of_Class : in Widget_Class;
+--		     Parent : in Widget;
+--		     Args : in Xt_Arg_List := Null_Xt_Arg_List) return Widget;
+--
+--	-- XtCreateManagedWidget
+--	function Xt_Create_Managed_Widget
+--		    (Name : in String;
+--		     Of_Class : in Widget_Class;
+--		     Parent : in Widget;
+--		     Args : in Xt_Arg_List := Null_Xt_Arg_List) return Widget;
+--
+--	-- XtSetMappedWhenManaged
+--	procedure Xt_Set_Mapped_When_Managed
+--		     (W : in Widget; Map_When_Managed : in Boolean);
+--
+--	-- XtMapWidget
+--	procedure Xt_Map_Widget (W : in Widget);
+--
+--	-- XtUnmapWidget
+--	procedure Xt_Unmap_Widget (W : in Widget);
+--
+--	-- XtRealizeWidget
+--	procedure Xt_Realize_Widget (W : in Widget);
+--
+--	-- XtUnrealizeWidget
+--	procedure Xt_Unrealize_Widget (W : in Widget);
+--
+--	-- XtDestroyWidget
+--	procedure Xt_Destroy_Widget (W : in Widget);
 
 	-- XtCreateWindow
 	procedure Xt_Create_Window (W : in Widget;
@@ -734,49 +734,49 @@ package Xt is
 				    Value_Mask : in Xt_Value_Mask;
 				    Attributes : in X_Set_Window_Attributes);
 
-	-- XtIsRealized
-	function Xt_Is_Realized (W : in Widget) return Boolean;
-
-	-- XtDisplay
-	function Xt_Display (W : in Widget) return X_Lib.Display;
-
-	-- XtParent
-	function Xt_Parent (W : in Widget) return Widget;
-
-	-- XtScreen
-	function Xt_Screen (W : in Widget) return X_Lib.Screen;
-
-	-- XtWindow
-	function Xt_Window (W : in Widget) return X_Lib.Window;
+--	-- XtIsRealized
+--	function Xt_Is_Realized (W : in Widget) return Boolean;
+--
+--	-- XtDisplay
+--	function Xt_Display (W : in Widget) return X_Lib.Display;
+--
+--	-- XtParent
+--	function Xt_Parent (W : in Widget) return Widget;
+--
+--	-- XtScreen
+--	function Xt_Screen (W : in Widget) return X_Lib.Screen;
+--
+--	-- XtWindow
+--	function Xt_Window (W : in Widget) return X_Lib.Window;
 
 	procedure Xt_Exit_Toolkit;
 
-	-- new for R4
-	-- XtAppSetFallbackResources
-	procedure Xt_App_Set_Fallback_Resources
-		     (App_Context : in Xt_App_Context;
-		      Specification_List : in Xt_String_List);
+--	-- new for R4
+--	-- XtAppSetFallbackResources
+--	procedure Xt_App_Set_Fallback_Resources
+--		     (App_Context : in Xt_App_Context;
+--		      Specification_List : in Xt_String_List);
     end Xt_Instance_Management;
 
-    package Xt_Composite_Management is
-	-- XtIsComposite
-	function Xt_Is_Composite (W : in Widget) return Boolean;
-
-	-- XtManageChildren
-	procedure Xt_Manage_Children (Wlist : in Xt_Widget_List);
-
-	-- XtManageChild
-	procedure Xt_Manage_Child (Child : in Widget);
-
-	-- XtUnmanageChildren
-	procedure Xt_Unmanage_Children (Wlist : in Xt_Widget_List);
-
-	-- XtUnmanageChild
-	procedure Xt_Unmanage_Child (W : in Widget);
-
-	-- XtIsManaged
-	function Xt_Is_Managed (W : in Widget) return Boolean;
-    end Xt_Composite_Management;
+--    package Xt_Composite_Management is
+--	-- XtIsComposite
+--	function Xt_Is_Composite (W : in Widget) return Boolean;
+--
+--	-- XtManageChildren
+--	procedure Xt_Manage_Children (Wlist : in Xt_Widget_List);
+--
+--	-- XtManageChild
+--	procedure Xt_Manage_Child (Child : in Widget);
+--
+--	-- XtUnmanageChildren
+--	procedure Xt_Unmanage_Children (Wlist : in Xt_Widget_List);
+--
+--	-- XtUnmanageChild
+--	procedure Xt_Unmanage_Child (W : in Widget);
+--
+--	-- XtIsManaged
+--	function Xt_Is_Managed (W : in Widget) return Boolean;
+--    end Xt_Composite_Management;
 
     package Xt_Geometry_Management is
 	-- Xt_Dont_Change and Cw_Query_Only are constants added by the toolkit:
@@ -806,21 +806,21 @@ package Xt is
 		      Width_Return, Height_Return : out Dimension;
 		      Result : out Xt_Geometry_Result);
 
-	-- XtMoveWidget
-	procedure Xt_Move_Widget (W : in Widget; X, Y : in Position);
+--	-- XtMoveWidget
+--	procedure Xt_Move_Widget (W : in Widget; X, Y : in Position);
 
 	-- XtResizeWidget
 	procedure Xt_Resize_Widget (W : in Widget;
 				    Width, Height, Border_Width : in Dimension);
 
-	-- XtConfigureWidget
-	procedure Xt_Configure_Widget
-		     (W : in Widget;
-		      X, Y : in Position;
-		      Width, Height, Border_Width : in Dimension);
-
-	-- XtResizeWindow
-	procedure Xt_Resize_Window (W : in Widget);
+--	-- XtConfigureWidget
+--	procedure Xt_Configure_Widget
+--		     (W : in Widget;
+--		      X, Y : in Position;
+--		      Width, Height, Border_Width : in Dimension);
+--
+--	-- XtResizeWindow
+--	procedure Xt_Resize_Window (W : in Widget);
 
 	-- XtTranslateCoords
 	procedure Xt_Translate_Coords
@@ -830,9 +830,9 @@ package Xt is
     end Xt_Geometry_Management;
 
     package Xt_Popup_Management is
-	type Xt_Grab_Kind is
-	   (Xt_Grab_None, Xt_Grab_Nonexclusive, Xt_Grab_Exclusive);
-	for Xt_Grab_Kind'Size use 32;  -- C uses enum which is 32 bits.
+--	type Xt_Grab_Kind is
+--	   (Xt_Grab_None, Xt_Grab_Nonexclusive, Xt_Grab_Exclusive);
+--	for Xt_Grab_Kind'Size use 32;  -- C uses enum which is 32 bits.
 
 	type Xt_Popdown_Id_Rec is
 	    record
@@ -841,16 +841,16 @@ package Xt is
 	    end record;
 	type Xt_Popdown_Id is access Xt_Popdown_Id_Rec;
 
-	-- XtCreatePopupShell
-	function Xt_Create_Popup_Shell
-		    (Name : in String;
-		     Of_Class : in Widget_Class;
-		     Parent : in Widget;
-		     Args : in Xt_Arg_List := Null_Xt_Arg_List) return Widget;
-
-	-- XtPopup
-	procedure Xt_Popup (Popup_Shell : in Widget;
-			    Grab_Kind : in Xt_Grab_Kind);
+--	-- XtCreatePopupShell
+--	function Xt_Create_Popup_Shell
+--		    (Name : in String;
+--		     Of_Class : in Widget_Class;
+--		     Parent : in Widget;
+--		     Args : in Xt_Arg_List := Null_Xt_Arg_List) return Widget;
+--
+--	-- XtPopup
+--	procedure Xt_Popup (Popup_Shell : in Widget;
+--			    Grab_Kind : in Xt_Grab_Kind);
 
 	-- XtMenuPopupAction
 	procedure Xt_Menu_Popup_Action (W : in Widget;
@@ -861,48 +861,48 @@ package Xt is
 	-- XtPopupSpringLoaded
 	procedure Xt_Popup_Spring_Loaded (Popup_Shell : in Widget);
 
-	-- XtPopdown
-	procedure Xt_Popdown (Popup_Shell : in Widget);
-
+--	-- XtPopdown
+--	procedure Xt_Popdown (Popup_Shell : in Widget);
+--
     end Xt_Popup_Management;
 
-    -- operations on the widget class hierarchy
-    package Xt_Class_Management is
-	-- XtClass
-	function Xt_Class (W : in Widget) return Widget_Class;
-
-	-- XtSuperclass
-	function Xt_Superclass (W : in Widget) return Widget_Class;
-
-	-- XtIsSubclass
-	function Xt_Is_Subclass
-		    (W : in Widget; Wc : in Widget_Class) return Boolean;
-
-	-- XtCheckSubclass
-	procedure Xt_Check_Subclass
-		     (W : in Widget; Wc : in Widget_Class; Message : in String);
-
-	-- XtIsShell
-	function Xt_Is_Shell (W : in Widget) return Boolean;
-
-	-- XtIsApplicationShell
-	function Xt_Is_Application_Shell (Object : in Widget) return Boolean;
-
-	-- XtIsOverrideShell
-	function Xt_Is_Override_Shell (Object : in Widget) return Boolean;
-
-	-- XtIsTopLevelShell
-	function Xt_Is_Toplevel_Shell (Object : in Widget) return Boolean;
-
-	-- XtIsTransientShell
-	function Xt_Is_Transient_Shell (Object : in Widget) return Boolean;
-
-	-- XtIsVendorShell
-	function Xt_Is_Vendor_Shell (Object : in Widget) return Boolean;
-
-	-- XtIsWMShell
-	function Xt_Is_Wm_Shell (Object : in Widget) return Boolean;
-    end Xt_Class_Management;
+--    -- operations on the widget class hierarchy
+--    package Xt_Class_Management is
+--	-- XtClass
+--	function Xt_Class (W : in Widget) return Widget_Class;
+--
+--	-- XtSuperclass
+--	function Xt_Superclass (W : in Widget) return Widget_Class;
+--
+--	-- XtIsSubclass
+--	function Xt_Is_Subclass
+--		    (W : in Widget; Wc : in Widget_Class) return Boolean;
+--
+--	-- XtCheckSubclass
+--	procedure Xt_Check_Subclass
+--		     (W : in Widget; Wc : in Widget_Class; Message : in String);
+--
+--	-- XtIsShell
+--	function Xt_Is_Shell (W : in Widget) return Boolean;
+--
+--	-- XtIsApplicationShell
+--	function Xt_Is_Application_Shell (Object : in Widget) return Boolean;
+--
+--	-- XtIsOverrideShell
+--	function Xt_Is_Override_Shell (Object : in Widget) return Boolean;
+--
+--	-- XtIsTopLevelShell
+--	function Xt_Is_Toplevel_Shell (Object : in Widget) return Boolean;
+--
+--	-- XtIsTransientShell
+--	function Xt_Is_Transient_Shell (Object : in Widget) return Boolean;
+--
+--	-- XtIsVendorShell
+--	function Xt_Is_Vendor_Shell (Object : in Widget) return Boolean;
+--
+--	-- XtIsWMShell
+--	function Xt_Is_Wm_Shell (Object : in Widget) return Boolean;
+--    end Xt_Class_Management;
 
     package Xt_Callbacks is
 	-- The external Xt_Callback_Lists:
@@ -927,11 +927,11 @@ package Xt is
 	type Callback_Rec is private;
 	type Xt_Callback_Ptr is access Callback_Rec;
 
-	-- XtAddCallback
-	procedure Xt_Add_Callback (Object : in Widget;
-				   Callback_Name : in String;
-				   Callback : in Xt_Callback_Proc;
-				   Client_Data : in Xt_Pointer);
+--	-- XtAddCallback
+--	procedure Xt_Add_Callback (Object : in Widget;
+--				   Callback_Name : in String;
+--				   Callback : in Xt_Callback_Proc;
+--				   Client_Data : in Xt_Pointer);
 
 	procedure Xt_Add_Callback (Object : in Widget;
 				   Callback_Name : in String;
@@ -948,11 +948,11 @@ package Xt is
 				    Callback_Name : in String;
 				    Callbacks : in Xt_Callback_List);
 
-	-- XtRemoveCallback
-	procedure Xt_Remove_Callback (Object : in Widget;
-				      Callback_Name : in String;
-				      Callback : in Xt_Callback_Proc;
-				      Client_Data : in Xt_Pointer);
+--	-- XtRemoveCallback
+--	procedure Xt_Remove_Callback (Object : in Widget;
+--				      Callback_Name : in String;
+--				      Callback : in Xt_Callback_Proc;
+--				      Client_Data : in Xt_Pointer);
 
 	-- XtRemoveCallbacks
 	procedure Xt_Remove_Callbacks (Object : in Widget;
@@ -1187,10 +1187,10 @@ package Xt is
 	procedure Xt_Peek_Event (Event_Return : out X_Event;
 				 Event_Found : out Boolean);
 
-	-- XtAppNextEvent
-	procedure Xt_App_Next_Event (App_Context : in Xt_App_Context;
-				     Event_Return : out X_Event;
-				     Block : in Boolean := Get_Options.Block);
+--	-- XtAppNextEvent
+--	procedure Xt_App_Next_Event (App_Context : in Xt_App_Context;
+--				     Event_Return : out X_Event;
+--				     Block : in Boolean := Get_Options.Block);
 
 	-- XtNextEvent
 	procedure Xt_Next_Event (Event_Return : out X_Event;
@@ -1203,16 +1203,16 @@ package Xt is
 	-- XtProcessEvent
 	procedure Xt_Process_Event (Mask : in Xt_Input_Mask);
 
-	-- XtDispatchEvent
-	function Xt_Dispatch_Event
-		    (Event : in X_Event;
-		     Block : in Boolean := Get_Options.Block) return Boolean;
-
-	-- XtAppMainLoop
-	procedure Xt_App_Main_Loop
-		     (App_Context : in Xt_App_Context;
-		      Block : in Boolean := Get_Options.Block;
-		      Poll_Delay : in Duration := Get_Options.Poll_Delay);
+--	-- XtDispatchEvent
+--	function Xt_Dispatch_Event
+--		    (Event : in X_Event;
+--		     Block : in Boolean := Get_Options.Block) return Boolean;
+--
+--	-- XtAppMainLoop
+--	procedure Xt_App_Main_Loop
+--		     (App_Context : in Xt_App_Context;
+--		      Block : in Boolean := Get_Options.Block;
+--		      Poll_Delay : in Duration := Get_Options.Poll_Delay);
 
 	-- XtMainLoop
 	procedure Xt_Main_Loop (Block : in Boolean := Get_Options.Block;
@@ -1304,9 +1304,9 @@ package Xt is
 
     package Xt_Resource_Management is
 
-	type Xt_Convert_Arg_List is array (Natural range <>) of Xt_Convert_Arg;
-	type Xt_Convert_Arg_List_Ptr is access Xt_Convert_Arg_List;
-	Null_Xt_Convert_Arg_List : Xt_Convert_Arg_List (1 .. 0);
+--	type Xt_Convert_Arg_List is array (Natural range <>) of Xt_Convert_Arg;
+--	type Xt_Convert_Arg_List_Ptr is access Xt_Convert_Arg_List;
+--	Null_Xt_Convert_Arg_List : Xt_Convert_Arg_List (1 .. 0);
 
 	type Xrm_Value_Ptr_List is array (Natural range <>) of Xrm_Value_Ptr;
 	Null_Xrm_Value_Ptr_List : Xrm_Value_Ptr_List (1 .. 0);
@@ -1315,29 +1315,29 @@ package Xt is
 	function Xt_Database
 		    (The_Display : in X_Lib.Display) return Xrm_Database;
 
-	function Xt_Screen_Database (Scr : in X_Lib.Screen) return Xrm_Database;
-
-	function To_Xt_String is
-	   new Unchecked_Conversion (Xt_Pointer, Xt_String);
-
-	-- Functions to set up various argument lists follow.  The first set are
-	-- convenient to use, but allocate memory for all parameters of
-	-- type STRING.  Use the Free routine in package
-	-- X_System_Utilities.String_Conversion_Utilities on the Arg components
-	-- to free such strings after they are no longer needed.
-
-	-- XtSetArg
-	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
-			      Name : in String;
-			      Value : in Xt_Pointer);
-	-- XtSetArg
-	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
-			      Name : in String;
-			      Value : in Xt_Arg_Val);
-
-	-- XtSetArg
-	procedure Xt_Set_Arg
-		     (Arg : in out Xt_Arg; Name : in String; Value : in String);
+--	function Xt_Screen_Database (Scr : in X_Lib.Screen) return Xrm_Database;
+--
+--	function To_Xt_String is
+--	   new Unchecked_Conversion (Xt_Pointer, Xt_String);
+--
+--	-- Functions to set up various argument lists follow.  The first set are
+--	-- convenient to use, but allocate memory for all parameters of
+--	-- type STRING.  Use the Free routine in package
+--	-- X_System_Utilities.String_Conversion_Utilities on the Arg components
+--	-- to free such strings after they are no longer needed.
+--
+--	-- XtSetArg
+--	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
+--			      Name : in String;
+--			      Value : in Xt_Pointer);
+--	-- XtSetArg
+--	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
+--			      Name : in String;
+--			      Value : in Xt_Arg_Val);
+--
+--	-- XtSetArg
+--	procedure Xt_Set_Arg
+--		     (Arg : in out Xt_Arg; Name : in String; Value : in String);
 
 	-- XtSetArg
 	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
@@ -1349,76 +1349,76 @@ package Xt is
 			      Name : in String;
 			      Value : in X_Lib.Fonts.String_16);
 
-	-- XtSetArg
-	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
-			      Name : in String;
-			      Value : in Boolean);
+--	-- XtSetArg
+--	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
+--			      Name : in String;
+--			      Value : in Boolean);
 
 	-- Overloadings of Xt_Set_Arg below do not allocate memory for strings.
 	-- They require the user to pass in persistent strings, thereby
 	-- putting the onus on the user to free such strings after they are
 	-- no longer needed.
 
-	-- XtSetArg
-	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
-			      Name : in Xt_String;
-			      Value : in Xt_Pointer);
-	-- XtSetArg
-	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
-			      Name : in Xt_String;
-			      Value : in Xt_Arg_Val);
-
-	-- XtSetArg
-	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
-			      Name : in Xt_String;
-			      Value : in Boolean);
-
-	-- XtSetArg
-	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
-			      Name : in Xt_Pointer;
-			      Value : in Xt_Pointer);
-	-- XtSetArg
-	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
-			      Name : in Xt_Pointer;
-			      Value : in Xt_Arg_Val);
-
-	-- XtSetArg
-	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
-			      Name : in Xt_Pointer;
-			      Value : in Boolean);
-
-	-- The following generic subprograms can be instantiated for any
-	-- type T whose 'SIZE is equal to that of Xt_Arg_Val'SIZE.  This
-	-- allows any user-defined data type to be used as the "Value"
-	-- component of the "Arg" parameter.  The Size_Incompatible exception
-	-- is raised on any call to an instance where the 'SIZEs differ.
-
-	generic
-	    type T is private;
-	procedure Xt_Set_Arg_Generic
-		     (Arg : in out Xt_Arg; Name : in String; Value : in T);
-
-	generic
-	    type T is private;
-	procedure Xt_Set_Arg_Generic_No_Malloc
-		     (Arg : in out Xt_Arg;
-		      Name : in Xt_String;  -- No string allocation performed.
-		      Value : in T);
+--	-- XtSetArg
+--	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
+--			      Name : in Xt_String;
+--			      Value : in Xt_Pointer);
+--	-- XtSetArg
+--	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
+--			      Name : in Xt_String;
+--			      Value : in Xt_Arg_Val);
+--
+--	-- XtSetArg
+--	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
+--			      Name : in Xt_String;
+--			      Value : in Boolean);
+--
+--	-- XtSetArg
+--	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
+--			      Name : in Xt_Pointer;
+--			      Value : in Xt_Pointer);
+--	-- XtSetArg
+--	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
+--			      Name : in Xt_Pointer;
+--			      Value : in Xt_Arg_Val);
+--
+--	-- XtSetArg
+--	procedure Xt_Set_Arg (Arg : in out Xt_Arg;
+--			      Name : in Xt_Pointer;
+--			      Value : in Boolean);
+--
+--	-- The following generic subprograms can be instantiated for any
+--	-- type T whose 'SIZE is equal to that of Xt_Arg_Val'SIZE.  This
+--	-- allows any user-defined data type to be used as the "Value"
+--	-- component of the "Arg" parameter.  The Size_Incompatible exception
+--	-- is raised on any call to an instance where the 'SIZEs differ.
+--
+--	generic
+--	    type T is private;
+--	procedure Xt_Set_Arg_Generic
+--		     (Arg : in out Xt_Arg; Name : in String; Value : in T);
+--
+--	generic
+--	    type T is private;
+--	procedure Xt_Set_Arg_Generic_No_Malloc
+--		     (Arg : in out Xt_Arg;
+--		      Name : in Xt_String;  -- No string allocation performed.
+--		      Value : in T);
 
 	-- XtMergeArgLists
 	function Xt_Merge_Arg_Lists
 		    (Args1, Args2 : in Xt_Arg_List) return Xt_Arg_List_Ptr;
 
-	-- XtGetResourceList
-	procedure Xt_Get_Resource_List
-		     (Object_Class : in Widget_Class;
-		      Resources_Return : out Xt_Resource_List);
-
-	-- new for R4
-	-- XtGetConstraintResourceList
-	procedure Xt_Get_Constraint_Resource_List
-		     (Object_Class : in Widget_Class;
-		      Resources_Return : out Xt_Resource_List);
+--	-- XtGetResourceList
+--	procedure Xt_Get_Resource_List
+--		     (Object_Class : in Widget_Class;
+--		      Resources_Return : out Xt_Resource_List);
+--
+--	-- new for R4
+--	-- XtGetConstraintResourceList
+--	procedure Xt_Get_Constraint_Resource_List
+--		     (Object_Class : in Widget_Class;
+--		      Resources_Return : out Xt_Resource_List);
 
 	-- XtGetSubresources
 	procedure Xt_Get_Subresources
@@ -1444,11 +1444,11 @@ package Xt is
 
 	procedure Xt_String_Conversion_Warning (Src, Dst_Type : in String);
 
-	-- new for R4
-	-- XtDisplayStringConversionWarning
-	procedure Xt_Display_String_Conversion_Warning
-		     (The_Display : in X_Lib.Display;
-		      Src, Dst_Type : in String);
+--	-- new for R4
+--	-- XtDisplayStringConversionWarning
+--	procedure Xt_Display_String_Conversion_Warning
+--		     (The_Display : in X_Lib.Display;
+--		      Src, Dst_Type : in String);
 
 	-- XtAddConverter
 	procedure Xt_Add_Converter (From_Type, To_Type : in String;
@@ -1462,23 +1462,23 @@ package Xt is
 		      Converter : in Xt_Converter;
 		      Converter_Args : in Xt_Convert_Arg_List);
 
-	-- XtAppSetTypeConverter
-	procedure Xt_App_Set_Type_Converter
-		     (App_Context : in Xt_App_Context;
-		      From_Type : in String;
-		      To_Type : in String;
-		      Converter : in Xt_Type_Converter;
-		      Converter_Args : in Xt_Convert_Arg_List;
-		      Cache_Type : in Xt_Cache_Type;
-		      Destructor : in Xt_Destructor);
-
-	-- XtSetTypeConverter
-	procedure Xt_Set_Type_Converter (From_Type : in String;
-					 To_Type : in String;
-					 Converter : in Xt_Type_Converter;
-					 Convert_Args : in Xt_Convert_Arg_List;
-					 Cache_Type : in Xt_Cache_Type;
-					 Destructor : in Xt_Destructor);
+--	-- XtAppSetTypeConverter
+--	procedure Xt_App_Set_Type_Converter
+--		     (App_Context : in Xt_App_Context;
+--		      From_Type : in String;
+--		      To_Type : in String;
+--		      Converter : in Xt_Type_Converter;
+--		      Converter_Args : in Xt_Convert_Arg_List;
+--		      Cache_Type : in Xt_Cache_Type;
+--		      Destructor : in Xt_Destructor);
+--
+--	-- XtSetTypeConverter
+--	procedure Xt_Set_Type_Converter (From_Type : in String;
+--					 To_Type : in String;
+--					 Converter : in Xt_Type_Converter;
+--					 Convert_Args : in Xt_Convert_Arg_List;
+--					 Cache_Type : in Xt_Cache_Type;
+--					 Destructor : in Xt_Destructor);
 
 	-- XtCallConverter
 	function Xt_Call_Converter
@@ -1510,16 +1510,16 @@ package Xt is
 				       To_Type : in String;
 				       To_In_Out : in Xrm_Value) return Boolean;
 
-	-- XtGetValues
-	procedure Xt_Get_Values (W : in Widget; Args : in out Xt_Arg_List);
+--	-- XtGetValues
+--	procedure Xt_Get_Values (W : in Widget; Args : in out Xt_Arg_List);
 
 	-- XtGetSubvalues
 	procedure Xt_Get_Subvalues (Base : in Xt_Pointer;
 				    Resources : in Xt_Resource_Array;
 				    Args : in out Xt_Arg_List);
 
-	-- XtSetValues
-	procedure Xt_Set_Values (W : in out Widget; Args : in Xt_Arg_List);
+--	-- XtSetValues
+--	procedure Xt_Set_Values (W : in out Widget; Args : in Xt_Arg_List);
 
 	-- XtSetSubvalues
 	procedure Xt_Set_Subvalues (Base : in Xt_Pointer;
@@ -1803,7 +1803,7 @@ package Xt is
     end Xt_Resource_Management;
 
     package Xt_Translation_Management is
-	type Xt_Translations is private;
+--	type Xt_Translations is private;
 	type Xt_Accelerators is private;
 	type Xt_Tm_Rec is private;
 	type Mod_To_Keysym_Table is private;
@@ -1811,33 +1811,33 @@ package Xt is
 	Null_Translations : constant Xt_Translations;
 	Null_Mod_To_Keysym_Table : constant Mod_To_Keysym_Table;
 
-	type Xt_Action_Rec is
-	    record
-		Action_Name : Xt_String;
-		Action_Proc : Xt_Action_Proc;
-	    end record;
-
-	type Xt_Action_List is array (Natural range <>) of Xt_Action_Rec;
-	Null_Xt_Action_List : Xt_Action_List (1 .. 0);
+--	type Xt_Action_Rec is
+--	    record
+--		Action_Name : Xt_String;
+--		Action_Proc : Xt_Action_Proc;
+--	    end record;
+--
+--	type Xt_Action_List is array (Natural range <>) of Xt_Action_Rec;
+--	Null_Xt_Action_List : Xt_Action_List (1 .. 0);
 
 	-- XtAddActions
 	procedure Xt_Add_Actions (Actions : in Xt_Action_List);
 
-	-- XtAppAddActions
-	procedure Xt_App_Add_Actions (App_Context : in Xt_App_Context;
-				      Actions : in Xt_Action_List);
-
-	-- XtParseTranslationTable
-	function Xt_Parse_Translation_Table
-		    (Table : in String) return Xt_Translations;
+--	-- XtAppAddActions
+--	procedure Xt_App_Add_Actions (App_Context : in Xt_App_Context;
+--				      Actions : in Xt_Action_List);
+--
+--	-- XtParseTranslationTable
+--	function Xt_Parse_Translation_Table
+--		    (Table : in String) return Xt_Translations;
 
 	-- XtAugmentTranslations
 	procedure Xt_Augment_Translations (W : in Widget;
 					   Translations : in Xt_Translations);
 
-	-- XtOverrideTranslations
-	procedure Xt_Override_Translations (W : in Widget;
-					    Translations : in Xt_Translations);
+--	-- XtOverrideTranslations
+--	procedure Xt_Override_Translations (W : in Widget;
+--					    Translations : in Xt_Translations);
 
 	-- XtUninstallTranslations
 	procedure Xt_Uninstall_Translations (W : in Widget);

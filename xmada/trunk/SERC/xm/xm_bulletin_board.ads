@@ -1,32 +1,32 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm;
-
-package Xm_Bulletin_Board is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Bulletin_Board_Class is Xm.Manager_Class;
-    subtype Bulletin_Board_Widget is Xm.Manager_Widget;
-
-    function Xm_Bulletin_Board_Widget_Class return Bulletin_Board_Class;
-
-    function Xm_Is_Bulletin_Board (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Bulletin_Board
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Bulletin_Board_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Bulletin_Board;
-
+--
+--with Xm;
+--
+--package Xm_Bulletin_Board is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Bulletin_Board_Class is Xm.Manager_Class;
+--    subtype Bulletin_Board_Widget is Xm.Manager_Widget;
+--
+--    function Xm_Bulletin_Board_Widget_Class return Bulletin_Board_Class;
+--
+--    function Xm_Is_Bulletin_Board (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Bulletin_Board
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Bulletin_Board_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Bulletin_Board;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

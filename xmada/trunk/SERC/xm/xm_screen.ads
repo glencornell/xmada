@@ -1,22 +1,22 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, X_Lib, Xm_Desktop;
-
-package Xm_Screen is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Screen_Object is Xm_Desktop.Desktop_Object;
-    subtype Screen_Object_Class is Xm_Desktop.Desktop_Object_Class;
-
-    function Xm_Screen_Object_Class return Screen_Object_Class;
-
-    function Xm_Is_Screen (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Get_Xm_Screen (Scr : X_Lib.Screen) return Xm.Xt_Widget;
-end Xm_Screen;
-
+--
+--with Xm, X_Lib, Xm_Desktop;
+--
+--package Xm_Screen is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Screen_Object is Xm_Desktop.Desktop_Object;
+--    subtype Screen_Object_Class is Xm_Desktop.Desktop_Object_Class;
+--
+--    function Xm_Screen_Object_Class return Screen_Object_Class;
+--
+--    function Xm_Is_Screen (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Get_Xm_Screen (Scr : X_Lib.Screen) return Xm.Xt_Widget;
+--end Xm_Screen;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

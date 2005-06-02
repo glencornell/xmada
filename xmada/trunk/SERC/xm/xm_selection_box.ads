@@ -1,63 +1,63 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, X_Lib, Xm_Bulletin_Board, X_Configuration_Dependent;
-
-package Xm_Selection_Box is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    type Xm_Selection_Box_Callback_Rec is
-	record
-	    Reason : Xm.Callback_Reason;
-	    Event_Ptr : Xm.X_Event_Ptr;
-	    Value : Xm.Xm_String;
-	    Length : X_Lib.X_Integer;
-	end record;
-    for Xm_Selection_Box_Callback_Rec use
-	record
-	    Reason at 0 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Value at 2 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Length at 3 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	end record;
-    type Xm_Selection_Box_Callback_Rec_Ptr is
-       access Xm_Selection_Box_Callback_Rec;
-
-    subtype Selection_Box_Class is Xm_Bulletin_Board.Bulletin_Board_Class;
-    subtype Selection_Box_Widget is Xm_Bulletin_Board.Bulletin_Board_Widget;
-
-    function Xm_Selection_Box_Widget_Class return Selection_Box_Class;
-
-    function Xm_Is_Selection_Box (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Selection_Box_Get_Child
-		(Sb : in Xm.Xt_Widget; Child : in Xm.Xm_Child_Types)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Selection_Box
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Selection_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Prompt_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Selection_Box;
-
+--
+--with Xm, X_Lib, Xm_Bulletin_Board, X_Configuration_Dependent;
+--
+--package Xm_Selection_Box is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    type Xm_Selection_Box_Callback_Rec is
+--	record
+--	    Reason : Xm.Callback_Reason;
+--	    Event_Ptr : Xm.X_Event_Ptr;
+--	    Value : Xm.Xm_String;
+--	    Length : X_Lib.X_Integer;
+--	end record;
+--    for Xm_Selection_Box_Callback_Rec use
+--	record
+--	    Reason at 0 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Value at 2 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Length at 3 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	end record;
+--    type Xm_Selection_Box_Callback_Rec_Ptr is
+--       access Xm_Selection_Box_Callback_Rec;
+--
+--    subtype Selection_Box_Class is Xm_Bulletin_Board.Bulletin_Board_Class;
+--    subtype Selection_Box_Widget is Xm_Bulletin_Board.Bulletin_Board_Widget;
+--
+--    function Xm_Selection_Box_Widget_Class return Selection_Box_Class;
+--
+--    function Xm_Is_Selection_Box (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Selection_Box_Get_Child
+--		(Sb : in Xm.Xt_Widget; Child : in Xm.Xm_Child_Types)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Selection_Box
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Selection_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Prompt_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Selection_Box;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

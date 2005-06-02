@@ -20,35 +20,35 @@ with System, X_Configuration_Dependent, X_Masks;
 use X_Configuration_Dependent, X_Masks;
 
 package X_Lib is
-    subtype X_Id is Unsigned_Long;
-    subtype Drawable is X_Id;
-    subtype Window is X_Id;
-    subtype Pixmap is X_Id;
+--    subtype X_Id is Unsigned_Long;
+--    subtype Drawable is X_Id;
+--    subtype Window is X_Id;
+--    subtype Pixmap is X_Id;
 
     type Context is private;
 
     type Visual is private;
 
-    type Screen is private;
+--    type Screen is private;
 
-    type Display is private;
+--    type Display is private;
 
     type Visual_Id_Type is new Unsigned_Long;
 
-    Null_Display : constant Display;
+--    Null_Display : constant Display;
 
     Null_Context : constant Context;
 
-    Null_Drawable : constant Drawable := 0;
+--    Null_Drawable : constant Drawable := 0;
     Copy_Drawable_From_Parent : constant Drawable := 0;
     None : constant Drawable := 0;
 
-    Null_Window : constant Window := Null_Drawable;
+--    Null_Window : constant Window := Null_Drawable;
     Pointer_Window : constant Window := Null_Drawable;
     Input_Focus_Window : constant Window := 1;
     Pointer_Root_Window : constant Window := 1;
 
-    Null_Pixmap : constant Pixmap := Null_Drawable;
+--    Null_Pixmap : constant Pixmap := Null_Drawable;
     Parent_Relative : constant Pixmap := 0;
 
     Null_X_Id : constant X_Id := 0;
@@ -86,10 +86,10 @@ package X_Lib is
     type Word_Array is array (Natural range <>) of Word;
     type Words is access Word_Array;
 
-    type String_Pointer is access String;
-    type String_Pointer_Array is array (Natural range <>) of String_Pointer;
-    type String_List is access String_Pointer_Array;
-    Null_String_Pointer_Array : String_Pointer_Array (1 .. 0);
+--    type String_Pointer is access String;
+--    type String_Pointer_Array is array (Natural range <>) of String_Pointer;
+--    type String_List is access String_Pointer_Array;
+--    Null_String_Pointer_Array : String_Pointer_Array (1 .. 0);
 
     type Wide_Character is new Unsigned_Long;
     type Wide_Character_Pointer is access Wide_Character;
@@ -97,8 +97,8 @@ package X_Lib is
     type Wide_Character_List is access Wide_Character_Array;
     Null_Wide_Character_Array : Wide_Character_Array (1 .. 0);
 
-    --subtype X_Pointer is String_List;
-    subtype X_Pointer is System.Address;
+--    --subtype X_Pointer is String_List;
+--    subtype X_Pointer is System.Address;
 
     type Long_Array is array (Natural range <>) of X_Long_Integer;
     type Long_Array_Ptr is access Long_Array;
@@ -113,11 +113,11 @@ package X_Lib is
     type String_Pointer_8 is access String_8;
     Null_String_8 : String_8 (1 .. 0);
 
-    type Time is new Unsigned_Long;
+--    type Time is new Unsigned_Long;
 
-    type Angle is new Int;
+--    type Angle is new Int;
 
-    type Pixel is new Int;
+--    type Pixel is new Int;
     type Pixel_Ptr is access Pixel;
     type U_Pixel is new Unsigned_Long;
     type Width_Height is new Unsigned_Int;
@@ -133,52 +133,52 @@ package X_Lib is
     type Depth_List is access Depth_Array;
     Null_Depth_Array : Depth_Array (1 .. 0);
 
-    type Screen_Number is new Int;
-
-    type Segment is
-	record
-	    X_1, Y_1 : Coordinate := 0;
-	    X_2, Y_2 : Coordinate := 0;
-	end record;
-    type Segment_Array is array (Natural range <>) of Segment;
-    Null_Segment_Array : Segment_Array (1 .. 0);
-
-    type Point is
-	record
-	    X, Y : Coordinate := 0;
-	end record;
-    type Point_Array is array (Natural range <>) of Point;
-    Null_Point_Array : Point_Array (1 .. 0);
-
-    type Rectangle is
-	record
-	    X, Y : Millimeters := 0;
-	    Width, Height : Word := 0;
-	end record;
-
-    for Rectangle use
-	record
-	    X at 0 * X_Configuration_Dependent.Word_Size range 0 .. 15;
-	    Y at 0 * X_Configuration_Dependent.Word_Size range 16 .. 31;
-	    Width at 1 * X_Configuration_Dependent.Word_Size range 0 .. 15;
-	    Height at 1 * X_Configuration_Dependent.Word_Size range 16 .. 31;
-	end record;
-
-    type Rectangle_Ptr is access Rectangle;
-    type Rectangle_Array is array (Natural range <>) of Rectangle;
-    type Rectangle_List is access Rectangle_Array;
-    Null_Rectangle_Array : Rectangle_Array (1 .. 0);
-
-    type Arc is
-	record
-	    X, Y : Millimeters := 0;
-	    Width : Word := 0;
-	    Height : Word := 0;
-	    Angle_1 : Millimeters := 0;
-	    Angle_2 : Millimeters := 0;
-	end record;
-    type Arc_Array is array (Natural range <>) of Arc;
-    Null_Arc_Array : Arc_Array (1 .. 0);
+--    type Screen_Number is new Int;
+--
+--    type Segment is
+--	record
+--	    X_1, Y_1 : Coordinate := 0;
+--	    X_2, Y_2 : Coordinate := 0;
+--	end record;
+--    type Segment_Array is array (Natural range <>) of Segment;
+--    Null_Segment_Array : Segment_Array (1 .. 0);
+--
+--    type Point is
+--	record
+--	    X, Y : Coordinate := 0;
+--	end record;
+--    type Point_Array is array (Natural range <>) of Point;
+--    Null_Point_Array : Point_Array (1 .. 0);
+--
+--    type Rectangle is
+--	record
+--	    X, Y : Millimeters := 0;
+--	    Width, Height : Word := 0;
+--	end record;
+--
+--    for Rectangle use
+--	record
+--	    X at 0 * X_Configuration_Dependent.Word_Size range 0 .. 15;
+--	    Y at 0 * X_Configuration_Dependent.Word_Size range 16 .. 31;
+--	    Width at 1 * X_Configuration_Dependent.Word_Size range 0 .. 15;
+--	    Height at 1 * X_Configuration_Dependent.Word_Size range 16 .. 31;
+--	end record;
+--
+--    type Rectangle_Ptr is access Rectangle;
+--    type Rectangle_Array is array (Natural range <>) of Rectangle;
+--    type Rectangle_List is access Rectangle_Array;
+--    Null_Rectangle_Array : Rectangle_Array (1 .. 0);
+--
+--    type Arc is
+--	record
+--	    X, Y : Millimeters := 0;
+--	    Width : Word := 0;
+--	    Height : Word := 0;
+--	    Angle_1 : Millimeters := 0;
+--	    Angle_2 : Millimeters := 0;
+--	end record;
+--    type Arc_Array is array (Natural range <>) of Arc;
+--    Null_Arc_Array : Arc_Array (1 .. 0);
 
     type Plane_Mask is new X_Mask_Type;
     All_Planes : constant Plane_Mask := Plane_Mask (not Null_X_Mask);
@@ -522,8 +522,8 @@ package X_Lib is
 	end record;
 
     package Atoms is
-	type Atom is new Unsigned_Long;
-	type Atom_Array is array (Natural range <>) of Atom;
+--	type Atom is new Unsigned_Long;
+--	type Atom_Array is array (Natural range <>) of Atom;
 	type Atom_List is access Atom_Array;
 	Null_Atom_Array : Atom_Array (1 .. 0);
 	Null_Atom : constant Atom := 0;
@@ -613,60 +613,60 @@ package X_Lib is
 
 	Xa_Last_Predefined : constant Atom := Xa_Wm_Transient_Height;
 
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Intern_Atom
-	--
-	--  Description
-	--
-	--    This function returns an atom for a specified name.
-	--
-	--  Parameters
-	--
-	--  Display_Id     : Specifies the connection to the X Server.
-	--  Atom_Name      : Specifies the name associated with the atom.
-	--  Only_If_Exists : Specifies that the atom be returned if it exists.
-	--
-	--  Documentation
-	--
-	--    Please refer to XInternAtom in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Atoms
-	--======================================================================
-
-	function X_Intern_Atom
-		    (Display_Id : in Display;
-		     Atom_Name : in String;
-		     Only_If_Exists : in Boolean := True) return Atom;
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Get_Atom_Name
-	--
-	--  Description
-	--
-	--    This function returns the name for the specified atom.
-	--
-	--  Parameters
-	--
-	--  Display_Id     : Specifies the connection to the X Server.
-	--  Atom_Id        : Specifies the Atom.
-	--
-	--  Documentation
-	--
-	--    Please refer to XGetAtomName in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Atoms
-	--======================================================================
-
-	function X_Get_Atom_Name
-		    (Display_Id : in Display; Atom_Id : in Atom) return String;
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Intern_Atom
+--	--
+--	--  Description
+--	--
+--	--    This function returns an atom for a specified name.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id     : Specifies the connection to the X Server.
+--	--  Atom_Name      : Specifies the name associated with the atom.
+--	--  Only_If_Exists : Specifies that the atom be returned if it exists.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XInternAtom in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Atoms
+--	--======================================================================
+--
+--	function X_Intern_Atom
+--		    (Display_Id : in Display;
+--		     Atom_Name : in String;
+--		     Only_If_Exists : in Boolean := True) return Atom;
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Get_Atom_Name
+--	--
+--	--  Description
+--	--
+--	--    This function returns the name for the specified atom.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id     : Specifies the connection to the X Server.
+--	--  Atom_Id        : Specifies the Atom.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XGetAtomName in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Atoms
+--	--======================================================================
+--
+--	function X_Get_Atom_Name
+--		    (Display_Id : in Display; Atom_Id : in Atom) return String;
     end Atoms;
 
     package Fonts is
@@ -1538,14 +1538,14 @@ package X_Lib is
     end Fonts;
 
     package Graphic_Output is
-	type Graphic_Context is private;
+--	type Graphic_Context is private;
 	type Image is private;
 
 	type Resource_Gc is private;
 
 	Image_Context : constant Image;
 
-	Null_Graphic_Context : constant Graphic_Context;
+--	Null_Graphic_Context : constant Graphic_Context;
 
 	type Bitmap_Status_Type is private;
 	Bitmap_Success : constant Bitmap_Status_Type;
@@ -1555,25 +1555,25 @@ package X_Lib is
 	function Create_Constant (Value : in X_Long_Integer)
 				 return Bitmap_Status_Type;
 
-	type Gx_Function_Code is private;
-	Gx_Clear : constant Gx_Function_Code;
-	Gx_And : constant Gx_Function_Code;
-	Gx_And_Reverse : constant Gx_Function_Code;
-	Gx_Copy : constant Gx_Function_Code;
-	Gx_And_Inverted : constant Gx_Function_Code;
-	Gx_Noop : constant Gx_Function_Code;
-	Gx_Xor : constant Gx_Function_Code;
-	Gx_Or : constant Gx_Function_Code;
-	Gx_Nor : constant Gx_Function_Code;
-	Gx_Equiv : constant Gx_Function_Code;
-	Gx_Invert : constant Gx_Function_Code;
-	Gx_Or_Reverse : constant Gx_Function_Code;
-	Gx_Copy_Inverted : constant Gx_Function_Code;
-	Gx_Or_Inverted : constant Gx_Function_Code;
-	Gx_Nand : constant Gx_Function_Code;
-	Gx_Set : constant Gx_Function_Code;
-	function Create_Constant
-		    (Value : in X_Long_Integer) return Gx_Function_Code;
+--	type Gx_Function_Code is private;
+--	Gx_Clear : constant Gx_Function_Code;
+--	Gx_And : constant Gx_Function_Code;
+--	Gx_And_Reverse : constant Gx_Function_Code;
+--	Gx_Copy : constant Gx_Function_Code;
+--	Gx_And_Inverted : constant Gx_Function_Code;
+--	Gx_Noop : constant Gx_Function_Code;
+--	Gx_Xor : constant Gx_Function_Code;
+--	Gx_Or : constant Gx_Function_Code;
+--	Gx_Nor : constant Gx_Function_Code;
+--	Gx_Equiv : constant Gx_Function_Code;
+--	Gx_Invert : constant Gx_Function_Code;
+--	Gx_Or_Reverse : constant Gx_Function_Code;
+--	Gx_Copy_Inverted : constant Gx_Function_Code;
+--	Gx_Or_Inverted : constant Gx_Function_Code;
+--	Gx_Nand : constant Gx_Function_Code;
+--	Gx_Set : constant Gx_Function_Code;
+--	function Create_Constant
+--		    (Value : in X_Long_Integer) return Gx_Function_Code;
 
 	type Z_Color_Mask is new X_Mask_Type;
 	Null_Z_Color_Mask : constant Z_Color_Mask := Z_Color_Mask (Null_X_Mask);
@@ -1662,44 +1662,44 @@ package X_Lib is
 	function Create_Constant (Value : in X_Long_Integer)
 				 return Subwindow_Mode_Type;
 
-	type Coordinate_Mode_Type is private;
-	Origin : constant Coordinate_Mode_Type;
-	Previous : constant Coordinate_Mode_Type;
-	function Create_Constant (Value : in X_Long_Integer)
-				 return Coordinate_Mode_Type;
+--	type Coordinate_Mode_Type is private;
+--	Origin : constant Coordinate_Mode_Type;
+--	Previous : constant Coordinate_Mode_Type;
+--	function Create_Constant (Value : in X_Long_Integer)
+--				 return Coordinate_Mode_Type;
+--
+--	type Shape_Type is private;
+--	Complex : constant Shape_Type;
+--	Convex : constant Shape_Type;
+--	Nonconvex : constant Shape_Type;
+--	function Create_Constant (Value : in X_Long_Integer) return Shape_Type;
 
-	type Shape_Type is private;
-	Complex : constant Shape_Type;
-	Convex : constant Shape_Type;
-	Nonconvex : constant Shape_Type;
-	function Create_Constant (Value : in X_Long_Integer) return Shape_Type;
-
-	type Gc_Mask_Type is new X_Mask_Type;
+--	type Gc_Mask_Type is new X_Mask_Type;
 	No_Gc_Mask : constant Gc_Mask_Type := Gc_Mask_Type (Null_X_Mask);
-	Gc_Function : constant Gc_Mask_Type := Create_Constant (2 ** 0);
-	Gc_Plane_Mask : constant Gc_Mask_Type := Create_Constant (2 ** 1);
-	Gc_Foreground : constant Gc_Mask_Type := Create_Constant (2 ** 2);
-	Gc_Background : constant Gc_Mask_Type := Create_Constant (2 ** 3);
-	Gc_Line_Width : constant Gc_Mask_Type := Create_Constant (2 ** 4);
-	Gc_Line_Style : constant Gc_Mask_Type := Create_Constant (2 ** 5);
-	Gc_Cap_Style : constant Gc_Mask_Type := Create_Constant (2 ** 6);
-	Gc_Join_Style : constant Gc_Mask_Type := Create_Constant (2 ** 7);
-	Gc_Fill_Style : constant Gc_Mask_Type := Create_Constant (2 ** 8);
-	Gc_Fill_Rule : constant Gc_Mask_Type := Create_Constant (2 ** 9);
-	Gc_Tile : constant Gc_Mask_Type := Create_Constant (2 ** 10);
-	Gc_Stipple : constant Gc_Mask_Type := Create_Constant (2 ** 11);
-	Gc_Ts_X_Origin : constant Gc_Mask_Type := Create_Constant (2 ** 12);
-	Gc_Ts_Y_Origin : constant Gc_Mask_Type := Create_Constant (2 ** 13);
-	Gc_Font : constant Gc_Mask_Type := Create_Constant (2 ** 14);
-	Gc_Subwindow_Mode : constant Gc_Mask_Type := Create_Constant (2 ** 15);
-	Gc_Graphics_Exposure : constant Gc_Mask_Type :=
-	   Create_Constant (2 ** 16);
-	Gc_Clip_X_Origin : constant Gc_Mask_Type := Create_Constant (2 ** 17);
-	Gc_Clip_Y_Origin : constant Gc_Mask_Type := Create_Constant (2 ** 18);
-	Gc_Clip_Mask : constant Gc_Mask_Type := Create_Constant (2 ** 19);
-	Gc_Dash_Offset : constant Gc_Mask_Type := Create_Constant (2 ** 20);
-	Gc_Dash_List : constant Gc_Mask_Type := Create_Constant (2 ** 21);
-	Gc_Arc_Mode : constant Gc_Mask_Type := Create_Constant (2 ** 22);
+--	Gc_Function : constant Gc_Mask_Type := Create_Constant (2 ** 0);
+--	Gc_Plane_Mask : constant Gc_Mask_Type := Create_Constant (2 ** 1);
+--	Gc_Foreground : constant Gc_Mask_Type := Create_Constant (2 ** 2);
+--	Gc_Background : constant Gc_Mask_Type := Create_Constant (2 ** 3);
+--	Gc_Line_Width : constant Gc_Mask_Type := Create_Constant (2 ** 4);
+--	Gc_Line_Style : constant Gc_Mask_Type := Create_Constant (2 ** 5);
+--	Gc_Cap_Style : constant Gc_Mask_Type := Create_Constant (2 ** 6);
+--	Gc_Join_Style : constant Gc_Mask_Type := Create_Constant (2 ** 7);
+--	Gc_Fill_Style : constant Gc_Mask_Type := Create_Constant (2 ** 8);
+--	Gc_Fill_Rule : constant Gc_Mask_Type := Create_Constant (2 ** 9);
+--	Gc_Tile : constant Gc_Mask_Type := Create_Constant (2 ** 10);
+--	Gc_Stipple : constant Gc_Mask_Type := Create_Constant (2 ** 11);
+--	Gc_Ts_X_Origin : constant Gc_Mask_Type := Create_Constant (2 ** 12);
+--	Gc_Ts_Y_Origin : constant Gc_Mask_Type := Create_Constant (2 ** 13);
+--	Gc_Font : constant Gc_Mask_Type := Create_Constant (2 ** 14);
+--	Gc_Subwindow_Mode : constant Gc_Mask_Type := Create_Constant (2 ** 15);
+--	Gc_Graphics_Exposure : constant Gc_Mask_Type :=
+--	   Create_Constant (2 ** 16);
+--	Gc_Clip_X_Origin : constant Gc_Mask_Type := Create_Constant (2 ** 17);
+--	Gc_Clip_Y_Origin : constant Gc_Mask_Type := Create_Constant (2 ** 18);
+--	Gc_Clip_Mask : constant Gc_Mask_Type := Create_Constant (2 ** 19);
+--	Gc_Dash_Offset : constant Gc_Mask_Type := Create_Constant (2 ** 20);
+--	Gc_Dash_List : constant Gc_Mask_Type := Create_Constant (2 ** 21);
+--	Gc_Arc_Mode : constant Gc_Mask_Type := Create_Constant (2 ** 22);
 
 	type Gc_Value_Record is
 	    record
@@ -1746,73 +1746,73 @@ package X_Lib is
 				   Values : in out Gc_Value_Record;
 				   Status : out Boolean);
 
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Create_GC
-	--
-	--  Description
-	--
-	--    This function creates a graphics context and returns its ID.
-	--  The graphics context can be used with any destination drawable having
-	--  the same root and depth as the specified drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id  : Specifies the connection to the X Server.
-	--  Drawable_Id : Specifies the drawable.
-	--  Value_Mask  : Specifies which components in the GC_Value_Record are
-	--                to be set. This argument is the bitwise OR of one or
-	--                more of the GC_Mask_Type constants.
-	--  Values      : Specifies the GC_Values_Record.
-	--
-	--  Documentation
-	--
-	--    Please refer to XCreateGC in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	function X_Create_Gc (Display_Id : in Display;
-			      Drawable_Id : in Drawable;
-			      Value_Mask : in Gc_Mask_Type;
-			      Values : in Gc_Value_Record)
-			     return Graphic_Context;
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Copy_GC
-	--
-	--  Description
-	--
-	--    This procedure copies the components specified in Value_Mask from
-	--  the source graphics context to the destination graphics context.
-	--
-	--  Parameters
-	--
-	--  Display_Id : Specifies the connection to the X Server.
-	--  Value_Mask : Specifies which components in the GC_Value_Record are
-	--               to be set. This argument is the bitwise OR of one or
-	--               more of the GC_Mask_Type constants.
-	-- Source      : Specifies the source graphics context.
-	-- Destination : Specifies the destination graphics context.
-	--
-	--  Documentation
-	--
-	--    Please refer to XCopyGC in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Copy_Gc (Display_Id : in Display;
-			     Value_Mask : in Gc_Mask_Type;
-			     Source : in Graphic_Context;
-			     Destination : in Graphic_Context);
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Create_GC
+--	--
+--	--  Description
+--	--
+--	--    This function creates a graphics context and returns its ID.
+--	--  The graphics context can be used with any destination drawable having
+--	--  the same root and depth as the specified drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id  : Specifies the connection to the X Server.
+--	--  Drawable_Id : Specifies the drawable.
+--	--  Value_Mask  : Specifies which components in the GC_Value_Record are
+--	--                to be set. This argument is the bitwise OR of one or
+--	--                more of the GC_Mask_Type constants.
+--	--  Values      : Specifies the GC_Values_Record.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XCreateGC in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	function X_Create_Gc (Display_Id : in Display;
+--			      Drawable_Id : in Drawable;
+--			      Value_Mask : in Gc_Mask_Type;
+--			      Values : in Gc_Value_Record)
+--			     return Graphic_Context;
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Copy_GC
+--	--
+--	--  Description
+--	--
+--	--    This procedure copies the components specified in Value_Mask from
+--	--  the source graphics context to the destination graphics context.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id : Specifies the connection to the X Server.
+--	--  Value_Mask : Specifies which components in the GC_Value_Record are
+--	--               to be set. This argument is the bitwise OR of one or
+--	--               more of the GC_Mask_Type constants.
+--	-- Source      : Specifies the source graphics context.
+--	-- Destination : Specifies the destination graphics context.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XCopyGC in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Copy_Gc (Display_Id : in Display;
+--			     Value_Mask : in Gc_Mask_Type;
+--			     Source : in Graphic_Context;
+--			     Destination : in Graphic_Context);
 
 	--======================================================================
 	--  Subprogram Name
@@ -1849,32 +1849,32 @@ package X_Lib is
 			       Value_Mask : in Gc_Mask_Type;
 			       Values : in Gc_Value_Record);
 
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Free_GC
-	--
-	--  Description
-	--
-	--    This procedure destroys the specified graphics context as well as
-	--  the shadow copy.
-	--
-	--  Parameters
-	--
-	--  Display_Id : Specifies the connection to the X Server.
-	--  GC         : Returns the graphic context ID.
-	--
-	--  Documentation
-	--
-	--    Please refer to XFreeGC in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Free_Gc (Display_Id : in Display;
-			     Gc : in out Graphic_Context);
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Free_GC
+--	--
+--	--  Description
+--	--
+--	--    This procedure destroys the specified graphics context as well as
+--	--  the shadow copy.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id : Specifies the connection to the X Server.
+--	--  GC         : Returns the graphic context ID.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XFreeGC in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Free_Gc (Display_Id : in Display;
+--			     Gc : in out Graphic_Context);
 
 	--======================================================================
 	--  Subprogram Name
@@ -2566,106 +2566,106 @@ package X_Lib is
 					    Gc : in Graphic_Context;
 					    Graphics_Exposures : in Boolean);
 
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Clear_Area
-	--
-	--  Description
-	--
-	--    This procedure clears a specified rectangular area in the specified
-	--  window. If either width or height are zero, they are replaced by the
-	--  current width or height of the specified window minus X or y.
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Window_Id    : Specifies the window.
-	--  Bounds       : Specifies the rectangle to clear.
-	--  Exposures    : Specifies that exposure event are to be generated.
-	--
-	--  Documentation
-	--
-	--    Please refer to XClearArea in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Clear_Area (Display_Id : in Display;
-				Window_Id : in Window;
-				X : in Coordinate;
-				Y : in Coordinate;
-				Width : in Width_Height;
-				Height : in Width_Height;
-				Exposures : in Boolean);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Clear_Window
-	--
-	--  Description
-	--
-	--    This procedure clears the entire area in the specified window.
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Window_Id    : Specifies the window.
-	--
-	--  Documentation
-	--
-	--    Please refer to XClearWindow in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Clear_Window
-		     (Display_Id : in Display; Window_Id : in Window);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Copy_Area
-	--
-	--  Description
-	--
-	--    This procedure copies an area of the source drawable to the target
-	--  drawable (pixmap or Window).
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Source       : Specifies the source window or pixmap.
-	--  Destination  : Specifies the source window or pixmap.
-	--  GC           : Specifies the graphics context.
-	--  Source_Area  : Specifies the origin of the source rectangle.
-	--  Dest_Origin  : Specifies the destination origin.
-	--
-	--
-	--  Documentation
-	--
-	--    Please refer to XCopyArea in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Copy_Area (Display_Id : in Display;
-			       Source : in Drawable;
-			       Destination : in Drawable;
-			       Gc : in Graphic_Context;
-			       Source_X : in Coordinate;
-			       Source_Y : in Coordinate;
-			       Width : in Width_Height;
-			       Height : in Width_Height;
-			       Destination_X : in Coordinate;
-			       Destination_Y : in Coordinate);
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Clear_Area
+--	--
+--	--  Description
+--	--
+--	--    This procedure clears a specified rectangular area in the specified
+--	--  window. If either width or height are zero, they are replaced by the
+--	--  current width or height of the specified window minus X or y.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Window_Id    : Specifies the window.
+--	--  Bounds       : Specifies the rectangle to clear.
+--	--  Exposures    : Specifies that exposure event are to be generated.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XClearArea in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Clear_Area (Display_Id : in Display;
+--				Window_Id : in Window;
+--				X : in Coordinate;
+--				Y : in Coordinate;
+--				Width : in Width_Height;
+--				Height : in Width_Height;
+--				Exposures : in Boolean);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Clear_Window
+--	--
+--	--  Description
+--	--
+--	--    This procedure clears the entire area in the specified window.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Window_Id    : Specifies the window.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XClearWindow in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Clear_Window
+--		     (Display_Id : in Display; Window_Id : in Window);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Copy_Area
+--	--
+--	--  Description
+--	--
+--	--    This procedure copies an area of the source drawable to the target
+--	--  drawable (pixmap or Window).
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Source       : Specifies the source window or pixmap.
+--	--  Destination  : Specifies the source window or pixmap.
+--	--  GC           : Specifies the graphics context.
+--	--  Source_Area  : Specifies the origin of the source rectangle.
+--	--  Dest_Origin  : Specifies the destination origin.
+--	--
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XCopyArea in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Copy_Area (Display_Id : in Display;
+--			       Source : in Drawable;
+--			       Destination : in Drawable;
+--			       Gc : in Graphic_Context;
+--			       Source_X : in Coordinate;
+--			       Source_Y : in Coordinate;
+--			       Width : in Width_Height;
+--			       Height : in Width_Height;
+--			       Destination_X : in Coordinate;
+--			       Destination_Y : in Coordinate);
 
 	--======================================================================
 	--  Subprogram Name
@@ -2707,495 +2707,495 @@ package X_Lib is
 				Destination_Y : in Coordinate;
 				Plane : in Plane_Mask);
 
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Draw_Point
-	--
-	--  Description
-	--
-	--    This procedure draws a single point in the drawable (pixmap or
-	--  Window).
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
-	--  GC           : Specifies the graphics context.
-	--  Xy           : Specifies the point location.
-	--
-	--  Documentation
-	--
-	--    Please refer to XDrawPoint in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Draw_Point (Display_Id : in Display;
-				Drawable_Id : in Drawable;
-				Gc : in Graphic_Context;
-				X : in Coordinate;
-				Y : in Coordinate);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Draw_Points
-	--
-	--  Description
-	--
-	--    This procedure draws the points specified in the point array. If
-	--  the Coordinate_Mode is Origin, all points are relative to the
-	--  drawable's origin. If the mode is Previous, all points after the
-	--  first are relative to the previous point.
-	--
-	--  Parameters
-	--
-	--  Display_Id      : Specifies the connection to the X Server.
-	--  Drawable_Id     : Specifies the drawable (pixmap or Window).
-	--  GC              : Specifies the graphics context.
-	--  Points          : Specifies an array of point locations.
-	--  Coordinate_Mode : Specifies Previous or Origin.
-	--
-	--
-	--
-	--  Documentation
-	--
-	--    Please refer to XDrawPoints in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Draw_Points (Display_Id : in Display;
-				 Drawable_Id : in Drawable;
-				 Gc : in Graphic_Context;
-				 Points : in Point_Array;
-				 Coordinate_Mode : in Coordinate_Mode_Type);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Draw_Line
-	--
-	--  Description
-	--
-	--    This procedure draws a single line in the drawable (pixmap or
-	--  Window).
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
-	--  GC           : Specifies the graphics context.
-	--  Point_1      : Specifies the beginning point of the line.
-	--  Point_2      : Specifies the ending point of the line.
-	--
-	--  Documentation
-	--
-	--    Please refer to XDrawLine in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Draw_Line (Display_Id : in Display;
-			       Drawable_Id : in Drawable;
-			       Gc : in Graphic_Context;
-			       X_1 : in Coordinate;
-			       Y_1 : in Coordinate;
-			       X_2 : in Coordinate;
-			       Y_2 : in Coordinate);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Draw_Lines
-	--
-	--  Description
-	--
-	--    This procedure draws multiple, connected lines in the drawable.
-	--  If Coordinate_Mode is Origin, all points are treated as relative
-	--  to the drawable origin. If Previous, all points are treated
-	--  as relative to the previous point.
-	--
-	--  Parameters
-	--
-	--  Display_Id      : Specifies the connection to the X Server.
-	--  Drawable_Id     : Specifies the drawable (pixmap or Window).
-	--  GC              : Specifies the graphics context.
-	--  Points          : Specifies an array of points.
-	--  Coordinate_Mode : Specifies either Origin or Previous.
-	--
-	--
-	--  Documentation
-	--
-	--    Please refer to XDrawLines in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Draw_Lines (Display_Id : in Display;
-				Drawable_Id : in Drawable;
-				Gc : in Graphic_Context;
-				Points : in Point_Array;
-				Coordinate_Mode : in Coordinate_Mode_Type);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Draw_Segments
-	--
-	--  Description
-	--
-	--    This procedure draws multiple, unconnected lines in the drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id  : Specifies the connection to the X Server.
-	--  Drawable_Id : Specifies the drawable (pixmap or Window).
-	--  GC          : Specifies the graphics context.
-	--  Segments    : Specifies an array of pairs of points (start and end).
-	--
-	--  Documentation
-	--
-	--    Please refer to XDrawSegments in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Draw_Segments (Display_Id : in Display;
-				   Drawable_Id : in Drawable;
-				   Gc : in Graphic_Context;
-				   Segments : in Segment_Array);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Draw_Rectangle
-	--
-	--  Description
-	--
-	--    This procedure draws a single rectangle in the specified drawable.
-	--  The X and Y components of the rectangle are drawn relative
-	--  to the origin of the drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
-	--  GC           : Specifies the graphics context.
-	--  Bounds       : Specifies the rectangle to draw.
-	--
-	--  Documentation
-	--
-	--    Please refer to XDrawRectangle in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Draw_Rectangle (Display_Id : in Display;
-				    Drawable_Id : in Drawable;
-				    Gc : in Graphic_Context;
-				    X : in Coordinate;
-				    Y : in Coordinate;
-				    Width : in Width_Height;
-				    Height : in Width_Height);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Draw_Rectangles
-	--
-	--  Description
-	--
-	--    This procedure draws multiple rectangles in the specified drawable
-	--  The X and Y components of the rectangles are drawn relative
-	--  to the origin of the drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
-	--  GC           : Specifies the graphics context.
-	--  Bounds       : Specifies an array of rectangles to draw.
-	--
-	--  Documentation
-	--
-	--    Please refer to XDrawRectangles in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Draw_Rectangles (Display_Id : in Display;
-				     Drawable_Id : in Drawable;
-				     Gc : in Graphic_Context;
-				     Bounds : in Rectangle_Array);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Draw_Arc
-	--
-	--  Description
-	--
-	--    This procedure draws a single arc in the specified drawable (pixmap
-	--  or Window). The X and Y components of the arc are drawn relative
-	--  to the origin of the drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id  : Specifies the connection to the X Server.
-	--  Drawable_Id : Specifies the drawable (pixmap or Window).
-	--  GC          : Specifies the graphics context.
-	--  X           : Specifies the origin's X coordinate.
-	--  Y           : Specifies the origin's Y coordinate.
-	--  Width       : Specifies the width.
-	--  Height      : Specifies the height.
-	--  Angle_1     : Specifies the angle.
-	--  Angle_2     : Specifies the angle.
-	--
-	--
-	--  Documentation
-	--
-	--    Please refer to XDrawArc in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Draw_Arc (Display_Id : in Display;
-			      Drawable_Id : in Drawable;
-			      Gc : in Graphic_Context;
-			      X : in Coordinate;
-			      Y : in Coordinate;
-			      Width : in Width_Height;
-			      Height : in Width_Height;
-			      Angle_1 : in Angle;
-			      Angle_2 : in Angle);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Draw_Arcs
-	--
-	--  Description
-	--
-	--    This procedure draws multiple arcs in the specified drawable
-	--  (pixmap or Window). The X and Y components of the arcs are drawn
-	--  relative to the origin of the drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
-	--  GC           : Specifies the graphics context.
-	--  Bounds       : Specifies an array of arcs to draw.
-	--
-	--  Documentation
-	--
-	--    Please refer to XDrawArcs in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Draw_Arcs (Display_Id : in Display;
-			       Drawable_Id : in Drawable;
-			       Gc : in Graphic_Context;
-			       Bounds : in Arc_Array);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Fill_Rectangle
-	--
-	--  Description
-	--
-	--    This procedure draws a filled rectangle in the specified drawable.
-	--  The X and Y components of the rectangle are drawn relative
-	--  to the origin of the drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
-	--  GC           : Specifies the graphics context.
-	--  Bounds       : Specifies the rectangle to fill.
-	--
-	--  Documentation
-	--
-	--    Please refer to XFillRectangle in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Fill_Rectangle (Display_Id : in Display;
-				    Drawable_Id : in Drawable;
-				    Gc : in Graphic_Context;
-				    X : in Coordinate;
-				    Y : in Coordinate;
-				    Width : in Width_Height;
-				    Height : in Width_Height);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Fill_Rectangles
-	--
-	--  Description
-	--
-	--    This procedure draws multiple filled rectangles in the specified
-	--  drawable The X and Y components of the rectangles are drawn
-	--  relative to the origin of the drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
-	--  GC           : Specifies the graphics context.
-	--  Bounds       : Specifies an array of rectangles to fill.
-	--
-	--  Documentation
-	--
-	--    Please refer to XFillRectangles in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Fill_Rectangles (Display_Id : in Display;
-				     Drawable_Id : in Drawable;
-				     Gc : in Graphic_Context;
-				     Rectangles : in Rectangle_Array);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Fill_Polygon
-	--
-	--  Description
-	--
-	--    This procedure draws a filled polygon in the drawable (pixmap or
-	--  Window).  Coordinate_Mode is Origin, all points are relative to the
-	--  drawable's origin. If the mode is Previous, all points after the
-	--  first are relative to the previous point. If the shape is Complex,
-	--  the path may intersect. If Nonconvex, the path does not intersect
-	--  but the shape is not convex. If shape is Convex, the path is wholly
-	--  convex.
-	--
-	--  Parameters
-	--
-	--  Display_Id      : Specifies the connection to the X Server.
-	--  Drawable_Id     : Specifies the drawable (pixmap or Window).
-	--  GC              : Specifies the graphics context.
-	--  Points          : Specifies an array of point locations.
-	--  Shape           : Specifies Complex, Nonconvex or Convex.
-	--  Coordinate_Mode : Specifies Previous or Origin.
-	--
-	--
-	--  Documentation
-	--
-	--    Please refer to XFillPolygon in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Fill_Polygon (Display_Id : in Display;
-				  Drawable_Id : in Drawable;
-				  Gc : in Graphic_Context;
-				  Points : in Point_Array;
-				  Shape : in Shape_Type;
-				  Coordinate_Mode : in Coordinate_Mode_Type);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Fill_Arc
-	--
-	--  Description
-	--
-	--    This procedure draws a single filled arc in the specified drawable
-	--  The X and Y components of the arc are drawn relative
-	--  to the origin of the drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id  : Specifies the connection to the X Server.
-	--  Drawable_Id : Specifies the drawable (pixmap or Window).
-	--  GC          : Specifies the graphics context.
-	--  Bounds      : Specifies the origin, width, height and angles or
-	--                the arc.
-	--
-	--  Documentation
-	--
-	--    Please refer to XFillArc in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Fill_Arc (Display_Id : in Display;
-			      Drawable_Id : in Drawable;
-			      Gc : in Graphic_Context;
-			      X : in Coordinate;
-			      Y : in Coordinate;
-			      Width : in Width_Height;
-			      Height : in Width_Height;
-			      Angle_1 : in Angle;
-			      Angle_2 : in Angle);
-
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Fill_Arcs
-	--
-	--  Description
-	--
-	--    This procedure draws multiple filled arcs in the specified drawable
-	--  The X and Y components of the arcs are drawn relative
-	--  to the origin of the drawable.
-	--
-	--  Parameters
-	--
-	--  Display_Id   : Specifies the connection to the X Server.
-	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
-	--  GC           : Specifies the graphics context.
-	--  Bounds       : Specifies an array of arcs to draw.
-	--
-	--  Documentation
-	--
-	--    Please refer to XFillArcs in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Graphic_Output
-	--======================================================================
-
-	procedure X_Fill_Arcs (Display_Id : in Display;
-			       Drawable_Id : in Drawable;
-			       Gc : in Graphic_Context;
-			       Arcs : in Arc_Array);
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Draw_Point
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws a single point in the drawable (pixmap or
+--	--  Window).
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
+--	--  GC           : Specifies the graphics context.
+--	--  Xy           : Specifies the point location.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XDrawPoint in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Draw_Point (Display_Id : in Display;
+--				Drawable_Id : in Drawable;
+--				Gc : in Graphic_Context;
+--				X : in Coordinate;
+--				Y : in Coordinate);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Draw_Points
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws the points specified in the point array. If
+--	--  the Coordinate_Mode is Origin, all points are relative to the
+--	--  drawable's origin. If the mode is Previous, all points after the
+--	--  first are relative to the previous point.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id      : Specifies the connection to the X Server.
+--	--  Drawable_Id     : Specifies the drawable (pixmap or Window).
+--	--  GC              : Specifies the graphics context.
+--	--  Points          : Specifies an array of point locations.
+--	--  Coordinate_Mode : Specifies Previous or Origin.
+--	--
+--	--
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XDrawPoints in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Draw_Points (Display_Id : in Display;
+--				 Drawable_Id : in Drawable;
+--				 Gc : in Graphic_Context;
+--				 Points : in Point_Array;
+--				 Coordinate_Mode : in Coordinate_Mode_Type);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Draw_Line
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws a single line in the drawable (pixmap or
+--	--  Window).
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
+--	--  GC           : Specifies the graphics context.
+--	--  Point_1      : Specifies the beginning point of the line.
+--	--  Point_2      : Specifies the ending point of the line.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XDrawLine in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Draw_Line (Display_Id : in Display;
+--			       Drawable_Id : in Drawable;
+--			       Gc : in Graphic_Context;
+--			       X_1 : in Coordinate;
+--			       Y_1 : in Coordinate;
+--			       X_2 : in Coordinate;
+--			       Y_2 : in Coordinate);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Draw_Lines
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws multiple, connected lines in the drawable.
+--	--  If Coordinate_Mode is Origin, all points are treated as relative
+--	--  to the drawable origin. If Previous, all points are treated
+--	--  as relative to the previous point.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id      : Specifies the connection to the X Server.
+--	--  Drawable_Id     : Specifies the drawable (pixmap or Window).
+--	--  GC              : Specifies the graphics context.
+--	--  Points          : Specifies an array of points.
+--	--  Coordinate_Mode : Specifies either Origin or Previous.
+--	--
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XDrawLines in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Draw_Lines (Display_Id : in Display;
+--				Drawable_Id : in Drawable;
+--				Gc : in Graphic_Context;
+--				Points : in Point_Array;
+--				Coordinate_Mode : in Coordinate_Mode_Type);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Draw_Segments
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws multiple, unconnected lines in the drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id  : Specifies the connection to the X Server.
+--	--  Drawable_Id : Specifies the drawable (pixmap or Window).
+--	--  GC          : Specifies the graphics context.
+--	--  Segments    : Specifies an array of pairs of points (start and end).
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XDrawSegments in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Draw_Segments (Display_Id : in Display;
+--				   Drawable_Id : in Drawable;
+--				   Gc : in Graphic_Context;
+--				   Segments : in Segment_Array);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Draw_Rectangle
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws a single rectangle in the specified drawable.
+--	--  The X and Y components of the rectangle are drawn relative
+--	--  to the origin of the drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
+--	--  GC           : Specifies the graphics context.
+--	--  Bounds       : Specifies the rectangle to draw.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XDrawRectangle in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Draw_Rectangle (Display_Id : in Display;
+--				    Drawable_Id : in Drawable;
+--				    Gc : in Graphic_Context;
+--				    X : in Coordinate;
+--				    Y : in Coordinate;
+--				    Width : in Width_Height;
+--				    Height : in Width_Height);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Draw_Rectangles
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws multiple rectangles in the specified drawable
+--	--  The X and Y components of the rectangles are drawn relative
+--	--  to the origin of the drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
+--	--  GC           : Specifies the graphics context.
+--	--  Bounds       : Specifies an array of rectangles to draw.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XDrawRectangles in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Draw_Rectangles (Display_Id : in Display;
+--				     Drawable_Id : in Drawable;
+--				     Gc : in Graphic_Context;
+--				     Bounds : in Rectangle_Array);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Draw_Arc
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws a single arc in the specified drawable (pixmap
+--	--  or Window). The X and Y components of the arc are drawn relative
+--	--  to the origin of the drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id  : Specifies the connection to the X Server.
+--	--  Drawable_Id : Specifies the drawable (pixmap or Window).
+--	--  GC          : Specifies the graphics context.
+--	--  X           : Specifies the origin's X coordinate.
+--	--  Y           : Specifies the origin's Y coordinate.
+--	--  Width       : Specifies the width.
+--	--  Height      : Specifies the height.
+--	--  Angle_1     : Specifies the angle.
+--	--  Angle_2     : Specifies the angle.
+--	--
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XDrawArc in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Draw_Arc (Display_Id : in Display;
+--			      Drawable_Id : in Drawable;
+--			      Gc : in Graphic_Context;
+--			      X : in Coordinate;
+--			      Y : in Coordinate;
+--			      Width : in Width_Height;
+--			      Height : in Width_Height;
+--			      Angle_1 : in Angle;
+--			      Angle_2 : in Angle);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Draw_Arcs
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws multiple arcs in the specified drawable
+--	--  (pixmap or Window). The X and Y components of the arcs are drawn
+--	--  relative to the origin of the drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
+--	--  GC           : Specifies the graphics context.
+--	--  Bounds       : Specifies an array of arcs to draw.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XDrawArcs in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Draw_Arcs (Display_Id : in Display;
+--			       Drawable_Id : in Drawable;
+--			       Gc : in Graphic_Context;
+--			       Bounds : in Arc_Array);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Fill_Rectangle
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws a filled rectangle in the specified drawable.
+--	--  The X and Y components of the rectangle are drawn relative
+--	--  to the origin of the drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
+--	--  GC           : Specifies the graphics context.
+--	--  Bounds       : Specifies the rectangle to fill.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XFillRectangle in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Fill_Rectangle (Display_Id : in Display;
+--				    Drawable_Id : in Drawable;
+--				    Gc : in Graphic_Context;
+--				    X : in Coordinate;
+--				    Y : in Coordinate;
+--				    Width : in Width_Height;
+--				    Height : in Width_Height);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Fill_Rectangles
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws multiple filled rectangles in the specified
+--	--  drawable The X and Y components of the rectangles are drawn
+--	--  relative to the origin of the drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
+--	--  GC           : Specifies the graphics context.
+--	--  Bounds       : Specifies an array of rectangles to fill.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XFillRectangles in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Fill_Rectangles (Display_Id : in Display;
+--				     Drawable_Id : in Drawable;
+--				     Gc : in Graphic_Context;
+--				     Rectangles : in Rectangle_Array);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Fill_Polygon
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws a filled polygon in the drawable (pixmap or
+--	--  Window).  Coordinate_Mode is Origin, all points are relative to the
+--	--  drawable's origin. If the mode is Previous, all points after the
+--	--  first are relative to the previous point. If the shape is Complex,
+--	--  the path may intersect. If Nonconvex, the path does not intersect
+--	--  but the shape is not convex. If shape is Convex, the path is wholly
+--	--  convex.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id      : Specifies the connection to the X Server.
+--	--  Drawable_Id     : Specifies the drawable (pixmap or Window).
+--	--  GC              : Specifies the graphics context.
+--	--  Points          : Specifies an array of point locations.
+--	--  Shape           : Specifies Complex, Nonconvex or Convex.
+--	--  Coordinate_Mode : Specifies Previous or Origin.
+--	--
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XFillPolygon in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Fill_Polygon (Display_Id : in Display;
+--				  Drawable_Id : in Drawable;
+--				  Gc : in Graphic_Context;
+--				  Points : in Point_Array;
+--				  Shape : in Shape_Type;
+--				  Coordinate_Mode : in Coordinate_Mode_Type);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Fill_Arc
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws a single filled arc in the specified drawable
+--	--  The X and Y components of the arc are drawn relative
+--	--  to the origin of the drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id  : Specifies the connection to the X Server.
+--	--  Drawable_Id : Specifies the drawable (pixmap or Window).
+--	--  GC          : Specifies the graphics context.
+--	--  Bounds      : Specifies the origin, width, height and angles or
+--	--                the arc.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XFillArc in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Fill_Arc (Display_Id : in Display;
+--			      Drawable_Id : in Drawable;
+--			      Gc : in Graphic_Context;
+--			      X : in Coordinate;
+--			      Y : in Coordinate;
+--			      Width : in Width_Height;
+--			      Height : in Width_Height;
+--			      Angle_1 : in Angle;
+--			      Angle_2 : in Angle);
+--
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Fill_Arcs
+--	--
+--	--  Description
+--	--
+--	--    This procedure draws multiple filled arcs in the specified drawable
+--	--  The X and Y components of the arcs are drawn relative
+--	--  to the origin of the drawable.
+--	--
+--	--  Parameters
+--	--
+--	--  Display_Id   : Specifies the connection to the X Server.
+--	--  Drawable_Id  : Specifies the drawable (pixmap or Window).
+--	--  GC           : Specifies the graphics context.
+--	--  Bounds       : Specifies an array of arcs to draw.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XFillArcs in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Graphic_Output
+--	--======================================================================
+--
+--	procedure X_Fill_Arcs (Display_Id : in Display;
+--			       Drawable_Id : in Drawable;
+--			       Gc : in Graphic_Context;
+--			       Arcs : in Arc_Array);
 
 	--======================================================================
 	--  Subprogram Name
@@ -4052,10 +4052,10 @@ package X_Lib is
 	procedure X_Flush_Gc (Dpy : in Display; Gc : in Graphic_Context);
 
     private
-	type Gc_Record;
-	type Graphic_Context is access Gc_Record;
-
-	Null_Graphic_Context : constant Graphic_Context := null;
+--	type Gc_Record;
+--	type Graphic_Context is access Gc_Record;
+--
+--	Null_Graphic_Context : constant Graphic_Context := null;
 
 	type Image_Record;
 	type Image is access Image_Record;
@@ -4070,23 +4070,23 @@ package X_Lib is
 	Bitmap_File_Invalid : constant Bitmap_Status_Type := 2;
 	Bitmap_No_Memory : constant Bitmap_Status_Type := 3;
 
-	type Gx_Function_Code is new Int32;
-	Gx_Clear : constant Gx_Function_Code := 0;
-	Gx_And : constant Gx_Function_Code := 1;
-	Gx_And_Reverse : constant Gx_Function_Code := 2;
-	Gx_Copy : constant Gx_Function_Code := 3;
-	Gx_And_Inverted : constant Gx_Function_Code := 4;
-	Gx_Noop : constant Gx_Function_Code := 5;
-	Gx_Xor : constant Gx_Function_Code := 6;
-	Gx_Or : constant Gx_Function_Code := 7;
-	Gx_Nor : constant Gx_Function_Code := 8;
-	Gx_Equiv : constant Gx_Function_Code := 9;
-	Gx_Invert : constant Gx_Function_Code := 10;
-	Gx_Or_Reverse : constant Gx_Function_Code := 11;
-	Gx_Copy_Inverted : constant Gx_Function_Code := 12;
-	Gx_Or_Inverted : constant Gx_Function_Code := 13;
-	Gx_Nand : constant Gx_Function_Code := 14;
-	Gx_Set : constant Gx_Function_Code := 15;
+--	type Gx_Function_Code is new Int32;
+--	Gx_Clear : constant Gx_Function_Code := 0;
+--	Gx_And : constant Gx_Function_Code := 1;
+--	Gx_And_Reverse : constant Gx_Function_Code := 2;
+--	Gx_Copy : constant Gx_Function_Code := 3;
+--	Gx_And_Inverted : constant Gx_Function_Code := 4;
+--	Gx_Noop : constant Gx_Function_Code := 5;
+--	Gx_Xor : constant Gx_Function_Code := 6;
+--	Gx_Or : constant Gx_Function_Code := 7;
+--	Gx_Nor : constant Gx_Function_Code := 8;
+--	Gx_Equiv : constant Gx_Function_Code := 9;
+--	Gx_Invert : constant Gx_Function_Code := 10;
+--	Gx_Or_Reverse : constant Gx_Function_Code := 11;
+--	Gx_Copy_Inverted : constant Gx_Function_Code := 12;
+--	Gx_Or_Inverted : constant Gx_Function_Code := 13;
+--	Gx_Nand : constant Gx_Function_Code := 14;
+--	Gx_Set : constant Gx_Function_Code := 15;
 
 	type Line_Style_Type is new Int32;
 	Line_Solid : constant Line_Style_Type := 0;
@@ -4145,7 +4145,7 @@ package X_Lib is
 
 
     package Colors is
-	type Color_Map is private;
+--	type Color_Map is private;
 	type Color_Map_Array is array (Natural range <>) of Color_Map;
 	type Color_Map_List is access Color_Map_Array;
 	Null_Color_Map : constant Color_Map;
@@ -4919,7 +4919,7 @@ package X_Lib is
 					   Cmap : in Standard_Colormap_Record;
 					   Property : in Atoms.Atom);
     private
-	type Color_Map is new X_Id;
+--	type Color_Map is new X_Id;
 
 	Null_Color_Map : constant Color_Map := 0;
 
@@ -4929,7 +4929,7 @@ package X_Lib is
     end Colors;
 
     package Cursors is
-	type Cursor is private;
+--	type Cursor is private;
 
 	Null_Cursor : constant Cursor;
 
@@ -5265,7 +5265,7 @@ package X_Lib is
 	procedure X_Undefine_Cursor
 		     (Display_Id : in Display; Window_Id : in Window);
     private
-	type Cursor is new X_Id;
+--	type Cursor is new X_Id;
 
 	Null_Cursor : constant Cursor := 0;
     end Cursors;
@@ -6598,44 +6598,44 @@ package X_Lib is
 	function Create_Constant (Value : in X_Long_Integer)
 				 return Event_Queue_Mode_Type;
 
-	type Event_Type is new Long;
+--	type Event_Type is new Long;
 
 	Unused_Event_1 : constant Event_Type := 0;
 	Unused_Event_2 : constant Event_Type := 1;
-	Key_Press : constant Event_Type := 2;
-	Key_Release : constant Event_Type := 3;
-	Button_Press : constant Event_Type := 4;
-	Button_Release : constant Event_Type := 5;
-	Motion_Notify : constant Event_Type := 6;
-	Enter_Notify : constant Event_Type := 7;
-	Leave_Notify : constant Event_Type := 8;
-	Focus_In : constant Event_Type := 9;
-	Focus_Out : constant Event_Type := 10;
-	Keymap_Notify : constant Event_Type := 11;
-	Expose : constant Event_Type := 12;
-	Graphics_Expose : constant Event_Type := 13;
-	No_Expose : constant Event_Type := 14;
-	Visibility_Notify : constant Event_Type := 15;
-	Create_Notify : constant Event_Type := 16;
-	Destroy_Notify : constant Event_Type := 17;
-	Unmap_Notify : constant Event_Type := 18;
-	Map_Notify : constant Event_Type := 19;
-	Map_Request : constant Event_Type := 20;
-	Reparent_Notify : constant Event_Type := 21;
-	Configure_Notify : constant Event_Type := 22;
-	Configure_Request : constant Event_Type := 23;
-	Gravity_Notify : constant Event_Type := 24;
-	Resize_Request : constant Event_Type := 25;
-	Circulate_Notify : constant Event_Type := 26;
-	Circulate_Request : constant Event_Type := 27;
-	Property_Notify : constant Event_Type := 28;
-	Selection_Clear : constant Event_Type := 29;
-	Selection_Request : constant Event_Type := 30;
-	Selection_Notify : constant Event_Type := 31;
-	Colormap_Notify : constant Event_Type := 32;
-	Client_Message : constant Event_Type := 33;
-	Mapping_Notify : constant Event_Type := 34;
-	Last_Event : constant Event_Type := 35;
+--	Key_Press : constant Event_Type := 2;
+--	Key_Release : constant Event_Type := 3;
+--	Button_Press : constant Event_Type := 4;
+--	Button_Release : constant Event_Type := 5;
+--	Motion_Notify : constant Event_Type := 6;
+--	Enter_Notify : constant Event_Type := 7;
+--	Leave_Notify : constant Event_Type := 8;
+--	Focus_In : constant Event_Type := 9;
+--	Focus_Out : constant Event_Type := 10;
+--	Keymap_Notify : constant Event_Type := 11;
+--	Expose : constant Event_Type := 12;
+--	Graphics_Expose : constant Event_Type := 13;
+--	No_Expose : constant Event_Type := 14;
+--	Visibility_Notify : constant Event_Type := 15;
+--	Create_Notify : constant Event_Type := 16;
+--	Destroy_Notify : constant Event_Type := 17;
+--	Unmap_Notify : constant Event_Type := 18;
+--	Map_Notify : constant Event_Type := 19;
+--	Map_Request : constant Event_Type := 20;
+--	Reparent_Notify : constant Event_Type := 21;
+--	Configure_Notify : constant Event_Type := 22;
+--	Configure_Request : constant Event_Type := 23;
+--	Gravity_Notify : constant Event_Type := 24;
+--	Resize_Request : constant Event_Type := 25;
+--	Circulate_Notify : constant Event_Type := 26;
+--	Circulate_Request : constant Event_Type := 27;
+--	Property_Notify : constant Event_Type := 28;
+--	Selection_Clear : constant Event_Type := 29;
+--	Selection_Request : constant Event_Type := 30;
+--	Selection_Notify : constant Event_Type := 31;
+--	Colormap_Notify : constant Event_Type := 32;
+--	Client_Message : constant Event_Type := 33;
+--	Mapping_Notify : constant Event_Type := 34;
+--	Last_Event : constant Event_Type := 35;
 	Null_Event_Kind : constant Event_Type := 1000;
 
 	type Event_Mask_Type is new X_Mask_Type;
@@ -7220,34 +7220,34 @@ package X_Lib is
 
 	procedure X_Flush (Display_Id : in Display);
 
-	--======================================================================
-	--  Subprogram Name
-	--
-	--    X_Sync
-	--
-	--  Description
-	--
-	--    This procedure flushes the output buffer then waits until all
-	--  (events including error events) have been received and processed by
-	--  the X Server.
-	--
-	--    In addition, this procedure places the events recently processed by
-	--  the X Server on the event queue.
-	--
-	--    If Discard is TRUE, Sync discards all events on the queue,
-	--  including those events that were on the queue before Sync was called.
-	--
-	--  Documentation
-	--
-	--    Please refer to XSync in the
-	--  Xlib - C Language X Interface X Window System
-	--  manual for more information.
-	--
-	--  Package:  Events
-	--======================================================================
-
-	procedure X_Sync (Display_Id : in Display;
-			  Discard : in Boolean := False);
+--	--======================================================================
+--	--  Subprogram Name
+--	--
+--	--    X_Sync
+--	--
+--	--  Description
+--	--
+--	--    This procedure flushes the output buffer then waits until all
+--	--  (events including error events) have been received and processed by
+--	--  the X Server.
+--	--
+--	--    In addition, this procedure places the events recently processed by
+--	--  the X Server on the event queue.
+--	--
+--	--    If Discard is TRUE, Sync discards all events on the queue,
+--	--  including those events that were on the queue before Sync was called.
+--	--
+--	--  Documentation
+--	--
+--	--    Please refer to XSync in the
+--	--  Xlib - C Language X Interface X Window System
+--	--  manual for more information.
+--	--
+--	--  Package:  Events
+--	--======================================================================
+--
+--	procedure X_Sync (Display_Id : in Display;
+--			  Discard : in Boolean := False);
 
 	--======================================================================
 	--  Subprogram Name
@@ -8996,22 +8996,22 @@ package X_Lib is
 	-- If a string value is returned in Xrm_Value, it is a C string and
 	-- needs to be converted to an Ada STRING.
 
-	type Xrm_Value is
-	    record
-		Size : X_Long_Integer;
-		Address : X_Address;
-	    end record;
-
-	type Xrm_Value_Ptr is access Xrm_Value;
+--	type Xrm_Value is
+--	    record
+--		Size : X_Long_Integer;
+--		Address : X_Address;
+--	    end record;
+--
+--	type Xrm_Value_Ptr is access Xrm_Value;
 	type Xrm_Value_Array is array (Natural range <>) of Xrm_Value;
 	type Xrm_Value_Table is access Xrm_Value_Array;
 	Null_Xrm_Value_Array : Xrm_Value_Array (1 .. 0);
 
-	type Xrm_Option_Kind is
-	   (Xrm_Option_No_Arg, Xrm_Option_Is_Arg, Xrm_Option_Sticky_Arg,
-	    Xrm_Option_Sep_Arg, Xrm_Option_Res_Arg, Xrm_Option_Skip_Arg,
-	    Xrm_Option_Skip_Line, Xrm_Option_Skip_N_Args); --R4
-	for Xrm_Option_Kind'Size use X_Integer'Size;
+--	type Xrm_Option_Kind is
+--	   (Xrm_Option_No_Arg, Xrm_Option_Is_Arg, Xrm_Option_Sticky_Arg,
+--	    Xrm_Option_Sep_Arg, Xrm_Option_Res_Arg, Xrm_Option_Skip_Arg,
+--	    Xrm_Option_Skip_Line, Xrm_Option_Skip_N_Args); --R4
+--	for Xrm_Option_Kind'Size use X_Integer'Size;
 
 	type Xrm_Binding is (Xrm_Bind_Tightly, Xrm_Bind_Loosely);
 
@@ -9035,22 +9035,22 @@ package X_Lib is
 	subtype Xrm_Representation is Xrm_Quark;
 	type Xrm_Representation_Ptr is access Xrm_Representation;
 
-	type Xrm_Option_Desc_Rec is
-	    record
-		Option : String_Pointer;
-		Resource_Name : String_Pointer;
-		Arg_Kind : Xrm_Option_Kind;
-		Value : X_Address;
-	    end record;
-
-	type Xrm_Option_Desc_List is
-	   array (Natural range <>) of Xrm_Option_Desc_Rec;
-
-	Null_Xrm_Options : Xrm_Option_Desc_List (1 .. 0);
+--	type Xrm_Option_Desc_Rec is
+--	    record
+--		Option : String_Pointer;
+--		Resource_Name : String_Pointer;
+--		Arg_Kind : Xrm_Option_Kind;
+--		Value : X_Address;
+--	    end record;
+--
+--	type Xrm_Option_Desc_List is
+--	   array (Natural range <>) of Xrm_Option_Desc_Rec;
+--
+--	Null_Xrm_Options : Xrm_Option_Desc_List (1 .. 0);
 
 	Null_Quark : constant Xrm_Quark := 0;
 
-	type Xrm_Database is private;
+--	type Xrm_Database is private;
 
 	type Xrm_Searchlist is private;
 
@@ -9831,80 +9831,80 @@ package X_Lib is
 
     function Get_Command_Line_Arguments return String_List;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Open_Display
-    --
-    --  Description
-    --
-    --    This function opens a connection to the X Server controlling the
-    --  specified display and returns a Display ID for use in all
-    --  subsequent calls.
-    --
-    --  Parameters
-    --
-    --  Name        : Specifies the hardware display name.
-    --
-    --  Documentation
-    --
-    --    Please refer to XOpenDisplay in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function X_Open_Display (Name : in String) return Display;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_No_Op
-    --
-    --  Description
-    --
-    --    This procedure executes a NoOperation protocol request to exercise the
-    --  X Server. The output buffer is not flushed.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --
-    --  Documentation
-    --
-    --    Please refer to XNoOp in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_No_Op (Display_Id : in Display);
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Close_Display
-    --
-    --  Description
-    --
-    --    This procedure closes the connection with the X Server.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --
-    --  Documentation
-    --
-    --    Please refer to XCloseDisplay in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Close_Display (The_Display : in Display);
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Open_Display
+--    --
+--    --  Description
+--    --
+--    --    This function opens a connection to the X Server controlling the
+--    --  specified display and returns a Display ID for use in all
+--    --  subsequent calls.
+--    --
+--    --  Parameters
+--    --
+--    --  Name        : Specifies the hardware display name.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XOpenDisplay in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function X_Open_Display (Name : in String) return Display;
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_No_Op
+--    --
+--    --  Description
+--    --
+--    --    This procedure executes a NoOperation protocol request to exercise the
+--    --  X Server. The output buffer is not flushed.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XNoOp in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_No_Op (Display_Id : in Display);
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Close_Display
+--    --
+--    --  Description
+--    --
+--    --    This procedure closes the connection with the X Server.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XCloseDisplay in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Close_Display (The_Display : in Display);
 
     --========================================================================
     --  Subprogram Name
@@ -9990,36 +9990,36 @@ package X_Lib is
     function X_Bitmap_Unit (Display_Id : in Display) return Pixel
        renames Bitmap_Unit;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Black_Pixel
-    --
-    --  Description
-    --
-    --    This function is used to return the black pixel value of the
-    --  specified screen.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Screen_No  : Specifies the screen number.
-    --
-    --  Documentation
-    --
-    --    Please refer to BlackPixel in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Black_Pixel (Display_Id : in Display; Screen_No : in Screen_Number)
-			 return U_Pixel;
-
-    function X_Black_Pixel
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return U_Pixel renames Black_Pixel;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Black_Pixel
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the black pixel value of the
+--    --  specified screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Screen_No  : Specifies the screen number.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to BlackPixel in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Black_Pixel (Display_Id : in Display; Screen_No : in Screen_Number)
+--			 return U_Pixel;
+--
+--    function X_Black_Pixel
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return U_Pixel renames Black_Pixel;
 
     --========================================================================
     --  Subprogram Name
@@ -10116,92 +10116,92 @@ package X_Lib is
 		(Display_Id : in Display; Screen_No : in Screen_Number)
 		return Depth_Type renames Default_Depth;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Default_GC
-    --
-    --  Description
-    --
-    --    This function is used to return the default graphic context for the
-    --  root window of the specified screen.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Screen_No  : Specifies the screen number.
-    --
-    --  Documentation
-    --
-    --    Please refer to DefaultGC in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Default_Gc (Display_Id : in Display; Screen_No : in Screen_Number)
-			return Graphic_Output.Graphic_Context;
-
-    function X_Default_Gc
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return Graphic_Output.Graphic_Context renames Default_Gc;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Default_Root_Window
-    --
-    --  Description
-    --
-    --    This function is used to determine the default root window for the
-    --  default screen.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --
-    --  Documentation
-    --
-    --    Please refer to DefaultRootWindow in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Default_Root_Window (Display_Id : in Display) return Window;
-
-    function X_Default_Root_Window (Display_Id : in Display) return Window
-       renames Default_Root_Window;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Default_Screen
-    --
-    --  Description
-    --
-    --    This function is used to return the default screen referenced in the
-    --  X_Open_Display routine.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --
-    --  Documentation
-    --
-    --    Please refer to DefaultScreen in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Default_Screen (Display_Id : in Display) return Screen_Number;
-
-    function X_Default_Screen (Display_Id : in Display) return Screen_Number
-       renames Default_Screen;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Default_GC
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the default graphic context for the
+--    --  root window of the specified screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Screen_No  : Specifies the screen number.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to DefaultGC in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Default_Gc (Display_Id : in Display; Screen_No : in Screen_Number)
+--			return Graphic_Output.Graphic_Context;
+--
+--    function X_Default_Gc
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return Graphic_Output.Graphic_Context renames Default_Gc;
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Default_Root_Window
+--    --
+--    --  Description
+--    --
+--    --    This function is used to determine the default root window for the
+--    --  default screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to DefaultRootWindow in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Default_Root_Window (Display_Id : in Display) return Window;
+--
+--    function X_Default_Root_Window (Display_Id : in Display) return Window
+--       renames Default_Root_Window;
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Default_Screen
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the default screen referenced in the
+--    --  X_Open_Display routine.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to DefaultScreen in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Default_Screen (Display_Id : in Display) return Screen_Number;
+--
+--    function X_Default_Screen (Display_Id : in Display) return Screen_Number
+--       renames Default_Screen;
 
     -- new for R4
     function X_Screen_Number_Of_Screen
@@ -10271,37 +10271,37 @@ package X_Lib is
 		(Display_Id : in Display; Screen_No : in Screen_Number)
 		return Natural renames Display_Cells;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Display_Height
-    --
-    --  Description
-    --
-    --    This function is used to return an integer that describes the height
-    --  of the screen in pixels.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Screen_No  : Specifies the screen number.
-    --
-    --  Documentation
-    --
-    --    Please refer to DisplayHeight in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Display_Height
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return Width_Height;
-
-    function X_Display_Height
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return Width_Height renames Display_Height;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Display_Height
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return an integer that describes the height
+--    --  of the screen in pixels.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Screen_No  : Specifies the screen number.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to DisplayHeight in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Display_Height
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return Width_Height;
+--
+--    function X_Display_Height
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return Width_Height renames Display_Height;
 
     --========================================================================
     --  Subprogram Name
@@ -10426,36 +10426,36 @@ package X_Lib is
     function X_Display_String (Display_Id : in Display) return String
        renames Display_String;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Display_Width
-    --
-    --  Description
-    --
-    --    This function is used to obtain the width of the screen in pixels.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Screen_No  : Specifies the screen number.
-    --
-    --  Documentation
-    --
-    --    Please refer to DisplayWidth in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Display_Width
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return Width_Height;
-
-    function X_Display_Width
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return Width_Height renames Display_Width;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Display_Width
+--    --
+--    --  Description
+--    --
+--    --    This function is used to obtain the width of the screen in pixels.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Screen_No  : Specifies the screen number.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to DisplayWidth in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Display_Width
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return Width_Height;
+--
+--    function X_Display_Width
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return Width_Height renames Display_Width;
 
     --========================================================================
     --  Subprogram Name
@@ -10657,36 +10657,36 @@ package X_Lib is
 
     function X_Q_Length (Dpy : in Display) return Natural renames Q_Length;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Root_Window
-    --
-    --  Description
-    --
-    --    This function is used to return the root window. This function is
-    --  useful with function that take a parent window as an argument.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Screen_No  : Specifies the screen number.
-    --
-    --  Documentation
-    --
-    --    Please refer to RootWindow in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Root_Window (Display_Id : in Display; Screen_No : in Screen_Number)
-			 return Window;
-
-    function X_Root_Window
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return Window renames Root_Window;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Root_Window
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the root window. This function is
+--    --  useful with function that take a parent window as an argument.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Screen_No  : Specifies the screen number.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to RootWindow in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Root_Window (Display_Id : in Display; Screen_No : in Screen_Number)
+--			 return Window;
+--
+--    function X_Root_Window
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return Window renames Root_Window;
 
     --========================================================================
     --  Subprogram Name
@@ -10715,33 +10715,33 @@ package X_Lib is
     function X_Screen_Count (Display_Id : in Display) return Screen_Number
        renames Screen_Count;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Server_Vendor
-    --
-    --  Description
-    --
-    --    This function is used to return a string that provides some
-    --  identification of the owner of the X Server implementation.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --
-    --  Documentation
-    --
-    --    Please refer to ServerVendor in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Server_Vendor (Display_Id : in Display) return String;
-
-    function X_Server_Vendor (Display_Id : in Display) return String
-       renames Server_Vendor;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Server_Vendor
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return a string that provides some
+--    --  identification of the owner of the X Server implementation.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to ServerVendor in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Server_Vendor (Display_Id : in Display) return String;
+--
+--    function X_Server_Vendor (Display_Id : in Display) return String
+--       renames Server_Vendor;
 
     --========================================================================
     --  Subprogram Name
@@ -10768,207 +10768,207 @@ package X_Lib is
 
     function Vendor_Release (Display_Id : in Display) return Natural;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    White_Pixel
-    --
-    --  Description
-    --
-    --    This function is used to return the white pixel value for the
-    --  specified display.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Screen_No  : Specifies the screen number.
-    --
-    --  Documentation
-    --
-    --    Please refer to WhitePixel in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    White_Pixel
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the white pixel value for the
+--    --  specified display.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Screen_No  : Specifies the screen number.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to WhitePixel in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function White_Pixel (Display_Id : in Display; Screen_No : in Screen_Number)
+--			 return U_Pixel;
+--
+--    function X_White_Pixel
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return U_Pixel renames White_Pixel;
 
-    function White_Pixel (Display_Id : in Display; Screen_No : in Screen_Number)
-			 return U_Pixel;
-
-    function X_White_Pixel
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return U_Pixel renames White_Pixel;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Screen_Of_Display, X_Screen_Of_Display
-    --
-    --  Description
-    --
-    --    This function is used to return a pointer to the screen record of
-    --  the specified display.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Screen_No : Specifies which screen to return.
-    --
-    --  Documentation
-    --
-    --    Please refer to ScreenOfDisplay in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Screen_Of_Display
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return Screen;
-
-    function X_Screen_Of_Display
-		(Display_Id : in Display; Screen_No : in Screen_Number)
-		return Screen renames Screen_Of_Display;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Default_Screen_Of_Display
-    --
-    --  Description
-    --
-    --    This function is used to return the default screen of the specified
-    --  display.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --
-    --  Documentation
-    --
-    --    Please refer to DefaultScreenOfDisplay in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Default_Screen_Of_Display (Display_Id : in Display) return Screen;
-
-    function X_Default_Screen_Of_Display (Display_Id : in Display) return Screen
-       renames Default_Screen_Of_Display;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Display_Of_Screen
-    --
-    --  Description
-    --
-    --    This function is used to return the display of the specified screen.
-    --
-    --  Parameters
-    --
-    --  Screen_Id  : Specifies the screen Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to DisplayOfScreen in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Display_Of_Screen (Screen_Id : in Screen) return Display;
-
-    function X_Display_Of_Screen (Screen_Id : in Screen) return Display
-       renames Display_Of_Screen;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Root_Window_Of_Screen
-    --
-    --  Description
-    --
-    --    This function is used to return the root window of the specified
-    --  screen.
-    --
-    --  Parameters
-    --
-    --  Screen_Id  : Specifies the screen Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to RootWindowOfScreen in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Root_Window_Of_Screen (Screen_Id : in Screen) return Window;
-
-    function X_Root_Window_Of_Screen (Screen_Id : in Screen) return Window
-       renames Root_Window_Of_Screen;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Black_Pixel_Of_Screen
-    --
-    --  Description
-    --
-    --    This function is used to return the black pixel value of the specified
-    --  screen.
-    --
-    --  Parameters
-    --
-    --  Screen_Id  : Specifies the screen Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to BlackPixelOfScreen in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Black_Pixel_Of_Screen (Screen_Id : in Screen) return U_Pixel;
-
-    function X_Black_Pixel_Of_Screen (Screen_Id : in Screen) return U_Pixel
-       renames Black_Pixel_Of_Screen;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    White_Pixel_Of_Screen
-    --
-    --  Description
-    --
-    --    This function is used to return the white pixel value of the specified
-    --  screen.
-    --
-    --  Parameters
-    --
-    --  Screen_Id  : Specifies the screen Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to WhitePixelOfScreen in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function White_Pixel_Of_Screen (Screen_Id : in Screen) return U_Pixel;
-
-    function X_White_Pixel_Of_Screen (Screen_Id : in Screen) return U_Pixel
-       renames White_Pixel_Of_Screen;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Screen_Of_Display, X_Screen_Of_Display
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return a pointer to the screen record of
+--    --  the specified display.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Screen_No : Specifies which screen to return.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to ScreenOfDisplay in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Screen_Of_Display
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return Screen;
+--
+--    function X_Screen_Of_Display
+--		(Display_Id : in Display; Screen_No : in Screen_Number)
+--		return Screen renames Screen_Of_Display;
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Default_Screen_Of_Display
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the default screen of the specified
+--    --  display.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to DefaultScreenOfDisplay in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Default_Screen_Of_Display (Display_Id : in Display) return Screen;
+--
+--    function X_Default_Screen_Of_Display (Display_Id : in Display) return Screen
+--       renames Default_Screen_Of_Display;
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Display_Of_Screen
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the display of the specified screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Screen_Id  : Specifies the screen Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to DisplayOfScreen in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Display_Of_Screen (Screen_Id : in Screen) return Display;
+--
+--    function X_Display_Of_Screen (Screen_Id : in Screen) return Display
+--       renames Display_Of_Screen;
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Root_Window_Of_Screen
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the root window of the specified
+--    --  screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Screen_Id  : Specifies the screen Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to RootWindowOfScreen in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Root_Window_Of_Screen (Screen_Id : in Screen) return Window;
+--
+--    function X_Root_Window_Of_Screen (Screen_Id : in Screen) return Window
+--       renames Root_Window_Of_Screen;
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Black_Pixel_Of_Screen
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the black pixel value of the specified
+--    --  screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Screen_Id  : Specifies the screen Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to BlackPixelOfScreen in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Black_Pixel_Of_Screen (Screen_Id : in Screen) return U_Pixel;
+--
+--    function X_Black_Pixel_Of_Screen (Screen_Id : in Screen) return U_Pixel
+--       renames Black_Pixel_Of_Screen;
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    White_Pixel_Of_Screen
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the white pixel value of the specified
+--    --  screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Screen_Id  : Specifies the screen Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to WhitePixelOfScreen in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function White_Pixel_Of_Screen (Screen_Id : in Screen) return U_Pixel;
+--
+--    function X_White_Pixel_Of_Screen (Screen_Id : in Screen) return U_Pixel
+--       renames White_Pixel_Of_Screen;
 
     --========================================================================
     --  Subprogram Name
@@ -11028,35 +11028,35 @@ package X_Lib is
     function X_Default_Depth_Of_Screen (Screen_Id : in Screen) return Depth_Type
        renames Default_Depth_Of_Screen;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Default_GC_Of_Screen
-    --
-    --  Description
-    --
-    --    This function is used to return the default Graphic Context of from
-    --  the specified screen.
-    --
-    --  Parameters
-    --
-    --  Screen_Id  : Specifies the screen Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to DefaultGCOfScreen in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Default_Gc_Of_Screen (Screen_Id : in Screen)
-				  return Graphic_Output.Graphic_Context;
-
-    function X_Default_Gc_Of_Screen
-		(Screen_Id : in Screen) return Graphic_Output.Graphic_Context
-       renames Default_Gc_Of_Screen;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Default_GC_Of_Screen
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the default Graphic Context of from
+--    --  the specified screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Screen_Id  : Specifies the screen Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to DefaultGCOfScreen in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Default_Gc_Of_Screen (Screen_Id : in Screen)
+--				  return Graphic_Output.Graphic_Context;
+--
+--    function X_Default_Gc_Of_Screen
+--		(Screen_Id : in Screen) return Graphic_Output.Graphic_Context
+--       renames Default_Gc_Of_Screen;
 
     --========================================================================
     --  Subprogram Name
@@ -11086,59 +11086,59 @@ package X_Lib is
     function X_Default_Visual_Of_Screen (Screen_Id : in Screen) return Visual
        renames Default_Visual_Of_Screen;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Width_Of_Screen
-    --
-    --  Description
-    --
-    --    This function is used to return the width of the specified screen.
-    --
-    --  Parameters
-    --
-    --  Screen_Id  : Specifies the screen Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to WidthOfScreen in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Width_Of_Screen (Screen_Id : in Screen) return Width_Height;
-
-    function X_Width_Of_Screen (Screen_Id : in Screen) return Width_Height
-       renames Width_Of_Screen;
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Height_Of_Screen
-    --
-    --  Description
-    --
-    --    This function is used to return the height of the specified screen.
-    --
-    --  Parameters
-    --
-    --  Screen_Id  : Specifies the screen Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to HeightOfScreen in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Height_Of_Screen (Screen_Id : in Screen) return Width_Height;
-
-    function X_Height_Of_Screen (Screen_Id : in Screen) return Width_Height
-       renames Height_Of_Screen;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Width_Of_Screen
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the width of the specified screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Screen_Id  : Specifies the screen Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to WidthOfScreen in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Width_Of_Screen (Screen_Id : in Screen) return Width_Height;
+--
+--    function X_Width_Of_Screen (Screen_Id : in Screen) return Width_Height
+--       renames Width_Of_Screen;
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Height_Of_Screen
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return the height of the specified screen.
+--    --
+--    --  Parameters
+--    --
+--    --  Screen_Id  : Specifies the screen Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to HeightOfScreen in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Height_Of_Screen (Screen_Id : in Screen) return Width_Height;
+--
+--    function X_Height_Of_Screen (Screen_Id : in Screen) return Width_Height
+--       renames Height_Of_Screen;
 
     --========================================================================
     --  Subprogram Name
@@ -11305,33 +11305,33 @@ package X_Lib is
     function X_Max_Cmaps_Of_Screen (Screen_Id : in Screen) return Natural
        renames Max_Cmaps_Of_Screen;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    Does_Save_Unders
-    --
-    --  Description
-    --
-    --    This function is used to return a Boolean value indicating whether
-    --  the screen supports save unders.
-    --
-    --  Parameters
-    --
-    --  Screen_Id  : Specifies the screen Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to DoesSaveUnders in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    function Does_Save_Unders (Screen_Id : in Screen) return Boolean;
-
-    function X_Does_Save_Unders (Screen_Id : in Screen) return Boolean
-       renames Does_Save_Unders;
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    Does_Save_Unders
+--    --
+--    --  Description
+--    --
+--    --    This function is used to return a Boolean value indicating whether
+--    --  the screen supports save unders.
+--    --
+--    --  Parameters
+--    --
+--    --  Screen_Id  : Specifies the screen Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to DoesSaveUnders in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    function Does_Save_Unders (Screen_Id : in Screen) return Boolean;
+--
+--    function X_Does_Save_Unders (Screen_Id : in Screen) return Boolean
+--       renames Does_Save_Unders;
 
     --========================================================================
     --  Subprogram Name
@@ -13025,184 +13025,184 @@ package X_Lib is
 				     Border : in U_Pixel;
 				     Background : in U_Pixel) return Window;
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Destroy_Window
-    --
-    --  Description
-    --
-    --    This procedure destroys a window and all of its subwindows.
-    --
-    --  Parameters
-    --
-    --  Display_Id   : Specifies the connection to the X Server.
-    --  Window_Id    : Specifies the Window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XDestroyWindow in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Destroy_Window (Display_Id : in Display; Window_Id : in Window);
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Destroy_Subwindows
-    --
-    --  Description
-    --
-    --    This procedure destroys all the subwindows of a specified window.
-    --
-    --  Parameters
-    --
-    --  Display_Id   : Specifies the connection to the X Server.
-    --  Window_Id    : Specifies the Window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XDestroySubwindows in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Destroy_Subwindows
-		 (Display_Id : in Display; Window_Id : in Window);
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Map_Window
-    --
-    --  Description
-    --
-    --   This procedure maps a specified window on the display.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Window_Id  : Specifies the window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XMapWindow in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Map_Window (Display_Id : in Display; Window_Id : in Window);
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Map_Raised
-    --
-    --  Description
-    --
-    --   This procedure maps and raises a specified window on the display.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Window_Id  : Specifies the window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XMapRaised in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Map_Raised (Display_Id : in Display; Window_Id : in Window);
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Map_Subwindows
-    --
-    --  Description
-    --
-    --   This procedure maps the subwindows of a specified window on the
-    --  display.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Window_Id  : Specifies the window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XMapSubwindows in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Map_Subwindows (Display_Id : in Display; Window_Id : in Window);
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Unmap_Window
-    --
-    --  Description
-    --
-    --   This procedure unmaps a specified window on the display.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Window_Id  : Specifies the window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XUnmapWindow in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Unmap_Window (Display_Id : in Display; Window_Id : in Window);
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Unmap_Subwindows
-    --
-    --  Description
-    --
-    --   This procedure unmaps the subwindows of a specified window on the
-    --  display.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Window_Id  : Specifies the window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XUnmapSubwindows in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Unmap_Subwindows
-		 (Display_Id : in Display; Window_Id : in Window);
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Destroy_Window
+--    --
+--    --  Description
+--    --
+--    --    This procedure destroys a window and all of its subwindows.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id   : Specifies the connection to the X Server.
+--    --  Window_Id    : Specifies the Window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XDestroyWindow in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Destroy_Window (Display_Id : in Display; Window_Id : in Window);
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Destroy_Subwindows
+--    --
+--    --  Description
+--    --
+--    --    This procedure destroys all the subwindows of a specified window.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id   : Specifies the connection to the X Server.
+--    --  Window_Id    : Specifies the Window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XDestroySubwindows in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Destroy_Subwindows
+--		 (Display_Id : in Display; Window_Id : in Window);
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Map_Window
+--    --
+--    --  Description
+--    --
+--    --   This procedure maps a specified window on the display.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Window_Id  : Specifies the window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XMapWindow in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Map_Window (Display_Id : in Display; Window_Id : in Window);
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Map_Raised
+--    --
+--    --  Description
+--    --
+--    --   This procedure maps and raises a specified window on the display.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Window_Id  : Specifies the window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XMapRaised in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Map_Raised (Display_Id : in Display; Window_Id : in Window);
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Map_Subwindows
+--    --
+--    --  Description
+--    --
+--    --   This procedure maps the subwindows of a specified window on the
+--    --  display.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Window_Id  : Specifies the window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XMapSubwindows in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Map_Subwindows (Display_Id : in Display; Window_Id : in Window);
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Unmap_Window
+--    --
+--    --  Description
+--    --
+--    --   This procedure unmaps a specified window on the display.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Window_Id  : Specifies the window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XUnmapWindow in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Unmap_Window (Display_Id : in Display; Window_Id : in Window);
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Unmap_Subwindows
+--    --
+--    --  Description
+--    --
+--    --   This procedure unmaps the subwindows of a specified window on the
+--    --  display.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Window_Id  : Specifies the window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XUnmapSubwindows in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Unmap_Subwindows
+--		 (Display_Id : in Display; Window_Id : in Window);
 
     --========================================================================
     --  Subprogram Name

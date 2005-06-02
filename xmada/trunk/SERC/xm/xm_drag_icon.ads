@@ -3,9 +3,9 @@
 with Xt, Xm, Xt_Object;
 
 package Xm_Drag_Icon is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
 
     type Xm_Drag_Attach is (Xmattach_North_West, Xmattach_North,
 			    Xmattach_North_East, Xmattach_East,
@@ -14,12 +14,12 @@ package Xm_Drag_Icon is
 			    Xmattach_Center, Xmattach_Hot);
     for Xm_Drag_Attach'Size use Xt.Xt_Ancillary_Types.Xt_Enum'Size;
 
-    subtype Drag_Icon_Object is Xt_Object.Obj_Widget;
-    subtype Drag_Icon_Object_Class is Xt_Object.Obj_Class;
-
-    function Xm_Drag_Icon_Object_Class return Drag_Icon_Object_Class;
-
-    function Xm_Is_Drag_Icon_Object_Class (W : in Xm.Xt_Widget) return Boolean;
+--    subtype Drag_Icon_Object is Xt_Object.Obj_Widget;
+--    subtype Drag_Icon_Object_Class is Xt_Object.Obj_Class;
+--
+--    function Xm_Drag_Icon_Object_Class return Drag_Icon_Object_Class;
+--
+--    function Xm_Is_Drag_Icon_Object_Class (W : in Xm.Xt_Widget) return Boolean;
 
     function Xm_Create_Drag_Icon
 		(W : in Xm.Xt_Widget;

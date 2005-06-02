@@ -1,26 +1,26 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm;
-
-package Xm_Frame is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Frame_Class is Xm.Manager_Class;
-    subtype Frame_Widget is Xm.Manager_Widget;
-
-    function Xm_Frame_Widget_Class return Frame_Class;
-
-    function Xm_Is_Frame (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Frame
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Frame;
-
+--
+--with Xm;
+--
+--package Xm_Frame is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Frame_Class is Xm.Manager_Class;
+--    subtype Frame_Widget is Xm.Manager_Widget;
+--
+--    function Xm_Frame_Widget_Class return Frame_Class;
+--
+--    function Xm_Is_Frame (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Frame
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Frame;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

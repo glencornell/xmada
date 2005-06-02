@@ -1,39 +1,39 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, Xm_Scrolled_Window;
-
-package Xm_Main_Window is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Main_Window_Class is Xm_Scrolled_Window.Scrolled_Window_Class;
-    subtype Main_Window_Widget is Xm_Scrolled_Window.Scrolled_Window_Widget;
-
-    function Xm_Main_Window_Widget_Class return Main_Window_Class;
-
-    function Xm_Is_Main_Window (W : in Xm.Xt_Widget) return Boolean;
-
-    procedure Xm_Main_Window_Set_Areas (W : in Xm.Xt_Widget;
-					Menu : in Xm.Xt_Widget;
-					Command : in Xm.Xt_Widget;
-					H_Scroll : in Xm.Xt_Widget;
-					V_Scroll : in Xm.Xt_Widget;
-					W_Region : in Xm.Xt_Widget);
-
-    function Xm_Main_Window_Sep1 (W : in Xm.Xt_Widget) return Xm.Xt_Widget;
-
-    function Xm_Main_Window_Sep2 (W : in Xm.Xt_Widget) return Xm.Xt_Widget;
-
-    function Xm_Main_Window_Sep3 (W : in Xm.Xt_Widget) return Xm.Xt_Widget;
-
-    function Xm_Create_Main_Window
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Main_Window;
-
+--
+--with Xm, Xm_Scrolled_Window;
+--
+--package Xm_Main_Window is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Main_Window_Class is Xm_Scrolled_Window.Scrolled_Window_Class;
+--    subtype Main_Window_Widget is Xm_Scrolled_Window.Scrolled_Window_Widget;
+--
+--    function Xm_Main_Window_Widget_Class return Main_Window_Class;
+--
+--    function Xm_Is_Main_Window (W : in Xm.Xt_Widget) return Boolean;
+--
+--    procedure Xm_Main_Window_Set_Areas (W : in Xm.Xt_Widget;
+--					Menu : in Xm.Xt_Widget;
+--					Command : in Xm.Xt_Widget;
+--					H_Scroll : in Xm.Xt_Widget;
+--					V_Scroll : in Xm.Xt_Widget;
+--					W_Region : in Xm.Xt_Widget);
+--
+--    function Xm_Main_Window_Sep1 (W : in Xm.Xt_Widget) return Xm.Xt_Widget;
+--
+--    function Xm_Main_Window_Sep2 (W : in Xm.Xt_Widget) return Xm.Xt_Widget;
+--
+--    function Xm_Main_Window_Sep3 (W : in Xm.Xt_Widget) return Xm.Xt_Widget;
+--
+--    function Xm_Create_Main_Window
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Main_Window;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

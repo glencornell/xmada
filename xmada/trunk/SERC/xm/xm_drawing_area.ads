@@ -1,44 +1,44 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, X_Lib, X_Configuration_Dependent;
-
-package Xm_Drawing_Area is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    type Xm_Drawing_Area_Callback_Rec is
-	record
-	    Reason : Xm.Callback_Reason;
-	    Event_Ptr : Xm.X_Event_Ptr;
-	    X_Window : X_Lib.Window;
-	end record;
-    for Xm_Drawing_Area_Callback_Rec use
-	record
-	    Reason at 0 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    X_Window at 2 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	end record;
-    type Xm_Drawing_Area_Callback_Rec_Ptr is
-       access Xm_Drawing_Area_Callback_Rec;
-
-    subtype Drawing_Area_Class is Xm.Manager_Class;
-    subtype Drawing_Area_Widget is Xm.Manager_Widget;
-
-    function Xm_Drawing_Area_Widget_Class return Drawing_Area_Class;
-
-    function Xm_Is_Drawing_Area (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Drawing_Area
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Drawing_Area;
-
+--
+--with Xm, X_Lib, X_Configuration_Dependent;
+--
+--package Xm_Drawing_Area is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    type Xm_Drawing_Area_Callback_Rec is
+--	record
+--	    Reason : Xm.Callback_Reason;
+--	    Event_Ptr : Xm.X_Event_Ptr;
+--	    X_Window : X_Lib.Window;
+--	end record;
+--    for Xm_Drawing_Area_Callback_Rec use
+--	record
+--	    Reason at 0 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    X_Window at 2 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	end record;
+--    type Xm_Drawing_Area_Callback_Rec_Ptr is
+--       access Xm_Drawing_Area_Callback_Rec;
+--
+--    subtype Drawing_Area_Class is Xm.Manager_Class;
+--    subtype Drawing_Area_Widget is Xm.Manager_Widget;
+--
+--    function Xm_Drawing_Area_Widget_Class return Drawing_Area_Class;
+--
+--    function Xm_Is_Drawing_Area (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Drawing_Area
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Drawing_Area;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

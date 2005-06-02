@@ -1,31 +1,31 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, Xt_Core, Xm_Arrow_Button;
-
-package Xm_Arrow_Button_Gadget is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    type Xm_Arrow_Button_Gadget_Callback_Rec is new
-       Xm_Arrow_Button.Xm_Arrow_Button_Callback_Rec;
-    type Xm_Arrow_Button_Gadget_Callback_Rec_Ptr is
-       access Xm_Arrow_Button_Gadget_Callback_Rec;
-
-    subtype Arrow_Button_Gadget_Class is Xm.Gadget_Class;
-    subtype Arrow_Button_Gadget is Xm.Gadget;
-
-    function Xm_Arrow_Button_Gadget_Class return Arrow_Button_Gadget_Class;
-
-    function Xm_Is_Arrow_Button_Gadget (W : Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Arrow_Button_Gadget
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Arrow_Button_Gadget;
-
+--
+--with Xm, Xt_Core, Xm_Arrow_Button;
+--
+--package Xm_Arrow_Button_Gadget is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    type Xm_Arrow_Button_Gadget_Callback_Rec is new
+--       Xm_Arrow_Button.Xm_Arrow_Button_Callback_Rec;
+--    type Xm_Arrow_Button_Gadget_Callback_Rec_Ptr is
+--       access Xm_Arrow_Button_Gadget_Callback_Rec;
+--
+--    subtype Arrow_Button_Gadget_Class is Xm.Gadget_Class;
+--    subtype Arrow_Button_Gadget is Xm.Gadget;
+--
+--    function Xm_Arrow_Button_Gadget_Class return Arrow_Button_Gadget_Class;
+--
+--    function Xm_Is_Arrow_Button_Gadget (W : Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Arrow_Button_Gadget
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Arrow_Button_Gadget;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

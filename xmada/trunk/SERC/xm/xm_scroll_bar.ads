@@ -1,26 +1,26 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, X_Lib, X_Configuration_Dependent;
-with Xm_Scrollbar; use Xm_Scrollbar;
-
-package Xm_Scroll_Bar is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 2005, Integrated Computer Solutions, Inc.  " &
-	  "All Rights Reserved.";
-
-    subtype Scroll_Bar_Class is Xm.Primitive_Class;
-    subtype Scroll_Bar_Widget is Xm.Primitive_Widget;
-
-    function Xm_Scroll_Bar_Widget_Class return Scrollbar_Class renames Xm_Scrollbar_Widget_Class;
-
-    function Xm_Create_Scroll_Bar
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget
-		renames Xm_Create_Scrollbar;
-end Xm_Scroll_Bar;
-
+--
+--with Xm, X_Lib, X_Configuration_Dependent;
+--with Xm_Scrollbar; use Xm_Scrollbar;
+--
+--package Xm_Scroll_Bar is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 2005, Integrated Computer Solutions, Inc.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Scroll_Bar_Class is Xm.Primitive_Class;
+--    subtype Scroll_Bar_Widget is Xm.Primitive_Widget;
+--
+--    function Xm_Scroll_Bar_Widget_Class return Scrollbar_Class renames Xm_Scrollbar_Widget_Class;
+--
+--    function Xm_Create_Scroll_Bar
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget
+--		renames Xm_Create_Scrollbar;
+--end Xm_Scroll_Bar;
+--
 -- ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 2005 Integrated Computer Solutions Corporation

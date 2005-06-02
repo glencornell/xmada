@@ -3,104 +3,104 @@
 with Xm, Xt, X_Lib, X_Configuration_Dependent;
 
 package Xm_Row_Column is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    type Xm_Row_Column_Callback_Rec is
-	record
-	    Reason : Xm.Callback_Reason;
-	    Event_Ptr : Xm.X_Event_Ptr;
-	    Widget : Xm.Xt_Widget;
-	    Data : Xt.Xt_Pointer;
-	    Callback_Rec : Xt.Xt_Pointer;
-	end record;
-    for Xm_Row_Column_Callback_Rec use
-	record
-	    Reason at 0 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Widget at 2 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Data at 3 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Callback_Rec at 4 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	end record;
-    type Xm_Row_Column_Callback_Rec_Ptr is access Xm_Row_Column_Callback_Rec;
-
-    subtype Row_Column_Class is Xm.Manager_Class;
-    subtype Row_Column_Widget is Xm.Manager_Widget;
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    type Xm_Row_Column_Callback_Rec is
+--	record
+--	    Reason : Xm.Callback_Reason;
+--	    Event_Ptr : Xm.X_Event_Ptr;
+--	    Widget : Xm.Xt_Widget;
+--	    Data : Xt.Xt_Pointer;
+--	    Callback_Rec : Xt.Xt_Pointer;
+--	end record;
+--    for Xm_Row_Column_Callback_Rec use
+--	record
+--	    Reason at 0 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Widget at 2 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Data at 3 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Callback_Rec at 4 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	end record;
+--    type Xm_Row_Column_Callback_Rec_Ptr is access Xm_Row_Column_Callback_Rec;
+--
+--    subtype Row_Column_Class is Xm.Manager_Class;
+--    subtype Row_Column_Widget is Xm.Manager_Widget;
 
     subtype Option_Menu_Class is Row_Column_Class;
     subtype Option_Menu_Widget is Row_Column_Widget;
 
-    function Xm_Row_Column_Widget_Class return Row_Column_Class;
-
-    function Xm_Is_Row_Column (W : Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Radio_Box
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Row_Column
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Work_Area
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Popup_Menu
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Pulldown_Menu
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Option_Menu
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Menu_Bar
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    procedure Xm_Menu_Position (Parent : in Xm.Xt_Widget;
-				The_Event : in X_Lib.Events.Button_Event);
-
-    function Xm_Option_Label_Gadget (M : Xm.Xt_Widget) return Xm.Xt_Widget;
-
-    function Xm_Option_Button_Gadget (M : Xm.Xt_Widget) return Xm.Xt_Widget;
-
-    function Xm_Get_Posted_From_Widget
-		(Menu : Xm.Xt_Widget) return Xm.Xt_Widget;
-
-    procedure Xm_Add_To_Post_From_List
-		 (Menu_Wid : in Xm.Xt_Widget; Wid : in Xm.Xt_Widget);
-
-    procedure Xm_Remove_From_Post_From_List
-		 (Menu_Wid : in Xm.Xt_Widget; Wid : in Xm.Xt_Widget);
-
-    function Xm_Get_Tear_Off_Control
-		(Menu : in Xm.Xt_Widget) return Xm.Xt_Widget;
-
+--    function Xm_Row_Column_Widget_Class return Row_Column_Class;
+--
+--    function Xm_Is_Row_Column (W : Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Radio_Box
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Row_Column
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Work_Area
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Popup_Menu
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Pulldown_Menu
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Option_Menu
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Menu_Bar
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    procedure Xm_Menu_Position (Parent : in Xm.Xt_Widget;
+--				The_Event : in X_Lib.Events.Button_Event);
+--
+--    function Xm_Option_Label_Gadget (M : Xm.Xt_Widget) return Xm.Xt_Widget;
+--
+--    function Xm_Option_Button_Gadget (M : Xm.Xt_Widget) return Xm.Xt_Widget;
+--
+--    function Xm_Get_Posted_From_Widget
+--		(Menu : Xm.Xt_Widget) return Xm.Xt_Widget;
+--
+--    procedure Xm_Add_To_Post_From_List
+--		 (Menu_Wid : in Xm.Xt_Widget; Wid : in Xm.Xt_Widget);
+--
+--    procedure Xm_Remove_From_Post_From_List
+--		 (Menu_Wid : in Xm.Xt_Widget; Wid : in Xm.Xt_Widget);
+--
+--    function Xm_Get_Tear_Off_Control
+--		(Menu : in Xm.Xt_Widget) return Xm.Xt_Widget;
+--
 end Xm_Row_Column;
 
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------

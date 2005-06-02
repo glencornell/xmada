@@ -293,12 +293,12 @@ package Xm_Drag_Context is
     type Xm_Drag_Drop_Finish_Callback_Rec_Ptr is
        access Xm_Drag_Drop_Finish_Callback_Rec;
 
-    subtype Drag_Context_Widget is Xt_Core.Core_Widget;
-    subtype Drag_Context_Class is Xt_Core.Core_Class;
-
-    function Xm_Drag_Context_Widget_Class return Drag_Context_Class;
-
-    function Xm_Is_Drag_Context (W : in Xm.Xt_Widget) return Boolean;
+--    subtype Drag_Context_Widget is Xt_Core.Core_Widget;
+--    subtype Drag_Context_Class is Xt_Core.Core_Class;
+--
+--    function Xm_Drag_Context_Widget_Class return Drag_Context_Class;
+--
+--    function Xm_Is_Drag_Context (W : in Xm.Xt_Widget) return Boolean;
 
     function Xm_Drag_Start (W : in Xm.Xt_Widget;
 			    Event : in X_Lib.Events.Event;

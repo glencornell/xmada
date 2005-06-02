@@ -29,12 +29,12 @@ package Xm_Drop_Transfer is
        array (Natural range <>) of Xm_Drop_Transfer_Entry_Rec;
     type Xm_Drop_Transfer_Entry_List is access Xm_Drop_Transfer_Entry_Rec;
 
-    subtype Drop_Transfer_Object_Widget is Xt_Object.Obj_Widget;
-    subtype Drop_Transfer_Object_Class is Xt_Object.Obj_Class;
-
-    function Xm_Drop_Transfer_Object_Class return Drop_Transfer_Object_Class;
-
-    function Xm_Is_Drop_Transfer (W : in Xm.Xt_Widget) return Boolean;
+--    subtype Drop_Transfer_Object_Widget is Xt_Object.Obj_Widget;
+--    subtype Drop_Transfer_Object_Class is Xt_Object.Obj_Class;
+--
+--    function Xm_Drop_Transfer_Object_Class return Drop_Transfer_Object_Class;
+--
+--    function Xm_Is_Drop_Transfer (W : in Xm.Xt_Widget) return Boolean;
 
     function Xm_Drop_Transfer_Start
 		(Ref_Widget : in Xm.Xt_Widget;

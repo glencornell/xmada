@@ -65,7 +65,7 @@ package X_Configuration_Dependent is
     subtype Unsigned_Char is Card8;
     subtype Byte is Card8;
 
-    subtype Bool is Int;
+--    subtype Bool is Int;
 
     subtype Flt is Float;
     type Serc_Float is digits 15;

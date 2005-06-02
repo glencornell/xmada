@@ -3,9 +3,9 @@
 with X_Lib, Xt, Xm, Xm_Desktop;
 
 package Xm_Display is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
 
     type Xm_Drag_Protocol_Style is
        (Xmdrag_None, Xmdrag_Drop_Only, Xmdrag_Prefer_Preregister,
@@ -13,20 +13,20 @@ package Xm_Display is
 	Xmdrag_Dynamic, Xmdrag_Prefer_Receiver);
     for Xm_Drag_Protocol_Style'Size use Xt.Xt_Ancillary_Types.Xt_Enum'Size;
 
-    subtype Display_Object is Xm_Desktop.Desktop_Object;
-    subtype Display_Object_Class is Xm_Desktop.Desktop_Object_Class;
-
-    function Xm_Display_Object_Class return Display_Object_Class;
-
-    function Xm_Is_Display (W : in Xm.Xt_Widget) return Boolean;
+--    subtype Display_Object is Xm_Desktop.Desktop_Object;
+--    subtype Display_Object_Class is Xm_Desktop.Desktop_Object_Class;
+--
+--    function Xm_Display_Object_Class return Display_Object_Class;
+--
+--    function Xm_Is_Display (W : in Xm.Xt_Widget) return Boolean;
 
     function Xm_Get_Display (W : in Xm.Xt_Widget) return Xm.Xt_Widget;
 
     function Xm_Get_Drag_Context
 		(W : in Xm.Xt_Widget; Time : in X_Lib.Time) return Xm.Xt_Widget;
 
-    function Xm_Get_Xm_Display (Dpy : in X_Lib.Display) return Xm.Xt_Widget;
-
+--    function Xm_Get_Xm_Display (Dpy : in X_Lib.Display) return Xm.Xt_Widget;
+--
 end Xm_Display;
 
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------

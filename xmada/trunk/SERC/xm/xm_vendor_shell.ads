@@ -1,19 +1,19 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, Xt_Shell;
-
-package Xm_Vendor_Shell is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    function Vendor_Shell_Widget_Class return Xt_Shell.Vendor_Shell_Class;
-
-    function Xm_Is_Vendor_Shell (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Is_Motif_Wm_Running (Shell : in Xm.Xt_Widget) return Boolean;
-end Xm_Vendor_Shell;
-
+--
+--with Xm, Xt_Shell;
+--
+--package Xm_Vendor_Shell is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    function Vendor_Shell_Widget_Class return Xt_Shell.Vendor_Shell_Class;
+--
+--    function Xm_Is_Vendor_Shell (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Is_Motif_Wm_Running (Shell : in Xm.Xt_Widget) return Boolean;
+--end Xm_Vendor_Shell;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

@@ -1,72 +1,72 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, Xm_Bulletin_Board;
-
-package Xm_Message_Box is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Message_Box_Class is Xm_Bulletin_Board.Bulletin_Board_Class;
-    subtype Message_Box_Widget is Xm_Bulletin_Board.Bulletin_Board_Widget;
-
-    function Xm_Message_Box_Widget_Class return Message_Box_Class;
-
-    function Xm_Is_Message_Box (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Message_Box
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Message_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Error_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Information_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Question_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Warning_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Working_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Template_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Message_Box_Get_Child
-		(W : Xm.Xt_Widget; Child : Xm.Xm_Child_Types)
-		return Xm.Xt_Widget;
-end Xm_Message_Box;
-
+--
+--with Xm, Xm_Bulletin_Board;
+--
+--package Xm_Message_Box is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Message_Box_Class is Xm_Bulletin_Board.Bulletin_Board_Class;
+--    subtype Message_Box_Widget is Xm_Bulletin_Board.Bulletin_Board_Widget;
+--
+--    function Xm_Message_Box_Widget_Class return Message_Box_Class;
+--
+--    function Xm_Is_Message_Box (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Message_Box
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Message_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Error_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Information_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Question_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Warning_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Working_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Template_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Message_Box_Get_Child
+--		(W : Xm.Xt_Widget; Child : Xm.Xm_Child_Types)
+--		return Xm.Xt_Widget;
+--end Xm_Message_Box;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation
