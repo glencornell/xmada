@@ -1,0 +1,92 @@
+-- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
+
+with Xm, X_Lib, Xm_Label, X_Configuration_Dependent;
+
+package Xm_Drawn_Button is
+    Copyright_Notice : constant String :=
+       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+	  "All Rights Reserved.";
+
+    type Xm_Drawn_Button_Callback_Rec is
+	record
+	    Reason : Xm.Callback_Reason;
+	    Event_Ptr : Xm.X_Event_Ptr;
+	    X_Window : X_Lib.Window;
+	    Click_Count : X_Lib.X_Integer;
+	end record;
+    for Xm_Drawn_Button_Callback_Rec use
+	record
+	    Reason at 0 * X_Configuration_Dependent.Word_Size
+	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
+	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+	    X_Window at 2 * X_Configuration_Dependent.Word_Size
+	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+	    Click_Count at 3 * X_Configuration_Dependent.Word_Size
+	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+	end record;
+    type Xm_Drawn_Button_Callback_Rec_Ptr is
+       access Xm_Drawn_Button_Callback_Rec;
+
+    subtype Drawn_Button_Class is Xm_Label.Label_Class;
+    subtype Drawn_Button_Widget is Xm_Label.Label_Widget;
+
+    function Xm_Drawn_Button_Widget_Class return Drawn_Button_Class;
+
+    function Xm_Is_Drawn_Button (W : Xm.Xt_Widget) return Boolean;
+
+    function Xm_Create_Drawn_Button
+		(Parent : in Xm.Xt_Widget;
+		 Name : in String;
+		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+		return Xm.Xt_Widget;
+end Xm_Drawn_Button;
+
+------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
+--
+-- (C) Copyright 1991, 1993 Systems Engineering Research Corporation
+-- All Rights Reserved
+--
+-- This notice must be included in all copies of this software.
+--
+-- THIS SOFTWARE AND MANUAL ARE BOTH PROTECTED BY U.S. COPYRIGHT
+-- LAW (TITLE 17 UNITED STATES CODE).  UNAUTHORIZED REPRODUCTION
+-- AND/OR SALES MAY RESULT IN IMPRISIONMENT OF UP TO ONE YEAR AND
+-- FINES OF UP TO $10,000 (17 USC 506).  COPYRIGHT INFRINGERS MAY
+-- ALSO BE SUBJECT TO CIVIL LIABILITY.
+--
+-- THIS PROGRAM IS AN UNPUBLISHED WORK FULLY PROTECTED BY THE
+-- UNITED STATES COPYRIGHT LAWS AND IS CONSIDERED A TRADE SECRET
+-- BELONGING TO THE COPYRIGHT HOLDER.
+--
+-- Use of this software is restricted to those individuals and/or
+-- organizations who have acquired a license from Systems Engineering
+-- Research Corporation for a particular machine or set of machines.
+-- No copying, use, or distribution of this software from or to an unlicensed
+-- machine is allowed without the prior written consent of Systems
+-- Engineering Research Corporation.
+--
+-- The SOFTWARE and documentation are provided with RESTRICTED RIGHTS.  Use,
+-- duplication, or disclosure by the Government is subject to the restrictions
+-- as set forth in subparagraph (c)(1)(ii) of The Rights in Technical Data
+-- and Computer Software clause at 52.227-7013.  Contractor/manufacturer is
+-- Systems Engineering Research Corporation/2555 Charleston Road/
+-- Mountain View, CA 94043 1-800-Ada-SERC.
+--
+------- DISCLAIMER -------
+--
+-- This software and its documentation are provided "AS IS" and
+-- without any expressed or implied warranties whatsoever.
+-- No warranties as to performance, merchantability, or fitness
+-- for a particular purpose exist.
+--
+-- Because of the diversity of conditions and hardware under
+-- which this software may be used, no warranty of fitness for
+-- a particular purpose is offered.  The user is advised to
+-- test the software thoroughly before relying on it.  The user
+-- must assume the entire risk and liability of using this
+-- software.
+--
+-- In no event shall Systems Engineering Research Corporation and its
+-- personnel be held responsible for any direct, indirect, consequential
+-- or inconsequential damages or lost profits.
