@@ -3,27 +3,27 @@
 with Xm, Xt;
 
 package Xm_Scrolled_Window is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Scrolled_Window_Class is Xm.Manager_Class;
-    subtype Scrolled_Window_Widget is Xm.Manager_Widget;
-
-    function Xm_Scrolled_Window_Widget_Class return Scrolled_Window_Class;
-
-    function Xm_Is_Scrolled_Window (W : in Xm.Xt_Widget) return Boolean;
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Scrolled_Window_Class is Xm.Manager_Class;
+--    subtype Scrolled_Window_Widget is Xm.Manager_Widget;
+--
+--    function Xm_Scrolled_Window_Widget_Class return Scrolled_Window_Class;
+--
+--    function Xm_Is_Scrolled_Window (W : in Xm.Xt_Widget) return Boolean;
 
     procedure Xm_Scrolled_Window_Set_Areas (Sw : in Xm.Xt_Widget;
 					    H_Scroll : in Xm.Xt_Widget;
 					    V_Scroll : in Xm.Xt_Widget;
 					    W_Region : in Xm.Xt_Widget);
 
-    function Xm_Create_Scrolled_Window
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
+--    function Xm_Create_Scrolled_Window
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
 
     procedure Xm_Scroll_Visible (Sw : in Xm.Xt_Widget;
 				 Wid : in Xm.Xt_Widget;

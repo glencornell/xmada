@@ -246,41 +246,41 @@ package X_Ext is
 		Pad05 at 7 * Word_Size range 0 .. 31;
 	    end record;
 
-	type X_Any_Class_Info is
-	    record
-		Class : X_Configuration_Dependent.Card8;
-		Length : X_Configuration_Dependent.Card8;
-		Dummy : X_Configuration_Dependent.Card8;
-	    end record;
-
-	for X_Any_Class_Info use
-	    record
-		Class at 0 * Word_Size range 0 .. 7;
-		Length at 0 * Word_Size + 1 range 0 .. 7;
-		Dummy at 0 * Word_Size + 3 range 0 .. 7;
-	    end record;
-
-	type X_Any_Class_Info_Ptr is access X_Any_Class_Info;
-
-	type X_Device_Info is
-	    record
-		Types : X_Lib.Events.Event_Type;
-		Id : X_Configuration_Dependent.Card8;
-		Num_Classes : X_Configuration_Dependent.Card8;
-		Used : X_Configuration_Dependent.Card8;
-		Pad1 : X_Configuration_Dependent.Card8;
-	    end record;
-
-	for X_Device_Info use
-	    record
-		Types at 0 * Word_Size range 0 .. 31;
-		Id at 1 * Word_Size range 0 .. 7;
-		Num_Classes at 1 * Word_Size + 1 range 0 .. 7;
-		Used at 1 * Word_Size + 2 range 0 .. 7;
-		Pad1 at 1 * Word_Size + 3 range 0 .. 7;
-	    end record;
-
-	type X_Device_Info_Ptr is access X_Device_Info;
+--	type X_Any_Class_Info is
+--	    record
+--		Class : X_Configuration_Dependent.Card8;
+--		Length : X_Configuration_Dependent.Card8;
+--		Dummy : X_Configuration_Dependent.Card8;
+--	    end record;
+--
+--	for X_Any_Class_Info use
+--	    record
+--		Class at 0 * Word_Size range 0 .. 7;
+--		Length at 0 * Word_Size + 1 range 0 .. 7;
+--		Dummy at 0 * Word_Size + 3 range 0 .. 7;
+--	    end record;
+--
+--	type X_Any_Class_Info_Ptr is access X_Any_Class_Info;
+--
+--	type X_Device_Info is
+--	    record
+--		Types : X_Lib.Events.Event_Type;
+--		Id : X_Configuration_Dependent.Card8;
+--		Num_Classes : X_Configuration_Dependent.Card8;
+--		Used : X_Configuration_Dependent.Card8;
+--		Pad1 : X_Configuration_Dependent.Card8;
+--	    end record;
+--
+--	for X_Device_Info use
+--	    record
+--		Types at 0 * Word_Size range 0 .. 31;
+--		Id at 1 * Word_Size range 0 .. 7;
+--		Num_Classes at 1 * Word_Size + 1 range 0 .. 7;
+--		Used at 1 * Word_Size + 2 range 0 .. 7;
+--		Pad1 at 1 * Word_Size + 3 range 0 .. 7;
+--	    end record;
+--
+--	type X_Device_Info_Ptr is access X_Device_Info;
 
 	type X_Key_Info is
 	    record
@@ -3771,24 +3771,24 @@ package X_Ext is
 
 	I_Name : constant String := "XInputExtension" & Ascii.Nul;
 
-	Xi_Keyboard : constant String := "KEYBOARD" & Ascii.Nul;
-	Xi_Mouse : constant String := "MOUSE" & Ascii.Nul;
-	Xi_Tablet : constant String := "TABLET" & Ascii.Nul;
-	Xi_Touchscreen : constant String := "TOUCHSCREEN" & Ascii.Nul;
-	Xi_Touchpad : constant String := "TOUCHPAD" & Ascii.Nul;
-	Xi_Barcode : constant String := "BARCODE" & Ascii.Nul;
-	Xi_Buttonbox : constant String := "BUTTONBOX" & Ascii.Nul;
-	Xi_Knob_Box : constant String := "KNOB_BOX" & Ascii.Nul;
-	Xi_One_Knob : constant String := "ONE_KNOB" & Ascii.Nul;
-	Xi_Nine_Knob : constant String := "NINE_KNOB" & Ascii.Nul;
-	Xi_Trackball : constant String := "TRACKBALL" & Ascii.Nul;
-	Xi_Quadrature : constant String := "QUADRATURE" & Ascii.Nul;
-	Xi_Id_Module : constant String := "ID_MODULE" & Ascii.Nul;
-	Xi_Spaceball : constant String := "SPACEBALL" & Ascii.Nul;
-	Xi_Dataglove : constant String := "DATAGLOVE" & Ascii.Nul;
-	Xi_Eyetracker : constant String := "EYETRACKER" & Ascii.Nul;
-	Xi_Cursorkeys : constant String := "CURSORKEYS" & Ascii.Nul;
-	Xi_Footmouse : constant String := "FOOTMOUSE" & Ascii.Nul;
+--	Xi_Keyboard : constant String := "KEYBOARD" & Ascii.Nul;
+--	Xi_Mouse : constant String := "MOUSE" & Ascii.Nul;
+--	Xi_Tablet : constant String := "TABLET" & Ascii.Nul;
+--	Xi_Touchscreen : constant String := "TOUCHSCREEN" & Ascii.Nul;
+--	Xi_Touchpad : constant String := "TOUCHPAD" & Ascii.Nul;
+--	Xi_Barcode : constant String := "BARCODE" & Ascii.Nul;
+--	Xi_Buttonbox : constant String := "BUTTONBOX" & Ascii.Nul;
+--	Xi_Knob_Box : constant String := "KNOB_BOX" & Ascii.Nul;
+--	Xi_One_Knob : constant String := "ONE_KNOB" & Ascii.Nul;
+--	Xi_Nine_Knob : constant String := "NINE_KNOB" & Ascii.Nul;
+--	Xi_Trackball : constant String := "TRACKBALL" & Ascii.Nul;
+--	Xi_Quadrature : constant String := "QUADRATURE" & Ascii.Nul;
+--	Xi_Id_Module : constant String := "ID_MODULE" & Ascii.Nul;
+--	Xi_Spaceball : constant String := "SPACEBALL" & Ascii.Nul;
+--	Xi_Dataglove : constant String := "DATAGLOVE" & Ascii.Nul;
+--	Xi_Eyetracker : constant String := "EYETRACKER" & Ascii.Nul;
+--	Xi_Cursorkeys : constant String := "CURSORKEYS" & Ascii.Nul;
+--	Xi_Footmouse : constant String := "FOOTMOUSE" & Ascii.Nul;
 
 	Dont_Check : constant := 0;
 	X_Input_Initial_Release : constant := 1;
@@ -3826,9 +3826,9 @@ package X_Ext is
 
 	Use_X_Keyboard : constant := 16#FF#;
 
-	Is_X_Pointer : constant := 0;
-	Is_X_Keyboard : constant := 1;
-	Is_X_Extension_Device : constant := 2;
+--	Is_X_Pointer : constant := 0;
+--	Is_X_Keyboard : constant := 1;
+--	Is_X_Extension_Device : constant := 2;
 
 	Async_This_Device : constant := 0;
 	Sync_This_Device : constant := 1;
@@ -3857,8 +3857,8 @@ package X_Ext is
 	Dv_String : constant := 1;
 	Dv_Integer : constant := 1;
 
-	Relative : constant := 0;
-	Absolute : constant := 1;
+--	Relative : constant := 0;
+--	Absolute : constant := 1;
 
 	Proximity_State : constant := 2;
 	In_Proximity : constant := 0;
@@ -3867,13 +3867,13 @@ package X_Ext is
 	Add_To_List : constant := 0;
 	Delete_From_List : constant := 1;
 
-	Key_Class : constant := 0;
-	Button_Class : constant := 1;
-	Valuator_Class : constant := 2;
-	Feedback_Class : constant := 3;
-	Proximity_Class : constant := 4;
-	Focus_Class : constant := 5;
-	Other_Class : constant := 6;
+--	Key_Class : constant := 0;
+--	Button_Class : constant := 1;
+--	Valuator_Class : constant := 2;
+--	Feedback_Class : constant := 3;
+--	Proximity_Class : constant := 4;
+--	Focus_Class : constant := 5;
+--	Other_Class : constant := 6;
 
 	Kbd_Feedback_Class : constant := 0;
 	Ptr_Feedback_Class : constant := 1;
@@ -4851,22 +4851,22 @@ package X_Ext is
 	type X_Button_Info_Ptr is access X_Button_Info;
 	for X_Button_Info_Ptr'Storage_Size use 0;
 
-	type X_Axis_Info is
-	    record
-		Resolution : X_Lib.X_Integer;
-		Min_Value : X_Lib.X_Integer;
-		Max_Value : X_Lib.X_Integer;
-	    end record;
-
-	for X_Axis_Info use
-	    record
-		Resolution at 0 * Word_Size range 0 .. 31;
-		Min_Value at 1 * Word_Size range 0 .. 31;
-		Max_Value at 2 * Word_Size range 0 .. 31;
-	    end record;
-
-	type X_Axis_Info_Ptr is access X_Axis_Info;
-	for X_Axis_Info_Ptr'Storage_Size use 0;
+--	type X_Axis_Info is
+--	    record
+--		Resolution : X_Lib.X_Integer;
+--		Min_Value : X_Lib.X_Integer;
+--		Max_Value : X_Lib.X_Integer;
+--	    end record;
+--
+--	for X_Axis_Info use
+--	    record
+--		Resolution at 0 * Word_Size range 0 .. 31;
+--		Min_Value at 1 * Word_Size range 0 .. 31;
+--		Max_Value at 2 * Word_Size range 0 .. 31;
+--	    end record;
+--
+--	type X_Axis_Info_Ptr is access X_Axis_Info;
+--	for X_Axis_Info_Ptr'Storage_Size use 0;
 	type X_Valuator_Info is
 	    record
 		Class : X_Lib.X_Id;
@@ -4893,37 +4893,37 @@ package X_Ext is
 	-- * event the device reports.
 	-- *
 
-	type X_Input_Class_Info is
-	    record
-		Input_Class : X_Lib.X_Character;
-		Event_Type_Base : X_Lib.X_Character;
-		Dummy : X_Lib.X_Character;
-	    end record;
-
-	for X_Input_Class_Info use
-	    record
-		Input_Class at 0 * Word_Size range 0 .. 7;
-		Event_Type_Base at 0 * Word_Size + 1 range 0 .. 7;
-		Dummy at 0 * Word_Size + 3 range 0 .. 7;
-	    end record;
+--	type X_Input_Class_Info is
+--	    record
+--		Input_Class : X_Lib.X_Character;
+--		Event_Type_Base : X_Lib.X_Character;
+--		Dummy : X_Lib.X_Character;
+--	    end record;
+--
+--	for X_Input_Class_Info use
+--	    record
+--		Input_Class at 0 * Word_Size range 0 .. 7;
+--		Event_Type_Base at 0 * Word_Size + 1 range 0 .. 7;
+--		Dummy at 0 * Word_Size + 3 range 0 .. 7;
+--	    end record;
 
 	X_Input_Class_Info_Size : constant := 16;
 
-	type X_Input_Class_Info_Ptr is access X_Input_Class_Info;
-	for X_Input_Class_Info_Ptr'Storage_Size use 0;
-	type X_Device is
-	    record
-		Device_Id : X_Lib.X_Id;
-		Num_Classes : X_Lib.X_Integer;
-		Classes : X_Input_Class_Info_Ptr;
-	    end record;
-
-	for X_Device use
-	    record
-		Device_Id at 0 * Word_Size range 0 .. 31;
-		Num_Classes at 1 * Word_Size range 0 .. 31;
-		Classes at 2 * Word_Size range 0 .. 31;
-	    end record;
+--	type X_Input_Class_Info_Ptr is access X_Input_Class_Info;
+--	for X_Input_Class_Info_Ptr'Storage_Size use 0;
+--	type X_Device is
+--	    record
+--		Device_Id : X_Lib.X_Id;
+--		Num_Classes : X_Lib.X_Integer;
+--		Classes : X_Input_Class_Info_Ptr;
+--	    end record;
+--
+--	for X_Device use
+--	    record
+--		Device_Id at 0 * Word_Size range 0 .. 31;
+--		Num_Classes at 1 * Word_Size range 0 .. 31;
+--		Classes at 2 * Word_Size range 0 .. 31;
+--	    end record;
 
 	-- ******************************************************************
 	-- *
@@ -5118,12 +5118,12 @@ package X_Ext is
 	-- * Function definitions.
 	-- *
 
-	function X_Open_Device (Dpy : in X_Lib.Display; Id : in X_Lib.X_Id)
-			       return X_Device;
-
-	procedure X_List_Input_Devices (Dpy : in X_Lib.Display;
-					N_Devices : out X_Lib.X_Integer;
-					Dev_Info : out X_Device_Info);
+--	function X_Open_Device (Dpy : in X_Lib.Display; Id : in X_Lib.X_Id)
+--			       return X_Device;
+--
+--	procedure X_List_Input_Devices (Dpy : in X_Lib.Display;
+--					N_Devices : out X_Lib.X_Integer;
+--					Dev_Info : out X_Device_Info);
 
 	procedure X_Get_Device_Motion_Events
 		     (Dpy : in X_Lib.Display;

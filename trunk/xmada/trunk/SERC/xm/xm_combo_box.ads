@@ -1,28 +1,28 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm;
-
-package Xm_Combo_Box is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 2005, Integrated Computer Solutions, Inc.  " &
-	  "All Rights Reserved.";
-
-
-    subtype Combo_Box_Class is Xm.Manager_Class;
-    subtype Combo_Box_Widget is Xm.Manager_Widget;
-
-    function Xm_Combo_Box_Widget_Class return Combo_Box_Class;
-
-    function Xm_Is_Combo_Box (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Combo_Box
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-end Xm_Combo_Box;
-
+--
+--with Xm;
+--
+--package Xm_Combo_Box is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 2005, Integrated Computer Solutions, Inc.  " &
+--	  "All Rights Reserved.";
+--
+--
+--    subtype Combo_Box_Class is Xm.Manager_Class;
+--    subtype Combo_Box_Widget is Xm.Manager_Widget;
+--
+--    function Xm_Combo_Box_Widget_Class return Combo_Box_Class;
+--
+--    function Xm_Is_Combo_Box (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Combo_Box
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--end Xm_Combo_Box;
+--
 -- ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 2005 Integrated Computer Solutions Corporation

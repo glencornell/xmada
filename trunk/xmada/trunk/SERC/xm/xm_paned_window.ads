@@ -1,26 +1,26 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm;
-
-package Xm_Paned_Window is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Paned_Window_Class is Xm.Manager_Class;
-    subtype Paned_Window_Widget is Xm.Manager_Widget;
-
-    function Xm_Paned_Window_Widget_Class return Paned_Window_Class;
-
-    function Xm_Is_Paned_Window (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Paned_Window
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Paned_Window;
-
+--
+--with Xm;
+--
+--package Xm_Paned_Window is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Paned_Window_Class is Xm.Manager_Class;
+--    subtype Paned_Window_Widget is Xm.Manager_Widget;
+--
+--    function Xm_Paned_Window_Widget_Class return Paned_Window_Class;
+--
+--    function Xm_Is_Paned_Window (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Paned_Window
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Paned_Window;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

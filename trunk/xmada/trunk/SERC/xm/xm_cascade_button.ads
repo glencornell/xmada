@@ -1,29 +1,29 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, Xm_Label;
-
-package Xm_Cascade_Button is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Cascade_Button_Class is Xm_Label.Label_Class;
-    subtype Cascade_Button_Widget is Xm_Label.Label_Widget;
-
-    function Xm_Cascade_Button_Widget_Class return Cascade_Button_Class;
-
-    function Xm_Is_Cascade_Button (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Cascade_Button
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    procedure Xm_Cascade_Button_Highlight
-		 (Cb : in Xm.Xt_Widget; Highlight : in Boolean);
-end Xm_Cascade_Button;
-
+--
+--with Xm, Xm_Label;
+--
+--package Xm_Cascade_Button is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Cascade_Button_Class is Xm_Label.Label_Class;
+--    subtype Cascade_Button_Widget is Xm_Label.Label_Widget;
+--
+--    function Xm_Cascade_Button_Widget_Class return Cascade_Button_Class;
+--
+--    function Xm_Is_Cascade_Button (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Cascade_Button
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    procedure Xm_Cascade_Button_Highlight
+--		 (Cb : in Xm.Xt_Widget; Highlight : in Boolean);
+--end Xm_Cascade_Button;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

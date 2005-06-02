@@ -1,26 +1,26 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm;
-
-package Xm_Separator is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Separator_Class is Xm.Primitive_Class;
-    subtype Separator_Widget is Xm.Primitive_Widget;
-
-    function Xm_Separator_Widget_Class return Separator_Class;
-
-    function Xm_Is_Separator (W : Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Separator
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Separator;
-
+--
+--with Xm;
+--
+--package Xm_Separator is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Separator_Class is Xm.Primitive_Class;
+--    subtype Separator_Widget is Xm.Primitive_Widget;
+--
+--    function Xm_Separator_Widget_Class return Separator_Class;
+--
+--    function Xm_Is_Separator (W : Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Separator
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Separator;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

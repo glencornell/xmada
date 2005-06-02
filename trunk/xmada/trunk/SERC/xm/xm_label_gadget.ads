@@ -1,26 +1,26 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm;
-
-package Xm_Label_Gadget is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Label_Gadget_Class is Xm.Gadget_Class;
-    subtype Label_Gadget is Xm.Gadget;
-
-    function Xm_Label_Gadget_Class return Label_Gadget_Class;
-
-    function Xm_Is_Label_Gadget (W : Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Label_Gadget
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Label_Gadget;
-
+--
+--with Xm;
+--
+--package Xm_Label_Gadget is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Label_Gadget_Class is Xm.Gadget_Class;
+--    subtype Label_Gadget is Xm.Gadget;
+--
+--    function Xm_Label_Gadget_Class return Label_Gadget_Class;
+--
+--    function Xm_Is_Label_Gadget (W : Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Label_Gadget
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Label_Gadget;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

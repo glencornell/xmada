@@ -1,27 +1,27 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xt_Shell, Xm;
-
-package Xm_Dialog_Shell is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
--- dialog shell is a subclass of transient shell
-    subtype Dialog_Shell_Class is Xt_Shell.Transient_Shell_Class;
-    subtype Dialog_Shell_Widget is Xt_Shell.Transient_Shell_Widget;
-
-    function Xm_Dialog_Shell_Widget_Class return Dialog_Shell_Class;
-
-    function Xm_Is_Dialog_Shell (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Dialog_Shell
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Dialog_Shell;
-
+--
+--with Xt_Shell, Xm;
+--
+--package Xm_Dialog_Shell is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+---- dialog shell is a subclass of transient shell
+--    subtype Dialog_Shell_Class is Xt_Shell.Transient_Shell_Class;
+--    subtype Dialog_Shell_Widget is Xt_Shell.Transient_Shell_Widget;
+--
+--    function Xm_Dialog_Shell_Widget_Class return Dialog_Shell_Class;
+--
+--    function Xm_Is_Dialog_Shell (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Dialog_Shell
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Dialog_Shell;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

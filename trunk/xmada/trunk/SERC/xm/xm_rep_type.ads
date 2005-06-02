@@ -3,70 +3,70 @@
 with X_Configuration_Dependent, X_Lib, Xm;
 
 package Xm_Rep_Type is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    Word_Size : constant := X_Configuration_Dependent.Word_Size;
-
-    Xmrep_Type_Invalid : constant := 16#1FFF#;
-
-    subtype Xm_Rep_Type_Id is X_Configuration_Dependent.Unsigned_Short;
-
-    type Unsigned_Char_Array is array (Natural range <>) of
-				   X_Configuration_Dependent.Unsigned_Char;
-    type Unsigned_Char_Array_Ptr is access Unsigned_Char_Array;
-
-    type Xm_Rep_Type_Entry_Rec is
-	record
-	    Rep_Type_Name : X_Lib.String_Pointer;
-	    Value_Names : X_Lib.String_List;
-	    Values : Unsigned_Char_Array_Ptr;
-	    Num_Values : X_Lib.X_Character;
-	    Reverse_Installed : Xm.Xm_Boolean;
-	    Rep_Type_Id : Xm_Rep_Type_Id;
-	end record;
-
-    for Xm_Rep_Type_Entry_Rec use
-	record
-	    Rep_Type_Name at 0 * Word_Size range 0 .. 31;
-	    Value_Names at 1 * Word_Size range 0 .. 31;
-	    Values at 2 * Word_Size range 0 .. 31;
-	    Num_Values at 3 * Word_Size range 0 .. 7;
-	    Reverse_Installed at 3 * Word_Size + 1 range 0 .. 7;
-	    Rep_Type_Id at 3 * Word_Size + 2 range 0 .. 15;
-	end record;
-
-    type Xm_Rep_Type_Entry is access Xm_Rep_Type_Entry_Rec;
-    type Xm_Rep_Type_List_Rec is
-       array (Natural range <>) of Xm_Rep_Type_Entry_Rec;
-    type Xm_Rep_Type_List is access Xm_Rep_Type_Entry_Rec;
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    Word_Size : constant := X_Configuration_Dependent.Word_Size;
+--
+--    Xmrep_Type_Invalid : constant := 16#1FFF#;
+--
+--    subtype Xm_Rep_Type_Id is X_Configuration_Dependent.Unsigned_Short;
+--
+--    type Unsigned_Char_Array is array (Natural range <>) of
+--				   X_Configuration_Dependent.Unsigned_Char;
+--    type Unsigned_Char_Array_Ptr is access Unsigned_Char_Array;
+--
+--    type Xm_Rep_Type_Entry_Rec is
+--	record
+--	    Rep_Type_Name : X_Lib.String_Pointer;
+--	    Value_Names : X_Lib.String_List;
+--	    Values : Unsigned_Char_Array_Ptr;
+--	    Num_Values : X_Lib.X_Character;
+--	    Reverse_Installed : Xm.Xm_Boolean;
+--	    Rep_Type_Id : Xm_Rep_Type_Id;
+--	end record;
+--
+--    for Xm_Rep_Type_Entry_Rec use
+--	record
+--	    Rep_Type_Name at 0 * Word_Size range 0 .. 31;
+--	    Value_Names at 1 * Word_Size range 0 .. 31;
+--	    Values at 2 * Word_Size range 0 .. 31;
+--	    Num_Values at 3 * Word_Size range 0 .. 7;
+--	    Reverse_Installed at 3 * Word_Size + 1 range 0 .. 7;
+--	    Rep_Type_Id at 3 * Word_Size + 2 range 0 .. 15;
+--	end record;
+--
+--    type Xm_Rep_Type_Entry is access Xm_Rep_Type_Entry_Rec;
+--    type Xm_Rep_Type_List_Rec is
+--       array (Natural range <>) of Xm_Rep_Type_Entry_Rec;
+--    type Xm_Rep_Type_List is access Xm_Rep_Type_Entry_Rec;
 
     function Xm_Rep_Type_Register
 		(Rep_Type : in String;
 		 Value_Names : in X_Lib.String_Pointer_Array;
 		 Values : in Unsigned_Char_Array) return Xm_Rep_Type_Id;
 
-    procedure Xm_Rep_Type_Add_Reverse (Rep_Type_Id : in Xm_Rep_Type_Id);
+--    procedure Xm_Rep_Type_Add_Reverse (Rep_Type_Id : in Xm_Rep_Type_Id);
 
     function Xm_Rep_Type_Valid_Value
 		(Rep_Type_Id : in Xm_Rep_Type_Id;
 		 Test_Value : in X_Lib.X_Character;
 		 Enable_Default_Warning : in Xm.Xt_Widget) return Boolean;
 
-    function Xm_Rep_Type_Get_Registered return Xm_Rep_Type_List;
-
-    function Xm_Rep_Type_Get_Record
-		(Rep_Type_Id : in Xm_Rep_Type_Id) return Xm_Rep_Type_Entry;
-
-    function Xm_Rep_Type_Get_Id (Rep_Type : in String) return Xm_Rep_Type_Id;
-
-    function Xm_Rep_Type_Get_Name_List (Rep_Type_Id : in Xm_Rep_Type_Id;
-					Use_Uppercase_Format : in Boolean)
-				       return X_Lib.String_Pointer_Array;
-
-    procedure Xm_Rep_Type_Install_Tear_Off_Model_Converter;
-
+--    function Xm_Rep_Type_Get_Registered return Xm_Rep_Type_List;
+--
+--    function Xm_Rep_Type_Get_Record
+--		(Rep_Type_Id : in Xm_Rep_Type_Id) return Xm_Rep_Type_Entry;
+--
+--    function Xm_Rep_Type_Get_Id (Rep_Type : in String) return Xm_Rep_Type_Id;
+--
+--    function Xm_Rep_Type_Get_Name_List (Rep_Type_Id : in Xm_Rep_Type_Id;
+--					Use_Uppercase_Format : in Boolean)
+--				       return X_Lib.String_Pointer_Array;
+--
+--    procedure Xm_Rep_Type_Install_Tear_Off_Model_Converter;
+--
 end Xm_Rep_Type;
 
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------

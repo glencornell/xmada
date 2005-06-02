@@ -3047,9 +3047,9 @@ package X_Lib_Interface is
 
     -- C interface to functions called by check_if_event
 
-    procedure Lock_Display (Display_Id : in System.Address);
-
-    procedure Unlock_Display (Display_Id : in System.Address);
+--    procedure Lock_Display (Display_Id : in System.Address);
+--
+--    procedure Unlock_Display (Display_Id : in System.Address);
 
     function Get_Qfree return System.Address;
 

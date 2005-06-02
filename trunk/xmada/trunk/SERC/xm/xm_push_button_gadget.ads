@@ -1,31 +1,31 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, Xm_Label_Gadget, Xm_Push_Button;
-
-package Xm_Push_Button_Gadget is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    type Xm_Push_Button_Gadget_Callback_Rec is new
-       Xm_Push_Button.Xm_Push_Button_Callback_Rec;
-    type Xm_Push_Button_Gadget_Rec_Ptr is
-       access Xm_Push_Button_Gadget_Callback_Rec;
-
-    subtype Push_Button_Gadget_Class is Xm_Label_Gadget.Label_Gadget_Class;
-    subtype Push_Button_Gadget is Xm_Label_Gadget.Label_Gadget;
-
-    function Xm_Push_Button_Gadget_Class return Push_Button_Gadget_Class;
-
-    function Xm_Is_Push_Button_Gadget (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Push_Button_Gadget
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Push_Button_Gadget;
-
+--
+--with Xm, Xm_Label_Gadget, Xm_Push_Button;
+--
+--package Xm_Push_Button_Gadget is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    type Xm_Push_Button_Gadget_Callback_Rec is new
+--       Xm_Push_Button.Xm_Push_Button_Callback_Rec;
+--    type Xm_Push_Button_Gadget_Rec_Ptr is
+--       access Xm_Push_Button_Gadget_Callback_Rec;
+--
+--    subtype Push_Button_Gadget_Class is Xm_Label_Gadget.Label_Gadget_Class;
+--    subtype Push_Button_Gadget is Xm_Label_Gadget.Label_Gadget;
+--
+--    function Xm_Push_Button_Gadget_Class return Push_Button_Gadget_Class;
+--
+--    function Xm_Is_Push_Button_Gadget (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Push_Button_Gadget
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Push_Button_Gadget;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

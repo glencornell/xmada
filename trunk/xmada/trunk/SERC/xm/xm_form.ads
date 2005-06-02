@@ -3,31 +3,31 @@
 with Xm, Xm_Bulletin_Board;
 
 package Xm_Form is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Form_Class is Xm_Bulletin_Board.Bulletin_Board_Class;
-    subtype Form_Widget is Xm_Bulletin_Board.Bulletin_Board_Widget;
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Form_Class is Xm_Bulletin_Board.Bulletin_Board_Class;
+--    subtype Form_Widget is Xm_Bulletin_Board.Bulletin_Board_Widget;
     subtype Form_Dialog_Class is Xm_Bulletin_Board.Bulletin_Board_Class;
     subtype Form_Dialog_Widget is Xm_Bulletin_Board.Bulletin_Board_Widget;
 
-    function Xm_Form_Widget_Class return Form_Class;
+--    function Xm_Form_Widget_Class return Form_Class;
     function Xm_Form_Dialog_Widget_Class return Form_Class;
 
-    function Xm_Is_Form (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Form
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Create_Form_Dialog
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
+--    function Xm_Is_Form (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Form
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Create_Form_Dialog
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
 end Xm_Form;
 
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------

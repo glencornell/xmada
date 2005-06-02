@@ -1,26 +1,26 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xt_Shell, Xm;
-
-package Xm_Menu_Shell is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    subtype Menu_Shell_Class is Xt_Shell.Override_Shell_Class;
-    subtype Menu_Shell_Widget is Xt_Shell.Override_Shell_Widget;
-
-    function Xm_Menu_Shell_Widget_Class return Menu_Shell_Class;
-
-    function Xm_Is_Menu_Shell (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Menu_Shell
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Menu_Shell;
-
+--
+--with Xt_Shell, Xm;
+--
+--package Xm_Menu_Shell is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    subtype Menu_Shell_Class is Xt_Shell.Override_Shell_Class;
+--    subtype Menu_Shell_Widget is Xt_Shell.Override_Shell_Widget;
+--
+--    function Xm_Menu_Shell_Widget_Class return Menu_Shell_Class;
+--
+--    function Xm_Is_Menu_Shell (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Menu_Shell
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Menu_Shell;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

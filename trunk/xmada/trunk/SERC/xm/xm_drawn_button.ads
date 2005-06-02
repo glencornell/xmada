@@ -1,47 +1,47 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, X_Lib, Xm_Label, X_Configuration_Dependent;
-
-package Xm_Drawn_Button is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    type Xm_Drawn_Button_Callback_Rec is
-	record
-	    Reason : Xm.Callback_Reason;
-	    Event_Ptr : Xm.X_Event_Ptr;
-	    X_Window : X_Lib.Window;
-	    Click_Count : X_Lib.X_Integer;
-	end record;
-    for Xm_Drawn_Button_Callback_Rec use
-	record
-	    Reason at 0 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    X_Window at 2 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Click_Count at 3 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	end record;
-    type Xm_Drawn_Button_Callback_Rec_Ptr is
-       access Xm_Drawn_Button_Callback_Rec;
-
-    subtype Drawn_Button_Class is Xm_Label.Label_Class;
-    subtype Drawn_Button_Widget is Xm_Label.Label_Widget;
-
-    function Xm_Drawn_Button_Widget_Class return Drawn_Button_Class;
-
-    function Xm_Is_Drawn_Button (W : Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Drawn_Button
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-end Xm_Drawn_Button;
-
+--
+--with Xm, X_Lib, Xm_Label, X_Configuration_Dependent;
+--
+--package Xm_Drawn_Button is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    type Xm_Drawn_Button_Callback_Rec is
+--	record
+--	    Reason : Xm.Callback_Reason;
+--	    Event_Ptr : Xm.X_Event_Ptr;
+--	    X_Window : X_Lib.Window;
+--	    Click_Count : X_Lib.X_Integer;
+--	end record;
+--    for Xm_Drawn_Button_Callback_Rec use
+--	record
+--	    Reason at 0 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    X_Window at 2 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Click_Count at 3 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	end record;
+--    type Xm_Drawn_Button_Callback_Rec_Ptr is
+--       access Xm_Drawn_Button_Callback_Rec;
+--
+--    subtype Drawn_Button_Class is Xm_Label.Label_Class;
+--    subtype Drawn_Button_Widget is Xm_Label.Label_Widget;
+--
+--    function Xm_Drawn_Button_Widget_Class return Drawn_Button_Class;
+--
+--    function Xm_Is_Drawn_Button (W : Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Drawn_Button
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--end Xm_Drawn_Button;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

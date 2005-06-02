@@ -20,76 +20,76 @@ package Xm_Protocols is
 
     function Xm_Wm_Protocol_Atom (W : Xm.Xt_Widget) return X_Lib.Atoms.Atom;
 
-    procedure Xm_Add_Protocols (Shell : in Xm.Xt_Widget;
-				Property : in X_Lib.Atoms.Atom;
-				Protocols : in Atom_List);
-
-    procedure Xm_Remove_Protocols (Shell : in Xm.Xt_Widget;
-				   Property : in X_Lib.Atoms.Atom;
-				   Protocols : in Atom_List);
-
-    procedure Xm_Add_Protocol_Callback
-		 (Shell : in Xm.Xt_Widget;
-		  Property : in X_Lib.Atoms.Atom;
-		  Proto_Atom : in X_Lib.Atoms.Atom;
-		  Callback : in Xt.Xt_Callback_Proc;
-		  Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
-
-    procedure Xm_Remove_Protocol_Callback
-		 (Shell : in Xm.Xt_Widget;
-		  Property : in X_Lib.Atoms.Atom;
-		  Proto_Atom : in X_Lib.Atoms.Atom;
-		  Callback : in Xt.Xt_Callback_Proc;
-		  Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
-
-    procedure Xm_Activate_Protocol (Shell : in Xm.Xt_Widget;
-				    Property : in X_Lib.Atoms.Atom;
-				    Proto_Atom : in X_Lib.Atoms.Atom);
-
-    procedure Xm_Deactivate_Protocol (Shell : in Xm.Xt_Widget;
-				      Property : in X_Lib.Atoms.Atom;
-				      Proto_Atom : in X_Lib.Atoms.Atom);
-
-    procedure Xm_Set_Protocol_Hooks
-		 (Shell : in Xm.Xt_Widget;
-		  Property : in X_Lib.Atoms.Atom;
-		  Proto_Atom : in X_Lib.Atoms.Atom;
-		  Pre_Hook : in Xt.Xt_Callback_Proc;
-		  Pre_Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer;
-		  Post_Hook : in Xt.Xt_Callback_Proc;
-		  Post_Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
-
-    procedure Xm_Add_Wm_Protocols
-		 (Shell : in Xm.Xt_Widget; Protocols : in Atom_List);
-
-    procedure Xm_Remove_Wm_Protocols
-		 (Shell : in Xm.Xt_Widget; Protocols : in Atom_List);
-
-    procedure Xm_Add_Wm_Protocol_Callback
-		 (Shell : in Xm.Xt_Widget;
-		  Protocol : in X_Lib.Atoms.Atom;
-		  Callback : in Xt.Xt_Callback_Proc;
-		  Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
-
-    procedure Xm_Remove_Wm_Protocol_Callback
-		 (Shell : in Xm.Xt_Widget;
-		  Protocol : in X_Lib.Atoms.Atom;
-		  Callback : in Xt.Xt_Callback_Proc;
-		  Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
-
-    procedure Xm_Activate_Wm_Protocol
-		 (Shell : in Xm.Xt_Widget; Protocol : in X_Lib.Atoms.Atom);
-
-    procedure Xm_Deactivate_Wm_Protocol
-		 (Shell : in Xm.Xt_Widget; Protocol : in X_Lib.Atoms.Atom);
-
-    procedure Xm_Set_Wm_Protocol_Hooks
-		 (Shell : in Xm.Xt_Widget;
-		  Protocol : in X_Lib.Atoms.Atom;
-		  Pre_Hook : in Xt.Xt_Callback_Proc;
-		  Pre_Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer;
-		  Post_Hook : in Xt.Xt_Callback_Proc;
-		  Post_Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
+--    procedure Xm_Add_Protocols (Shell : in Xm.Xt_Widget;
+--				Property : in X_Lib.Atoms.Atom;
+--				Protocols : in Atom_List);
+--
+--    procedure Xm_Remove_Protocols (Shell : in Xm.Xt_Widget;
+--				   Property : in X_Lib.Atoms.Atom;
+--				   Protocols : in Atom_List);
+--
+--    procedure Xm_Add_Protocol_Callback
+--		 (Shell : in Xm.Xt_Widget;
+--		  Property : in X_Lib.Atoms.Atom;
+--		  Proto_Atom : in X_Lib.Atoms.Atom;
+--		  Callback : in Xt.Xt_Callback_Proc;
+--		  Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
+--
+--    procedure Xm_Remove_Protocol_Callback
+--		 (Shell : in Xm.Xt_Widget;
+--		  Property : in X_Lib.Atoms.Atom;
+--		  Proto_Atom : in X_Lib.Atoms.Atom;
+--		  Callback : in Xt.Xt_Callback_Proc;
+--		  Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
+--
+--    procedure Xm_Activate_Protocol (Shell : in Xm.Xt_Widget;
+--				    Property : in X_Lib.Atoms.Atom;
+--				    Proto_Atom : in X_Lib.Atoms.Atom);
+--
+--    procedure Xm_Deactivate_Protocol (Shell : in Xm.Xt_Widget;
+--				      Property : in X_Lib.Atoms.Atom;
+--				      Proto_Atom : in X_Lib.Atoms.Atom);
+--
+--    procedure Xm_Set_Protocol_Hooks
+--		 (Shell : in Xm.Xt_Widget;
+--		  Property : in X_Lib.Atoms.Atom;
+--		  Proto_Atom : in X_Lib.Atoms.Atom;
+--		  Pre_Hook : in Xt.Xt_Callback_Proc;
+--		  Pre_Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer;
+--		  Post_Hook : in Xt.Xt_Callback_Proc;
+--		  Post_Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
+--
+--    procedure Xm_Add_Wm_Protocols
+--		 (Shell : in Xm.Xt_Widget; Protocols : in Atom_List);
+--
+--    procedure Xm_Remove_Wm_Protocols
+--		 (Shell : in Xm.Xt_Widget; Protocols : in Atom_List);
+--
+--    procedure Xm_Add_Wm_Protocol_Callback
+--		 (Shell : in Xm.Xt_Widget;
+--		  Protocol : in X_Lib.Atoms.Atom;
+--		  Callback : in Xt.Xt_Callback_Proc;
+--		  Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
+--
+--    procedure Xm_Remove_Wm_Protocol_Callback
+--		 (Shell : in Xm.Xt_Widget;
+--		  Protocol : in X_Lib.Atoms.Atom;
+--		  Callback : in Xt.Xt_Callback_Proc;
+--		  Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
+--
+--    procedure Xm_Activate_Wm_Protocol
+--		 (Shell : in Xm.Xt_Widget; Protocol : in X_Lib.Atoms.Atom);
+--
+--    procedure Xm_Deactivate_Wm_Protocol
+--		 (Shell : in Xm.Xt_Widget; Protocol : in X_Lib.Atoms.Atom);
+--
+--    procedure Xm_Set_Wm_Protocol_Hooks
+--		 (Shell : in Xm.Xt_Widget;
+--		  Protocol : in X_Lib.Atoms.Atom;
+--		  Pre_Hook : in Xt.Xt_Callback_Proc;
+--		  Pre_Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer;
+--		  Post_Hook : in Xt.Xt_Callback_Proc;
+--		  Post_Closure : in Xt.Xt_Pointer := Xt.Null_Xt_Pointer);
 end Xm_Protocols;
 
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------

@@ -1,59 +1,59 @@
 -- See COPYRIGHT, DISTRIBUTION, and DISCLAIMER notices at end of this file.
-
-with Xm, X_Lib, Xm_Selection_Box, X_Configuration_Dependent;
-
-package Xm_Command is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    type Xm_Command_Callback_Rec is
-	record
-	    Reason : Xm.Callback_Reason;
-	    Event_Ptr : Xm.X_Event_Ptr;
-	    Value : Xm.Xm_String;
-	    Length : X_Lib.X_Integer;
-	end record;
-    for Xm_Command_Callback_Rec use
-	record
-	    Reason at 0 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Value at 2 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Length at 3 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	end record;
-    type Xm_Command_Callback_Rec_Ptr is access Xm_Command_Callback_Rec;
-
-    subtype Command_Class is Xm_Selection_Box.Selection_Box_Class;
-    subtype Command_Widget is Xm_Selection_Box.Selection_Box_Widget;
-
-    function Xm_Command_Widget_Class return Command_Class;
-
-    function Xm_Is_Command (W : in Xm.Xt_Widget) return Boolean;
-
-    function Xm_Create_Command
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
-
-    function Xm_Command_Get_Child
-		(The_Widget : in Xm.Xt_Widget; Child : in Xm.Xm_Child_Types)
-		return Xm.Xt_Widget;
-
-    procedure Xm_Command_Set_Value
-		 (The_Widget : in Xm.Xt_Widget; Value : in Xm.Xm_String);
-
-    procedure Xm_Command_Append_Value
-		 (The_Widget : in Xm.Xt_Widget; Value : in Xm.Xm_String);
-
-    procedure Xm_Command_Error
-		 (The_Widget : in Xm.Xt_Widget; Error : in Xm.Xm_String);
-end Xm_Command;
-
+--
+--with Xm, X_Lib, Xm_Selection_Box, X_Configuration_Dependent;
+--
+--package Xm_Command is
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    type Xm_Command_Callback_Rec is
+--	record
+--	    Reason : Xm.Callback_Reason;
+--	    Event_Ptr : Xm.X_Event_Ptr;
+--	    Value : Xm.Xm_String;
+--	    Length : X_Lib.X_Integer;
+--	end record;
+--    for Xm_Command_Callback_Rec use
+--	record
+--	    Reason at 0 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Value at 2 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Length at 3 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	end record;
+--    type Xm_Command_Callback_Rec_Ptr is access Xm_Command_Callback_Rec;
+--
+--    subtype Command_Class is Xm_Selection_Box.Selection_Box_Class;
+--    subtype Command_Widget is Xm_Selection_Box.Selection_Box_Widget;
+--
+--    function Xm_Command_Widget_Class return Command_Class;
+--
+--    function Xm_Is_Command (W : in Xm.Xt_Widget) return Boolean;
+--
+--    function Xm_Create_Command
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
+--
+--    function Xm_Command_Get_Child
+--		(The_Widget : in Xm.Xt_Widget; Child : in Xm.Xm_Child_Types)
+--		return Xm.Xt_Widget;
+--
+--    procedure Xm_Command_Set_Value
+--		 (The_Widget : in Xm.Xt_Widget; Value : in Xm.Xm_String);
+--
+--    procedure Xm_Command_Append_Value
+--		 (The_Widget : in Xm.Xt_Widget; Value : in Xm.Xm_String);
+--
+--    procedure Xm_Command_Error
+--		 (The_Widget : in Xm.Xt_Widget; Error : in Xm.Xm_String);
+--end Xm_Command;
+--
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------
 --
 -- (C) Copyright 1991, 1993 Systems Engineering Research Corporation

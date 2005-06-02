@@ -3,33 +3,33 @@
 with Xm, X_Lib, X_Configuration_Dependent;
 
 package Xm_Scale is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    type Xm_Scale_Callback_Rec is
-	record
-	    Reason : Xm.Callback_Reason;
-	    Event_Ptr : Xm.X_Event_Ptr;
-	    Value : X_Lib.X_Integer;
-	end record;
-    for Xm_Scale_Callback_Rec use
-	record
-	    Reason at 0 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Value at 2 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	end record;
-    type Xm_Scale_Callback_Rec_Ptr is access Xm_Scale_Callback_Rec;
-
-    subtype Scale_Class is Xm.Manager_Class;
-    subtype Scale_Widget is Xm.Manager_Widget;
-
-    function Xm_Scale_Widget_Class return Scale_Class;
-
-    function Xm_Is_Scale (W : Xm.Xt_Widget) return Boolean;
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    type Xm_Scale_Callback_Rec is
+--	record
+--	    Reason : Xm.Callback_Reason;
+--	    Event_Ptr : Xm.X_Event_Ptr;
+--	    Value : X_Lib.X_Integer;
+--	end record;
+--    for Xm_Scale_Callback_Rec use
+--	record
+--	    Reason at 0 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Value at 2 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	end record;
+--    type Xm_Scale_Callback_Rec_Ptr is access Xm_Scale_Callback_Rec;
+--
+--    subtype Scale_Class is Xm.Manager_Class;
+--    subtype Scale_Widget is Xm.Manager_Widget;
+--
+--    function Xm_Scale_Widget_Class return Scale_Class;
+--
+--    function Xm_Is_Scale (W : Xm.Xt_Widget) return Boolean;
 
     procedure Xm_Scale_Get_Value (W : in Xm.Xt_Widget;
 				  Value : in out X_Lib.X_Integer);
@@ -37,11 +37,11 @@ package Xm_Scale is
     procedure Xm_Scale_Set_Value
 		 (W : in Xm.Xt_Widget; Value : in X_Lib.X_Integer);
 
-    function Xm_Create_Scale
-		(Parent : in Xm.Xt_Widget;
-		 Name : in String;
-		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
-		return Xm.Xt_Widget;
+--    function Xm_Create_Scale
+--		(Parent : in Xm.Xt_Widget;
+--		 Name : in String;
+--		 An_Arg_List : in Xm.Xm_Arg_List := Xm.Null_Xm_Arg_List)
+--		return Xm.Xt_Widget;
 end Xm_Scale;
 
 ------ COPYRIGHT AND DISTRIBUTION NOTICE ----------

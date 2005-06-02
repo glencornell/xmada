@@ -3,36 +3,36 @@
 with Xm, X_Lib, X_Configuration_Dependent;
 
 package Xm_Scrollbar is
-    Copyright_Notice : constant String :=
-       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
-	  "All Rights Reserved.";
-
-    type Xm_Scroll_Bar_Callback_Rec is
-	record
-	    Reason : Xm.Callback_Reason;
-	    Event_Ptr : Xm.X_Event_Ptr;
-	    Value : X_Lib.X_Integer;
-	    Pixel : X_Lib.X_Integer;
-	end record;
-    for Xm_Scroll_Bar_Callback_Rec use
-	record
-	    Reason at 0 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Value at 2 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	    Pixel at 3 * X_Configuration_Dependent.Word_Size
-	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
-	end record;
-    type Xm_Scroll_Bar_Callback_Rec_Ptr is access Xm_Scroll_Bar_Callback_Rec;
+--    Copyright_Notice : constant String :=
+--       "(C) Copyright 1991, 1993 Systems Engineering Research Corporation.  " &
+--	  "All Rights Reserved.";
+--
+--    type Xm_Scroll_Bar_Callback_Rec is
+--	record
+--	    Reason : Xm.Callback_Reason;
+--	    Event_Ptr : Xm.X_Event_Ptr;
+--	    Value : X_Lib.X_Integer;
+--	    Pixel : X_Lib.X_Integer;
+--	end record;
+--    for Xm_Scroll_Bar_Callback_Rec use
+--	record
+--	    Reason at 0 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Event_Ptr at 1 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Value at 2 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	    Pixel at 3 * X_Configuration_Dependent.Word_Size
+--	       range 0 .. X_Configuration_Dependent.Bits_Per_Word - 1;
+--	end record;
+--    type Xm_Scroll_Bar_Callback_Rec_Ptr is access Xm_Scroll_Bar_Callback_Rec;
 
     subtype Scrollbar_Class is Xm.Primitive_Class;
     subtype Scrollbar_Widget is Xm.Primitive_Widget;
 
     function Xm_Scrollbar_Widget_Class return Scrollbar_Class;
 
-    function Xm_Is_Scrollbar (W : in Xm.Xt_Widget) return Boolean;
+--    function Xm_Is_Scrollbar (W : in Xm.Xt_Widget) return Boolean;
 
     procedure Xm_Scrollbar_Get_Values (W : in Xm.Xt_Widget;
 				       Value : out X_Lib.X_Integer;
