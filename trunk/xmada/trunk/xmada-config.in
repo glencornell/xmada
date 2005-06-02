@@ -15,7 +15,7 @@ MINOR=@XMADA_MINOR_VERSION@
 usage()
 {
    cat <<EOF
-Usage: polyorb-config [OPTIONS]
+Usage: xmada-config [OPTIONS]
 Options:
         No option:
             Output all the flags (compiler and linker) required
