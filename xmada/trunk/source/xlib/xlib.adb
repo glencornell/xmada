@@ -76,6 +76,29 @@ package body Xlib is
       return XBlackPixelOfScreen (The_Screen);
    end X_Black_Pixel_Of_Screen;
 
+   procedure X_Circulate_Subwindows_Down (The_Display : in Display;
+                                          The_Window  : in Window)
+   is
+      procedure XCirculateSubwindowsDown (The_Display : in Display;
+                                          The_Window  : in Window);
+      pragma Import (C, XCirculateSubwindowsDown, "XCirculateSubwindowsDown");
+
+   begin
+      Check (The_Display);
+      XCirculateSubwindowsDown (The_Display, The_Window);
+   end X_Circulate_Subwindows_Down;
+
+   procedure X_Circulate_Subwindows_Up (The_Display : in Display;
+                                        The_Window  : in Window)
+   is
+      procedure XCirculateSubwindowsUp (The_Display : in Display;
+                                        The_Window  : in Window);
+      pragma Import (C, XCirculateSubwindowsUp, "XCirculateSubwindowsUp");
+
+   begin
+      Check (The_Display);
+      XCirculateSubwindowsUp (The_Display, The_Window);
+   end X_Circulate_Subwindows_Up;
 
    procedure X_Close_Display (The_Display : in Display) is
       procedure XCloseDisplay (The_Display : in Display);
@@ -243,6 +266,17 @@ package body Xlib is
       XLockDisplay (The_Display);
    end X_Lock_Display;
 
+   procedure X_Lower_Window (The_Display : in Display;
+                             The_Window  : in Window)
+   is
+      procedure XLowerWindow (The_Display : in Display;
+                              The_Window  : in Window);
+      pragma Import (C, XLowerWindow, "XLowerWindow");
+
+   begin
+      Check (The_Display);
+      XLowerWindow (The_Display, The_Window);
+   end X_Lower_Window;
 
    procedure X_Map_Raised (The_Display : in Display;
                            The_Window  : in Window)
@@ -296,6 +330,17 @@ package body Xlib is
       return XOpenDisplay (To_C (Name));
    end X_Open_Display;
 
+   procedure X_Raise_Window (The_Display : in Display;
+                             The_Window  : in Window)
+   is
+      procedure XRaiseWindow (The_Display : in Display;
+                              The_Window  : in Window);
+      pragma Import (C, XRaiseWindow, "XRaiseWindow");
+
+   begin
+      Check (The_Display);
+      XRaiseWindow (The_Display, The_Window);
+   end X_Raise_Window;
 
    function X_Root_Window (The_Display       : in Display;
                            The_Screen_Number : in Screen_Number)

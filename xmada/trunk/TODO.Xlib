@@ -173,7 +173,7 @@ X11 Functions (X11R6.4)
  n X_Free
  + X_Close_Display                 Xlib
    X_Set_Close_Down_Mode
-   X_Init_Threads                  Xlib
+ + X_Init_Threads                  Xlib
  + X_Lock_Display                  Xlib
  + X_Unlock_Display                Xlib
    X_Add_Connection_Watch
@@ -195,11 +195,11 @@ X11 Functions (X11R6.4)
    X_Resize_Window
    X_Move_Resize_Window
    X_Set_Window_Border_Width
-   X_Raise_Window
-   X_Lower_Window
-   X_Circulate_Subwindows
-   X_Circulate_Subwindows_Up
-   X_Circulate_Subwindows_Down
+ + X_Raise_Window                  Xlib
+ + X_Lower_Window                  Xlib
+   X_Circulate_Subwindows          Xlib
+ + X_Circulate_Subwindows_Up       Xlib
+ + X_Circulate_Subwindows_Down     Xlib
    X_Restack_Windows
    X_Change_Window_Attributes
    X_Set_Window_Background
@@ -398,7 +398,7 @@ X11 Functions (X11R6.4)
 
    X_Select_Input
    X_Flush
-   X_Sync
+ + X_Sync                            Xlib.Events
    X_Events_Queued
    X_Pending
    X_Next_Event

@@ -239,6 +239,20 @@ package Xlib is
    procedure X_Unmap_Subwindows (The_Display : in Display;
                                  The_Window  : in Window);
 
+   procedure X_Raise_Window (The_Display : in Display;
+                             The_Window  : in Window);
+
+   procedure X_Lower_Window (The_Display : in Display;
+                             The_Window  : in Window);
+
+--   procedure X_Circulate_Subwindows
+
+   procedure X_Circulate_Subwindows_Up (The_Display : in Display;
+                                        The_Window  : in Window);
+
+   procedure X_Circulate_Subwindows_Down (The_Display : in Display;
+                                          The_Window  : in Window);
+
    --  Additional procedural form. Raise Threads_Not_Supported if
    --  initialization failed.
    procedure X_Init_Threads;

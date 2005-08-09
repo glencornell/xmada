@@ -13371,56 +13371,56 @@ package X_Lib is
 					 Window_Id : in Window;
 					 Width : in Width_Height);
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Raise_Window
-    --
-    --  Description
-    --
-    --   This procedure raises a window so that no sibling window obscures it.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Window_Id  : Specifies the window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XRaiseWindow in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Raise_Window (Display_Id : in Display; Window_Id : in Window);
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Lower_Window
-    --
-    --  Description
-    --
-    --   This procedure lowers a window so that no sibling window is obscured
-    --  by it.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Window_Id  : Specifies the window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XLowerWindow in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Lower_Window (Display_Id : in Display; Window_Id : in Window);
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Raise_Window
+--    --
+--    --  Description
+--    --
+--    --   This procedure raises a window so that no sibling window obscures it.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Window_Id  : Specifies the window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XRaiseWindow in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Raise_Window (Display_Id : in Display; Window_Id : in Window);
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Lower_Window
+--    --
+--    --  Description
+--    --
+--    --   This procedure lowers a window so that no sibling window is obscured
+--    --  by it.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Window_Id  : Specifies the window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XLowerWindow in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Lower_Window (Display_Id : in Display; Window_Id : in Window);
 
     --========================================================================
     --  Subprogram Name
@@ -13451,58 +13451,58 @@ package X_Lib is
 				      Window_Id : in Window;
 				      Direction : in Direction_Type);
 
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Circulate_Subwindows_Up
-    --
-    --  Description
-    --
-    --   This procedure raises the lowest child of a the specified window.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Window_Id  : Specifies the window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XCirculateSubwindowsUp in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Circulate_Subwindows_Up
-		 (Display_Id : in Display; Window_Id : in Window);
-
-    --========================================================================
-    --  Subprogram Name
-    --
-    --    X_Circulate_Subwindows_Down
-    --
-    --  Description
-    --
-    --   This procedure lowers the highest mapped child of the specified window.
-    --
-    --  Parameters
-    --
-    --  Display_Id : Specifies the connection to the X Server.
-    --  Window_Id  : Specifies the window Id.
-    --
-    --  Documentation
-    --
-    --    Please refer to XCirculateSubwindowsDown in the
-    --  Xlib - C Language X InterfaceWindow System manual
-    --  for more information.
-    --
-    --  Package:  X_Lib
-    --========================================================================
-
-    procedure X_Circulate_Subwindows_Down
-		 (Display_Id : in Display; Window_Id : in Window);
-
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Circulate_Subwindows_Up
+--    --
+--    --  Description
+--    --
+--    --   This procedure raises the lowest child of a the specified window.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Window_Id  : Specifies the window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XCirculateSubwindowsUp in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Circulate_Subwindows_Up
+--		 (Display_Id : in Display; Window_Id : in Window);
+--
+--    --========================================================================
+--    --  Subprogram Name
+--    --
+--    --    X_Circulate_Subwindows_Down
+--    --
+--    --  Description
+--    --
+--    --   This procedure lowers the highest mapped child of the specified window.
+--    --
+--    --  Parameters
+--    --
+--    --  Display_Id : Specifies the connection to the X Server.
+--    --  Window_Id  : Specifies the window Id.
+--    --
+--    --  Documentation
+--    --
+--    --    Please refer to XCirculateSubwindowsDown in the
+--    --  Xlib - C Language X InterfaceWindow System manual
+--    --  for more information.
+--    --
+--    --  Package:  X_Lib
+--    --========================================================================
+--
+--    procedure X_Circulate_Subwindows_Down
+--		 (Display_Id : in Display; Window_Id : in Window);
+--
     --========================================================================
     --  Subprogram Name
     --
