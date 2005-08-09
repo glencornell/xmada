@@ -5,8 +5,9 @@ with System;
 
 package Xlib is
 
-   Dereference_Error : exception
+   Dereference_Error           : exception
      renames Interfaces.C.Strings.Dereference_Error;
+   Threads_Not_Supported_Error : exception;
 
    type Bool is new Interfaces.C.int;
 
@@ -120,7 +121,6 @@ package Xlib is
    Invalid_Screen_Error          : exception;
    Invalid_Graphic_Context_Error : exception;
 
-
    function X_Open_Display (Name : in String) return Display;
 
 
@@ -203,7 +203,7 @@ package Xlib is
    procedure X_Close_Display (The_Display : in Display);
 
 
---   function X_Init_Threads
+   function X_Init_Threads return Boolean;
 
 
    procedure X_Lock_Display (The_Display : in Display);
@@ -239,6 +239,9 @@ package Xlib is
    procedure X_Unmap_Subwindows (The_Display : in Display;
                                  The_Window  : in Window);
 
+   --  Additional procedural form. Raise Threads_Not_Supported if
+   --  initialization failed.
+   procedure X_Init_Threads;
 
 private
 
