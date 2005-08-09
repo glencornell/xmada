@@ -13,7 +13,8 @@ package Xt is
    Invalid_Widget_Subclass_Error     : exception;
    Invalid_Application_Context_Error : exception;
    Incompatible_Representation_Error : exception;
-   Threads_Not_Supported_Error       : exception;
+   Threads_Not_Supported_Error       : exception
+     renames Xlib.Threads_Not_Supported_Error;
 
    type Cardinal is new Interfaces.C.unsigned;
 
