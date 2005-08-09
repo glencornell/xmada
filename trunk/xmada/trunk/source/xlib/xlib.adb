@@ -220,6 +220,20 @@ package body Xlib is
       return X_Dimension (XHeightOfScreen (The_Screen));
    end X_Height_Of_Screen;
 
+   function X_Init_Threads return Boolean is
+      function XInitThreads return int;
+      pragma Import (C, XInitThreads, "XInitThreads");
+
+   begin
+      return XInitThreads /= 0;
+   end X_Init_Threads;
+
+   procedure X_Init_Threads is
+   begin
+      if not X_Init_Threads then
+         raise Threads_Not_Supported_Error;
+      end if;
+   end X_Init_Threads;
 
    procedure X_Lock_Display (The_Display : in Display) is
       procedure XLockDisplay (The_Display : in Display);
