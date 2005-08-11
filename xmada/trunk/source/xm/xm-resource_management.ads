@@ -168,6 +168,9 @@ package Xm.Resource_Management is
                          Name  : in     Xt.Xt_Resource_Name_String;
                          Value : in     Xm_Indicator_On);
 
+   procedure Xt_Set_Arg (Arg   : in out Xt.Ancillary_Types.Xt_Arg;
+                         Name  : in     Xt.Xt_Resource_Name_String;
+                         Value : in     Xm_Include_Status);
 
    procedure Xt_Set_Arg (Arg   : in out Xt.Ancillary_Types.Xt_Arg;
                          Name  : in     Xt.Xt_Resource_Name_String;

@@ -484,7 +484,16 @@ package body Xm.Resource_Management is
 --   begin
 --      Arg := (Name, Xt_Arg_Val (To_unsigned_char (Value)));
 --   end Xt_Set_Arg;
---
+
+   procedure Xt_Set_Arg (Arg   : in out Xt_Arg;
+                         Name  : in     Xt_Resource_Name_String;
+                         Value : in     Xm_Include_Status)
+   is
+      function To_unsigned_char is
+        new Ada.Unchecked_Conversion (Xm_Include_Status, unsigned_char);
+   begin
+      Arg := (Name, Xt_Arg_Val (To_unsigned_char (Value)));
+   end Xt_Set_Arg;
 
    procedure Xt_Set_Arg (Arg   : in out Xt_Arg;
                          Name  : in     Xt_Resource_Name_String;
