@@ -145,6 +145,12 @@ source/xm/xm_toggle_button.adb
 source/xm/xm_toggle_button.ads
 source/xm/xm_toggle_button_gadget.adb
 source/xm/xm_toggle_button_gadget.ads
+source/xml/Makefile.am
+source/xml/Makefile.in
+source/xml/xml.ads
+source/xml/xml_grid.adb
+source/xml/xml_grid.ads
+source/xml/xml_string_defs.ads
 source/xt/Makefile.am
 source/xt/Makefile.in
 source/xt/xt.adb
@@ -192,12 +198,13 @@ source/xt/xt_transient_shell.ads
 source/xt/xt_vendor_shell.ads
 source/xt/xt_wm_shell.ads
 support/Makefile.common
+support/aclocal.m4
 support/ada.m4
 support/adacompiler.in
 support/config.guess
 support/config.sub
 support/install-sh
+support/libtool.m4
 support/ltmain.sh
 support/missing
-support/mkinstalldirs
 xmada-config.in
