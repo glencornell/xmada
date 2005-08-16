@@ -1,0 +1,372 @@
+Xt Widget Classes
+                  Resource
+                   Names
+ApplicationShell     +
+Composite            +
+Constraint           +
+Core                 +
+Object               +
+OverrideShell        +
+RectObj              +
+SessionShell         +
+Shell                +
+TopLevelShell        +
+TransientShell       +
+WMShell              +
+
+Xt Data Types
+ + Xt_Language_Proc             Xt
+   Xrm_Option_Kind
+   Xrm_Option_Desc_Rec
+   Xrm_Option_Desc_List
+ + Arg                          Xt.Ancillary_Types
+ + Arg_List                     Xt.Ancillary_Types
+   Xt_Typed_Arg
+   Xt_Typed_Arg_List
+   Xt_Allocate_Proc
+   Xt_Init_Proc
+   Xt_Args_Proc
+   Xt_Realize_Proc
+   Xt_Widget_Proc
+   Xt_Deallocate_Proc
+   Xt_Order_Proc
+   Xt_Do_Change_Proc
+   Xt_Grab_Kind
+   Xt_Create_Popup_Child_Proc
+   Xt_Popdown_Id_Rec
+   Xt_Popdown_Id
+   Xt_Geometry_Mask
+   Xt_Widget_Geometry
+   Xt_Geometry_Result
+   Xt_Geometry_Handler
+   Xt_Input_Callback_Proc
+   Xt_Block_Hook_Proc
+   Xt_Timer_Callback_Proc
+   Xt_Signal_Callback_Proc
+   Xt_Accept_Focus_Proc
+   Xt_Work_Proc
+   Xt_Expose_Proc
+   Xt_Event_Handler
+   Xt_List_Position
+   Xt_Extension_Select_Proc
+   Xt_Event_Dispatch_Proc
+ + Xt_Callback_Proc            Xt.Callbacks
+   Xt_Callback_Rec
+   Xt_Callback_List
+   Xt_Callback_Status
+   Xt_Resource
+   Xt_Resource_List
+   Xt_Resource_Default_Proc
+   Xrm_Value
+   Xrm_Value_Ptr
+ + Xt_Type_Converter                  Xt.Resource_Management
+ + Xt_Destructor                      Xt.Resource_Management
+ + Xt_Cache_Type                      Xt
+   Xt_Address_Mode
+   Xt_Convert_Arg_Rec
+   Xt_Convert_Arg_List
+   Xt_Convert_Arg_Proc
+   Xt_Cache_Ref
+   Xt_Set_Values_Func
+   Xt_Almost_Proc
+   Xt_Args_Func
+ + Xt_Action_Proc                     Xt
+   Xt_Actions_Rec
+   Xt_Action_List
+   Xt_Action_Hook_Proc
+   Xt_String_Proc
+   Xt_Key_Proc
+   Xt_Case_Proc
+   Xt_Convert_Selection_Proc
+   Xt_Lose_Selection_Proc
+   Xt_Selection_Done_Proc
+   Xt_Selection_Callback_Proc
+   Xt_Request_Id
+   Xt_Convert_Selection_Incr_Proc
+   Xt_Lose_Selection_Incr_Proc
+   Xt_Selection_Done_Incr_Proc
+   Xt_Cancel_Convert_Selection_Proc
+   Xt_Error_Msg_Handler
+   Xt_Error_Handler
+   Substitution_Rec
+   Substitution
+   Xt_File_Predicate
+   Xt_Create_Hook_Data_Rec
+   Xt_Change_Hook_Data_Rec
+   Xt_Change_Hook_Set_Values_Data_Rec
+   Xt_Configure_Hook_Data_Rec
+   Xt_Geometry_Hook_Data_Rec
+   Xt_Destroy_Hook_Data_Rec
+
+   --  compatibility
+   Xt_Converter
+
+Xt Functions
+ + Xt_Toolkit_Initialize                Xt.Initializers
+ + Xt_Create_Application_Context        Xt.Initializers
+ + Xt_Destroy_Application_Context       Xt.Initializers
+ + Xt_Widget_To_Application_Context     Xt.Utilities
+   Xt_Display_Initialize
+ + Xt_Open_Display                      Xt.Initializers
+ + Xt_Close_Display                     Xt.Initializers
+ + Xt_Set_Language_Proc                 Xt.Initializers
+ + Xt_Screen_Database                   Xt.Initializers
+   Xt_Database
+ + Xt_App_Set_Fallback_Resources        Xt.Initializers
+   Xt_Set_Arg
+   Xt_Merge_Arg_Lists
+ n Xt_Va_Create_Args_List
+ + Xt_Create_Widget                     Xt.Instance_Management
+ n Xt_Va_Create_Widget
+ + Xt_App_Create_Shell                  Xt.Initializers
+ n Xt_Va_App_Create_Shell
+ p Xt_Open_Application                  Xt.Initializers
+ n Xt_Va_Open_Application
+ + Xt_Realize_Widget                    Xt.Instance_Management
+ + Xt_Is_Realized                       Xt.Instance_Management
+   Xt_Create_Window
+ + Xt_Display                           Xt.Utilities
+ + Xt_Parent                            Xt.Instance_Management
+ + Xt_Screen                            Xt.Utilities
+ + Xt_Window                            Xt.Utilities
+ + Xt_Display_Of_Object                 Xt.Utilities
+ + Xt_Screen_Of_Object                  Xt.Utilities
+ + Xt_Window_Of_Object                  Xt.Utilities
+ + Xt_Name                              Xt.Utilities
+ + Xt_Unrealize_Widget
+ + Xt_Destroy_Widget                    Xt.Instance_Management
+ + Xt_Manage_Children                   Xt.Composite_Management
+ + Xt_Manage_Child                      Xt.Composite_Management
+ + Xt_Create_Managed_Widget             Xt.Instance_Management
+ n Xt_Va_Create_Managed_Widget
+ + Xt_Unmanage_Children                 Xt.Composite_Management
+ + Xt_Unmanage_Child                    Xt.Composite_Management
+   Xt_Change_Managed_Set                Xt.Composite_Management
+ + Xt_Is_Managed                        Xt.Composite_Management
+ + Xt_Set_Mapped_When_Managed           Xt.Instance_Management
+ + Xt_Map_Widget                        Xt.Instance_Management
+ + Xt_Unmap_Widget                      Xt.Instance_Management
+ p Xt_Create_Popup_Shell                Xt.Popup_Management
+   Xt_Va_Create_Popup_Shell
+ + Xt_Popup                             Xt.Popup_Management
+   Xt_Popup_Spring_Loaded
+   Xt_Callback_None
+   Xt_Callback_Nonexclusive
+   Xt_Callback_Exclusive
+   Xt_Menu_Popup
+ + Xt_Popdown                           Xt.Popup_Management
+   Xt_Callback_Popdown
+   Xt_Menu_Popdown
+   Xt_Make_Geometry_Request
+   Xt_Make_Resize_Request
+ + Xt_Move_Widget                       Xt.Geometry_Management
+   Xt_Resize_Widget
+ + Xt_Configure_Widget                  Xt.Geometry_Management
+ + Xt_Resize_Window                     Xt.Geometry_Management
+   Xt_Query_Geometry
+   Xt_App_Add_Input
+   Xt_Remove_Input
+   Xt_App_Add_Block_Hook
+   Xt_Remove_Block_Hook
+   Xt_App_Add_Time_Out
+   Xt_Remove_Time_Out
+   Xt_App_Add_Signal
+   Xt_Notice_Signal
+   Xt_Remove_Signal
+   Xt_Add_Grab
+   Xt_Remove_Grab
+   Xt_Grab_Key
+   Xt_Ungrab_Key
+   Xt_Grab_Keyboard
+   Xt_Ungrab_Keyboard
+   Xt_Grab_Button
+   Xt_Ungrab_Button
+   Xt_Grab_Pointer
+   Xt_Ungrab_Pointer
+   Xt_Set_Keyboard_Focus
+   Xt_Call_Accept_Focus
+   Xt_Register_Drawable
+   Xt_Unregister_Drawable
+   Xt_App_Pending
+   Xt_App_Peek_Event
+   Xt_App_Next_Event
+   Xt_App_Process_Event
+   Xt_Dispatch_Event
+   Xt_App_Main_Loop
+ + Xt_Set_Sensitive                 Xt.Utilities
+   Xt_Is_Sensitive
+   Xt_App_Add_Work_Proc
+   Xt_Remove_Work_Proc
+   Xt_Add_Event_Handler
+   Xt_Remove_Event_Handler
+   Xt_Insert_Event_Handler
+   Xt_Add_Raw_Event_Handler
+   Xt_Remove_Raw_Event_Handler
+   Xt_Insert_Raw_Event_Handler
+   Xt_Build_Event_Mask
+   Xt_Insert_Event_Type_Handler
+   Xt_Remove_Event_Type_Handler
+   Xt_Register_Extension_Selector
+   Xt_Set_Event_Dispatcher
+   Xt_Get_Keyboard_Focus_Widget
+   Xt_Dispatch_Event_To_Widget
+ + Xt_Toolkit_Thread_Initialize          Xt.Initializers
+ + Xt_App_Lock                           Xt.Utilities
+ + Xt_App_Unlock                         Xt.Utilities
+ + Xt_Process_Lock                       Xt.Utilities
+ + Xt_Process_Unlock                     Xt.Utilities
+ + Xt_App_Set_Exit_Flag                  Xt.Utilities
+ + Xt_App_Get_Exit_Flag                  Xt.Utilities
+ + Xt_Add_Callback                       Xt.Callbacks
+   Xt_Add_Callbacks
+ + Xt_Remove_Callback                    Xt.Callbacks
+   Xt_Remove_Callbacks
+   Xt_Remove_All_Callbacks
+   Xt_Call_Callbacks
+   Xt_Call_Callback_List
+   Xt_Has_Callbacks
+   Xt_Get_Resource_List
+   Xt_Get_Constraint_Resource_List
+   Xt_Offset_Of
+   Xt_Offset
+   Xt_Get_Subresources
+   Xt_Va_Get_Subresources
+   Xt_Get_Application_Resources
+   Xt_Va_Get_Application_Resources
+   Xt_Display_String_Conversion_Warning
+   Xt_Display_To_Application_Context
+ + Xt_Set_Type_Converter                 Xt.Resource_Management
+ + Xt_App_Set_Type_Converter             Xt.Resource_Management
+   Xt_Call_Converter
+   Xt_App_Release_Cache_Refs
+   Xt_Callback_Release_Cache_Ref
+   Xt_Callback_Release_Cache_Ref_List
+   Xt_Convert_And_Store
+ + Xt_Get_Values                         Xt.Resource_Management
+   Xt_Va_Get_Values
+   Xt_Get_Subvalues
+   Xt_Va_Get_Subvalues
+ + Xt_Set_Values                         Xt.Resource_Management
+   Xt_Va_Set_Values
+   Xt_Set_Subvalues
+   Xt_Va_Set_Subvalues
+   Xt_App_Add_Actions
+   Xt_App_Add_Action_Hook
+   Xt_Remove_Action_Hook
+   Xt_Set_Multi_Click_Time
+   Xt_Get_Multi_Click_Time
+   Xt_Parse_Translation_Table
+   Xt_Augment_Translations
+   Xt_Override_Translations
+   Xt_Uninstall_Translations
+   Xt_Parse_Accelerator_Table
+   Xt_Install_Accelerators
+   Xt_Install_All_Accelerators
+   Xt_Get_Keysym_Table
+   Xt_Set_Key_Translator
+   Xt_Translate_Keycode
+   Xt_Register_Case_Converter
+   Xt_Convert_Case
+   Xt_Get_Action_Keysym
+   Xt_Keysym_To_Keycode_List
+   Xt_Register_Grab_Action
+   Xt_Call_Action_Proc
+   Xt_Get_Action_List
+   Xt_Number
+   Xt_Name_To_Widget
+   Xt_Malloc
+   Xt_Calloc
+   Xt_Realloc
+   Xt_Free
+   Xt_New
+   Xt_New_String
+   Xt_Allocate_GC
+   Xt_Get_GC
+   Xt_Release_GC
+   Xt_App_Set_Selection_Timeout
+   Xt_App_Get_Selection_Timeout
+   Xt_Get_Selection_Request
+   Xt_Get_Selection_Value
+   Xt_Get_Selection_Values
+   Xt_Own_Selection
+   Xt_Disown_Selection
+   Xt_Get_Selection_Value_Incremental
+   Xt_Get_Selection_Values_Incremental
+   Xt_Own_Selection_Incremental
+   Xt_Set_Selection_Parameters
+   Xt_Get_Selection_Parameters
+   Xt_Create_Selection_Request
+   Xt_Send_Selection_Request
+   Xt_Cancel_Selection_Request
+   Xt_Reserve_Property_Atom
+   Xt_Release_Property_Atom
+   Xt_Last_Timestamp_Processed
+   Xt_Last_Event_Processed
+   Xt_Add_Exposure_To_Region
+   Xt_Translate_Coords
+   Xt_Window_To_Widget
+   Xt_App_Get_Error_Database
+   Xt_App_Get_Error_Database_Text
+   Xt_Get_Application_Name_And_Class
+   Xt_App_Set_Error_Msg_Handler
+   Xt_App_Error_Msg
+   Xt_App_Set_Warning_Msg_Handler
+   Xt_App_Warning_Msg
+   Xt_App_Set_Error_Handler
+   Xt_App_Error
+   Xt_App_Set_Warning_Handler
+   Xt_App_Warning
+   Xt_Set_Wm_Colormap_Windows
+   Xt_Find_File
+   Xt_Resolve_Pathname
+   Xt_Hooks_Of_Display
+   Xt_Get_Displays
+ + Xt_Class                              Xt.Class_Management
+ + Xt_Superclass                         Xt.Class_Management
+ + Xt_Is_Subclass                        Xt.Class_Management
+ p Xt_Check_Subclass                     Xt.Class_Management
+ + Xt_Is_Object                          Xt.Class_Management
+ + Xt_Is_Rect_Obj                        Xt.Class_Management
+ + Xt_Is_Widget                          Xt.Class_Management
+ + Xt_Is_Composite                       Xt.Class_Management
+ + Xt_Is_Constraint                      Xt.Class_Management
+ + Xt_Is_Shell                           Xt.Class_Management
+ + Xt_Is_Override_Shell                  Xt.Class_Management
+ + Xt_Is_WM_Shell                        Xt.Class_Management
+ + Xt_Is_Vendor_Shell                    Xt.Class_Management
+ + Xt_Is_Transient_Shell                 Xt.Class_Management
+ + Xt_Is_Top_Level_Shell                 Xt.Class_Management
+ + Xt_Is_Application_Shell               Xt.Class_Management
+ + Xt_Is_Session_Shell                   Xt.Class_Management
+
+   --  compatibility
+ p Xt_App_Initialize
+ n Xt_Va_App_Initialize
+   Xt_Initialize
+   Xt_Main_Loop
+   Xt_Next_Event
+   Xt_Process_Event
+   Xt_Peek_Event
+   Xt_Pending
+   Xt_Add_Input
+   Xt_Add_Time_Out
+   Xt_Add_Work_Proc
+   Xt_Create_Application_Shell
+   Xt_String_Conversion_Warning
+   Xt_Add_Converter
+   Xt_App_Add_Converter
+   Xt_Convert
+   Xt_Destroy_GC
+   Xt_Add_Actions
+   Xt_Set_Selection_Timeout
+   Xt_Get_Selection_Timeout
+   Xt_Get_Error_Database
+   Xt_Get_Error_Database_Text
+   Xt_Set_Error_Msg_Handler
+   Xt_Error_Msg
+   Xt_Set_Warning_Msg_Handler
+   Xt_Warning_Msg
+   Xt_Set_Error_Handler
+   Xt_Error
+   Xt_Set_Warning_Handler
+   Xt_Warning

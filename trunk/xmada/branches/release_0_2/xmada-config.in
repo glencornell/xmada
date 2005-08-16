@@ -1,0 +1,78 @@
+#!/bin/sh
+# @configure_input@
+
+prefix="@prefix@"
+exec_prefix="@exec_prefix@"
+includedir="@includedir@"
+libdir="@libdir@"
+
+xmada_dir="-I${includedir}/xmada"
+xmada_lib="-L${libdir}"
+
+MAJOR=@XMADA_MAJOR_VERSION@
+MINOR=@XMADA_MINOR_VERSION@
+
+usage()
+{
+   cat <<EOF
+Usage: xmada-config [OPTIONS]
+Options:
+        No option:
+            Output all the flags (compiler and linker) required
+            to compiler your program
+        [--prefix]
+            Output the directory in which XmAda is installed.
+        [--version|-v]
+            Output the version of XmAda
+        [--config]
+            Output XmAda's configuration parameters.
+        [--libs]
+            Output the linker flags to use for XmAda.
+        [--cflags]
+            Output the compiler flags to use for XmAda.
+        [--help]
+            Output this message
+EOF
+}
+
+output_type=full
+
+while test $# -gt 0; do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case $1 in
+    --help|-h)
+      usage 1>&2
+      exit 1
+      ;;
+    --prefix)
+      echo $prefix
+      exit 0
+      ;;
+    --version|-v)
+      echo XmAda ${MAJOR}.${MINOR}
+      exit 0
+      ;;
+    --config)
+      exit 0
+      ;;  
+    --libs)
+      echo $xmada_lib
+      exit 0
+      ;;
+    --cflags)
+      echo $xmada_dir
+      exit 0
+      ;;
+    *)
+      usage 1>&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+echo $xmada_dir -largs $xmada_lib

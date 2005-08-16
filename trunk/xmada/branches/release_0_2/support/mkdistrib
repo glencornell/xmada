@@ -1,0 +1,20 @@
+#!/bin/sh
+ARCHIVE=../xmada-0.2.tar
+TMP=xmada-0.2
+
+./support/reconfig
+
+rm -rf $TMP
+mkdir $TMP
+(tar cf - -T MANIFEST) | (cd $TMP && tar xf -)
+
+(cd $TMP && \
+ for f in `find -type l | grep -v aclocal.m4`; do \
+   rm -f $f; 
+   cp -p ../$f $f; \
+ done)
+
+tar cf $ARCHIVE $TMP
+gzip -9 $ARCHIVE
+
+(cd $TMP && ./configure && make) && rm -rf $TMP
