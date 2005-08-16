@@ -1,6 +1,6 @@
 #!/bin/sh
-ARCHIVE=../xmada-0.2.tar
-TMP=xmada-0.2
+ARCHIVE=../xmada-0.3.tar
+TMP=xmada-0.3
 
 ./support/reconfig
 
