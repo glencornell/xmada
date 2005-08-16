@@ -1,57 +1,140 @@
-with Xt;                       use Xt;
-with Xt.Class_Management;      use Xt.Class_Management;
+------------------------------------------------------------------------------
+--
+--  Motif Ada Binding
+--
+------------------------------------------------------------------------------
+--! <Copyright>
+--!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rost.ru)
+--!
+--! XmAda is free software; you can redistribute it and/or modify it under
+--! the terms of the GNU General Public License as published by the Free
+--! Software Foundation; either version 2, or (at your option) any later
+--! version.
+--!
+--! XmAda is distributed in the hope that it will be useful, but WITHOUT ANY
+--! WARRANTY; without even the implied warranty of MERCHANTABILITY or
+--! FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+--! for more details.
+--!
+--! You should have received a copy of the GNU General Public License
+--! along with GCC; see the file COPYING. If not, write to the Free
+--! Software Foundation, 51 Franklin Street, Fifth Floor, Boston, MA
+--! 02110-1301, USA.
+--!
+--! As a special exception, if other files instantiate generics from this
+--! unit, or you link this unit with other files to produce an executable,
+--! this unit does not by itself cause the resulting executable to be
+--! covered by the GNU General Public License. This exception does not
+--! however invalidate any other reasons why the executable file might be
+--! covered by the GNU Public License.
+--!
+--! <Unit> Xm.Class_Management
+--! <ImplementationNotes>
+--! <PortabilityIssues>
+--! <AnticipatedChanges>
+------------------------------------------------------------------------------
+--  $Revision$ $Author$
+--  $Date$
+------------------------------------------------------------------------------
+with Xt.Class_Management;
 
-with Xm_Arrow_Button;          use Xm_Arrow_Button;
-with Xm_Arrow_Button_Gadget;   use Xm_Arrow_Button_Gadget;
-with Xm_Bulletin_Board;        use Xm_Bulletin_Board;
-with Xm_Cascade_Button;        use Xm_Cascade_Button;
-with Xm_Cascade_Button_Gadget; use Xm_Cascade_Button_Gadget;
-with Xm_Combo_Box;             use Xm_Combo_Box;
-with Xm_Command;               use Xm_Command;
-with Xm_Container;             use Xm_Container;
-with Xm_Dialog_Shell;          use Xm_Dialog_Shell;
-with Xm_Display;               use Xm_Display;
-with Xm_Drag_Context;          use Xm_Drag_Context;
-with Xm_Drag_Icon;             use Xm_Drag_Icon;
-with Xm_Drawing_Area;          use Xm_Drawing_Area;
-with Xm_Drawn_Button;          use Xm_Drawn_Button;
+with Xm_Arrow_Button;
+with Xm_Arrow_Button_Gadget;
+with Xm_Bulletin_Board;
+with Xm_Cascade_Button;
+with Xm_Cascade_Button_Gadget;
+with Xm_Combo_Box;
+with Xm_Command;
+with Xm_Container;
+with Xm_Dialog_Shell;
+with Xm_Display;
+with Xm_Drag_Context;
+with Xm_Drag_Icon;
+with Xm_Drawing_Area;
+with Xm_Drawn_Button;
 --with Xm_Drop_Site_Manager;
-with Xm_Drop_Transfer;         use Xm_Drop_Transfer;
-with Xm_File_Selection_Box;    use Xm_File_Selection_Box;
-with Xm_Form;                  use Xm_Form;
-with Xm_Frame;                 use Xm_Frame;
-with Xm_Gadget;                use Xm_Gadget;
---with Xm_Grab_Shell;            use Xm_Grab_Shell;
-with Xm_Icon_Gadget;           use Xm_Icon_Gadget;
-with Xm_Label;                 use Xm_Label;
-with Xm_Label_Gadget;          use Xm_Label_Gadget;
-with Xm_List;                  use Xm_List;
-with Xm_Main_Window;           use Xm_Main_Window;
-with Xm_Manager;               use Xm_Manager;
-with Xm_Menu_Shell;            use Xm_Menu_Shell;
-with Xm_Message_Box;           use Xm_Message_Box;
-with Xm_Notebook;              use Xm_Notebook;
-with Xm_Paned_Window;          use Xm_Paned_Window;
-with Xm_Primitive;             use Xm_Primitive;
-with Xm_Print_Shell;           use Xm_Print_Shell;
-with Xm_Push_Button;           use Xm_Push_Button;
-with Xm_Push_Button_Gadget;    use Xm_Push_Button_Gadget;
-with Xm_Row_Column;            use Xm_Row_Column;
-with Xm_Scale;                 use Xm_Scale;
-with Xm_Screen;                use Xm_Screen;
-with Xm_Scroll_Bar;            use Xm_Scroll_Bar;
-with Xm_Scrolled_Window;       use Xm_Scrolled_Window;
-with Xm_Selection_Box;         use Xm_Selection_Box;
-with Xm_Separator;             use Xm_Separator;
-with Xm_Separator_Gadget;      use Xm_Separator_Gadget;
-with Xm_Text;                  use Xm_Text;
-with Xm_Text_Field;            use Xm_Text_Field;
-with Xm_Toggle_Button;         use Xm_Toggle_Button;
-with Xm_Toggle_Button_Gadget;  use Xm_Toggle_Button_Gadget;
-
+with Xm_Drop_Transfer;
+with Xm_File_Selection_Box;
+with Xm_Form;
+with Xm_Frame;
+with Xm_Gadget;
+--with Xm_Grab_Shell;
+with Xm_Icon_Gadget;
+with Xm_Label;
+with Xm_Label_Gadget;
+with Xm_List;
+with Xm_Main_Window;
+with Xm_Manager;
+with Xm_Menu_Shell;
+with Xm_Message_Box;
+with Xm_Notebook;
+with Xm_Paned_Window;
+with Xm_Primitive;
+with Xm_Print_Shell;
+with Xm_Push_Button;
+with Xm_Push_Button_Gadget;
+with Xm_Row_Column;
+with Xm_Scale;
+with Xm_Screen;
+with Xm_Scroll_Bar;
+with Xm_Scrolled_Window;
+with Xm_Selection_Box;
+with Xm_Separator;
+with Xm_Separator_Gadget;
+with Xm_Text;
+with Xm_Text_Field;
+with Xm_Toggle_Button;
+with Xm_Toggle_Button_Gadget;
 
 package body Xm.Class_Management is
 
+   use Xm_Arrow_Button;
+   use Xm_Arrow_Button_Gadget;
+   use Xm_Bulletin_Board;
+   use Xm_Cascade_Button;
+   use Xm_Cascade_Button_Gadget;
+   use Standard.Xm_Combo_Box;
+   use Xm_Command;
+   use Xm_Container;
+   use Xm_Dialog_Shell;
+   use Xm_Display;
+   use Xm_Drag_Context;
+   use Xm_Drag_Icon;
+   use Xm_Drawing_Area;
+   use Xm_Drawn_Button;
+   use Xm_Drop_Transfer;
+   use Xm_File_Selection_Box;
+   use Xm_Form;
+   use Xm_Frame;
+   use Xm_Gadget;
+   use Xm_Icon_Gadget;
+   use Xm_Label;
+   use Xm_Label_Gadget;
+   use Xm_List;
+   use Xm_Main_Window;
+   use Xm_Manager;
+   use Xm_Menu_Shell;
+   use Xm_Message_Box;
+   use Xm_Notebook;
+   use Xm_Paned_Window;
+   use Xm_Primitive;
+   use Xm_Print_Shell;
+   use Xm_Push_Button;
+   use Xm_Push_Button_Gadget;
+   use Xm_Row_Column;
+   use Xm_Scale;
+   use Xm_Screen;
+   use Xm_Scroll_Bar;
+   use Xm_Scrolled_Window;
+   use Xm_Selection_Box;
+   use Standard.Xm_Separator;
+   use Xm_Separator_Gadget;
+   use Xm_Text;
+   use Xm_Text_Field;
+   use Xm_Toggle_Button;
+   use Xm_Toggle_Button_Gadget;
+   use Xt;
+   use Xt.Class_Management;
 
    function Xm_Is_Arrow_Button (The_Widget : in Widget) return Boolean is
    begin
