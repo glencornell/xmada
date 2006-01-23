@@ -124,7 +124,7 @@ package X_Lib is
 
     type Millimeters is new Short;
 
-    subtype Coordinate is Pixel;
+--    subtype Coordinate is Pixel;
 
     subtype Depth_Type is Unsigned_Long;
 
@@ -6804,34 +6804,34 @@ package X_Lib is
 	    end record;
 	type Error_Event is access Error_Event_Record;
 
-	type Key_Event_Record is
-	    record
-		Root : Window;
-		Subwindow : Window;
-		Event_Time : Time;
-		X : Coordinate;
-		Y : Coordinate;
-		X_Root : Coordinate;
-		Y_Root : Coordinate;
-		State : Key_And_Button_Mask;
-		Key_Code : Keyboard.Key_Code;
-		Same_Screen : Boolean;
-	    end record;
-	type Key_Event is access Key_Event_Record;
-
-	type Button_Event_Record is
-	    record
-		Root : Window;
-		Subwindow : Window;
-		Event_Time : Time;
-		X : Coordinate;
-		Y : Coordinate;
-		X_Root : Coordinate;
-		Y_Root : Coordinate;
-		State : Key_And_Button_Mask;
-		Button : Button_Name_Type;
-		Same_Screen : Boolean;
-	    end record;
+--	type Key_Event_Record is
+--	    record
+--		Root : Window;
+--		Subwindow : Window;
+--		Event_Time : Time;
+--		X : Coordinate;
+--		Y : Coordinate;
+--		X_Root : Coordinate;
+--		Y_Root : Coordinate;
+--		State : Key_And_Button_Mask;
+--		Key_Code : Keyboard.Key_Code;
+--		Same_Screen : Boolean;
+--	    end record;
+--	type Key_Event is access Key_Event_Record;
+--
+--	type Button_Event_Record is
+--	    record
+--		Root : Window;
+--		Subwindow : Window;
+--		Event_Time : Time;
+--		X : Coordinate;
+--		Y : Coordinate;
+--		X_Root : Coordinate;
+--		Y_Root : Coordinate;
+--		State : Key_And_Button_Mask;
+--		Button : Button_Name_Type;
+--		Same_Screen : Boolean;
+--	    end record;
 	type Button_Event is access Button_Event_Record;
 
 	type Motion_Event_Record is
@@ -7078,14 +7078,14 @@ package X_Lib is
 
 	type Event_Component (Kind : Event_Type := Enter_Notify) is
 	    record
-		Serial : Unsigned_Long;
-		Send_Event : Boolean;
-		Display_Id : Display;
-		Window_Id : Window;
+--		Serial : Unsigned_Long;
+--		Send_Event : Boolean;
+--		Display_Id : Display;
+--		Window_Id : Window;
 
 		case Kind is
-		    when Button_Press | Button_Release =>
-			Button : Button_Event_Record;
+--		    when Button_Press | Button_Release =>
+--			Button : Button_Event_Record;
 		    when Circulate_Notify =>
 			Circulate : Circulate_Event_Record;
 		    when Circulate_Request =>
@@ -7112,8 +7112,8 @@ package X_Lib is
 			Graphics : Graphics_Expose_Event_Record;
 		    when Gravity_Notify =>
 			Gravity : Gravity_Event_Record;
-		    when Key_Press | Key_Release =>
-			Key : Key_Event_Record;
+--		    when Key_Press | Key_Release =>
+--			Key : Key_Event_Record;
 		    when Keymap_Notify =>
 			Keymap : Keymap_Event_Record;
 		    when Map_Notify =>
@@ -7147,12 +7147,12 @@ package X_Lib is
 		end case;
 	    end record;
 
-	type Event_Record is
-	    record
-		E : Event_Component;
-	    end record;
-
-	type Event is access Event_Record;
+--	type Event_Record is
+--	    record
+--		E : Event_Component;
+--	    end record;
+--
+--	type Event is access Event_Record;
 
 	function Null_Event return Event_Record;  -- Kind = Null_Event_Kind
 
