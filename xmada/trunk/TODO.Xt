@@ -147,7 +147,7 @@ Xt Functions
  + Xt_Map_Widget                        Xt.Instance_Management
  + Xt_Unmap_Widget                      Xt.Instance_Management
  p Xt_Create_Popup_Shell                Xt.Popup_Management
-   Xt_Va_Create_Popup_Shell
+ n Xt_Va_Create_Popup_Shell
  + Xt_Popup                             Xt.Popup_Management
    Xt_Popup_Spring_Loaded
    Xt_Callback_None
