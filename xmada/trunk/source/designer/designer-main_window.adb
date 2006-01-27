@@ -47,7 +47,7 @@ package body Designer.Main_Window is
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Initialize is
+   procedure Initialize (App_Shell : in Xt.Widget) is
    begin
       Designer.Properties_Editor.Initialize;
       Designer.Tree_Editor.Initialize;

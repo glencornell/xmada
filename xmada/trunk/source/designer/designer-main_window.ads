@@ -38,6 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt;
 
 package Designer.Main_Window is
 
@@ -48,6 +49,6 @@ package Designer.Main_Window is
    --! главного окна и создание виджетов.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Initialize;
+   procedure Initialize (App_Shell : in Xt.Widget);
 
 end Designer.Main_Window;

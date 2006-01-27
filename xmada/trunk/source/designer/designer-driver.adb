@@ -36,11 +36,30 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt.Event_Management;
+with Xt.Initializers;
+with Xt_Session_Shell;
+
 with Designer.Main_Window;
 with Model.Initialization;
 
 procedure Designer.Driver is
+
+   use Xt;
+   use Xt.Event_Management;
+   use Xt.Initializers;
+   use Xt_Session_Shell;
+
+   App_Context : Xt_App_Context;
+   App_Shell   : Widget;
+
 begin
    Model.Initialization.Initialize;
-   Designer.Main_Window.Initialize;
+
+   Xt_Set_Language_Proc;
+   Xt_Open_Application (App_Shell, App_Context, "XmAdaDesigner",
+                        The_Widget_Class => Session_Shell_Widget_Class);
+   Designer.Main_Window.Initialize (App_Shell);
+
+   Xt_App_Main_Loop (App_Context);
 end Designer.Driver;
