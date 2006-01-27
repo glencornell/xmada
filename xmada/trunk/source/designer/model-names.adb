@@ -33,8 +33,8 @@
 --! <PortabilityIssues>
 --! <AnticipatedChanges>
 ------------------------------------------------------------------------------
---  $Source$
---  $Revision$ $Date$ $Author$
+--  $Revision$ $Author$
+--  $Date$
 ------------------------------------------------------------------------------
 with GNAT.Table;
 
