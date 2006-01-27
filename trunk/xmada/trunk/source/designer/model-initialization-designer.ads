@@ -28,38 +28,30 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Designer.Driver
---! <ImplementationNotes>
---! <PortabilityIssues>
---! <AnticipatedChanges>
+--! <Unit> Model.Initialization.Designer
+--! <Purpose>
+--!   Пакет содержит подпрограмму начальной инициализации расширения дизайнера
+--! для внутренних структур данных модели.
+--!
+--! <Effects>
+--!   Вызов подпрограмм этого пакета должен производиться только после вызова
+--! подпрограмм родительского пакета. При нарушении этого условия поведение
+--! программы не предсказуемо.
+--!
+--! <Perfomance>
 ------------------------------------------------------------------------------
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Xt.Event_Management;
-with Xt.Initializers;
-with Xt_Session_Shell;
 
-with Designer.Main_Window;
-with Model.Initialization.Designer;
+package Model.Initialization.Designer is
 
-procedure Designer.Driver is
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Initialize;
 
-   use Xt;
-   use Xt.Event_Management;
-   use Xt.Initializers;
-   use Xt_Session_Shell;
-
-   App_Context : Xt_App_Context;
-   App_Shell   : Widget;
-
-begin
-   Model.Initialization.Initialize;
-   Model.Initialization.Designer.Initialize;
-
-   Xt_Set_Language_Proc;
-   Xt_Open_Application (App_Shell, App_Context, "XmAdaDesigner",
-                        The_Widget_Class => Session_Shell_Widget_Class);
-   Designer.Main_Window.Initialize (App_Shell);
-   Xt_App_Main_Loop (App_Context);
-end Designer.Driver;
+end Model.Initialization.Designer;
