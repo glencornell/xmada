@@ -1,0 +1,14 @@
+
+!!  Шрифт по умолчанию для всех виджетов.
+*renderTable:
+*renderTable.fontType: FONT_IS_FONTSET
+*renderTable.fontName: -*-helvetica-medium-r-normal--12-*
+!!  Шрифт по умолчанию для виджетов класса Текст и Текстовое Поле.
+!!  В качестве шрифта для этих классов виждетов необходимо указывать
+!!  моноширинный шрифт.
+*XmText.renderTable:
+*XmText.renderTable.fontType: FONT_IS_FONTSET
+*XmText.renderTable.fontName: -*-courier-medium-r-normal--12-*
+*XmTextField.renderTable:
+*XmTextField.renderTable.fontType: FONT_IS_FONTSET
+*XmTextField.renderTable.fontName: -*-courier-medium-r-normal--12-*
