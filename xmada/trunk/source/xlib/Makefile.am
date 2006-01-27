@@ -34,53 +34,53 @@ install-data-local:
 	for f in $(srcdir)/*.ad[sb] *.ali; do $(INSTALL) -m 444 $$f $(DESTDIR)$(alidir); done
 
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
-xlib.lo: \
-	$(srcdir)/xlib.adb \
-	$(srcdir)/xlib.ads \
-	$(srcdir)/xlib-implementation.adb \
-	$(srcdir)/xlib-implementation.ads
 xlib-atoms.lo: \
-	$(srcdir)/xlib.ads \
 	$(srcdir)/xlib-atoms.adb \
 	$(srcdir)/xlib-atoms.ads \
-	$(srcdir)/xlib-implementation.ads
+	$(srcdir)/xlib-implementation.ads \
+	$(srcdir)/xlib.ads
 xlib-colors.lo: \
-	$(srcdir)/xlib.ads \
-	$(srcdir)/xlib-colors.ads
+	$(srcdir)/xlib-colors.ads \
+	$(srcdir)/xlib.ads
 xlib-cursors.lo: \
-	$(srcdir)/xlib.ads \
-	$(srcdir)/xlib-cursors.ads
+	$(srcdir)/xlib-cursors.ads \
+	$(srcdir)/xlib.ads
 xlib-events.lo: \
-	$(srcdir)/xlib.ads \
 	$(srcdir)/xlib-events.adb \
 	$(srcdir)/xlib-events.ads \
-	$(srcdir)/xlib-implementation.ads
-xlib-extensions.lo: \
-	$(srcdir)/xlib.ads \
-	$(srcdir)/xlib-extensions.ads
+	$(srcdir)/xlib-implementation.ads \
+	$(srcdir)/xlib.ads
 xlib-extensions-input_device.lo: \
-	$(srcdir)/xlib.ads \
 	$(srcdir)/xlib-atoms.ads \
-	$(srcdir)/xlib-extensions.ads \
 	$(srcdir)/xlib-extensions-input_device.adb \
 	$(srcdir)/xlib-extensions-input_device.ads \
-	$(srcdir)/xlib-implementation.adb \
-	$(srcdir)/xlib-implementation.ads
-xlib-extensions-print.lo: \
-	$(srcdir)/xlib.ads \
 	$(srcdir)/xlib-extensions.ads \
+	$(srcdir)/xlib-implementation.adb \
+	$(srcdir)/xlib-implementation.ads \
+	$(srcdir)/xlib.ads
+xlib-extensions-print.lo: \
 	$(srcdir)/xlib-extensions-print.adb \
 	$(srcdir)/xlib-extensions-print.ads \
-	$(srcdir)/xlib-implementation.ads
+	$(srcdir)/xlib-extensions.ads \
+	$(srcdir)/xlib-implementation.ads \
+	$(srcdir)/xlib.ads
+xlib-extensions.lo: \
+	$(srcdir)/xlib-extensions.ads \
+	$(srcdir)/xlib.ads
 xlib-graphic_output.lo: \
-	$(srcdir)/xlib.ads \
 	$(srcdir)/xlib-graphic_output.adb \
 	$(srcdir)/xlib-graphic_output.ads \
-	$(srcdir)/xlib-implementation.ads
+	$(srcdir)/xlib-implementation.ads \
+	$(srcdir)/xlib.ads
 xlib-implementation.lo: \
-	$(srcdir)/xlib.ads \
 	$(srcdir)/xlib-implementation.adb \
-	$(srcdir)/xlib-implementation.ads
+	$(srcdir)/xlib-implementation.ads \
+	$(srcdir)/xlib.ads
 xlib-resource_manager.lo: \
-	$(srcdir)/xlib.ads \
-	$(srcdir)/xlib-resource_manager.ads
+	$(srcdir)/xlib-resource_manager.ads \
+	$(srcdir)/xlib.ads
+xlib.lo: \
+	$(srcdir)/xlib-implementation.adb \
+	$(srcdir)/xlib-implementation.ads \
+	$(srcdir)/xlib.adb \
+	$(srcdir)/xlib.ads

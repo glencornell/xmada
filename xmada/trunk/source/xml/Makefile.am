@@ -30,21 +30,21 @@ install-data-local:
 xml.lo: \
 	$(srcdir)/xml.ads
 xml_grid.lo: \
-	$(top_srcdir)/source/xlib/xlib.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
+	$(top_srcdir)/source/xlib/xlib.ads \
+	$(top_srcdir)/source/xm/xm_manager.ads \
 	$(srcdir)/xml_grid.adb \
 	$(srcdir)/xml_grid.ads \
-	$(top_srcdir)/source/xm/xm_manager.ads \
-	$(top_srcdir)/source/xt/xt.ads \
 	$(top_srcdir)/source/xt/xt-ancillary_types.ads \
-	$(top_srcdir)/source/xt/xt_composite.ads \
 	$(top_srcdir)/source/xt/xt-composite_management.ads \
+	$(top_srcdir)/source/xt/xt.ads \
+	$(top_srcdir)/source/xt/xt_composite.ads \
 	$(top_srcdir)/source/xt/xt_constraint.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xml_string_defs.lo: \
-	$(top_srcdir)/source/xlib/xlib.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
+	$(top_srcdir)/source/xlib/xlib.ads \
 	$(srcdir)/xml_string_defs.ads \
 	$(top_srcdir)/source/xt/xt.ads

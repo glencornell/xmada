@@ -1,7 +1,7 @@
 #AUTOMAKE_OPTIONS = foreign no-dependencies
 #ACLOCAL_AMFLAGS = -I support
 
-SUBDIRS = xlib xt xm xml
+SUBDIRS = xlib xt xm xml designer
 
 depend:
 	for d in $(SUBDIRS); do \

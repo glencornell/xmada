@@ -37,6 +37,7 @@ dnl is edited automatically by make_distrib.
 AC_OUTPUT([
 	Makefile
 	source/Makefile
+	source/designer/Makefile
 	source/xlib/Makefile
 	source/xt/Makefile
 	source/xm/Makefile
