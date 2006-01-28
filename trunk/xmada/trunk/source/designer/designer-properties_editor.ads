@@ -38,7 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Xt;
+with Xt.Ancillary_Types;
 
 package Designer.Properties_Editor is
 
@@ -49,6 +49,7 @@ package Designer.Properties_Editor is
    --! и создание виджетов.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Initialize (Parent : in Xt.Widget);
+   procedure Initialize (Parent   : in Xt.Widget;
+                         Arg_List : in Xt.Ancillary_Types.Xt_Arg_List);
 
 end Designer.Properties_Editor;

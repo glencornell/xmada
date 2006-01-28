@@ -16,7 +16,9 @@
 !!  Главное окно.
 *main_window.horizontal_paned.orientation: HORIZONTAL
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
+*main_window.horizontal_paned.properties_form.allowResize: TRUE
 *main_window.horizontal_paned.tree_form.skipAdjust: TRUE
+*main_window.horizontal_paned.tree_form.allowResize: TRUE
 *main_window*vertical_paned.message_form.skipAdjust: TRUE
 
 *drawing.background: white
