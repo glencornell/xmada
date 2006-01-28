@@ -36,11 +36,38 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt.Ancillary_Types;
+with Xt.Composite_Management;
+with Xt.Instance_Management;
+with Xt.Resource_Management;
+with Xm_Form;
+with Xm_Label_Gadget;
+with Xm_Main_Window;
+with Xm_Notebook;
+with Xm_Paned_Window;
+with Xm_Row_Column;
+with Xm_String_Defs;
+
 with Designer.Properties_Editor;
 with Designer.Tree_Editor;
 with Designer.Visual_Editor;
 
 package body Designer.Main_Window is
+
+   use Xm_Form;
+   use Xm_Label_Gadget;
+   use Xm_Main_Window;
+   use Xm_Notebook;
+   use Xm_Paned_Window;
+   use Xm_Row_Column;
+   use Xm_String_Defs;
+   use Xt;
+   use Xt.Ancillary_Types;
+   use Xt.Composite_Management;
+   use Xt.Instance_Management;
+   use Xt.Resource_Management;
+
+   Status_Bar : Xt.Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -48,10 +75,37 @@ package body Designer.Main_Window is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Initialize (App_Shell : in Xt.Widget) is
+      Properties_Form : Widget;
+      Tree_Form       : Widget;
+      Main_Window     : Widget;
+      Args            : Xt_Arg_List (0 .. 5);
+      Palette         : Widget;
+      Paned           : Widget;
+      Menu            : Widget;
+      Paned1          : Widget;
+      Message_Form    : Widget;
+
    begin
+      Main_Window := Xm_Create_Managed_Main_Window (App_Shell, "main_window");
+      Paned       := Xm_Create_Managed_Paned_Window (Main_Window, "horizontal_paned");
+      Status_Bar  := Xm_Create_Managed_Label_Gadget (Main_Window, "status_bar");
+      Palette     := Xm_Create_Managed_Notebook (Main_Window, "widget_set");
+      Menu        := Xm_Create_Managed_Menu_Bar (Main_Window, "main_menu");
+
+      Properties_Form := Xm_Create_Managed_Form (Paned, "properties_form");
+      Paned1          := Xm_Create_Managed_Paned_Window (Paned, "vertical_paned");
+      Tree_Form       := Xm_Create_Managed_Form (Paned, "tree_form");
+
+      Designer.Visual_Editor.Initialize (Paned1);
+      Message_Form := Xm_Create_Managed_Form (Paned1, "message_form");
+
+      Xt_Set_Arg (Args (0), Xm_N_Command_Window, Palette);
+      Xt_Set_Arg (Args (1), Xm_N_Message_Window, Status_Bar);
+      Xt_Set_Values (Main_Window, Args (0 .. 1));
+      Xt_Realize_Widget (App_Shell);
+
       Designer.Properties_Editor.Initialize;
       Designer.Tree_Editor.Initialize;
-      Designer.Visual_Editor.Initialize;
    end Initialize;
 
 end Designer.Main_Window;
