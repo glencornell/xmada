@@ -38,6 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt;
 
 package Designer.Tree_Editor is
 
@@ -48,6 +49,6 @@ package Designer.Tree_Editor is
    --! создание виджетов.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Initialize;
+   procedure Initialize (Parent : in Xt.Widget);
 
 end Designer.Tree_Editor;

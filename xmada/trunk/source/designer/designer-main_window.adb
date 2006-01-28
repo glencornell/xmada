@@ -104,8 +104,8 @@ package body Designer.Main_Window is
       Xt_Set_Values (Main_Window, Args (0 .. 1));
       Xt_Realize_Widget (App_Shell);
 
-      Designer.Properties_Editor.Initialize;
-      Designer.Tree_Editor.Initialize;
+      Designer.Properties_Editor.Initialize (Properties_Form);
+      Designer.Tree_Editor.Initialize (Tree_Form);
    end Initialize;
 
 end Designer.Main_Window;
