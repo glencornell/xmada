@@ -179,8 +179,6 @@ package body Designer.Main_Window is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Initialize (App_Shell : in Xt.Widget) is
-      use Callbacks;
-
       Properties_Form : Widget;
       Tree_Form       : Widget;
       Main_Window     : Widget;
@@ -197,8 +195,10 @@ package body Designer.Main_Window is
 
    begin
       Main_Window := Xm_Create_Managed_Main_Window (App_Shell, "main_window");
-      Paned       := Xm_Create_Managed_Paned_Window (Main_Window, "horizontal_paned");
-      Status_Bar  := Xm_Create_Managed_Label_Gadget (Main_Window, "status_bar");
+      Paned       :=
+        Xm_Create_Managed_Paned_Window (Main_Window, "horizontal_paned");
+      Status_Bar  :=
+        Xm_Create_Managed_Label_Gadget (Main_Window, "status_bar");
       Palette     := Xm_Create_Managed_Notebook (Main_Window, "widget_set");
       Menu        := Xm_Create_Managed_Menu_Bar (Main_Window, "main_menu");
 
@@ -212,26 +212,23 @@ package body Designer.Main_Window is
       --  Для унификации механизма скрытия/отображения панели кнопка создаётся
       --  как самостоятельная панель.
 
-      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment,   Xm_Attach_Form);
-      Xt_Set_Arg (Args (1), Xm_N_Left_Attachment,  Xm_Attach_Form);
       Show_Properties :=
-        Xm_Create_Arrow_Button_Gadget
-         (Paned, "properties_show", Args (0 .. 1));
+        Xm_Create_Arrow_Button_Gadget (Paned, "properties_show");
       Xt_Add_Callback (Show_Properties,
                        Xm_N_Activate_Callback,
-                       On_Show_Button'Access,
+                       Callbacks.On_Show_Button'Access,
                        To_Closure (Properties_Form));
 
       --  Создание кнопки скрытия панели редактирования свойств.
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment,   Xm_Attach_Form);
       Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Form);
-      Button := Xm_Create_Managed_Arrow_Button_Gadget (Properties_Form,
-                                                       "properties_hide",
-                                                       Args (0 .. 1));
+      Button :=
+        Xm_Create_Managed_Arrow_Button_Gadget
+         (Properties_Form, "properties_hide", Args (0 .. 1));
       Xt_Add_Callback (Button,
                        Xm_N_Activate_Callback,
-                       On_Hide_Button'Access,
+                       Callbacks.On_Hide_Button'Access,
                        To_Closure (Show_Properties));
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
@@ -257,27 +254,22 @@ package body Designer.Main_Window is
       --  Для унификации механизма скрытия/отображения панели кнопка создаётся
       --  как самостоятельная панель.
 
-      Xt_Set_Arg (Args (0), Xm_N_Bottom_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment,  Xm_Attach_Form);
-      Show_Messages := Xm_Create_Arrow_Button_Gadget (Paned1,
-                                                      "message_show",
-                                                      Args (0 .. 1));
-
+      Show_Messages := Xm_Create_Arrow_Button_Gadget (Paned1, "message_show");
       Xt_Add_Callback (Show_Messages,
                        Xm_N_Activate_Callback,
-                       On_Show_Button'Access,
+                       Callbacks.On_Show_Button'Access,
                        To_Closure (Message_Form));
 
       --  Создание кнопки скрытия панели сообщений.
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment,   Xm_Attach_Form);
       Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Form);
-      Button := Xm_Create_Managed_Arrow_Button_Gadget (Message_Form,
-                                                       "message_hide",
-                                                       Args (0 .. 1));
+      Button :=
+        Xm_Create_Managed_Arrow_Button_Gadget
+         (Message_Form, "message_hide", Args (0 .. 1));
       Xt_Add_Callback (Button,
                        Xm_N_Activate_Callback,
-                       On_Hide_Button'Access,
+                       Callbacks.On_Hide_Button'Access,
                        To_Closure (Show_Messages));
 
       --
@@ -290,26 +282,22 @@ package body Designer.Main_Window is
       --  Для унификации механизма скрытия/отображения панели кнопка создаётся
       --  как самостоятельная панель.
 
-      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment,   Xm_Attach_Form);
-      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Form);
-      Show_Tree := Xm_Create_Arrow_Button_Gadget (Paned,
-                                                  "tree_show",
-                                                  Args (0 .. 1));
+      Show_Tree := Xm_Create_Arrow_Button_Gadget (Paned, "tree_show");
       Xt_Add_Callback (Show_Tree,
                        Xm_N_Activate_Callback,
-                       On_Show_Button'Access,
+                       Callbacks.On_Show_Button'Access,
                        To_Closure (Tree_Form));
 
       --  Создание кнопки скрытия панели дерева.
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment,  Xm_Attach_Form);
       Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Form);
-      Button := Xm_Create_Managed_Arrow_Button_Gadget (Tree_Form,
-                                                       "tree_hide",
-                                                       Args (0 .. 1));
+      Button :=
+        Xm_Create_Managed_Arrow_Button_Gadget
+         (Tree_Form, "tree_hide", Args (0 .. 1));
       Xt_Add_Callback (Button,
                        Xm_N_Activate_Callback,
-                       On_Hide_Button'Access,
+                       Callbacks.On_Hide_Button'Access,
                        To_Closure (Show_Tree));
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
