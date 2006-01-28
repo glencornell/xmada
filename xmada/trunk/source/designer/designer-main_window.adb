@@ -108,7 +108,6 @@ package body Designer.Main_Window is
       Xt_Set_Arg (Args (0), Xm_N_Command_Window, Palette);
       Xt_Set_Arg (Args (1), Xm_N_Message_Window, Status_Bar);
       Xt_Set_Values (Main_Window, Args (0 .. 1));
-      Xt_Realize_Widget (App_Shell);
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Form);
@@ -121,6 +120,8 @@ package body Designer.Main_Window is
       Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
       Designer.Tree_Editor.Initialize (Tree_Form, Args (0 .. 3));
+
+      Xt_Realize_Widget (App_Shell);
    end Initialize;
 
 end Designer.Main_Window;
