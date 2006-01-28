@@ -44,7 +44,7 @@ package body Designer.Properties_Editor is
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Initialize is
+   procedure Initialize (Parent : in Xt.Widget) is
    begin
       null;
    end Initialize;
