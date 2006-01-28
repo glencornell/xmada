@@ -66,6 +66,22 @@ package body Model.Initialization is
    Xt_Motif_Child_Vertical_Alignment_Resource_Type   : Node_Id;
    Xt_Motif_Combo_Box_Type_Resource_Type             : Node_Id;
    Xt_Motif_Command_Window_Location_Resource_Type    : Node_Id;
+   Xt_Motif_Default_Button_Type_Resource_Type        : Node_Id;
+   Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
+   Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
+   Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
+   Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
+   Xt_Motif_Toggle_Indicator_On_Resource_Type        : Node_Id;
+   Xt_Motif_Indicator_Type_Resource_Type             : Node_Id;
+   Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
+   Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
+   Xt_Motif_Label_Type_Resource_Type                 : Node_Id;
+   Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
+   Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
+   Xt_Motif_Match_Behavior_Resource_Type             : Node_Id;
+--   Xt_Motif__Resource_Type : Node_Id;
+--   Xt_Motif__Resource_Type : Node_Id;
+--   Xt_Motif__Resource_Type : Node_Id;
 --   Xt_Motif__Resource_Type : Node_Id;
 --   Xt_Motif__Resource_Type : Node_Id;
 --   Xt_Motif__Resource_Type : Node_Id;
@@ -658,29 +674,467 @@ package body Model.Initialization is
           (Xt_Motif_Command_Window_Location_Resource_Type, Values);
       end;
 
---      declare
---         Values : constant List_Id := New_List;
---         Value  : Node_Id;
---
---      begin
+      --  DefaultButtonType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_NONE"));
+         Set_Internal_Name (Value, Enter ("DIALOG_NONE"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_CANCEL_BUTTON"));
+         Set_Internal_Name (Value, Enter ("DIALOG_CANCEL_BUTTON"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_OK_BUTTON"));
+         Set_Internal_Name (Value, Enter ("DIALOG_OK_BUTTON"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_HELP_BUTTON"));
+         Set_Internal_Name (Value, Enter ("DIALOG_HELP_BUTTON"));
+         Append (Values, Value);
+
+         Xt_Motif_Default_Button_Type_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Default_Button_Type_Resource_Type,
+           Enter ("XmRDefaultButtonType"));
+         Set_Internal_Name
+          (Xt_Motif_Default_Button_Type_Resource_Type,
+           Enter ("DefaultButtonType"));
+         Set_Value_Specifications
+          (Xt_Motif_Default_Button_Type_Resource_Type, Values);
+      end;
+
+      --  DeleteResponse
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDESTROY"));
+         Set_Internal_Name (Value, Enter ("DESTROY"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmUNMAP"));
+         Set_Internal_Name (Value, Enter ("UNMAP"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDO_NOTHING"));
+         Set_Internal_Name (Value, Enter ("DO_NOTHING"));
+         Append (Values, Value);
+
+         Xt_Motif_Delete_Response_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Delete_Response_Resource_Type,
+           Enter ("XmRDeleteResponse"));
+         Set_Internal_Name
+          (Xt_Motif_Delete_Response_Resource_Type, Enter ("DeleteResponse"));
+         Set_Value_Specifications
+          (Xt_Motif_Delete_Response_Resource_Type, Values);
+      end;
+
+      --  DialogStyle
+
+      --  Тип имеет альтернативные имена для:
+      --  XmDIALOG_PRIMARY_APPLICATION_MODAL: XmDIALOG_APPLICATION_MODAL
+      --    (для обратной совместимости)
+      --  XmDIALOG_MODELESS: XmDIALOG_WORK_AREA
+      --    (используется если родитель виджета - не XmDialogShell)
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_MODELESS"));
+         Set_Internal_Name (Value, Enter ("DIALOG_MODELESS"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_PRIMARY_APPLICATION_MODAL"));
+         Set_Internal_Name (Value, Enter ("DIALOG_PRIMARY_APPLICATION_MODAL"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_FULL_APPLICATION_MODAL"));
+         Set_Internal_Name (Value, Enter ("DIALOG_FULL_APPLICATION_MODAL"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_SYSTEM_MODAL"));
+         Set_Internal_Name (Value, Enter ("DIALOG_SYSTEM_MODAL"));
+         Append (Values, Value);
+
+         Xt_Motif_Dialog_Style_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Dialog_Style_Resource_Type, Enter ("XmRDialogStyle"));
+         Set_Internal_Name
+          (Xt_Motif_Dialog_Style_Resource_Type, Enter ("DialogStyle"));
+         Set_Value_Specifications
+          (Xt_Motif_Dialog_Style_Resource_Type, Values);
+      end;
+
+      --  DialogType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_TEMPLATE"));
+         Set_Internal_Name (Value, Enter ("DIALOG_TEMPLATE"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_ERROR"));
+         Set_Internal_Name (Value, Enter ("DIALOG_ERROR"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_INFORMATION"));
+         Set_Internal_Name (Value, Enter ("DIALOG_INFORMATION"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_MESSAGE"));
+         Set_Internal_Name (Value, Enter ("DIALOG_MESSAGE"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_QUESTION"));
+         Set_Internal_Name (Value, Enter ("DIALOG_QUESTION"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_WARNING"));
+         Set_Internal_Name (Value, Enter ("DIALOG_WARNING"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDIALOG_WORKING"));
+         Set_Internal_Name (Value, Enter ("DIALOG_WORKING"));
+         Append (Values, Value);
+
+         Xt_Motif_Dialog_Type_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Dialog_Type_Resource_Type, Enter ("XmRDialogType"));
+         Set_Internal_Name
+          (Xt_Motif_Dialog_Type_Resource_Type, Enter ("DialogType"));
+         Set_Value_Specifications
+          (Xt_Motif_Dialog_Type_Resource_Type, Values);
+      end;
+
+      --  EditMode
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmSINGLE_LINE_EDIT"));
+         Set_Internal_Name (Value, Enter ("SINGLE_LINE_EDIT"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmMULTI_LINE_EDIT"));
+         Set_Internal_Name (Value, Enter ("MULTI_LINE_EDIT"));
+         Append (Values, Value);
+
+         Xt_Motif_Edit_Mode_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Edit_Mode_Resource_Type, Enter ("XmREditMode"));
+         Set_Internal_Name
+          (Xt_Motif_Edit_Mode_Resource_Type, Enter ("EditMode"));
+         Set_Value_Specifications
+          (Xt_Motif_Edit_Mode_Resource_Type, Values);
+      end;
+
+      --  ToggleIndicatorOn
+
+      --  Тип имеет альтернативные имена для:
+      --  XmINDICATOR_NONE: OFF, FALSE, NO
+      --  XmINDICATOR_FILL: ON, TRUE, YES
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmINDICATOR_NONE"));
+         Set_Internal_Name (Value, Enter ("INDICATOR_NONE"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmINDICATOR_FILL"));
+         Set_Internal_Name (Value, Enter ("INDICATOR_FILL"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmINDICATOR_BOX"));
+         Set_Internal_Name (Value, Enter ("INDICATOR_BOX"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmINDICATOR_CHECK"));
+         Set_Internal_Name (Value, Enter ("INDICATOR_CHECK"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmINDICATOR_CHECK_BOX"));
+         Set_Internal_Name (Value, Enter ("INDICATOR_CHECK_BOX"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmINDICATOR_CROSS"));
+         Set_Internal_Name (Value, Enter ("INDICATOR_CROSS"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmINDICATOR_CROSS_BOX"));
+         Set_Internal_Name (Value, Enter ("INDICATOR_CROSS_BOX"));
+         Append (Values, Value);
+
+         Xt_Motif_Toggle_Indicator_On_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Toggle_Indicator_On_Resource_Type,
+           Enter ("XmRIndicatorOn"));
+         Set_Internal_Name
+          (Xt_Motif_Toggle_Indicator_On_Resource_Type, Enter ("IndicatorOn"));
+         Set_Value_Specifications
+          (Xt_Motif_Toggle_Indicator_On_Resource_Type, Values);
+      end;
+
+      --  IndicatorType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmN_OF_MANY"));
+         Set_Internal_Name (Value, Enter ("N_OF_MANY"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmONE_OF_MANY"));
+         Set_Internal_Name (Value, Enter ("ONE_OF_MANY"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmONE_OF_MANY_ROUND"));
+         Set_Internal_Name (Value, Enter ("ONE_OF_MANY_ROUND"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmONE_OF_MANY_DIAMOND"));
+         Set_Internal_Name (Value, Enter ("ONE_OF_MANY_DIAMOND"));
+         Append (Values, Value);
+
+         Xt_Motif_Indicator_Type_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Indicator_Type_Resource_Type, Enter ("XmRIndicatorType"));
+         Set_Internal_Name
+          (Xt_Motif_Indicator_Type_Resource_Type, Enter ("IndicatorType"));
+         Set_Value_Specifications
+          (Xt_Motif_Indicator_Type_Resource_Type, Values);
+      end;
+
+      --  InputPolicy
+
+      --  XXX Значение XmINHERIT_POLICY не определено в RepresentationType.
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmPER_SHELL"));
+         Set_Internal_Name (Value, Enter ("PER_SHELL"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmPER_WIDGET"));
+         Set_Internal_Name (Value, Enter ("PER_WIDGET"));
+         Append (Values, Value);
+
 --         Value := Create_Enumerated_Resource_Type_Value_Specification;
---         Set_Name (Value, Enter (""));
---         Set_Internal_Name (Value, Enter (""));
+--         Set_Name (Value, Enter ("XmINHERIT_POLICY"));
+--         Set_Internal_Name (Value, Enter (""));  --  XXX ???
 --         Append (Values, Value);
---
---         Value := Create_Enumerated_Resource_Type_Value_Specification;
---         Set_Name (Value, Enter (""));
---         Set_Internal_Name (Value, Enter (""));
---         Append (Values, Value);
---
---          := Create_Enumerated_Resource_Type;
---         Set_Name
---          (, Enter (""));
---         Set_Internal_Name
---          (, Enter (""));
---         Set_Value_Specifications
---          (, Values);
---      end;
+
+         Xt_Motif_Input_Policy_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Input_Policy_Resource_Type, Enter ("XmRInputPolicy"));
+         Set_Internal_Name
+          (Xt_Motif_Input_Policy_Resource_Type, Enter ("InputPolicy"));
+         Set_Value_Specifications
+          (Xt_Motif_Input_Policy_Resource_Type, Values);
+      end;
+
+      --  KeyboardFocusPolicy
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmEXPLICIT"));
+         Set_Internal_Name (Value, Enter ("EXPLICIT"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmPOINTER"));
+         Set_Internal_Name (Value, Enter ("POINTER"));
+         Append (Values, Value);
+
+         Xt_Motif_Keyboard_Focus_Policy_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Keyboard_Focus_Policy_Resource_Type,
+           Enter ("XmRKeyboardFocusPolicy"));
+         Set_Internal_Name
+          (Xt_Motif_Keyboard_Focus_Policy_Resource_Type,
+           Enter ("KeyboardFocusPolicy"));
+         Set_Value_Specifications
+          (Xt_Motif_Keyboard_Focus_Policy_Resource_Type, Values);
+      end;
+
+      --  LabelType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmSTRING"));
+         Set_Internal_Name (Value, Enter ("STRING"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmPIXMAP"));
+         Set_Internal_Name (Value, Enter ("PIXMAP"));
+         Append (Values, Value);
+
+         Xt_Motif_Label_Type_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Label_Type_Resource_Type, Enter ("XmRLabelType"));
+         Set_Internal_Name
+          (Xt_Motif_Label_Type_Resource_Type, Enter ("LabelType"));
+         Set_Value_Specifications
+          (Xt_Motif_Label_Type_Resource_Type, Values);
+      end;
+
+      --  LayoutType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmOUTLINE"));
+         Set_Internal_Name (Value, Enter ("OUTLINE"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmSPATIAL"));
+         Set_Internal_Name (Value, Enter ("SPATIAL"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmDETAIL"));
+         Set_Internal_Name (Value, Enter ("DETAIL"));
+         Append (Values, Value);
+
+         Xt_Motif_Layout_Type_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Layout_Type_Resource_Type, Enter ("XmRLayoutType"));
+         Set_Internal_Name
+          (Xt_Motif_Layout_Type_Resource_Type, Enter ("LayoutType"));
+         Set_Value_Specifications
+          (Xt_Motif_Layout_Type_Resource_Type, Values);
+      end;
+
+      --  ContainerLineStyle
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmSINGLE"));
+         Set_Internal_Name (Value, Enter ("SINGLE"));
+         Append (Values, Value);
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmNO_LINE"));
+         Set_Internal_Name (Value, Enter ("NO_LINE"));
+         Append (Values, Value);
+
+         Xt_Motif_Container_Line_Style_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Container_Line_Style_Resource_Type,
+           Enter ("XmRLineStyle"));
+         Set_Internal_Name
+          (Xt_Motif_Container_Line_Style_Resource_Type, Enter ("LineStyle"));
+         Set_Value_Specifications
+          (Xt_Motif_Container_Line_Style_Resource_Type, Values);
+      end;
+
+      --  MatchBehavior
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmQUICK_NAVIGATE"));
+         Set_Internal_Name (Value, Enter ("QUICK_NAVIGATE"));
+         Append (Values, Value);
+
+         --  Этого значения нет в RepType.c!
+
+         Value := Create_Enumerated_Resource_Type_Value_Specification;
+         Set_Name (Value, Enter ("XmINVALID_MATCH_BEHAVIOR"));
+         Set_Internal_Name (Value, Enter ("INVALID_MATCH_BEHAVIOR"));
+         Append (Values, Value);
+
+         Xt_Motif_Match_Behavior_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Match_Behavior_Resource_Type, Enter (""));
+         Set_Internal_Name
+          (Xt_Motif_Match_Behavior_Resource_Type, Enter (""));
+         Set_Value_Specifications
+          (Xt_Motif_Match_Behavior_Resource_Type, Values);
+      end;
 
 --      declare
 --         Values : constant List_Id := New_List;
@@ -722,13 +1176,24 @@ package body Model.Initialization is
       Append (Types, Xt_Motif_Binding_Type_Resource_Type);
       Append (Types, Xt_Motif_Child_Horizontal_Alignment_Resource_Type);
       Append (Types, Xt_Motif_Child_Placement_Resource_Type);
-      Append (Types, Xt_Motif_Frame_Child_Type_Resource_Type);
+      Append (Types, Xt_Motif_Frame_Child_Type_Resource_Type);  --  ???
       Append (Types, Xt_Motif_Child_Vertical_Alignment_Resource_Type);
       Append (Types, Xt_Motif_Combo_Box_Type_Resource_Type);
       Append (Types, Xt_Motif_Command_Window_Location_Resource_Type);
-
---      Append (Types, Xt_Motif__Resource_Type);
---      Append (Types, Xt_Motif__Resource_Type);
+      Append (Types, Xt_Motif_Default_Button_Type_Resource_Type);
+      Append (Types, Xt_Motif_Delete_Response_Resource_Type);
+      Append (Types, Xt_Motif_Dialog_Style_Resource_Type);
+      Append (Types, Xt_Motif_Dialog_Type_Resource_Type);
+      Append (Types, Xt_Motif_Edit_Mode_Resource_Type);
+      Append (Types, Xt_Motif_Toggle_Indicator_On_Resource_Type);  --  ???
+      Append (Types, Xt_Motif_Indicator_Type_Resource_Type);
+      Append (Types, Xt_Motif_Input_Policy_Resource_Type);
+      Append (Types, Xt_Motif_Keyboard_Focus_Policy_Resource_Type);
+      Append (Types, Xt_Motif_Label_Type_Resource_Type);
+      Append (Types, Xt_Motif_Layout_Type_Resource_Type);
+      Append (Types, Xt_Motif_Container_Line_Style_Resource_Type);  --  ???
+      Append (Types, Xt_Motif_Match_Behavior_Resource_Type);
+--      Append (Types, );
 --      Append (Types, );
 --      Append (Types, );
 --      Append (Types, );
