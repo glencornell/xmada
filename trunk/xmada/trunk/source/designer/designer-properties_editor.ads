@@ -40,6 +40,8 @@
 ------------------------------------------------------------------------------
 with Xt.Ancillary_Types;
 
+with Model;
+
 package Designer.Properties_Editor is
 
    ---------------------------------------------------------------------------
@@ -51,5 +53,10 @@ package Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Initialize (Parent   : in Xt.Widget;
                          Arg_List : in Xt.Ancillary_Types.Xt_Arg_List);
+
+private
+
+   type Node_Properties_Editor (Node : Model.Node_Id) is
+     abstract tagged limited null record;
 
 end Designer.Properties_Editor;

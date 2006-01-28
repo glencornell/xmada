@@ -36,12 +36,34 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with GNAT.Table;
+
 with Xm_Notebook;
+
+with Designer.Properties_Editor.Component_Class;
+with Designer.Properties_Editor.Widget_Instance;
+with Model.Allocations;
 
 package body Designer.Properties_Editor is
 
+   use Model;
    use Xt;
    use Xm_Notebook;
+
+   type Node_Properties_Editor_Access is
+     access all Node_Properties_Editor'Class;
+
+   --  Для каждого узла создаётся (по запросу) свой собственный редактор
+   --  свойств. Уже созданные редакторы свойств сохраняются в таблице
+   --  Editor_Table.
+
+   package Editor_Table is
+     new GNAT.Table
+          (Table_Component_Type => Node_Properties_Editor_Access,
+           Table_Index_Type     => Node_Id,
+           Table_Low_Bound      => Node_Id'First + 1,
+           Table_Initial        => Model.Allocations.Node_Table_Initial,
+           Table_Increment      => Model.Allocations.Node_Table_Increment);
 
    Notebook : Widget;
 

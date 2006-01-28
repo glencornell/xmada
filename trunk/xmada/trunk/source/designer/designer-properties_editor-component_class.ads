@@ -39,6 +39,17 @@
 --  $Date$
 ------------------------------------------------------------------------------
 
-package Designer.Properties_Editor.Component_Class is
+private package Designer.Properties_Editor.Component_Class is
+
+   pragma Elaborate_Body;
+   --  XXX Директиву необходимо убрать после добавления подпрограммы.
+
+   type Component_Class_Properties_Editor is
+     new Node_Properties_Editor with private;
+
+private
+
+   type Component_Class_Properties_Editor is
+     new Node_Properties_Editor with null record;
 
 end Designer.Properties_Editor.Component_Class;
