@@ -2,8 +2,11 @@
 ADAFLAGS = -g3 -O0 -ggdb3 \
 	-I$(srcdir) \
 	-I$(top_srcdir)/source/xlib \
+	-I$(top_builddir)/source/xlib \
 	-I$(top_srcdir)/source/xt \
-	-I$(top_srcdir)/source/xm
+	-I$(top_builddir)/source/xt \
+	-I$(top_srcdir)/source/xm \
+	-I$(top_builddir)/source/xm
 
 LIBS = -L/usr/X11R6/lib \
 	-L$(top_builddir)/source/xlib/.libs \
@@ -12,6 +15,8 @@ LIBS = -L/usr/X11R6/lib \
 	-lXm -lXt -lXi -lxmadaxlib -lxmadaxt -lxmadaxm
 
 ADALFLAGS = $(LIBS)
+
+CLEANFILES = *.ali *.o XmAdaDesigner b~designer-driver.ad[sb] designer
 
 all: XmAdaDesigner
 	gnatmake $(ADAFLAGS) designer-driver.adb -o designer -bargs $(ADABFLAGS) -largs $(ADALFLAGS)
