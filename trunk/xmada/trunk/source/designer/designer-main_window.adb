@@ -44,6 +44,7 @@ with Xt.Composite_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xm.Resource_Management;
+with Xm.Traversal_Management;
 with Xm_Arrow_Button_Gadget;
 with Xm_Form;
 with Xm_Label_Gadget;
@@ -61,6 +62,7 @@ package body Designer.Main_Window is
 
    use Xm;
    use Xm.Resource_Management;
+   use Xm.Traversal_Management;
    use Xm_Arrow_Button_Gadget;
    use Xm_Form;
    use Xm_Label_Gadget;
@@ -123,10 +125,15 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
          Show : constant Widget := To_Implementation (Closure);
+         Aux  : Boolean;
 
       begin
          Xt_Unmanage_Child (Xt_Parent (The_Widget));
          Xt_Manage_Child (Show);
+
+         Aux := Xm_Process_Traversal (Show, Xm_Traverse_Current);
+         --  Для удобства использования с клавиатуры после отображения
+         --  виджета передаём ему фокус клавиатурного ввода.
 
       exception
          when E : others =>
@@ -146,10 +153,15 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
          Show : constant Widget := To_Implementation (Closure);
+         Aux  : Boolean;
 
       begin
          Xt_Unmanage_Child (The_Widget);
          Xt_Manage_Child (Show);
+
+         Aux := Xm_Process_Traversal (Show, Xm_Traverse_Current);
+         --  Для удобства использования с клавиатуры после отображения
+         --  виджета передаём ему фокус клавиатурного ввода.
 
       exception
          when E : others =>
