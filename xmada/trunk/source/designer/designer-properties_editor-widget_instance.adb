@@ -37,6 +37,6 @@
 --  $Date$
 ------------------------------------------------------------------------------
 
-package Designer.Properties_Editor.Widget_Instance is
+package body Designer.Properties_Editor.Widget_Instance is
 
 end Designer.Properties_Editor.Widget_instance;

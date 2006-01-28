@@ -39,6 +39,17 @@
 --  $Date$
 ------------------------------------------------------------------------------
 
-package Designer.Properties_Editor.Widget_Instance is
+private package Designer.Properties_Editor.Widget_Instance is
+
+   pragma Elaborate_Body;
+   --  XXX Директиву необходимо убрать после добавления подпрограммы.
+
+   type Widget_Instance_Properties_Editor is
+     new Node_Properties_Editor with private;
+
+private
+
+   type Widget_Instance_Properties_Editor is
+     new Node_Properties_Editor with null record;
 
 end Designer.Properties_Editor.Widget_instance;
