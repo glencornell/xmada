@@ -36,17 +36,43 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xm.Resource_Management;
+with Xm_Container;
+with Xm_Scrolled_Window;
+with Xm_String_Defs;
 
 package body Designer.Tree_Editor is
+
+   use Xm;
+   use Xm.Resource_Management;
+   use Xm_Container;
+   use Xm_Scrolled_Window;
+   use Xm_String_Defs;
+   use Xt;
+   use Xt.Ancillary_Types;
+
+   Container : Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Initialize (Parent : in Xt.Widget) is
+   procedure Initialize (Parent   : in Xt.Widget;
+                         Arg_List : in Xt.Ancillary_Types.Xt_Arg_List)
+   is
+      Args     : Xt_Arg_List (0 .. Arg_List'Length);
+      Scrolled : Widget;
+
    begin
-      null;
+      Args (0 .. Arg_List'Length - 1) := Arg_List;
+      Xt_Set_Arg (Args (Arg_List'Length), Xm_N_Scrolling_Policy, Xm_Automatic);
+      Scrolled :=
+        Xm_Create_Managed_Scrolled_Window
+         (Parent, "scrolled", Args (0 .. Arg_List'Length));
+
+      Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
+      Container := Xm_Create_Managed_Container (Scrolled, "tree", Args (0 .. 0));
    end Initialize;
 
 end Designer.Tree_Editor;

@@ -36,17 +36,25 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xm_Notebook;
 
 package body Designer.Properties_Editor is
+
+   use Xt;
+   use Xm_Notebook;
+
+   Notebook : Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Initialize (Parent : in Xt.Widget) is
+   procedure Initialize (Parent   : in Xt.Widget;
+                         Arg_List : in Xt.Ancillary_Types.Xt_Arg_List)
+   is
    begin
-      null;
+      Notebook := Xm_Create_Managed_Notebook (Parent, "notebook", Arg_List);
    end Initialize;
 
 end Designer.Properties_Editor;

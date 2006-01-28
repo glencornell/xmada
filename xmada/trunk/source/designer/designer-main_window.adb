@@ -40,6 +40,7 @@ with Xt.Ancillary_Types;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
+with Xm.Resource_Management;
 with Xm_Form;
 with Xm_Label_Gadget;
 with Xm_Main_Window;
@@ -54,6 +55,8 @@ with Designer.Visual_Editor;
 
 package body Designer.Main_Window is
 
+   use Xm;
+   use Xm.Resource_Management;
    use Xm_Form;
    use Xm_Label_Gadget;
    use Xm_Main_Window;
@@ -87,13 +90,16 @@ package body Designer.Main_Window is
 
    begin
       Main_Window := Xm_Create_Managed_Main_Window (App_Shell, "main_window");
-      Paned       := Xm_Create_Managed_Paned_Window (Main_Window, "horizontal_paned");
-      Status_Bar  := Xm_Create_Managed_Label_Gadget (Main_Window, "status_bar");
+      Paned       :=
+        Xm_Create_Managed_Paned_Window (Main_Window, "horizontal_paned");
+      Status_Bar  :=
+        Xm_Create_Managed_Label_Gadget (Main_Window, "status_bar");
       Palette     := Xm_Create_Managed_Notebook (Main_Window, "widget_set");
       Menu        := Xm_Create_Managed_Menu_Bar (Main_Window, "main_menu");
 
       Properties_Form := Xm_Create_Managed_Form (Paned, "properties_form");
-      Paned1          := Xm_Create_Managed_Paned_Window (Paned, "vertical_paned");
+      Paned1          :=
+        Xm_Create_Managed_Paned_Window (Paned, "vertical_paned");
       Tree_Form       := Xm_Create_Managed_Form (Paned, "tree_form");
 
       Designer.Visual_Editor.Initialize (Paned1);
@@ -104,8 +110,17 @@ package body Designer.Main_Window is
       Xt_Set_Values (Main_Window, Args (0 .. 1));
       Xt_Realize_Widget (App_Shell);
 
-      Designer.Properties_Editor.Initialize (Properties_Form);
-      Designer.Tree_Editor.Initialize (Tree_Form);
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Designer.Properties_Editor.Initialize (Properties_Form, Args (0 .. 3));
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Designer.Tree_Editor.Initialize (Tree_Form, Args (0 .. 3));
    end Initialize;
 
 end Designer.Main_Window;
