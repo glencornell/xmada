@@ -38,6 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt;
 
 package Designer.Visual_Editor is
 
@@ -48,6 +49,6 @@ package Designer.Visual_Editor is
    --! виджетов.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Initialize;
+   procedure Initialize (Parent : in Xt.Widget);
 
 end Designer.Visual_Editor;

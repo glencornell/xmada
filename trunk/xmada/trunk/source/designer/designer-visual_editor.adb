@@ -36,17 +36,25 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xm_Drawing_Area;
+with Xm_Scrolled_Window;
 
 package body Designer.Visual_Editor is
 
+   use Xm_Drawing_Area;
+   use Xm_Scrolled_Window;
+   use Xt;
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Initialize is
+   procedure Initialize (Parent : in Xt.Widget) is
+      Scroll : Widget;
+      Draw   : Widget;
    begin
-      null;
+      Scroll := Xm_Create_Managed_Scrolled_Window (Parent, "scrolled");
+      Draw   := Xm_Create_Managed_Drawing_Area (Scroll, "drawing");
    end Initialize;
 
 end Designer.Visual_Editor;
