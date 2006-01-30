@@ -44,6 +44,71 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Application_Class_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Application_Class_Name (Node : in Node_Id) return Name_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Application);
+
+      return Node_Table.Table (Node).Application_Class_Name;
+   end Application_Class_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Applications
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Applications (Node : in Node_Id) return List_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+      return Node_Table.Table (Node).Applications;
+   end Applications;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Component_Classes
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Component_Classes (Node : in Node_Id) return List_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Application);
+
+      return Node_Table.Table (Node).Component_Classes;
+   end Component_Classes;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> File_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function File_Name (Node : in Node_Id) return Name_Id is
+      begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+      return Node_Table.Table (Node).File_Name;
+   end File_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Imported_Widget_Sets
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Imported_Widget_Sets (Node : in Node_Id) return List_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+      return Node_Table.Table (Node).Imported_Widget_Sets;
+   end Imported_Widget_Sets;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Internal_Name
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -134,6 +199,78 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Application_Class_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Application_Class_Name (Node  : in Node_Id;
+                                         Value : in Name_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Application);
+
+      Node_Table.Table (Node).Application_Class_Name := Value;
+   end Set_Application_Class_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Applications
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Applications (Node : in Node_Id; Value : in List_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+      Node_Table.Table (Node).Applications := Value;
+      Set_Parent_Node (Value, Node);
+   end Set_Applications;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Component_Classes
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Component_Classes (Node : in Node_Id; Value : in List_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Application);
+
+      Node_Table.Table (Node).Component_Classes := Value;
+      Set_Parent_Node (Value, Node);
+   end Set_Component_Classes;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_File_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_File_Name (Node : in Node_Id; Value : in Name_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+      Node_Table.Table (Node).File_Name := Value;
+   end Set_File_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Imported_Widget_Sets
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Imported_Widget_Sets (Node  : in Node_Id;
+                                       Value : in List_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+      Node_Table.Table (Node).Imported_Widget_Sets := Value;
+      Set_Parent_Node (Value, Node);
+   end Set_Imported_Widget_Sets;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Internal_Name
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -166,7 +303,9 @@ package body Model.Tree is
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
        (Node_Kind (Node) = Node_Enumeration_Value_Specification
-          or else Node_Kind (Node) = Node_Enumerated_Resource_Type);
+          or else Node_Kind (Node) = Node_Enumerated_Resource_Type
+          or else Node_Kind (Node) = Node_Project
+          or else Node_Kind (Node) = Node_Component_Class);
 
       case Node_Kind (Node) is
          when Node_Enumeration_Value_Specification =>
@@ -174,6 +313,12 @@ package body Model.Tree is
 
          when Node_Enumerated_Resource_Type =>
             Node_Table.Table (Node).ERT_Name := Value;
+
+         when Node_Project =>
+            Node_Table.Table (Node).P_Name := Value;
+
+         when Node_Component_Class =>
+            Node_Table.Table (Node).CC_Name := Value;
 
          when others =>
             raise Program_Error;

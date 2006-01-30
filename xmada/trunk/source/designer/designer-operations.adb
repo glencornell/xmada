@@ -36,8 +36,24 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Designer.Main_Window;
+with Model.Initialization.Designer;
+with Model.Names;
+with Model.Tree.Constructors;
+with Model.Tree.Lists;
+with Model.Xt_Motif;
 
 package body Designer.Operations is
+
+   use Model;
+   use Model.Names;
+   use Model.Tree;
+   use Model.Tree.Constructors;
+   use Model.Tree.Lists;
+   use Model.Xt_Motif;
+
+   Project : Node_Id := Null_Node;
+   --  Узел дерева модели текущего редактируемого проекта.
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -45,8 +61,66 @@ package body Designer.Operations is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure New_Project is
+      Application : Node_Id;
+      Component   : Node_Id;
+      List        : List_Id;
+
    begin
-      null;
+      --  Освобождение всех используемых внутренних структур компонентов
+      --  дизайнера и их повторная инициализация.
+
+      Designer.Main_Window.Reinitialize;
+
+      --  Повторное построение базовых элементов модели и аннотирование их
+      --  дополнительной информацией для дизайнера.
+
+      Model.Initialization.Initialize;
+      Model.Initialization.Designer.Initialize;
+
+      --  Создание узла представления проекта и установка необходимых
+      --  атрибутов узла.
+
+      Project := Create_Project;
+      Set_Name (Project, Enter ("Untitled"));
+      Set_File_Name (Project, Enter ("untitled.xad"));
+
+      List := New_List;
+      Append (List, Xt_Motif_Widget_Set);
+      Set_Imported_Widget_Sets (Project, List);
+
+      --  Извещение компонентов дизайнера о создании нового проекта.
+
+      Designer.Main_Window.Insert_Item (Project);
+
+      --  Создание узла приложения и добавление его в состав проекта.
+
+      Application := Create_Application;
+      Set_Application_Class_Name (Application, Enter ("Application1"));
+
+      List := New_List;
+      Append (List, Application);
+      Set_Applications (Project, List);
+
+      --  Извещение компонентов дизайнера о создании нового приложения.
+
+      Designer.Main_Window.Insert_Item (Application);
+
+      --  Создание компонента приложения и добавление его в состав приложения.
+
+      Component := Create_Component_Class;
+      Set_Name (Component, Enter ("Component1"));
+
+      List := New_List;
+      Append (List, Component);
+      Set_Component_Classes (Application, List);
+
+      --  Извещение компонентов дизайнера о создании нового компонента.
+
+      Designer.Main_Window.Insert_Item (Component);
+
+      --  Извещение компонентов дизайнера о выборе нового компонента.
+
+      Designer.Main_Window.Select_Item (Component);
    end New_Project;
 
    ---------------------------------------------------------------------------
@@ -61,7 +135,7 @@ package body Designer.Operations is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Save
+   --!    <Unit> Save_Project
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Save_Project (File_Name : in Wide_String) is
