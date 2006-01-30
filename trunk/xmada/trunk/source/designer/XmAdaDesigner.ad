@@ -14,6 +14,8 @@
 *XmTextField.renderTable.fontName: -*-courier-medium-r-normal--12-*
 
 !!  Главное окно.
+*open_file_dialog_popup.title : Open existing file
+*save_file_dialog_popup.title : Save current file
 *main_window.main_menu*file.labelString : File
 *main_window.main_menu*file.mnemonic : F
 *main_window.main_menu*file_pulldown*new.labelString: New

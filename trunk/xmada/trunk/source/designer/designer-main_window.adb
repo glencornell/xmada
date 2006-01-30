@@ -39,18 +39,21 @@
 with Ada.Characters.Wide_Latin_1;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Unchecked_Conversion;
+with Interfaces.C;
 
 with Xt.Ancillary_Types;
 with Xt.Callbacks;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
-with Xm.Class_Management;
 with Xt.Resource_Management;
+with Xt.Utilities;
+with Xm.Class_Management;
 with Xm.Resource_Management;
 with Xm.Traversal_Management;
 with Xm.Utilities;
 with Xm_Arrow_Button_Gadget;
 with Xm_Cascade_Button_Gadget;
+with Xm_File_Selection_Box;
 with Xm_Form;
 with Xm_Label_Gadget;
 with Xm_Main_Window;
@@ -68,6 +71,7 @@ with Designer.Visual_Editor;
 
 package body Designer.Main_Window is
 
+   use Interfaces.C;
    use Xm;
    use Xm.Class_Management;
    use Xm.Resource_Management;
@@ -75,6 +79,7 @@ package body Designer.Main_Window is
    use Xm.Utilities;
    use Xm_Arrow_Button_Gadget;
    use Xm_Cascade_Button_Gadget;
+   use Xm_File_Selection_Box;
    use Xm_Form;
    use Xm_Label_Gadget;
    use Xm_Main_Window;
@@ -90,12 +95,25 @@ package body Designer.Main_Window is
    use Xt.Composite_Management;
    use Xt.Instance_Management;
    use Xt.Resource_Management;
+   use Xt.Utilities;
 
    function To_Closure is new Ada.Unchecked_Conversion (Widget, Xt_Pointer);
 
    function To_Widget is new Ada.Unchecked_Conversion (Xt_Pointer, Widget);
 
    package Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Open_File
+      --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
+      --! клавиши OK/Cancel в диалоге открытия файла.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Open_File (The_Widget : in Widget;
+                              Closure    : in Xt_Pointer;
+                              Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Open_File);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -147,6 +165,19 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Save_File
+      --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
+      --! клавиши OK/Cancel в диалоге сохранения файла.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Save_File (The_Widget : in Widget;
+                              Closure    : in Xt_Pointer;
+                              Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Save_File);
+
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Close
       --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
       --! закрытия файла.
@@ -183,6 +214,9 @@ package body Designer.Main_Window is
    end Callbacks;
 
    Status_Bar     : Widget;
+   Open_Dialog    : Widget;
+   Save_Dialog    : Widget;
+   Is_Modified    : Boolean := False;
    Message_Text   : Widget;
    Message_Buffer : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
 
@@ -191,6 +225,47 @@ package body Designer.Main_Window is
    ---------------
 
    package body Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Close
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Close (The_Widget : in Widget;
+                          Closure    : in Xt_Pointer;
+                          Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         null;
+      exception
+         when E : others =>
+            null;
+      end On_Close;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Exit
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Exit (The_Widget : in Widget;
+                         Closure    : in Xt_Pointer;
+                         Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Xt_App_Set_Exit_Flag (Xt_Widget_To_Application_Context (The_Widget));
+      exception
+         when E : others =>
+            null;
+      end On_Exit;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -207,6 +282,7 @@ package body Designer.Main_Window is
          Show   : constant Widget := To_Widget (Closure);
          Parent : constant Widget := Xt_Parent (The_Widget);
          Aux    : Boolean;
+         pragma Warnings (Off, Aux);
 
       begin
          if not Xm_Is_Paned_Window (Parent) then
@@ -262,11 +338,40 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         null;
+         Xt_Manage_Child (Open_Dialog);
       exception
          when E : others =>
             null;
       end On_Open;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Open_File
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Open_File (The_Widget : in Widget;
+                              Closure    : in Xt_Pointer;
+                              Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Data : constant Xm_Any_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+         if Data.Reason = Xm_CR_Ok then
+            null;
+         elsif Data.Reason = Xm_CR_Cancel then
+            null;
+         end if;
+
+         Xt_Unmanage_Child (The_Widget);
+
+      exception
+         when E : others =>
+            null;
+      end On_Open_File;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -304,7 +409,7 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         null;
+         Xt_Manage_Child (Save_Dialog);
       exception
          when E : others =>
             null;
@@ -312,45 +417,32 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Close
+      --!    <Unit> On_Open_File
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure On_Close (The_Widget : in Widget;
-                          Closure    : in Xt_Pointer;
-                          Call_Data  : in Xt_Pointer)
+      procedure On_Save_File (The_Widget : in Widget;
+                              Closure    : in Xt_Pointer;
+                              Call_Data  : in Xt_Pointer)
       is
-         pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
-         pragma Unreferenced (Call_Data);
          --  Данные переменные не используются.
 
+         Data : constant Xm_Any_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
       begin
-         null;
+         if Data.Reason = Xm_CR_Ok then
+            null;
+         elsif Data.Reason = Xm_CR_Cancel then
+            null;
+         end if;
+
+         Xt_Unmanage_Child (The_Widget);
+
       exception
          when E : others =>
             null;
-      end On_Close;
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> On_Exit
-      --!    <ImplementationNotes>
-      ------------------------------------------------------------------------
-      procedure On_Exit (The_Widget : in Widget;
-                         Closure    : in Xt_Pointer;
-                         Call_Data  : in Xt_Pointer)
-      is
-         pragma Unreferenced (The_Widget);
-         pragma Unreferenced (Closure);
-         pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
-
-      begin
-         null;
-      exception
-         when E : others =>
-            null;
-      end On_Exit;
+      end On_Save_File;
 
    end Callbacks;
 
@@ -372,6 +464,8 @@ package body Designer.Main_Window is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Initialize (App_Shell : in Xt.Widget) is
+      use Callbacks;
+
       Properties_Form : Widget;
       Tree_Form       : Widget;
       Main_Window     : Widget;
@@ -389,6 +483,22 @@ package body Designer.Main_Window is
       Element         : Widget;
 
    begin
+      --  Создание диалога открытия файлов.
+
+      Open_Dialog  := Xm_Create_File_Selection_Dialog (App_Shell,
+                                                       "open_file_dialog");
+      Xt_Add_Callback (Open_Dialog, Xm_N_Ok_Callback, On_Open_File'Access);
+      Xt_Add_Callback (Open_Dialog, Xm_N_Cancel_Callback, On_Open_File'Access);
+
+      --  Создание диалога сохранения файлов.
+
+      Save_Dialog  := Xm_Create_File_Selection_Dialog (App_Shell,
+                                                      "save_file_dialog");
+      Xt_Add_Callback (Save_Dialog, Xm_N_Ok_Callback, On_Save_File'Access);
+      Xt_Add_Callback (Save_Dialog, Xm_N_Cancel_Callback, On_Save_File'Access);
+
+      --  Создание основного окна приложения.
+
       Main_Window := Xm_Create_Managed_Main_Window (App_Shell, "main_window");
       Paned       :=
         Xm_Create_Managed_Paned_Window (Main_Window, "horizontal_paned");
@@ -434,7 +544,7 @@ package body Designer.Main_Window is
                        Xm_N_Activate_Callback,
                        Callbacks.On_Exit'Access);
 
-      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id,File_Pulldown);
+      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, File_Pulldown);
 
       Button :=
         Xm_Create_Managed_Cascade_Button_Gadget
