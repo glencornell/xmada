@@ -43,10 +43,12 @@ with Xm_Notebook;
 with Designer.Properties_Editor.Component_Class;
 with Designer.Properties_Editor.Widget_Instance;
 with Model.Allocations;
+with Model.Tree;
 
 package body Designer.Properties_Editor is
 
    use Model;
+   use Model.Tree;
    use Xt;
    use Xm_Notebook;
 
@@ -55,15 +57,19 @@ package body Designer.Properties_Editor is
 
    --  Для каждого узла создаётся (по запросу) свой собственный редактор
    --  свойств. Уже созданные редакторы свойств сохраняются в таблице
-   --  Editor_Table.
+   --  Annotation_Table.
 
-   package Editor_Table is
+   package Annotation_Table is
      new GNAT.Table
           (Table_Component_Type => Node_Properties_Editor_Access,
            Table_Index_Type     => Node_Id,
            Table_Low_Bound      => Node_Id'First + 1,
            Table_Initial        => Model.Allocations.Node_Table_Initial,
            Table_Increment      => Model.Allocations.Node_Table_Increment);
+
+   Selected_Item : Node_Id := Null_Node;
+   --  Элемент модели, выбранный пользователем в настоящий момент и для
+   --  отображены страницы редактора свойств.
 
    Notebook : Widget;
 
@@ -78,5 +84,38 @@ package body Designer.Properties_Editor is
    begin
       Notebook := Xm_Create_Managed_Notebook (Parent, "notebook", Arg_List);
    end Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Select_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Select_Item (Node : in Model.Node_Id) is
+   begin
+      if Selected_Item /= Null_Node then
+         Hide (Annotation_Table.Table (Selected_Item));
+      end if;
+
+      Selected_Item := Node;
+
+      if Selected_Item /= Null_Node then
+         if Annotation_Table.Table (Selected_Item) = null then
+            --  Создание страниц редактора свойств.
+
+            case Node_Kind (Selected_Item) is
+               when Node_Component_Class =>
+                  null;
+
+               when Node_Widget_Instance =>
+                  null;
+
+               when others =>
+                  raise Program_Error;
+            end case;
+         end if;
+
+         Show (Annotation_Table.Table (Selected_Item));
+      end if;
+   end Select_Item;
 
 end Designer.Properties_Editor;

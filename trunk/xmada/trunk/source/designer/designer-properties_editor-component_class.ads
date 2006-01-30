@@ -41,9 +41,6 @@
 
 private package Designer.Properties_Editor.Component_Class is
 
-   pragma Elaborate_Body;
-   --  XXX Директиву необходимо убрать после добавления подпрограммы.
-
    type Component_Class_Properties_Editor is
      new Node_Properties_Editor with private;
 
@@ -51,5 +48,21 @@ private
 
    type Component_Class_Properties_Editor is
      new Node_Properties_Editor with null record;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Show
+   --!    <Purpose> Отображает страницы редактора свойств класса компонента.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Show (Object : access Component_Class_Properties_Editor);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Hide
+   --!    <Purpose> Скрывает страницы редактора свойств класса компонента.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Hide (Object : access Component_Class_Properties_Editor);
 
 end Designer.Properties_Editor.Component_Class;

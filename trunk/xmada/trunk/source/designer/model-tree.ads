@@ -116,7 +116,9 @@ package Model.Tree is
     (Node_Empty,
 --    (Node_Project,
 --     Node_Application,
---     Node_Component_Class,
+     Node_Component_Class,
+     --  Описание класса компонента.
+
 --     Node_Component_Instance,
 
      Node_Widget_Set,
@@ -130,11 +132,13 @@ package Model.Tree is
      Node_Enumerated_Resource_Type_Value_Specification,
      --  Описание значения перечислимого типа ресурса.
 
-     Node_Widget_Class);
+     Node_Widget_Class,
      --  Описание класса виджетов.
 
 --     Node_Resource_Specification,
---     Node_Widget_Instance,
+     Node_Widget_Instance);
+     --  Описание экземпляра виджета.
+
 --     Node_Resource_Value,
 --     Node_Resource_Class_Value);
 
@@ -206,6 +210,9 @@ private
          when Node_Empty =>
             null;
 
+         when Node_Component_Class =>
+            null;
+
          when Node_Widget_Set =>
             Resource_Types : List_Id;
             --  Типы ресурсов.
@@ -272,6 +279,9 @@ private
             --     XXX Возможно, что этот ресурс лучше переписать через traits.
             --  Locked_Resources
             --  --  Значения ресурсов, определяющих данный класс.
+
+         when Node_Widget_Instance =>
+            null;
       end case;
    end record;
 
