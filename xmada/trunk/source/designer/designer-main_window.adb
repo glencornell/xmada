@@ -61,6 +61,7 @@ with Xm_Row_Column;
 with Xm_String_Defs;
 with Xm_Text;
 
+with Designer.Operations;
 with Designer.Properties_Editor;
 with Designer.Tree_Editor;
 with Designer.Visual_Editor;
