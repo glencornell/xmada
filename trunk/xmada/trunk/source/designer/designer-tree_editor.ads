@@ -88,4 +88,13 @@ package Designer.Tree_Editor is
    procedure Initialize (Parent   : in Xt.Widget;
                          Arg_List : in Xt.Ancillary_Types.Xt_Arg_List);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Reinitialize
+   --!    <Purpose> Производит освобождение всех использующихся ресурсов и
+   --! повторная инициализация внутренних структур.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Reinitialize;
+
 end Designer.Tree_Editor;
