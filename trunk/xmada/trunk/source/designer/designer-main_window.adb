@@ -36,6 +36,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Characters.Wide_Latin_1;
+with Ada.Strings.Wide_Unbounded;
 with Ada.Unchecked_Conversion;
 
 with Xt.Ancillary_Types;
@@ -46,6 +48,7 @@ with Xm.Class_Management;
 with Xt.Resource_Management;
 with Xm.Resource_Management;
 with Xm.Traversal_Management;
+with Xm.Utilities;
 with Xm_Arrow_Button_Gadget;
 with Xm_Cascade_Button_Gadget;
 with Xm_Form;
@@ -56,6 +59,7 @@ with Xm_Paned_Window;
 with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
 with Xm_String_Defs;
+with Xm_Text;
 
 with Designer.Properties_Editor;
 with Designer.Tree_Editor;
@@ -67,6 +71,7 @@ package body Designer.Main_Window is
    use Xm.Class_Management;
    use Xm.Resource_Management;
    use Xm.Traversal_Management;
+   use Xm.Utilities;
    use Xm_Arrow_Button_Gadget;
    use Xm_Cascade_Button_Gadget;
    use Xm_Form;
@@ -77,6 +82,7 @@ package body Designer.Main_Window is
    use Xm_Push_Button_Gadget;
    use Xm_Row_Column;
    use Xm_String_Defs;
+   use Xm_Text;
    use Xt;
    use Xt.Ancillary_Types;
    use Xt.Callbacks;
@@ -174,6 +180,14 @@ package body Designer.Main_Window is
       pragma Convention (C, On_Hide_Show_Button);
 
    end Callbacks;
+
+   Status_Bar     : Widget;
+   Message_Text   : Widget;
+   Message_Buffer : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+
+   ---------------
+   -- Callbacks --
+   ---------------
 
    package body Callbacks is
 
@@ -339,8 +353,6 @@ package body Designer.Main_Window is
 
    end Callbacks;
 
-   Status_Bar : Xt.Widget;
-
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Delete_Item
@@ -362,7 +374,7 @@ package body Designer.Main_Window is
       Properties_Form : Widget;
       Tree_Form       : Widget;
       Main_Window     : Widget;
-      Args            : Xt_Arg_List (0 .. 5);
+      Args            : Xt_Arg_List (0 .. 6);
       Palette         : Widget;
       Paned           : Widget;
       Menu            : Widget;
@@ -497,11 +509,30 @@ package body Designer.Main_Window is
                        Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Show_Messages));
 
+      --  Создание текстового поля отображения сообщений.
+
+      Xt_Set_Arg (Args (0), Xm_N_Editable, Xt_False);
+      Xt_Set_Arg (Args (1), Xm_N_Edit_Mode, Xm_Multi_Line_Edit);
+      Xt_Set_Arg (Args (2), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (3), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (4), Xm_N_Right_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (5), Xm_N_Right_Widget, Button);
+      Xt_Set_Arg (Args (6), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Message_Text :=
+        Xm_Create_Managed_Scrolled_Text
+         (Message_Form, "message_text", Args (0 .. 6));
+      Xm_Text_Insert_Wcs
+       (Message_Text,
+        Xm_Text_Get_Last_Position (Message_Text),
+        Ada.Strings.Wide_Unbounded.To_Wide_String (Message_Buffer));
+      Xm_Text_Set_Insertion_Position
+       (Message_Text, Xm_Text_Get_Last_Position (Message_Text));
+
       --
       --  Создание панели редактирования дерева.
       --
 
-      Tree_Form       := Xm_Create_Managed_Form (Paned, "tree_form");
+      Tree_Form := Xm_Create_Managed_Form (Paned, "tree_form");
 
       --  Создание кнопки отображения панели дерева.
       --  Для унификации механизма скрытия/отображения панели кнопка создаётся
@@ -554,6 +585,28 @@ package body Designer.Main_Window is
       Designer.Visual_Editor.Insert_Item (Node);
       Designer.Properties_Editor.Insert_Item (Node);
    end Insert_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Put_Line
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Put_Line (Item : in Wide_String) is
+   begin
+      if Message_Text /= Null_Widget then
+         Xm_Text_Insert_Wcs
+          (Message_Text,
+           Xm_Text_Get_Last_Position (Message_Text),
+           Item & Ada.Characters.Wide_Latin_1.LF);
+         Xm_Text_Set_Insertion_Position
+          (Message_Text, Xm_Text_Get_Last_Position (Message_Text));
+         Xm_Update_Display (Message_Text);
+
+      else
+         Ada.Strings.Wide_Unbounded.Append
+          (Message_Buffer, Item & Ada.Characters.Wide_Latin_1.LF);
+      end if;
+   end Put_Line;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
