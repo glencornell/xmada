@@ -28,7 +28,7 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Designer.Driver
+--! <Unit> Designer.Operations
 --! <ImplementationNotes>
 --! <PortabilityIssues>
 --! <AnticipatedChanges>
@@ -36,56 +36,37 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Command_Line;
-with Ada.Characters.Handling;
 
-with Xt.Event_Management;
-with Xt.Initializers;
-with Xt_Session_Shell;
+package body Designer.Operations is
 
-with Designer.Operations;
-with Designer.Main_Window;
-with Model.Initialization.Designer;
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> New_Project
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure New_Project is
+   begin
+      null;
+   end New_Project;
 
-procedure Designer.Driver is
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Open_Project
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Open_Project (File_Name : in Wide_String) is
+   begin
+      null;
+   end Open_Project;
 
-   use Ada.Command_Line;
-   use Xt;
-   use Xt.Event_Management;
-   use Xt.Initializers;
-   use Xt_Session_Shell;
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Save
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Save_Project (File_Name : in Wide_String) is
+   begin
+      null;
+   end Save_Project;
 
-   App_Context : Xt_App_Context;
-   App_Shell   : Widget;
-
-begin
-   Model.Initialization.Initialize;
-   Model.Initialization.Designer.Initialize;
-
-   Xt_Set_Language_Proc;
-   Xt_Open_Application (App_Shell, App_Context, "XmAdaDesigner",
-                        The_Widget_Class => Session_Shell_Widget_Class);
-   Designer.Main_Window.Initialize (App_Shell);
-
-   --  Если в командной строке указано имя файла проекта, то открываем этот
-   --  файл. В противном случае создаём новый проект.
-
-   if Argument_Count = 0 then
-      Designer.Operations.New_Project;
-
-   else
-      Designer.Operations.Open_Project
-       (Ada.Characters.Handling.To_Wide_String (Argument (1)));
-   end if;
-
-   Xt_App_Main_Loop (App_Context);
-
-exception
-   when others =>
-      --  При обнаружении любых необработанных исключений производим попытку
-      --  сохранения текущей модели в специальном файле.
-
-      Designer.Operations.Save_Project ("autosave.xmada");
-
-      raise;
-end Designer.Driver;
+end Designer.Operations;
