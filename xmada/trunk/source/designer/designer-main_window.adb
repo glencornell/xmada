@@ -92,6 +92,78 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_New
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! создания файла.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_New (The_Widget : in Widget;
+                        Closure    : in Xt_Pointer;
+                        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_New);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Open
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! открытия файла.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Open (The_Widget : in Widget;
+                         Closure    : in Xt_Pointer;
+                         Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Open);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Save
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! сохранения файла.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Save (The_Widget : in Widget;
+                         Closure    : in Xt_Pointer;
+                         Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Save);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Save_As
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! сохранения под другим именем.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Save_As (The_Widget : in Widget;
+                            Closure    : in Xt_Pointer;
+                            Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Save_As);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Close
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! закрытия файла.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Close (The_Widget : in Widget;
+                          Closure    : in Xt_Pointer;
+                          Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Close);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Exit
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! выхода из программы.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Exit (The_Widget : in Widget;
+                         Closure    : in Xt_Pointer;
+                         Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Exit);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Message_Hide_Button
       --!    <Purpose> Подпрограмма обратного вызова
       --!    <Exceptions>
@@ -172,6 +244,132 @@ package body Designer.Main_Window is
             null;
       end On_Show_Button;
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_New
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_New (The_Widget : in Widget;
+                        Closure    : in Xt_Pointer;
+                        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         null;
+      exception
+         when E : others =>
+            null;
+      end On_New;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Open
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Open (The_Widget : in Widget;
+                         Closure    : in Xt_Pointer;
+                         Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         null;
+      exception
+         when E : others =>
+            null;
+      end On_Open;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Save
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Save (The_Widget : in Widget;
+                         Closure    : in Xt_Pointer;
+                         Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         null;
+      exception
+         when E : others =>
+            null;
+      end On_Save;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Save_As
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Save_As (The_Widget : in Widget;
+                            Closure    : in Xt_Pointer;
+                            Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         null;
+      exception
+         when E : others =>
+            null;
+      end On_Save_As;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Close
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Close (The_Widget : in Widget;
+                          Closure    : in Xt_Pointer;
+                          Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         null;
+      exception
+         when E : others =>
+            null;
+      end On_Close;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Exit
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Exit (The_Widget : in Widget;
+                         Closure    : in Xt_Pointer;
+                         Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         null;
+      exception
+         when E : others =>
+            null;
+      end On_Exit;
+
    end Callbacks;
 
    Status_Bar : Xt.Widget;
@@ -212,18 +410,37 @@ package body Designer.Main_Window is
 
       Menu          := Xm_Create_Managed_Menu_Bar (Main_Window, "main_menu");
       File_Pulldown := Xm_Create_Pulldown_Menu (Menu, "file_pulldown");
+
       Element       :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "new");
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_New'Access);
       Element       :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "open");
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Open'Access);
       Element       :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "save");
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Save'Access);
       Element       :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "save_as");
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Save_As'Access);
       Element       :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "close");
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Close'Access);
       Element       :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "quit");
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Exit'Access);
 
       Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id,File_Pulldown);
 
