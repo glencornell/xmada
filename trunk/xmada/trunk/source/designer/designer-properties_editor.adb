@@ -126,30 +126,34 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
    begin
-      if Selected_Item /= Null_Node then
-         Hide (Annotation_Table.Table (Selected_Item));
-      end if;
+      null;
 
-      Selected_Item := Node;
+      --  Прототип реализации.
 
-      if Selected_Item /= Null_Node then
-         if Annotation_Table.Table (Selected_Item) = null then
-            --  Создание страниц редактора свойств.
-
-            case Node_Kind (Selected_Item) is
-               when Node_Component_Class =>
-                  null;
-
-               when Node_Widget_Instance =>
-                  null;
-
-               when others =>
-                  raise Program_Error;
-            end case;
-         end if;
-
-         Show (Annotation_Table.Table (Selected_Item));
-      end if;
+--      if Selected_Item /= Null_Node then
+--         Hide (Annotation_Table.Table (Selected_Item));
+--      end if;
+--
+--      Selected_Item := Node;
+--
+--      if Selected_Item /= Null_Node then
+--         if Annotation_Table.Table (Selected_Item) = null then
+--            --  Создание страниц редактора свойств.
+--
+--            case Node_Kind (Selected_Item) is
+--               when Node_Component_Class =>
+--                  null;
+--
+--               when Node_Widget_Instance =>
+--                  null;
+--
+--               when others =>
+--                  raise Program_Error;
+--            end case;
+--         end if;
+--
+--         Show (Annotation_Table.Table (Selected_Item));
+--      end if;
    end Select_Item;
 
    ---------------------------------------------------------------------------

@@ -188,6 +188,22 @@ package Model.Tree is
    function Internal_Name (Node : in Node_Id) return Name_Id;
    procedure Set_Internal_Name (Node : in Node_Id; Value : in Name_Id);
 
+   function Imported_Widget_Sets (Node : in Node_Id) return List_Id;
+   procedure Set_Imported_Widget_Sets (Node : in Node_Id; Value : in List_Id);
+
+   function Applications (Node : in Node_Id) return List_Id;
+   procedure Set_Applications (Node : in Node_Id; Value : in List_Id);
+
+   function Component_Classes (Node : in Node_Id) return List_Id;
+   procedure Set_Component_Classes (Node : in Node_Id; Value : in List_Id);
+
+   function File_Name (Node : in Node_Id) return Name_Id;
+   procedure Set_File_Name (Node : in Node_Id; Value : in Name_Id);
+
+   function Application_Class_Name (Node : in Node_Id) return Name_Id;
+   procedure Set_Application_Class_Name (Node  : in Node_Id;
+                                         Value : in Name_Id);
+
 private
 
    type Node_Record (Kind : Node_Kinds := Node_Empty) is record
@@ -201,6 +217,9 @@ private
             null;
 
          when Node_Project =>
+            P_Name               : Name_Id;
+            --  Имя проекта.
+
             File_Name            : Name_Id;
             --  Имя файла проекта.
 

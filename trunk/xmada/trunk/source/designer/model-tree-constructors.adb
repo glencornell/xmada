@@ -41,6 +41,42 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Application
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Application return Node_Id is
+   begin
+      Node_Table.Append ((Kind                    => Node_Application,
+                          Parent                  => Null_Node,
+                          List                    => Null_List,
+                          Previous                => Null_Node,
+                          Next                    => Null_Node,
+                          Application_Class_Name  => Null_Name,
+                          Component_Classes       => Null_List));
+
+      return Node_Table.Last;
+   end Create_Application;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Component_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Component_Class return Node_Id is
+   begin
+      Node_Table.Append ((Kind     => Node_Component_Class,
+                          Parent   => Null_Node,
+                          List     => Null_List,
+                          Previous => Null_Node,
+                          Next     => Null_Node,
+                          CC_Name  => Null_Name,
+                          Root     => Null_Node));
+
+      return Node_Table.Last;
+   end Create_Component_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Enumerated_Resource_Type
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -79,6 +115,26 @@ package body Model.Tree.Constructors is
 
       return Node_Table.Last;
    end Create_Enumeration_Value_Specification;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Project
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Project return Node_Id is
+   begin
+      Node_Table.Append ((Kind                 => Node_Project,
+                          Parent               => Null_Node,
+                          List                 => Null_List,
+                          Previous             => Null_Node,
+                          Next                 => Null_Node,
+                          P_Name               => Null_Name,
+                          File_Name            => Null_Name,
+                          Imported_Widget_Sets => Null_List,
+                          Applications         => Null_List));
+
+      return Node_Table.Last;
+   end Create_Project;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

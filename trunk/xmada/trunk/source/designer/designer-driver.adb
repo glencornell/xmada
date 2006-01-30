@@ -45,7 +45,6 @@ with Xt_Session_Shell;
 
 with Designer.Operations;
 with Designer.Main_Window;
-with Model.Initialization.Designer;
 
 procedure Designer.Driver is
 
@@ -59,9 +58,6 @@ procedure Designer.Driver is
    App_Shell   : Widget;
 
 begin
-   Model.Initialization.Initialize;
-   Model.Initialization.Designer.Initialize;
-
    Xt_Set_Language_Proc;
    Xt_Open_Application (App_Shell, App_Context, "XmAdaDesigner",
                         The_Widget_Class => Session_Shell_Widget_Class);
