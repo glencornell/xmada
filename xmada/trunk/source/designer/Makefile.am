@@ -1,5 +1,6 @@
 
-ADAFLAGS = -g3 -O0 -ggdb3 \
+ADAFLAGS = -gnatW8 -gnatwa -gnatyabcefhiknoprstx \
+	 -g3 -O0 -ggdb3 \
 	-I$(srcdir) \
 	-I$(top_srcdir)/source/xlib \
 	-I$(top_builddir)/source/xlib \
