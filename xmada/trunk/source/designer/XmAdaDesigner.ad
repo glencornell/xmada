@@ -14,6 +14,13 @@
 *XmTextField.renderTable.fontName: -*-courier-medium-r-normal--12-*
 
 !!  Главное окно.
+*main_window.main_menu*file.labelString : File
+*main_window.main_menu*file_pulldown*new.labelString: New
+*main_window.main_menu*file_pulldown*open.labelString: Open...
+*main_window.main_menu*file_pulldown*save.labelString: Save
+*main_window.main_menu*file_pulldown*save_as.labelString: Save as...
+*main_window.main_menu*file_pulldown*close.labelString: Close
+*main_window.main_menu*file_pulldown*quit.labelString: Quit
 *main_window.horizontal_paned.orientation: HORIZONTAL
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
