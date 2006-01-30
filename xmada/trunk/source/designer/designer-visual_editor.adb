@@ -80,6 +80,16 @@ package body Designer.Visual_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Reinitialize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Reinitialize is
+   begin
+      null;
+   end Reinitialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Select_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
