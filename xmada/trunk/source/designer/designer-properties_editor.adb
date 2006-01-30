@@ -75,6 +75,16 @@ package body Designer.Properties_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Delete_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Delete_Item (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Delete_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -84,6 +94,20 @@ package body Designer.Properties_Editor is
    begin
       Notebook := Xm_Create_Managed_Notebook (Parent, "notebook", Arg_List);
    end Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Insert_Item
+   --!    <ImplementationNotes> В связи с тем, что все компоненты редактора
+   --! свойств создаются "по требованию" при добавлении новго элемента
+   --! производить каких-либо действий не требуется.
+   ---------------------------------------------------------------------------
+   procedure Insert_Item (Node : in Model.Node_Id) is
+      pragma Unreferenced (Node);
+
+   begin
+      null;
+   end Insert_Item;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -117,5 +141,15 @@ package body Designer.Properties_Editor is
          Show (Annotation_Table.Table (Selected_Item));
       end if;
    end Select_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Update_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Update_Item (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Update_Item;
 
 end Designer.Properties_Editor;

@@ -55,6 +55,16 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Delete_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Delete_Item (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Delete_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -78,6 +88,16 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Insert_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Insert_Item (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Insert_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Select_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -85,5 +105,15 @@ package body Designer.Tree_Editor is
    begin
       null;
    end Select_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Update_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Update_Item (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Update_Item;
 
 end Designer.Tree_Editor;
