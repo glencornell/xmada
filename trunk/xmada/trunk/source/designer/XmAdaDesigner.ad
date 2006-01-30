@@ -15,12 +15,25 @@
 
 !!  Главное окно.
 *main_window.main_menu*file.labelString : File
+*main_window.main_menu*file.mnemonic : F
 *main_window.main_menu*file_pulldown*new.labelString: New
-*main_window.main_menu*file_pulldown*open.labelString: Open...
+*main_window.main_menu*file_pulldown*new.mnemonic: N
+*main_window.main_menu*file_pulldown*new.accelerator: Ctrl<Key>N
+*main_window.main_menu*file_pulldown*new.acceleratorText: Ctrl-N
+*main_window.main_menu*file_pulldown*open.labelString: Open ...
+*main_window.main_menu*file_pulldown*open.mnemonic: O
+*main_window.main_menu*file_pulldown*open.accelerator: Ctrl<Key>O
+*main_window.main_menu*file_pulldown*open.acceleratorText: Ctrl-O
 *main_window.main_menu*file_pulldown*save.labelString: Save
-*main_window.main_menu*file_pulldown*save_as.labelString: Save as...
+*main_window.main_menu*file_pulldown*save.mnemonic: S
+*main_window.main_menu*file_pulldown*save.accelerator: Ctrl<Key>S
+*main_window.main_menu*file_pulldown*save.acceleratorText: Ctrl-S
+*main_window.main_menu*file_pulldown*save_as.labelString: Save As ...
+*main_window.main_menu*file_pulldown*save_as.mnemonic: A
 *main_window.main_menu*file_pulldown*close.labelString: Close
-*main_window.main_menu*file_pulldown*quit.labelString: Quit
+*main_window.main_menu*file_pulldown*close.mnemonic: C
+*main_window.main_menu*file_pulldown*quit.labelString: Exit
+*main_window.main_menu*file_pulldown*quit.mnemonic: x
 *main_window.horizontal_paned.orientation: HORIZONTAL
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
