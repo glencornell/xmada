@@ -84,11 +84,9 @@ package body Designer.Main_Window is
    use Xt.Instance_Management;
    use Xt.Resource_Management;
 
-   function To_Closure is
-     new Ada.Unchecked_Conversion (Widget, Xt_Pointer);
+   function To_Closure is new Ada.Unchecked_Conversion (Widget, Xt_Pointer);
 
-   function To_Implementation is
-     new Ada.Unchecked_Conversion (Xt_Pointer, Widget);
+   function To_Widget is new Ada.Unchecked_Conversion (Xt_Pointer, Widget);
 
    package Callbacks is
 
@@ -191,7 +189,7 @@ package body Designer.Main_Window is
          pragma Unreferenced (Call_Data);
          --  Данные переменные не используются.
 
-         Show   : constant Widget := To_Implementation (Closure);
+         Show   : constant Widget := To_Widget (Closure);
          Parent : constant Widget := Xt_Parent (The_Widget);
          Aux    : Boolean;
 
