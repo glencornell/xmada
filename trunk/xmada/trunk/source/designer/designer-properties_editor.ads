@@ -89,6 +89,15 @@ package Designer.Properties_Editor is
    procedure Initialize (Parent   : in Xt.Widget;
                          Arg_List : in Xt.Ancillary_Types.Xt_Arg_List);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Reinitialize
+   --!    <Purpose> Производит освобождение всех использующихся ресурсов и
+   --! повторная инициализация внутренних структур.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Reinitialize;
+
 private
 
    type Node_Properties_Editor (Node : Model.Node_Id) is

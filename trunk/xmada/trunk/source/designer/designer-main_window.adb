@@ -721,6 +721,18 @@ package body Designer.Main_Window is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Reinitialize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Reinitialize is
+   begin
+      Designer.Tree_Editor.Reinitialize;
+      Designer.Visual_Editor.Reinitialize;
+      Designer.Properties_Editor.Reinitialize;
+   end Reinitialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Select_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
