@@ -42,6 +42,7 @@ with Xt.Ancillary_Types;
 with Xt.Callbacks;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
+with Xm.Class_Management;
 with Xt.Resource_Management;
 with Xm.Resource_Management;
 with Xm.Traversal_Management;
@@ -63,6 +64,7 @@ with Designer.Visual_Editor;
 package body Designer.Main_Window is
 
    use Xm;
+   use Xm.Class_Management;
    use Xm.Resource_Management;
    use Xm.Traversal_Management;
    use Xm_Arrow_Button_Gadget;
@@ -164,25 +166,14 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Message_Hide_Button
+      --!    <Unit> On_Message_Hide_Show_Button
       --!    <Purpose> Подпрограмма обратного вызова
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure On_Hide_Button (The_Widget : in Widget;
-                                Closure    : in Xt_Pointer;
-                                Call_Data  : in Xt_Pointer);
-      pragma Convention (C, On_Hide_Button);
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> On_Show_Button
-      --!    <Purpose> Подпрограмма обратного вызова
-      --!    <Exceptions>
-      ------------------------------------------------------------------------
-      procedure On_Show_Button (The_Widget : in Widget;
-                                Closure    : in Xt_Pointer;
-                                Call_Data  : in Xt_Pointer);
-      pragma Convention (C, On_Show_Button);
+      procedure On_Hide_Show_Button (The_Widget : in Widget;
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Hide_Show_Button);
 
    end Callbacks;
 
@@ -190,21 +181,27 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Hide_Button
+      --!    <Unit> On_Hide_Show_Button
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure On_Hide_Button (The_Widget : in Widget;
-                                Closure    : in Xt_Pointer;
-                                Call_Data  : in Xt_Pointer)
+      procedure On_Hide_Show_Button (The_Widget : in Widget;
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Call_Data);
          --  Данные переменные не используются.
 
-         Show : constant Widget := To_Implementation (Closure);
-         Aux  : Boolean;
+         Show   : constant Widget := To_Implementation (Closure);
+         Parent : constant Widget := Xt_Parent (The_Widget);
+         Aux    : Boolean;
 
       begin
-         Xt_Unmanage_Child (Xt_Parent (The_Widget));
+         if not Xm_Is_Paned_Window (Parent) then
+            Xt_Unmanage_Child (Parent);
+         else
+            Xt_Unmanage_Child (The_Widget);
+         end if;
+
          Xt_Manage_Child (Show);
 
          Aux := Xm_Process_Traversal (Show, Xm_Traverse_Current);
@@ -214,35 +211,7 @@ package body Designer.Main_Window is
       exception
          when E : others =>
             null;
-      end On_Hide_Button;
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> On_Hide_Button
-      --!    <ImplementationNotes>
-      ------------------------------------------------------------------------
-      procedure On_Show_Button (The_Widget : in Widget;
-                                Closure    : in Xt_Pointer;
-                                Call_Data  : in Xt_Pointer)
-      is
-         pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
-
-         Show : constant Widget := To_Implementation (Closure);
-         Aux  : Boolean;
-
-      begin
-         Xt_Unmanage_Child (The_Widget);
-         Xt_Manage_Child (Show);
-
-         Aux := Xm_Process_Traversal (Show, Xm_Traverse_Current);
-         --  Для удобства использования с клавиатуры после отображения
-         --  виджета передаём ему фокус клавиатурного ввода.
-
-      exception
-         when E : others =>
-            null;
-      end On_Show_Button;
+      end On_Hide_Show_Button;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -462,7 +431,7 @@ package body Designer.Main_Window is
         Xm_Create_Arrow_Button_Gadget (Paned, "properties_show");
       Xt_Add_Callback (Show_Properties,
                        Xm_N_Activate_Callback,
-                       Callbacks.On_Show_Button'Access,
+                       Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Properties_Form));
 
       --  Создание кнопки скрытия панели редактирования свойств.
@@ -474,7 +443,7 @@ package body Designer.Main_Window is
          (Properties_Form, "properties_hide", Args (0 .. 1));
       Xt_Add_Callback (Button,
                        Xm_N_Activate_Callback,
-                       Callbacks.On_Hide_Button'Access,
+                       Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Show_Properties));
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
@@ -503,7 +472,7 @@ package body Designer.Main_Window is
       Show_Messages := Xm_Create_Arrow_Button_Gadget (Paned1, "message_show");
       Xt_Add_Callback (Show_Messages,
                        Xm_N_Activate_Callback,
-                       Callbacks.On_Show_Button'Access,
+                       Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Message_Form));
 
       --  Создание кнопки скрытия панели сообщений.
@@ -515,7 +484,7 @@ package body Designer.Main_Window is
          (Message_Form, "message_hide", Args (0 .. 1));
       Xt_Add_Callback (Button,
                        Xm_N_Activate_Callback,
-                       Callbacks.On_Hide_Button'Access,
+                       Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Show_Messages));
 
       --
@@ -531,7 +500,7 @@ package body Designer.Main_Window is
       Show_Tree := Xm_Create_Arrow_Button_Gadget (Paned, "tree_show");
       Xt_Add_Callback (Show_Tree,
                        Xm_N_Activate_Callback,
-                       Callbacks.On_Show_Button'Access,
+                       Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Tree_Form));
 
       --  Создание кнопки скрытия панели дерева.
@@ -543,7 +512,7 @@ package body Designer.Main_Window is
          (Tree_Form, "tree_hide", Args (0 .. 1));
       Xt_Add_Callback (Button,
                        Xm_N_Activate_Callback,
-                       Callbacks.On_Hide_Button'Access,
+                       Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Show_Tree));
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
