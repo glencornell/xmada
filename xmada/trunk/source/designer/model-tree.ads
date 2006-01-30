@@ -45,22 +45,6 @@ with Model.Allocations;
 
 package Model.Tree is
 
-   --  Node_Project
-   --
-   --  Описание проекта.
-
-   --  Node_Application
-   --
-   --  Описание приложения.
-   --
-   --  Application_Class_Name (Name)
-
-   --  Node_Component_Class
-   --
-   --  Описание класса компонента.
-   --
-   --
-
    --  Node_Component_Instance
    --
    --  Описание экземпляра компонента.
@@ -114,8 +98,14 @@ package Model.Tree is
 
    type Node_Kinds is
     (Node_Empty,
---    (Node_Project,
---     Node_Application,
+     --  Специальный вид узла, не содержащий значений.
+
+     Node_Project,
+     --  Описание проекта.
+
+     Node_Application,
+     --  Описание приложения.
+
      Node_Component_Class,
      --  Описание класса компонента.
 
@@ -210,8 +200,29 @@ private
          when Node_Empty =>
             null;
 
+         when Node_Project =>
+            File_Name            : Name_Id;
+            --  Имя файла проекта.
+
+            Imported_Widget_Sets : List_Id;
+            --  Список импортированных наборов виджетов.
+
+            Applications         : List_Id;
+            --  Список приложений, входящих в проект.
+
+         when Node_Application =>
+            Application_Class_Name : Name_Id;
+            --  Имя класса приложения.
+
+            Component_Classes      : List_Id;
+            --  Список классов компонентов, составляющих приложение.
+
          when Node_Component_Class =>
-            null;
+            CC_Name : Name_Id;
+            --  Имя класса компонентов.
+
+            Root    : Node_Id;
+            --  Корневой виджет иерархии виджетов класса компонента.
 
          when Node_Widget_Set =>
             Resource_Types : List_Id;
