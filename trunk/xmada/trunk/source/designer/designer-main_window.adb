@@ -46,11 +46,13 @@ with Xt.Resource_Management;
 with Xm.Resource_Management;
 with Xm.Traversal_Management;
 with Xm_Arrow_Button_Gadget;
+with Xm_Cascade_Button_Gadget;
 with Xm_Form;
 with Xm_Label_Gadget;
 with Xm_Main_Window;
 with Xm_Notebook;
 with Xm_Paned_Window;
+with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
 with Xm_String_Defs;
 
@@ -64,11 +66,13 @@ package body Designer.Main_Window is
    use Xm.Resource_Management;
    use Xm.Traversal_Management;
    use Xm_Arrow_Button_Gadget;
+   use Xm_Cascade_Button_Gadget;
    use Xm_Form;
    use Xm_Label_Gadget;
    use Xm_Main_Window;
    use Xm_Notebook;
    use Xm_Paned_Window;
+   use Xm_Push_Button_Gadget;
    use Xm_Row_Column;
    use Xm_String_Defs;
    use Xt;
@@ -168,7 +172,6 @@ package body Designer.Main_Window is
             null;
       end On_Show_Button;
 
-
    end Callbacks;
 
    Status_Bar : Xt.Widget;
@@ -192,6 +195,8 @@ package body Designer.Main_Window is
       Show_Properties : Widget;
       Show_Tree       : Widget;
       Show_Messages   : Widget;
+      File_Pulldown   : Widget;
+      Element         : Widget;
 
    begin
       Main_Window := Xm_Create_Managed_Main_Window (App_Shell, "main_window");
@@ -200,7 +205,31 @@ package body Designer.Main_Window is
       Status_Bar  :=
         Xm_Create_Managed_Label_Gadget (Main_Window, "status_bar");
       Palette     := Xm_Create_Managed_Notebook (Main_Window, "widget_set");
-      Menu        := Xm_Create_Managed_Menu_Bar (Main_Window, "main_menu");
+
+      --
+      --  Создание главного меню.
+      --
+
+      Menu          := Xm_Create_Managed_Menu_Bar (Main_Window, "main_menu");
+      File_Pulldown := Xm_Create_Pulldown_Menu (Menu, "file_pulldown");
+      Element       :=
+        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "new");
+      Element       :=
+        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "open");
+      Element       :=
+        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "save");
+      Element       :=
+        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "save_as");
+      Element       :=
+        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "close");
+      Element       :=
+        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "quit");
+
+      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id,File_Pulldown);
+
+      Button :=
+        Xm_Create_Managed_Cascade_Button_Gadget
+         (Menu, "file", Args (0 .. 0));
 
       --
       --  Создание панели редактирования свойств.
