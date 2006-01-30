@@ -345,6 +345,18 @@ package body Designer.Main_Window is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Delete_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Delete_Item (Node : in Model.Node_Id) is
+   begin
+      Designer.Tree_Editor.Delete_Item (Node);
+      Designer.Visual_Editor.Delete_Item (Node);
+      Designer.Properties_Editor.Delete_Item (Node);
+   end Delete_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -535,6 +547,18 @@ package body Designer.Main_Window is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Insert_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Insert_Item (Node : in Model.Node_Id) is
+   begin
+      Designer.Tree_Editor.Insert_Item (Node);
+      Designer.Visual_Editor.Insert_Item (Node);
+      Designer.Properties_Editor.Insert_Item (Node);
+   end Insert_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Select_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -544,5 +568,17 @@ package body Designer.Main_Window is
       Designer.Visual_Editor.Select_Item (Node);
       Designer.Properties_Editor.Select_Item (Node);
    end Select_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Update_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Update_Item (Node : in Model.Node_Id) is
+   begin
+      Designer.Tree_Editor.Update_Item (Node);
+      Designer.Visual_Editor.Update_Item (Node);
+      Designer.Properties_Editor.Update_Item (Node);
+   end Update_Item;
 
 end Designer.Main_Window;
