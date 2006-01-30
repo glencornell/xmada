@@ -129,7 +129,7 @@ package Model.Tree is
      Node_Enumerated_Resource_Type,
      --  Описание перечислимого типа ресурса.
 
-     Node_Enumerated_Resource_Type_Value_Specification,
+     Node_Enumeration_Value_Specification,
      --  Описание значения перечислимого типа ресурса.
 
      Node_Widget_Class,
@@ -233,11 +233,11 @@ private
             Value_Specifications : List_Id;
             --  Список возможных значений.
 
-         when Node_Enumerated_Resource_Type_Value_Specification =>
-            ERTVS_Name          : Name_Id;
+         when Node_Enumeration_Value_Specification =>
+            EVS_Name          : Name_Id;
             --  Имя значения перечислимого типа.
 
-            ERTVS_Internal_Name : Name_Id;
+            EVS_Internal_Name : Name_Id;
             --  Имя значения перечислимого типа, используемое Xt для
             --  преобразования во внутреннее значение.
 

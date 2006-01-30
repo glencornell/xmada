@@ -51,12 +51,12 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Enumerated_Resource_Type_Value_Specification
+       (Node_Kind (Node) = Node_Enumeration_Value_Specification
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type);
 
       case Node_Kind (Node) is
-         when Node_Enumerated_Resource_Type_Value_Specification =>
-            return Node_Table.Table (Node).ERTVS_Internal_Name;
+         when Node_Enumeration_Value_Specification =>
+            return Node_Table.Table (Node).EVS_Internal_Name;
 
          when Node_Enumerated_Resource_Type =>
             return Node_Table.Table (Node).ERT_Internal_Name;
@@ -75,12 +75,12 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Enumerated_Resource_Type_Value_Specification
+       (Node_Kind (Node) = Node_Enumeration_Value_Specification
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type);
 
       case Node_Kind (Node) is
-         when Node_Enumerated_Resource_Type_Value_Specification =>
-            return Node_Table.Table (Node).ERTVS_Name;
+         when Node_Enumeration_Value_Specification =>
+            return Node_Table.Table (Node).EVS_Name;
 
          when Node_Enumerated_Resource_Type =>
             return Node_Table.Table (Node).ERT_Name;
@@ -141,12 +141,12 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Enumerated_Resource_Type_Value_Specification
+       (Node_Kind (Node) = Node_Enumeration_Value_Specification
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type);
 
       case Node_Kind (Node) is
-         when Node_Enumerated_Resource_Type_Value_Specification =>
-            Node_Table.Table (Node).ERTVS_Internal_Name := Value;
+         when Node_Enumeration_Value_Specification =>
+            Node_Table.Table (Node).EVS_Internal_Name := Value;
 
          when Node_Enumerated_Resource_Type =>
             Node_Table.Table (Node).ERT_Internal_Name := Value;
@@ -165,12 +165,12 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Enumerated_Resource_Type_Value_Specification
+       (Node_Kind (Node) = Node_Enumeration_Value_Specification
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type);
 
       case Node_Kind (Node) is
-         when Node_Enumerated_Resource_Type_Value_Specification =>
-            Node_Table.Table (Node).ERTVS_Name := Value;
+         when Node_Enumeration_Value_Specification =>
+            Node_Table.Table (Node).EVS_Name := Value;
 
          when Node_Enumerated_Resource_Type =>
             Node_Table.Table (Node).ERT_Name := Value;

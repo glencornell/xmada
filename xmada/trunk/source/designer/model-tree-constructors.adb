@@ -61,25 +61,24 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Create_Enumerated_Resource_Type_Value_Specification
+   --!    <Unit> Create_Enumeration_Value_Specification
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Create_Enumerated_Resource_Type_Value_Specification
+   function Create_Enumeration_Value_Specification
      return Node_Id
    is
    begin
       Node_Table.Append
-       ((Kind                =>
-           Node_Enumerated_Resource_Type_Value_Specification,
-         Parent              => Null_Node,
-         List                => Null_List,
-         Previous            => Null_Node,
-         Next                => Null_Node,
-         ERTVS_Name          => Null_Name,
-         ERTVS_Internal_Name => Null_Name));
+       ((Kind              => Node_Enumeration_Value_Specification,
+         Parent            => Null_Node,
+         List              => Null_List,
+         Previous          => Null_Node,
+         Next              => Null_Node,
+         EVS_Name          => Null_Name,
+         EVS_Internal_Name => Null_Name));
 
       return Node_Table.Last;
-   end Create_Enumerated_Resource_Type_Value_Specification;
+   end Create_Enumeration_Value_Specification;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
