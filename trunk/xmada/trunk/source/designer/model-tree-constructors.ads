@@ -44,7 +44,7 @@ package Model.Tree.Constructors is
 
    function Create_Enumerated_Resource_Type return Node_Id;
 
-   function Create_Enumerated_Resource_Type_Value_Specification return Node_Id;
+   function Create_Enumeration_Value_Specification return Node_Id;
 
    function Create_Widget_Set return Node_Id;
 
