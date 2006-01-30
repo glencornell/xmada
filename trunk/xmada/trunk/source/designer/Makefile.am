@@ -25,7 +25,7 @@ all: XmAdaDesigner
 XmAdaDesigner:
 	ln -s $(srcdir)/XmAdaDesigner.ad XmAdaDesigner
 
-run:
+run: all
 	LD_LIBRARY_PATH=$(top_builddir)/source/xlib/.libs:$(top_builddir)/source/xt/.libs:$(top_builddir)/source/xm/.libs:$$LD_LIBRARY_PATH XAPPLRESDIR=. ./designer
 
 depend-local:
