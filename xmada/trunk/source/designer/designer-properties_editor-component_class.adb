@@ -39,4 +39,24 @@
 
 package body Designer.Properties_Editor.Component_Class is
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Hide
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Hide (Object : access Component_Class_Properties_Editor) is
+   begin
+      null;
+   end Hide;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Show
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Show (Object : access Component_Class_Properties_Editor) is
+   begin
+      null;
+   end Show;
+
 end Designer.Properties_Editor.Component_Class;

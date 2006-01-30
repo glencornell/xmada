@@ -318,4 +318,16 @@ package body Designer.Main_Window is
       Xt_Realize_Widget (App_Shell);
    end Initialize;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Select_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Select_Item (Node : in Model.Node_Id) is
+   begin
+      Designer.Tree_Editor.Select_Item (Node);
+      Designer.Visual_Editor.Select_Item (Node);
+      Designer.Properties_Editor.Select_Item (Node);
+   end Select_Item;
+
 end Designer.Main_Window;

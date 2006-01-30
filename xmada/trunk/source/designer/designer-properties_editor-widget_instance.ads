@@ -41,9 +41,6 @@
 
 private package Designer.Properties_Editor.Widget_Instance is
 
-   pragma Elaborate_Body;
-   --  XXX Директиву необходимо убрать после добавления подпрограммы.
-
    type Widget_Instance_Properties_Editor is
      new Node_Properties_Editor with private;
 
@@ -51,5 +48,21 @@ private
 
    type Widget_Instance_Properties_Editor is
      new Node_Properties_Editor with null record;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Show
+   --!    <Purpose> Отображает страницы редактора свойств экземпляра виджета.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Show (Object : access Widget_Instance_Properties_Editor);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Hide
+   --!    <Purpose> Скрывает страницы редактора свойств экземпляра виджета.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Hide (Object : access Widget_Instance_Properties_Editor);
 
 end Designer.Properties_Editor.Widget_instance;

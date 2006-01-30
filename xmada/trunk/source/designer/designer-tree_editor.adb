@@ -72,7 +72,18 @@ package body Designer.Tree_Editor is
          (Parent, "scrolled", Args (0 .. Arg_List'Length));
 
       Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
-      Container := Xm_Create_Managed_Container (Scrolled, "tree", Args (0 .. 0));
+      Container :=
+        Xm_Create_Managed_Container (Scrolled, "tree", Args (0 .. 0));
    end Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Select_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Select_Item (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Select_Item;
 
 end Designer.Tree_Editor;

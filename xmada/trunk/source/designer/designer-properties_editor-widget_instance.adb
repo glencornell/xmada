@@ -39,4 +39,24 @@
 
 package body Designer.Properties_Editor.Widget_Instance is
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Hide
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Hide (Object : access Widget_Instance_Properties_Editor) is
+   begin
+      null;
+   end Hide;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Show
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Show (Object : access Widget_Instance_Properties_Editor) is
+   begin
+      null;
+   end Show;
+
 end Designer.Properties_Editor.Widget_instance;

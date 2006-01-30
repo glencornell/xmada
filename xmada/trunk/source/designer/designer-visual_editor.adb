@@ -44,6 +44,7 @@ package body Designer.Visual_Editor is
    use Xm_Drawing_Area;
    use Xm_Scrolled_Window;
    use Xt;
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
@@ -56,5 +57,15 @@ package body Designer.Visual_Editor is
       Scroll := Xm_Create_Managed_Scrolled_Window (Parent, "scrolled");
       Draw   := Xm_Create_Managed_Drawing_Area (Scroll, "drawing");
    end Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Select_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Select_Item (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Select_Item;
 
 end Designer.Visual_Editor;
