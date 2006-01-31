@@ -203,15 +203,23 @@ package body Model.Tree is
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
        (Node_Kind (Node) = Node_Enumeration_Value_Specification
+          or else Node_Kind (Node) = Node_Component_Class
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type
+          or else Node_Kind (Node) = Node_Project
           or else Node_Kind (Node) = Node_Widget_Class);
 
       case Node_Kind (Node) is
+         when Node_Component_Class =>
+            return Node_Table.Table (Node).CC_Name;
+
          when Node_Enumeration_Value_Specification =>
             return Node_Table.Table (Node).EVS_Name;
 
          when Node_Enumerated_Resource_Type =>
             return Node_Table.Table (Node).ERT_Name;
+
+         when Node_Project =>
+            return Node_Table.Table (Node).P_Name;
 
          when Node_Widget_Class =>
             return Node_Table.Table (Node).WC_Name;
