@@ -248,6 +248,7 @@ package body Designer.Main_Window is
       begin
          Operations.Save_Project;
          Operations.New_Project;
+
       exception
          when E : others =>
             null;
@@ -269,6 +270,7 @@ package body Designer.Main_Window is
       begin
          Operations.Save_Project;
          Xt_App_Set_Exit_Flag (Xt_Widget_To_Application_Context (The_Widget));
+
       exception
          when E : others =>
             null;
@@ -294,6 +296,7 @@ package body Designer.Main_Window is
       begin
          if not Xm_Is_Paned_Window (Parent) then
             Xt_Unmanage_Child (Parent);
+
          else
             Xt_Unmanage_Child (The_Widget);
          end if;
@@ -325,6 +328,7 @@ package body Designer.Main_Window is
 
       begin
          Operations.New_Project;
+
       exception
          when E : others =>
             null;
@@ -346,6 +350,7 @@ package body Designer.Main_Window is
 
       begin
          Xt_Manage_Child (Open_Dialog);
+
       exception
          when E : others =>
             null;
@@ -421,6 +426,7 @@ package body Designer.Main_Window is
 
       begin
          Xt_Manage_Child (Save_Dialog);
+
       exception
          when E : others =>
             null;
@@ -520,6 +526,8 @@ package body Designer.Main_Window is
         Xm_Create_Managed_Label_Gadget (Main_Window, "status_bar");
       Palette     := Xm_Create_Managed_Notebook (Main_Window, "widget_set");
 
+      Button      := Xt_Name_To_Widget (Palette, "PageScroller");
+      Xt_Unmanage_Child (Button);
       --
       --  Создание главного меню.
       --
@@ -592,6 +600,16 @@ package body Designer.Main_Window is
                        Xm_N_Activate_Callback,
                        Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Show_Properties));
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Button);
+      Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (3), Xm_N_Bottom_Widget, Button);
+      Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (5), Xm_N_Right_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (6), Xm_N_Right_Widget, Button);
+      Element := Xm_Create_Managed_Label_Gadget
+                  (Properties_Form, "properties_label", Args (0 .. 6));
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
       Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Button);
@@ -680,6 +698,16 @@ package body Designer.Main_Window is
                        Xm_N_Activate_Callback,
                        Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Show_Tree));
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Button);
+      Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (3), Xm_N_Bottom_Widget, Button);
+      Xt_Set_Arg (Args (4), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (5), Xm_N_Left_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (6), Xm_N_Left_Widget, Button);
+      Element := Xm_Create_Managed_Label_Gadget
+                  (Tree_Form, "tree_label", Args (0 .. 6));
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
       Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Button);

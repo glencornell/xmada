@@ -36,16 +36,24 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt.Composite_Management;
+with Xt.Utilities;
 with Xm.Resource_Management;
 with Xm_Container;
+with Xm_Notebook;
+with Xm_Push_Button_Gadget;
 with Xm_Scrolled_Window;
 with Xm_String_Defs;
 
 package body Designer.Tree_Editor is
 
+   use Xt.Composite_Management;
+   use Xt.Utilities;
    use Xm;
    use Xm.Resource_Management;
    use Xm_Container;
+   use Xm_Notebook;
+   use Xm_Push_Button_Gadget;
    use Xm_Scrolled_Window;
    use Xm_String_Defs;
    use Xt;
@@ -73,13 +81,25 @@ package body Designer.Tree_Editor is
    is
       Args     : Xt_Arg_List (0 .. Arg_List'Length);
       Scrolled : Widget;
+      Notebook : Widget;
+      Button   : Widget;
 
    begin
+      Notebook := Xm_Create_Managed_Notebook (Parent, "notebook", Arg_List);
+
+      Button := Xt_Name_To_Widget (Notebook, "PageScroller");
+      Xt_Unmanage_Child (Button);
+
+      Button := Xm_Create_Managed_Push_Button_Gadget (Notebook,
+                                                      "page_component");
+      Button := Xm_Create_Managed_Push_Button_Gadget (Notebook,
+                                                      "page_project");
+
       Args (0 .. Arg_List'Length - 1) := Arg_List;
       Xt_Set_Arg (Args (Arg_List'Length), Xm_N_Scrolling_Policy, Xm_Automatic);
       Scrolled :=
         Xm_Create_Managed_Scrolled_Window
-         (Parent, "scrolled", Args (0 .. Arg_List'Length));
+         (Notebook, "scrolled", Args (0 .. Arg_List'Length));
 
       Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
       Container :=
