@@ -52,7 +52,11 @@ package Model.Tree.Constructors is
 
    function Create_Project return Node_Id;
 
+   function Create_Resource_Specification return Node_Id;
+
    function Create_Widget_Class return Node_Id;
+
+   function Create_Widget_Instance return Node_Id;
 
    function Create_Widget_Set return Node_Id;
 

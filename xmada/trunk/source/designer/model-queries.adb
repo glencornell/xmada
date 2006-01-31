@@ -64,4 +64,24 @@ package body Model.Queries is
       return Image (Name (Node));
    end Name_Image;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Resource_Class_Name_Image
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Class_Name_Image (Node : in Node_Id) return Wide_String is
+   begin
+      return Image (Resource_Class_Name (Node));
+   end Resource_Class_Name_Image;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Resource_Name_Image
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Name_Image (Node : in Node_Id) return Wide_String is
+   begin
+      return Image (Resource_Name (Node));
+   end Resource_Name_Image;
+
 end Model.Queries;

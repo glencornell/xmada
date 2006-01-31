@@ -138,6 +138,28 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Resource_Specification
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Resource_Specification return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                         => Node_Resource_Specification,
+         Parent                       => Null_Node,
+         List                         => Null_List,
+         Previous                     => Null_Node,
+         Next                         => Null_Node,
+         Resource_Name                => Null_Name,
+         Internal_Resource_Name       => Null_Name,
+         Resource_Class_Name          => Null_Name,
+         Internal_Resource_Class_Name => Null_Name,
+         Resource_Type                => Null_Node));
+
+      return Node_Table.Last;
+   end Create_Resource_Specification;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Widget_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -152,16 +174,41 @@ package body Model.Tree.Constructors is
          WC_Name                              => Null_Name,
          Is_Meta_Class                        => False,
          Super_Class                          => Null_Node,
-         Automatically_Created_Parent         => Null_Node,
-         Automatically_Created_Children       => Null_List,
+         WC_Automatically_Created_Parent      => Null_Node,
+         WC_Automatically_Created_Children    => Null_List,
          Corresponding_Widget_Or_Gadget_Class => Null_Node,
-         Resources                            => Null_List,
-         Constraint_Resources                 => Null_List,
-         Callbacks                            => Null_List,
+         WC_Resources                         => Null_List,
+         WC_Constraint_Resources              => Null_List,
+         WC_Callbacks                         => Null_List,
          Controls                             => Null_List));
 
       return Node_Table.Last;
    end Create_Widget_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Widget_Instance
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Widget_Instance return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                                 => Node_Widget_Instance,
+         Parent                               => Null_Node,
+         List                                 => Null_List,
+         Previous                             => Null_Node,
+         Next                                 => Null_Node,
+         WI_Name                              => Null_Name,
+         Class                                => Null_Node,
+         Is_Managed                           => False,
+         WI_Automatically_Created_Parent      => Null_Node,
+         WI_Automatically_Created_Children    => Null_List,
+         WI_Resources                         => Null_List,
+         WI_Constraint_Resources              => Null_List,
+         WI_Callbacks                         => Null_List));
+
+      return Node_Table.Last;
+   end Create_Widget_Instance;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

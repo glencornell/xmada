@@ -53,32 +53,6 @@ package Model.Tree is
    --
    --  Описание предопределенного типа ресурсов.
 
-   --  Node_Resource_Specification
-   --
-   --  Описание спецификации ресурса.
-   --
-   --  Resource_Name (Name)
-   --  Internal_Resource_Name (Name)
-   --  Resource_Class (Name)
-   --  Internal_Resource_Class (Name)
-   --  Resource_Type (Node)
-   --  Related (Node)
-   --  Default
-
-   --  Node_Widget_Instance
-   --
-   --  Описание экземпляра виджета.
-   --
-   --  Name (Name)
-   --  Class (Node)
-   --  Is_Create_Managed (Boolean)
-   --  Resources (List)
-   --  Constraint_Resources (List)
-   --  Callbacks (List)
-   --  Children (List)
-   --  Automatically_Created_Parent (Node)
-   --  Automatically_Created_Children (List)
-
    --  Node_Resource_Value
    --
    --  Описание значения ресурса.
@@ -125,7 +99,9 @@ package Model.Tree is
      Node_Widget_Class,
      --  Описание класса виджетов.
 
---     Node_Resource_Specification,
+     Node_Resource_Specification,
+     --  Описание ресурса класса виджетов.
+
      Node_Widget_Instance);
      --  Описание экземпляра виджета.
 
@@ -213,6 +189,29 @@ package Model.Tree is
    function Super_Class (Node : in Node_Id) return Node_Id;
    procedure Set_Super_Class (Node : in Node_Id; Value : in Node_Id);
 
+   function Resource_Name (Node : in Node_Id) return Name_Id;
+   procedure Set_Resource_Name (Node : in Node_Id; Value : in Name_Id);
+
+   function Internal_Resource_Name (Node : in Node_Id) return Name_Id;
+   procedure Set_Internal_Resource_Name (Node  : in Node_Id;
+                                         Value : in Name_Id);
+
+   function Resource_Class_Name (Node : in Node_Id) return Name_Id;
+   procedure Set_Resource_Class_Name (Node : in Node_Id; Value : in Name_Id);
+
+   function Internal_Resource_Class_Name (Node : in Node_Id) return Name_Id;
+   procedure Set_Internal_Resource_Class_Name (Node  : in Node_Id;
+                                               Value : in Name_Id);
+
+   function Resource_Type (Node : in Node_Id) return Node_Id;
+   procedure Set_Resource_Type (Node : in Node_Id; Value : in Node_Id);
+
+   function Resources (Node : in Node_Id) return List_Id;
+   procedure Set_Resources (Node : in Node_Id; Value : in List_Id);
+
+   function Constraint_Resources (Node : in Node_Id) return List_Id;
+   procedure Set_Constraint_Resources (Node : in Node_Id; Value : in List_Id);
+
 private
 
    type Node_Record (Kind : Node_Kinds := Node_Empty) is record
@@ -291,10 +290,10 @@ private
             Super_Class                          : Node_Id;
             --  Объявление базового класса.
 
-            Automatically_Created_Parent         : Node_Id;
+            WC_Automatically_Created_Parent      : Node_Id;
             --  Автоматически создаваемый родительский виджет.
 
-            Automatically_Created_Children       : List_Id;
+            WC_Automatically_Created_Children    : List_Id;
             --  Автоматически создаваемые дочерние виджеты.
 
             Corresponding_Widget_Or_Gadget_Class : Node_Id;
@@ -302,13 +301,13 @@ private
             --  виджетами содержит ссылку на класс гаджет, и наоборот, для
             --  классов, являющихся гаджетами содержит ссылку на виджет класс.
 
-            Resources                            : List_Id;
+            WC_Resources                         : List_Id;
             --  Описание обычных ресурсов класса.
 
-            Constraint_Resources                 : List_Id;
+            WC_Constraint_Resources              : List_Id;
             --  Описание ресурсов ограничений класса.
 
-            Callbacks                            : List_Id;
+            WC_Callbacks                         : List_Id;
             --  Описание подпрограмм обратного вызова.
 
             Controls                             : List_Id; -- Elist
@@ -319,8 +318,52 @@ private
             --  Locked_Resources
             --  --  Значения ресурсов, определяющих данный класс.
 
+         when Node_Resource_Specification =>
+            Resource_Name                : Name_Id;
+            --  Имя ресурса.
+
+            Internal_Resource_Name       : Name_Id;
+            --  Внутреннее имя ресурса, используемое Xt.
+
+            Resource_Class_Name          : Name_Id;
+            --  Имя класса ресурсов.
+
+            Internal_Resource_Class_Name : Name_Id;
+            --  Внутреннее имя класса ресурсов, используемое Xt.
+
+            Resource_Type                : Node_Id;
+            --  Тип значения ресурса.
+
+            --  Related (Node)
+            --  Default
+
          when Node_Widget_Instance =>
-            null;
+            WI_Name                           : Name_Id;
+            --  Имя экземпляра виджета.
+
+            Class                             : Node_Id;
+            --  Класс экземпляра виджета.
+
+            Is_Managed                        : Boolean;
+            --  Признак необходимости взятия на управление сразу после
+            --  создания.
+
+            WI_Resources                      : List_Id;
+            --  Значения ресурсов виджета.
+
+            WI_Constraint_Resources           : List_Id;
+            --  Значения ресурсов ограничений, полученных от класса
+            --  родительского виджета.
+
+            WI_Callbacks                      : List_Id;
+            --  Подпрограммы обратного вызова.
+
+            WI_Automatically_Created_Parent   : Node_Id;
+            --  Автоматически создаваемый родительский виджет.
+
+            WI_Automatically_Created_Children : List_Id;
+            --  Автоматически создаваемые дочерние виджеты.
+
       end case;
    end record;
 
