@@ -143,4 +143,14 @@ package body Designer.Operations is
       null;
    end Save_Project;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Save_Project
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Save_Project is
+   begin
+      null;
+   end Save_Project;
+
 end Designer.Operations;

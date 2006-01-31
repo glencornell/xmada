@@ -49,6 +49,7 @@ with Xt.Resource_Management;
 with Xt.Utilities;
 with Xm.Class_Management;
 with Xm.Resource_Management;
+with Xm.Strings;
 with Xm.Traversal_Management;
 with Xm.Utilities;
 with Xm_Arrow_Button_Gadget;
@@ -71,10 +72,12 @@ with Designer.Visual_Editor;
 
 package body Designer.Main_Window is
 
+   use Ada.Strings.Wide_Unbounded;
    use Interfaces.C;
    use Xm;
    use Xm.Class_Management;
    use Xm.Resource_Management;
+   use Xm.Strings;
    use Xm.Traversal_Management;
    use Xm.Utilities;
    use Xm_Arrow_Button_Gadget;
@@ -216,7 +219,6 @@ package body Designer.Main_Window is
    Status_Bar     : Widget;
    Open_Dialog    : Widget;
    Save_Dialog    : Widget;
-   Is_Modified    : Boolean := False;
    Message_Text   : Widget;
    Message_Buffer : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
 
@@ -241,7 +243,8 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         null;
+         Operations.Save_Project;
+         Operations.New_Project;
       exception
          when E : others =>
             null;
@@ -261,6 +264,7 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
+         Operations.Save_Project;
          Xt_App_Set_Exit_Flag (Xt_Widget_To_Application_Context (The_Widget));
       exception
          when E : others =>
@@ -317,7 +321,7 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         null;
+         Operations.New_Project;
       exception
          when E : others =>
             null;
@@ -356,12 +360,15 @@ package body Designer.Main_Window is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
-         Data : constant Xm_Any_Callback_Struct_Access
+         Data      : constant Xm_File_Selection_Box_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
+         File_Name : constant Wide_String
+           := Xm_String_Unparse (Data.Value);
 
       begin
          if Data.Reason = Xm_CR_Ok then
-            null;
+            Operations.Open_Project (File_Name);
+
          elsif Data.Reason = Xm_CR_Cancel then
             null;
          end if;
@@ -388,7 +395,8 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         null;
+         Operations.Save_Project;
+
       exception
          when E : others =>
             null;
@@ -427,12 +435,15 @@ package body Designer.Main_Window is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
-         Data : constant Xm_Any_Callback_Struct_Access
+         Data      : constant Xm_File_Selection_Box_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
+         File_Name : constant Wide_String
+           := Xm_String_Unparse (Data.Value);
 
       begin
          if Data.Reason = Xm_CR_Ok then
-            null;
+            Operations.Save_Project (File_Name);
+
          elsif Data.Reason = Xm_CR_Cancel then
             null;
          end if;
