@@ -158,6 +158,16 @@ package body Designer.Properties_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Properties
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Properties (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Set_Properties;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Update_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------

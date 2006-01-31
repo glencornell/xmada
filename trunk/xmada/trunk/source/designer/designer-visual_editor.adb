@@ -57,6 +57,16 @@ package body Designer.Visual_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Get_Properties
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Get_Properties (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Get_Properties;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -97,6 +107,16 @@ package body Designer.Visual_Editor is
    begin
       null;
    end Select_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Properties
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Properties (Node : in Model.Node_Id) is
+   begin
+      null;
+   end Set_Properties;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
