@@ -59,13 +59,53 @@ package body Designer.Properties_Editor is
    --  свойств. Уже созданные редакторы свойств сохраняются в таблице
    --  Annotation_Table.
 
+   type Annotation_Kinds is
+    (Annotation_Empty,
+     Annotation_Component_Class,
+     Annotation_Widget_Instance,
+     Annotation_Enumerated_Resource_Type,
+     Annotation_Enumeration_Value_Specification);
+
+   type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
+   record
+      case Kind is
+         when Annotation_Component_Class
+           | Annotation_Widget_Instance
+         =>
+            Properties_Editor : Node_Properties_Editor_Access;
+            --  Соответствующий редактор свойств элемента модели.
+
+         when Annotation_Enumerated_Resource_Type =>
+            Menu              : Widget;
+            --  Выпадающее меню, используемое в меню опций значения ресурса.
+
+         when Annotation_Enumeration_Value_Specification =>
+            Button            : Widget;
+            --  Кнопка выпадающего меню, используемого в меню опций значения
+            --  ресурса.
+
+         when Annotation_Empty =>
+            null;
+      end case;
+   end record;
+
    package Annotation_Table is
      new GNAT.Table
-          (Table_Component_Type => Node_Properties_Editor_Access,
+          (Table_Component_Type => Annotation_Record,
            Table_Index_Type     => Node_Id,
            Table_Low_Bound      => Node_Id'First + 1,
            Table_Initial        => Model.Allocations.Node_Table_Initial,
            Table_Increment      => Model.Allocations.Node_Table_Increment);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Relocate_Node_Table
+   --!    <Purpose> Производит расширение таблицы для обеспечения возможности
+   --! её использования для указанного узла. Все добавленные элементы
+   --! инициализируются значениями по умолчанию.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table (Node : in Node_Id);
 
    Selected_Item : Node_Id := Null_Node;
    --  Элемент модели, выбранный пользователем в настоящий момент и для
@@ -98,15 +138,26 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Insert_Item
-   --!    <ImplementationNotes> В связи с тем, что все компоненты редактора
-   --! свойств создаются "по требованию" при добавлении нового элемента
-   --! производить каких-либо действий не требуется.
+   --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Insert_Item (Node : in Model.Node_Id) is
-      pragma Unreferenced (Node);
-
    begin
-      null;
+      Relocate_Annotation_Table (Node);
+
+      case Node_Kind (Node) is
+         when Node_Project =>
+            --  XXX Необходимо построить меню для элементов перечислимых типов.
+            null;
+
+         when Node_Application =>
+            null;
+
+         when Node_Component_Class =>
+            null;
+
+         when others =>
+            raise Program_Error;
+      end case;
    end Insert_Item;
 
    ---------------------------------------------------------------------------
@@ -121,6 +172,46 @@ package body Designer.Properties_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Relocate_Annotation_Table
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table (Node : in Node_Id) is
+      First : Node_Id := Annotation_Table.Last + 1;
+
+   begin
+      if Annotation_Table.Last >= Node then
+         --  Таблица уже имеет достаточный размер и не нуждается в расширении.
+
+         return;
+      end if;
+
+      Annotation_Table.Set_Last (Node);
+
+      for J in First .. Node loop
+         case Node_Kind (J) is
+            when Node_Component_Class =>
+               Annotation_Table.Table (J) :=
+                (Kind              => Annotation_Component_Class,
+                 Properties_Editor => null);
+
+            when Node_Enumerated_Resource_Type =>
+               Annotation_Table.Table (J) :=
+                (Kind => Annotation_Enumerated_Resource_Type,
+                 Menu => Null_Widget);
+
+            when Node_Enumeration_Value_Specification =>
+               Annotation_Table.Table (J) :=
+                (Kind   => Annotation_Enumeration_Value_Specification,
+                 Button => Null_Widget);
+
+            when others =>
+               Annotation_Table.Table (J) := (Kind => Annotation_Empty);
+         end case;
+      end loop;
+   end Relocate_Annotation_Table;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Select_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -130,6 +221,8 @@ package body Designer.Properties_Editor is
 
       --  Прототип реализации.
 
+--      Relocate_Annotation_Table (Node);
+--
 --      if Selected_Item /= Null_Node then
 --         Hide (Annotation_Table.Table (Selected_Item));
 --      end if;
