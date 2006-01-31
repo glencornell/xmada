@@ -133,6 +133,19 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Is_Meta_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Meta_Class (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      return Node_Table.Table (Node).Is_Meta_Class;
+   end Is_Meta_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Name
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -141,7 +154,8 @@ package body Model.Tree is
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
        (Node_Kind (Node) = Node_Enumeration_Value_Specification
-          or else Node_Kind (Node) = Node_Enumerated_Resource_Type);
+          or else Node_Kind (Node) = Node_Enumerated_Resource_Type
+          or else Node_Kind (Node) = Node_Widget_Class);
 
       case Node_Kind (Node) is
          when Node_Enumeration_Value_Specification =>
@@ -149,6 +163,9 @@ package body Model.Tree is
 
          when Node_Enumerated_Resource_Type =>
             return Node_Table.Table (Node).ERT_Name;
+
+         when Node_Widget_Class =>
+            return Node_Table.Table (Node).WC_Name;
 
          when others =>
             raise Program_Error;
@@ -295,6 +312,19 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Is_Meta_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Is_Meta_Class (Node : in Node_Id; Value : in Boolean) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Node_Table.Table (Node).Is_Meta_Class := Value;
+   end Set_Is_Meta_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Name
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -305,7 +335,8 @@ package body Model.Tree is
        (Node_Kind (Node) = Node_Enumeration_Value_Specification
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type
           or else Node_Kind (Node) = Node_Project
-          or else Node_Kind (Node) = Node_Component_Class);
+          or else Node_Kind (Node) = Node_Component_Class
+          or else Node_Kind (Node) = Node_Widget_Class);
 
       case Node_Kind (Node) is
          when Node_Enumeration_Value_Specification =>
@@ -319,6 +350,9 @@ package body Model.Tree is
 
          when Node_Component_Class =>
             Node_Table.Table (Node).CC_Name := Value;
+
+         when Node_Widget_Class =>
+            Node_Table.Table (Node).WC_Name := Value;
 
          when others =>
             raise Program_Error;
@@ -341,6 +375,19 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Super_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Super_Class (Node : in Node_Id; Value : in Node_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Node_Table.Table (Node).Super_Class := Value;
+   end Set_Super_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Value_Specifications
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -357,6 +404,33 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Widget_Classes
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Widget_Classes (Node : in Node_Id; Value : in List_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Set);
+
+      Node_Table.Table (Node).Widget_Classes := Value;
+      Set_Parent_Node (Value, Node);
+   end Set_Widget_Classes;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Super_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Super_Class (Node : in Node_Id) return Node_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      return Node_Table.Table (Node).Super_Class;
+   end Super_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Value_Specifications
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -367,5 +441,18 @@ package body Model.Tree is
 
       return Node_Table.Table (Node).Value_Specifications;
    end Value_Specifications;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Widget_Classes
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Widget_Classes (Node : in Node_Id) return List_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Set);
+
+      return Node_Table.Table (Node).Widget_Classes;
+   end Widget_Classes;
 
 end Model.Tree;

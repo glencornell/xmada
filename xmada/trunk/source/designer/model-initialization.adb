@@ -50,50 +50,63 @@ package body Model.Initialization is
    use Model.Tree.Constructors;
    use Model.Xt_Motif;
 
-   Xt_Motif_Alignment_Resource_Type                  : Node_Id;
-   Xt_Motif_Arrow_Direction_Resource_Type            : Node_Id;
-   Xt_Motif_Arrow_Layout_Resource_Type               : Node_Id;
-   Xt_Motif_Arrow_Orientation_Resource_Type          : Node_Id;
-   Xt_Motif_Arrow_Sensitivity_Resource_Type          : Node_Id;
-   Xt_Motif_Attachment_Resource_Type                 : Node_Id;
-   Xt_Motif_Audible_Warning_Resource_Type            : Node_Id;
-   Xt_Motif_Auto_Drag_Model_Resource_Type            : Node_Id;
-   Xt_Motif_Automatic_Selection_Resource_Type        : Node_Id;
-   Xt_Motif_Binding_Type_Resource_Type               : Node_Id;
-   Xt_Motif_Child_Horizontal_Alignment_Resource_Type : Node_Id;
-   Xt_Motif_Child_Placement_Resource_Type            : Node_Id;
-   Xt_Motif_Frame_Child_Type_Resource_Type           : Node_Id;
-   Xt_Motif_Child_Vertical_Alignment_Resource_Type   : Node_Id;
-   Xt_Motif_Combo_Box_Type_Resource_Type             : Node_Id;
-   Xt_Motif_Command_Window_Location_Resource_Type    : Node_Id;
-   Xt_Motif_Default_Button_Type_Resource_Type        : Node_Id;
-   Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
-   Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
-   Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
-   Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
-   Xt_Motif_Toggle_Indicator_On_Resource_Type        : Node_Id;
-   Xt_Motif_Indicator_Type_Resource_Type             : Node_Id;
-   Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
-   Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
-   Xt_Motif_Label_Type_Resource_Type                 : Node_Id;
-   Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
-   Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
-   Xt_Motif_Match_Behavior_Resource_Type             : Node_Id;
---   Xt_Motif__Resource_Type : Node_Id;
---   Xt_Motif__Resource_Type : Node_Id;
---   Xt_Motif__Resource_Type : Node_Id;
---   Xt_Motif__Resource_Type : Node_Id;
---   Xt_Motif__Resource_Type : Node_Id;
---   Xt_Motif__Resource_Type : Node_Id;
---   Xt_Motif__Resource_Type : Node_Id;
+   procedure Create_Enumerated_Resource_Types;
+
+   procedure Create_Widget_Classes;
+
+   Types   : List_Id;
+   Classes : List_Id;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Initialize
+   --!    <Unit> Create_Enumerated_Resource_Types
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Initialize is
-      Types  : List_Id;
+   procedure Create_Enumerated_Resource_Types is
+      Xt_Motif_Alignment_Resource_Type                  : Node_Id;
+      Xt_Motif_Arrow_Direction_Resource_Type            : Node_Id;
+      Xt_Motif_Arrow_Layout_Resource_Type               : Node_Id;
+      Xt_Motif_Arrow_Orientation_Resource_Type          : Node_Id;
+      Xt_Motif_Arrow_Sensitivity_Resource_Type          : Node_Id;
+      Xt_Motif_Attachment_Resource_Type                 : Node_Id;
+      Xt_Motif_Audible_Warning_Resource_Type            : Node_Id;
+      Xt_Motif_Auto_Drag_Model_Resource_Type            : Node_Id;
+      Xt_Motif_Automatic_Selection_Resource_Type        : Node_Id;
+      Xt_Motif_Binding_Type_Resource_Type               : Node_Id;
+      Xt_Motif_Child_Horizontal_Alignment_Resource_Type : Node_Id;
+      Xt_Motif_Child_Placement_Resource_Type            : Node_Id;
+      Xt_Motif_Frame_Child_Type_Resource_Type           : Node_Id;
+      Xt_Motif_Child_Vertical_Alignment_Resource_Type   : Node_Id;
+      Xt_Motif_Combo_Box_Type_Resource_Type             : Node_Id;
+      Xt_Motif_Command_Window_Location_Resource_Type    : Node_Id;
+      Xt_Motif_Default_Button_Type_Resource_Type        : Node_Id;
+      Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
+      Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
+      Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
+      Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
+      Xt_Motif_Toggle_Indicator_On_Resource_Type        : Node_Id;
+      Xt_Motif_Indicator_Type_Resource_Type             : Node_Id;
+      Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
+      Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
+      Xt_Motif_Label_Type_Resource_Type                 : Node_Id;
+      Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
+      Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
+      Xt_Motif_Match_Behavior_Resource_Type             : Node_Id;
+      Xt_Motif_Multi_Click_Resource_Type                : Node_Id;
+      Xt_Motif_Navigation_Type_Resource_Type            : Node_Id;
+      Xt_Motif_Notebook_Child_Type_Resource_Type        : Node_Id;
+      Xt_Motif_Orientation_Resource_Type                : Node_Id;
+      Xt_Motif_Outline_Button_Policy_Resource_Type      : Node_Id;
+      Xt_Motif_Outline_State_Resource_Type              : Node_Id;
+      Xt_Motif_Packing_Resource_Type                    : Node_Id;
+      Xt_Motif_Position_Mode_Resource_Type              : Node_Id;
+--      Xt_Motif__Resource_Type : Node_Id;
+--      Xt_Motif__Resource_Type : Node_Id;
+--      Xt_Motif__Resource_Type : Node_Id;
+--      Xt_Motif__Resource_Type : Node_Id;
+--      Xt_Motif__Resource_Type : Node_Id;
+--      Xt_Motif__Resource_Type : Node_Id;
+--      Xt_Motif__Resource_Type : Node_Id;
 
    begin
 
@@ -1116,25 +1129,281 @@ package body Model.Initialization is
 
       begin
          Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmNONE"));
+         Set_Internal_Name (Value, Enter ("NONE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
          Set_Name (Value, Enter ("XmQUICK_NAVIGATE"));
          Set_Internal_Name (Value, Enter ("QUICK_NAVIGATE"));
          Append (Values, Value);
 
-         --  Этого значения нет в RepType.c!
-
-         Value := Create_Enumeration_Value_Specification;
-         Set_Name (Value, Enter ("XmINVALID_MATCH_BEHAVIOR"));
-         Set_Internal_Name (Value, Enter ("INVALID_MATCH_BEHAVIOR"));
-         Append (Values, Value);
-
-         Xt_Motif_Match_Behavior_Resource_Type := Create_Enumerated_Resource_Type;
+         Xt_Motif_Match_Behavior_Resource_Type :=
+           Create_Enumerated_Resource_Type;
          Set_Name
-          (Xt_Motif_Match_Behavior_Resource_Type, Enter (""));
+          (Xt_Motif_Match_Behavior_Resource_Type, Enter ("XmRMatchBehavior"));
          Set_Internal_Name
-          (Xt_Motif_Match_Behavior_Resource_Type, Enter (""));
+          (Xt_Motif_Match_Behavior_Resource_Type, Enter ("MatchBehavior"));
          Set_Value_Specifications
           (Xt_Motif_Match_Behavior_Resource_Type, Values);
       end;
+
+      --  MultiClick
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMULTICLICK_DISCARD"));
+         Set_Internal_Name (Value, Enter ("MULTICLICK_DISCARD"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMULTICLICK_KEEP"));
+         Set_Internal_Name (Value, Enter ("MULTICLICK_KEEP"));
+         Append (Values, Value);
+
+         Xt_Motif_Multi_Click_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Multi_Click_Resource_Type, Enter ("XmRMultiClick"));
+         Set_Internal_Name
+          (Xt_Motif_Multi_Click_Resource_Type, Enter ("MultiClick"));
+         Set_Value_Specifications
+          (Xt_Motif_Multi_Click_Resource_Type, Values);
+      end;
+
+      --  NavigationType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmNONE"));
+         Set_Internal_Name (Value, Enter ("NONE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmTAB_GROUP"));
+         Set_Internal_Name (Value, Enter ("TAB_GROUP"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSTICKY_TAB_GROUP"));
+         Set_Internal_Name (Value, Enter ("STICKY_TAB_GROUP"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmEXCLUSIVE_TAB_GROUP"));
+         Set_Internal_Name (Value, Enter ("EXCLUSIVE_TAB_GROUP"));
+         Append (Values, Value);
+
+         Xt_Motif_Navigation_Type_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Navigation_Type_Resource_Type,
+           Enter ("XmRNavigationType"));
+         Set_Internal_Name
+          (Xt_Motif_Navigation_Type_Resource_Type, Enter ("NavigationType"));
+         Set_Value_Specifications
+          (Xt_Motif_Navigation_Type_Resource_Type, Values);
+      end;
+
+      --  NotebookChildType
+
+      --  В менеджере представлений тип имеет ещё одно значение - XmNONE,
+      --  используемое реализацией для сброса в начальное состояние.
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmPAGE"));
+         Set_Internal_Name (Value, Enter ("PAGE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMAJOR_TAB"));
+         Set_Internal_Name (Value, Enter ("MAJOR_TAB"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMINOR_TAB"));
+         Set_Internal_Name (Value, Enter ("MINOR_TAB"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSTATUS_AREA"));
+         Set_Internal_Name (Value, Enter ("STATUS_AREA"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmPAGE_SCROLLER"));
+         Set_Internal_Name (Value, Enter ("PAGE_SCROLLER"));
+         Append (Values, Value);
+
+         Xt_Motif_Notebook_Child_Type_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Notebook_Child_Type_Resource_Type,
+           Enter ("XmRNotebookChildType"));
+         Set_Internal_Name
+          (Xt_Motif_Notebook_Child_Type_Resource_Type,
+           Enter ("NotebookChildType"));
+         Set_Value_Specifications
+          (Xt_Motif_Notebook_Child_Type_Resource_Type, Values);
+      end;
+
+      --  Orientation
+
+      --  Значение XmNO_ORIENTATION используется в RowColumn для указания
+      --  динамичкески определяемого значения. Его добавление в список
+      --  значений не требуется.
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmVERTICAL"));
+         Set_Internal_Name (Value, Enter ("VERTICAL"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmHORIZONTAL"));
+         Set_Internal_Name (Value, Enter ("HORIZONTAL"));
+         Append (Values, Value);
+
+         Xt_Motif_Orientation_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Orientation_Resource_Type, Enter ("XmROrientation"));
+         Set_Internal_Name
+          (Xt_Motif_Orientation_Resource_Type, Enter ("Orientation"));
+         Set_Value_Specifications
+          (Xt_Motif_Orientation_Resource_Type, Values);
+      end;
+
+      --  OutlineButtonPolicy
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmOUTLINE_BUTTON_PRESENT"));
+         Set_Internal_Name (Value, Enter ("OUTLINE_BUTTON_PRESENT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmOUTLINE_BUTTON_ABSENT"));
+         Set_Internal_Name (Value, Enter ("OUTLINE_BUTTON_ABSENT"));
+         Append (Values, Value);
+
+         Xt_Motif_Outline_Button_Policy_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Outline_Button_Policy_Resource_Type,
+           Enter ("XmROutlineButtonPolicy"));
+         Set_Internal_Name
+          (Xt_Motif_Outline_Button_Policy_Resource_Type,
+           Enter ("OutlineButtonPolicy"));
+         Set_Value_Specifications
+          (Xt_Motif_Outline_Button_Policy_Resource_Type, Values);
+      end;
+
+      --  OutlineState
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmCOLLAPSED"));
+         Set_Internal_Name (Value, Enter ("COLLAPSED"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmEXPANDED"));
+         Set_Internal_Name (Value, Enter ("EXPANDED"));
+         Append (Values, Value);
+
+         Xt_Motif_Outline_State_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Outline_State_Resource_Type, Enter ("XmROutlineState"));
+         Set_Internal_Name
+          (Xt_Motif_Outline_State_Resource_Type, Enter ("OutlineState"));
+         Set_Value_Specifications
+          (Xt_Motif_Outline_State_Resource_Type, Values);
+      end;
+
+      --  Packing
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmPACK_TIGHT"));
+         Set_Internal_Name (Value, Enter ("PACK_TIGHT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmPACK_COLUMN"));
+         Set_Internal_Name (Value, Enter ("PACK_COLUMN"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmPACK_NONE"));
+         Set_Internal_Name (Value, Enter ("PACK_NONE"));
+         Append (Values, Value);
+
+         Xt_Motif_Packing_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Packing_Resource_Type, Enter ("XmRPacking"));
+         Set_Internal_Name
+          (Xt_Motif_Packing_Resource_Type, Enter ("Packing"));
+         Set_Value_Specifications
+          (Xt_Motif_Packing_Resource_Type, Values);
+      end;
+
+      --  PositionMode
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmZERO_BASED"));
+         Set_Internal_Name (Value, Enter ("ZERO_BASED"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmONE_BASED"));
+         Set_Internal_Name (Value, Enter ("ONE_BASED"));
+         Append (Values, Value);
+
+         Xt_Motif_Position_Mode_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Position_Mode_Resource_Type, Enter ("XmRPositionMode"));
+         Set_Internal_Name
+          (Xt_Motif_Position_Mode_Resource_Type, Enter ("PositionMode"));
+         Set_Value_Specifications
+          (Xt_Motif_Position_Mode_Resource_Type, Values);
+      end;
+
+      --
 
 --      declare
 --         Values : constant List_Id := New_List;
@@ -1161,8 +1430,6 @@ package body Model.Initialization is
 --      end;
 
       --  Формирование списка всех типов ресурсов.
-
-      Types := New_List;
 
       Append (Types, Xt_Motif_Alignment_Resource_Type);
       Append (Types, Xt_Motif_Arrow_Direction_Resource_Type);
@@ -1193,6 +1460,14 @@ package body Model.Initialization is
       Append (Types, Xt_Motif_Layout_Type_Resource_Type);
       Append (Types, Xt_Motif_Container_Line_Style_Resource_Type);  --  ???
       Append (Types, Xt_Motif_Match_Behavior_Resource_Type);
+      Append (Types, Xt_Motif_Multi_Click_Resource_Type);
+      Append (Types, Xt_Motif_Navigation_Type_Resource_Type);
+      Append (Types, Xt_Motif_Notebook_Child_Type_Resource_Type);
+      Append (Types, Xt_Motif_Orientation_Resource_Type);
+      Append (Types, Xt_Motif_Outline_Button_Policy_Resource_Type);
+      Append (Types, Xt_Motif_Outline_State_Resource_Type);
+      Append (Types, Xt_Motif_Packing_Resource_Type);
+      Append (Types, Xt_Motif_Position_Mode_Resource_Type);
 --      Append (Types, );
 --      Append (Types, );
 --      Append (Types, );
@@ -1200,9 +1475,611 @@ package body Model.Initialization is
 --      Append (Types, );
 --      Append (Types, );
 --      Append (Types, );
+   end Create_Enumerated_Resource_Types;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Widget_Classes
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Create_Widget_Classes is
+--      Xt_Motif__Widget_Class : Node_Id;
+--      Xt_Motif__Widget_Class : Node_Id;
+--      Xt_Motif__Widget_Class : Node_Id;
+--      Xt_Motif__Widget_Class : Node_Id;
+--      Xt_Motif__Widget_Class : Node_Id;
+--      Xt_Motif__Widget_Class : Node_Id;
+--      Xt_Motif__Widget_Class : Node_Id;
+
+   --  Классы виджетов Xt.
+
+   Xt_Motif_Application_Shell_Widget_Class : Node_Id;
+   Xt_Motif_Composite_Widget_Class         : Node_Id;
+   Xt_Motif_Constraint_Widget_Class        : Node_Id;
+   Xt_Motif_Core_Widget_Class              : Node_Id;
+   Xt_Motif_Object_Widget_Class            : Node_Id;
+   Xt_Motif_Override_Shell_Widget_Class    : Node_Id;
+   Xt_Motif_Rect_Obj_Widget_Class          : Node_Id;
+   Xt_Motif_Shell_Widget_Class             : Node_Id;
+   Xt_Motif_Session_Shell_Widget_Class     : Node_Id;
+   Xt_Motif_Top_Level_Shell_Widget_Class   : Node_Id;
+   Xt_Motif_Transient_Shell_Widget_Class   : Node_Id;
+   Xt_Motif_Vendor_Shell_Widget_Class      : Node_Id;
+   Xt_Motif_WM_Shell_Widget_Class          : Node_Id;
+
+   --  Классы виджетов Motif.
+
+   Xt_Motif_Arrow_Button_Gadget_Widget_Class   : Node_Id;
+   Xt_Motif_Arrow_Button_Widget_Class          : Node_Id;
+   Xt_Motif_Bulletin_Board_Widget_Class        : Node_Id;
+--   Xt_Motif_Bulletin_Board_Dialog_Widget_Class : Node_Id;
+   Xt_Motif_Cascade_Button_Gadget_Widget_Class : Node_Id;
+   Xt_Motif_Cascade_Button_Widget_Class        : Node_Id;
+   Xt_Motif_Combo_Box_Widget_Class             : Node_Id;
+   Xt_Motif_Command_Widget_Class               : Node_Id;
+   Xt_Motif_Container_Widget_Class             : Node_Id;
+   Xt_Motif_Dialog_Shell_Widget_Class          : Node_Id;
+   Xt_Motif_Drawing_Area_Widget_Class          : Node_Id;
+   Xt_Motif_Drawn_Button_Widget_Class          : Node_Id;
+--   Xt_Motif_Error_Dialog_Widget_Class          : Node_Id;
+   Xt_Motif_File_Selection_Box_Widget_Class    : Node_Id;
+--   Xt_Motif_File_Selection_Dialog_Widget_Class : Node_Id;
+   Xt_Motif_Form_Widget_Class                  : Node_Id;
+--   Xt_Motif_Form_Dialog_Widget_Class           : Node_Id;
+   Xt_Motif_Frame_Widget_Class                 : Node_Id;
+   Xt_Motif_Gadget_Widget_Class                : Node_Id;
+   Xt_Motif_Icon_Gadget_Widget_Class           : Node_Id;
+--   Xt_Motif_Information_Dialog_Widget_Class    : Node_Id;
+   Xt_Motif_Label_Gadget_Widget_Class          : Node_Id;
+   Xt_Motif_Label_Widget_Class                 : Node_Id;
+   Xt_Motif_List_Widget_Class                  : Node_Id;
+   Xt_Motif_Main_Window_Widget_Class           : Node_Id;
+   Xt_Motif_Manager_Widget_Class               : Node_Id;
+   Xt_Motif_Message_Box_Widget_Class           : Node_Id;
+--   Xt_Motif_Message_Dialog_Widget_Class        : Node_Id;
+   Xt_Motif_Notebook_Widget_Class              : Node_Id;
+   Xt_Motif_Paned_Window_Widget_Class          : Node_Id;
+   Xt_Motif_Primitive_Widget_Class             : Node_Id;
+   Xt_Motif_Push_Button_Gadget_Widget_Class    : Node_Id;
+   Xt_Motif_Push_Button_Widget_Class           : Node_Id;
+--   Xt_Motif_Question_Dialog_Widget_Class       : Node_Id;
+   Xt_Motif_Row_Column_Widget_Class            : Node_Id;
+   Xt_Motif_Scale_Widget_Class                 : Node_Id;
+   Xt_Motif_Scroll_Bar_Widget_Class            : Node_Id;
+--   Xt_Motif_Scrolled_List_Widget_Class         : Node_Id;
+--   Xt_Motif_Scrolled_Text_Widget_Class         : Node_Id;
+   Xt_Motif_Scrolled_Window_Widget_Class       : Node_Id;
+   Xt_Motif_Selection_Box_Widget_Class         : Node_Id;
+--   Xt_Motif_Selection_Dialog_Widget_Class      : Node_Id;
+   Xt_Motif_Separator_Gadget_Widget_Class      : Node_Id;
+   Xt_Motif_Separator_Widget_Class             : Node_Id;
+   Xt_Motif_Simple_Spin_Box_Widget_Class       : Node_Id;
+   Xt_Motif_Spin_Box_Widget_Class              : Node_Id;
+--   Xt_Motif_Template_Dialog_Widget_Class       : Node_Id;
+   Xt_Motif_Text_Field_Widget_Class            : Node_Id;
+   Xt_Motif_Text_Widget_Class                  : Node_Id;
+   Xt_Motif_Toggle_Button_Gadget_Widget_Class  : Node_Id;
+   Xt_Motif_Toggle_Button_Widget_Class         : Node_Id;
+--   Xt_Motif_Warning_Dialog_Widget_Class        : Node_Id;
+--   Xt_Motif_Working_Dialog_Widget_Class        : Node_Id;
+
+
+   begin
+
+      ------------------------------------------------------------------------
+      --  Xt Toolkit Intrinsics Core Widget Classes
+      ------------------------------------------------------------------------
+
+      --  Object
+
+      Xt_Motif_Object_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Object_Widget_Class, Enter ("Object"));
+      Set_Is_Meta_Class (Xt_Motif_Object_Widget_Class, True);
+
+      --  RectObj
+
+      Xt_Motif_Rect_Obj_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Rect_Obj_Widget_Class, Enter ("RectObj"));
+      Set_Super_Class (Xt_Motif_Rect_Obj_Widget_Class,
+                       Xt_Motif_Object_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Rect_Obj_Widget_Class, True);
+
+      --  Core
+
+      Xt_Motif_Core_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Core_Widget_Class, Enter ("Core"));
+      Set_Super_Class (Xt_Motif_Core_Widget_Class,
+                       Xt_Motif_Rect_Obj_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Core_Widget_Class, True);
+
+      --  Composite
+
+      Xt_Motif_Composite_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Composite_Widget_Class, Enter ("Composite"));
+      Set_Super_Class (Xt_Motif_Composite_Widget_Class,
+                       Xt_Motif_Core_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Composite_Widget_Class, True);
+
+      --  Constraint
+
+      Xt_Motif_Constraint_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Constraint_Widget_Class, Enter ("Constraint"));
+      Set_Super_Class (Xt_Motif_Constraint_Widget_Class,
+                       Xt_Motif_Composite_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Constraint_Widget_Class, True);
+
+      --  Shell
+
+      Xt_Motif_Shell_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Shell_Widget_Class, Enter ("Shell"));
+      Set_Super_Class (Xt_Motif_Shell_Widget_Class,
+                       Xt_Motif_Composite_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Shell_Widget_Class, True);
+
+      --  OverrideShell
+
+      Xt_Motif_Override_Shell_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Override_Shell_Widget_Class, Enter ("OverrideShell"));
+      Set_Super_Class (Xt_Motif_Override_Shell_Widget_Class,
+                       Xt_Motif_Shell_Widget_Class);
+
+      --  WMShell
+
+      Xt_Motif_WM_Shell_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_WM_Shell_Widget_Class, Enter ("WMShell"));
+      Set_Super_Class (Xt_Motif_WM_Shell_Widget_Class,
+                       Xt_Motif_Shell_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_WM_Shell_Widget_Class, True);
+
+      --  VendorShell
+
+      Xt_Motif_Vendor_Shell_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Vendor_Shell_Widget_Class, Enter ("VendorShell"));
+      Set_Super_Class (Xt_Motif_Vendor_Shell_Widget_Class,
+                       Xt_Motif_WM_Shell_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Vendor_Shell_Widget_Class, True);
+
+      --  TransientShell
+
+      Xt_Motif_Transient_Shell_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Transient_Shell_Widget_Class,
+                Enter ("TransientShell"));
+      Set_Super_Class (Xt_Motif_Transient_Shell_Widget_Class,
+                       Xt_Motif_Vendor_Shell_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Transient_Shell_Widget_Class, True);
+
+      --  TopLevelShell
+
+      Xt_Motif_Top_Level_Shell_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Top_Level_Shell_Widget_Class,
+                Enter ("TopLevelShell"));
+      Set_Super_Class (Xt_Motif_Top_Level_Shell_Widget_Class,
+                       Xt_Motif_Vendor_Shell_Widget_Class);
+
+      --  ApplicationShell
+
+      Xt_Motif_Application_Shell_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Application_Shell_Widget_Class,
+                Enter ("ApplicationShell"));
+      Set_Super_Class (Xt_Motif_Application_Shell_Widget_Class,
+                       Xt_Motif_Top_Level_Shell_Widget_Class);
+
+      --  SessionShell
+
+      Xt_Motif_Session_Shell_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Session_Shell_Widget_Class,
+                Enter ("SessionShell"));
+      Set_Super_Class (Xt_Motif_Session_Shell_Widget_Class,
+                       Xt_Motif_Application_Shell_Widget_Class);
+
+      ------------------------------------------------------------------------
+      --  Motif Primitives Widget Classes
+      ------------------------------------------------------------------------
+
+      --  XmPrimitive
+
+      Xt_Motif_Primitive_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Primitive_Widget_Class, Enter ("XmPrimitive"));
+      Set_Super_Class (Xt_Motif_Primitive_Widget_Class,
+                       Xt_Motif_Core_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Primitive_Widget_Class, True);
+
+      --  XmArrowButton
+
+      Xt_Motif_Arrow_Button_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Arrow_Button_Widget_Class, Enter ("XmArrowButton"));
+      Set_Super_Class (Xt_Motif_Arrow_Button_Widget_Class,
+                       Xt_Motif_Primitive_Widget_Class);
+
+      --  XmLabel
+
+      Xt_Motif_Label_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Label_Widget_Class, Enter ("XmLabel"));
+      Set_Super_Class (Xt_Motif_Label_Widget_Class,
+                       Xt_Motif_Primitive_Widget_Class);
+
+      --  XmCascadeButton
+
+      Xt_Motif_Cascade_Button_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Cascade_Button_Widget_Class,
+                Enter ("XmCascadeButton"));
+      Set_Super_Class (Xt_Motif_Cascade_Button_Widget_Class,
+                       Xt_Motif_Label_Widget_Class);
+
+      --  XmDrawnButton
+
+      Xt_Motif_Drawn_Button_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Drawn_Button_Widget_Class,
+                Enter ("XmDrawnButton"));
+      Set_Super_Class (Xt_Motif_Drawn_Button_Widget_Class,
+                       Xt_Motif_Label_Widget_Class);
+
+      --  XmPushButton
+
+      Xt_Motif_Push_Button_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Push_Button_Widget_Class, Enter ("XmPushButton"));
+      Set_Super_Class (Xt_Motif_Push_Button_Widget_Class,
+                       Xt_Motif_Label_Widget_Class);
+
+      --  XmToggleButton
+
+      Xt_Motif_Toggle_Button_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Toggle_Button_Widget_Class, Enter ("XmToggleButton"));
+      Set_Super_Class (Xt_Motif_Toggle_Button_Widget_Class,
+                       Xt_Motif_Label_Widget_Class);
+
+      --  XmList
+
+      Xt_Motif_List_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_List_Widget_Class, Enter ("XmList"));
+      Set_Super_Class (Xt_Motif_List_Widget_Class,
+                       Xt_Motif_Primitive_Widget_Class);
+
+      --  XmScrollBar
+
+      Xt_Motif_Scroll_Bar_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Scroll_Bar_Widget_Class, Enter ("XmScrollBar"));
+      Set_Super_Class (Xt_Motif_Scroll_Bar_Widget_Class,
+                       Xt_Motif_Primitive_Widget_Class);
+
+      --  XmSeparator
+
+      Xt_Motif_Separator_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Separator_Widget_Class, Enter ("XmSeparator"));
+      Set_Super_Class (Xt_Motif_Separator_Widget_Class,
+                       Xt_Motif_Primitive_Widget_Class);
+
+      --  XmText
+
+      Xt_Motif_Text_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Text_Widget_Class, Enter ("XmText"));
+      Set_Super_Class (Xt_Motif_Text_Widget_Class,
+                       Xt_Motif_Primitive_Widget_Class);
+
+      --  XmTextField
+
+      Xt_Motif_Text_Field_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Text_Field_Widget_Class, Enter ("XmTextField"));
+      Set_Super_Class (Xt_Motif_Text_Field_Widget_Class,
+                       Xt_Motif_Primitive_Widget_Class);
+
+      ------------------------------------------------------------------------
+      --  Motif Gadgets Widget Classes
+      ------------------------------------------------------------------------
+
+      --  XmGadget
+
+      Xt_Motif_Gadget_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Gadget_Widget_Class, Enter ("XmGadget"));
+      Set_Super_Class (Xt_Motif_Gadget_Widget_Class,
+                       Xt_Motif_Rect_Obj_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Gadget_Widget_Class, True);
+
+      --  XmArrowButtonGadget
+
+      Xt_Motif_Arrow_Button_Gadget_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
+                Enter ("XmArrowButtonGadget"));
+      Set_Super_Class (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
+                       Xt_Motif_Gadget_Widget_Class);
+
+      --  XmIconGadget
+
+      Xt_Motif_Icon_Gadget_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Icon_Gadget_Widget_Class,
+                Enter ("XmIconGadget"));
+      Set_Super_Class (Xt_Motif_Icon_Gadget_Widget_Class,
+                       Xt_Motif_Gadget_Widget_Class);
+
+      --  XmLabelGadget
+
+      Xt_Motif_Label_Gadget_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Label_Gadget_Widget_Class,
+                Enter ("XmLabelGadget"));
+      Set_Super_Class (Xt_Motif_Label_Gadget_Widget_Class,
+                       Xt_Motif_Gadget_Widget_Class);
+
+      --  XmCascadeButtonGadget
+
+      Xt_Motif_Cascade_Button_Gadget_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Cascade_Button_Gadget_Widget_Class,
+                Enter ("XmCascadeButtonGadget"));
+      Set_Super_Class (Xt_Motif_Cascade_Button_Gadget_Widget_Class,
+                       Xt_Motif_Label_Gadget_Widget_Class);
+
+      --  XmPushButtonGadget
+
+      Xt_Motif_Push_Button_Gadget_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Push_Button_Gadget_Widget_Class,
+                Enter ("XmPushButtonGadget"));
+      Set_Super_Class (Xt_Motif_Push_Button_Gadget_Widget_Class,
+                       Xt_Motif_Label_Gadget_Widget_Class);
+
+      --  XmToggleButtonGadget
+
+      Xt_Motif_Toggle_Button_Gadget_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Toggle_Button_Gadget_Widget_Class,
+                Enter ("XmToggleButtonGadget"));
+      Set_Super_Class (Xt_Motif_Toggle_Button_Gadget_Widget_Class,
+                       Xt_Motif_Label_Gadget_Widget_Class);
+
+      --  XmSeparatorGadget
+
+      Xt_Motif_Separator_Gadget_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Separator_Gadget_Widget_Class,
+                Enter ("XmSeparatorGadget"));
+      Set_Super_Class (Xt_Motif_Separator_Gadget_Widget_Class,
+                       Xt_Motif_Gadget_Widget_Class);
+
+      ------------------------------------------------------------------------
+      --  Motif Shells Widget Classes
+      ------------------------------------------------------------------------
+
+      --  XmDialogShell
+
+      Xt_Motif_Dialog_Shell_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Dialog_Shell_Widget_Class, Enter ("XmDialogShell"));
+      Set_Super_Class (Xt_Motif_Dialog_Shell_Widget_Class,
+                       Xt_Motif_Transient_Shell_Widget_Class);
+
+      ------------------------------------------------------------------------
+      --  Motif Managers Widget Classes
+      ------------------------------------------------------------------------
+
+      --  XmManager
+
+      Xt_Motif_Manager_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Manager_Widget_Class, Enter ("XmManager"));
+      Set_Super_Class (Xt_Motif_Manager_Widget_Class,
+                       Xt_Motif_Constraint_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Manager_Widget_Class, True);
+
+      --  XmBulletinBoard
+
+      Xt_Motif_Bulletin_Board_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Bulletin_Board_Widget_Class,
+                Enter ("XmBulletinBoard"));
+      Set_Super_Class (Xt_Motif_Bulletin_Board_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmForm
+
+      Xt_Motif_Form_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Form_Widget_Class, Enter ("XmForm"));
+      Set_Super_Class (Xt_Motif_Form_Widget_Class,
+                       Xt_Motif_Bulletin_Board_Widget_Class);
+
+      --  XmMessageBox
+
+      Xt_Motif_Message_Box_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Message_Box_Widget_Class, Enter ("XmMessageBox"));
+      Set_Super_Class (Xt_Motif_Message_Box_Widget_Class,
+                       Xt_Motif_Bulletin_Board_Widget_Class);
+
+      --  XmSelectionBox
+
+      Xt_Motif_Selection_Box_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Selection_Box_Widget_Class, Enter ("XmSelectionBox"));
+      Set_Super_Class (Xt_Motif_Selection_Box_Widget_Class,
+                       Xt_Motif_Bulletin_Board_Widget_Class);
+
+      --  XmCommand
+
+      Xt_Motif_Command_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Command_Widget_Class, Enter ("XmCommand"));
+      Set_Super_Class (Xt_Motif_Command_Widget_Class,
+                       Xt_Motif_Selection_Box_Widget_Class);
+
+      --  XmFileSelectionBox
+
+      Xt_Motif_File_Selection_Box_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_File_Selection_Box_Widget_Class,
+                Enter ("XmFileSelectionBox"));
+      Set_Super_Class (Xt_Motif_File_Selection_Box_Widget_Class,
+                       Xt_Motif_Selection_Box_Widget_Class);
+
+      --  XmComboBox
+
+      Xt_Motif_Combo_Box_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Combo_Box_Widget_Class, Enter ("XmComboBox"));
+      Set_Super_Class (Xt_Motif_Combo_Box_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmContainer
+
+      Xt_Motif_Container_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Container_Widget_Class, Enter ("XmContainer"));
+      Set_Super_Class (Xt_Motif_Container_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmDrawingArea
+
+      Xt_Motif_Drawing_Area_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Drawing_Area_Widget_Class, Enter ("XmDrawingArea"));
+      Set_Super_Class (Xt_Motif_Drawing_Area_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmFrame
+
+      Xt_Motif_Frame_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Frame_Widget_Class, Enter ("XmFrame"));
+      Set_Super_Class (Xt_Motif_Frame_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmNotebook
+
+      Xt_Motif_Notebook_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Notebook_Widget_Class, Enter ("XmNotebook"));
+      Set_Super_Class (Xt_Motif_Notebook_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmPanedWindow
+
+      Xt_Motif_Paned_Window_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Paned_Window_Widget_Class, Enter ("XmPanedWindow"));
+      Set_Super_Class (Xt_Motif_Paned_Window_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmRowColumn
+
+      Xt_Motif_Row_Column_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Row_Column_Widget_Class, Enter ("XmRowColumn"));
+      Set_Super_Class (Xt_Motif_Row_Column_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmScale
+
+      Xt_Motif_Scale_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Scale_Widget_Class, Enter ("XmScale"));
+      Set_Super_Class (Xt_Motif_Scale_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmScrolledWindow
+
+      Xt_Motif_Scrolled_Window_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Scrolled_Window_Widget_Class,
+                Enter ("XmScrolledWindow"));
+      Set_Super_Class (Xt_Motif_Scrolled_Window_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmMainWindow
+
+      Xt_Motif_Main_Window_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Main_Window_Widget_Class,
+                Enter ("XmMainWindow"));
+      Set_Super_Class (Xt_Motif_Main_Window_Widget_Class,
+                       Xt_Motif_Scrolled_Window_Widget_Class);
+
+      --  XmSimpleSpinBox
+
+      Xt_Motif_Simple_Spin_Box_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Simple_Spin_Box_Widget_Class,
+                Enter ("XmSimpleSpinBox"));
+      Set_Super_Class (Xt_Motif_Simple_Spin_Box_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      --  XmSpinBox
+
+      Xt_Motif_Spin_Box_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Spin_Box_Widget_Class, Enter ("XmSpinBox"));
+      Set_Super_Class (Xt_Motif_Spin_Box_Widget_Class,
+                       Xt_Motif_Manager_Widget_Class);
+
+      ------------------------------------------------------------------------
+      --  Motif Specialized Widget Classes
+      ------------------------------------------------------------------------
+
+      --  Формирование обобщенного списка классов виджетов.
+
+      --  Классы заносятся в список в алфавитном порядке для устранения
+      --  необходимости их сортировке в дизайнере.
+
+      Append (Classes, Xt_Motif_Application_Shell_Widget_Class);
+      Append (Classes, Xt_Motif_Composite_Widget_Class);
+      Append (Classes, Xt_Motif_Constraint_Widget_Class);
+      Append (Classes, Xt_Motif_Core_Widget_Class);
+      Append (Classes, Xt_Motif_Object_Widget_Class);
+      Append (Classes, Xt_Motif_Override_Shell_Widget_Class);
+      Append (Classes, Xt_Motif_Rect_Obj_Widget_Class);
+      Append (Classes, Xt_Motif_Session_Shell_Widget_Class);
+      Append (Classes, Xt_Motif_Shell_Widget_Class);
+      Append (Classes, Xt_Motif_Top_Level_Shell_Widget_Class);
+      Append (Classes, Xt_Motif_Transient_Shell_Widget_Class);
+      Append (Classes, Xt_Motif_Vendor_Shell_Widget_Class);
+      Append (Classes, Xt_Motif_WM_Shell_Widget_Class);
+
+      Append (Classes, Xt_Motif_Arrow_Button_Widget_Class);
+      Append (Classes, Xt_Motif_Arrow_Button_Gadget_Widget_Class);
+      Append (Classes, Xt_Motif_Bulletin_Board_Widget_Class);
+--      Append (Classes, Xt_Motif_Bulletin_Board_Dialog_Widget_Class);
+      Append (Classes, Xt_Motif_Cascade_Button_Widget_Class);
+      Append (Classes, Xt_Motif_Cascade_Button_Gadget_Widget_Class);
+      Append (Classes, Xt_Motif_Combo_Box_Widget_Class);
+      Append (Classes, Xt_Motif_Command_Widget_Class);
+      Append (Classes, Xt_Motif_Container_Widget_Class);
+      Append (Classes, Xt_Motif_Dialog_Shell_Widget_Class);
+      Append (Classes, Xt_Motif_Drawing_Area_Widget_Class);
+      Append (Classes, Xt_Motif_Drawn_Button_Widget_Class);
+--      Append (Classes, Xt_Motif_Error_Dialog_Widget_Class);
+      Append (Classes, Xt_Motif_File_Selection_Box_Widget_Class);
+--      Append (Classes, Xt_Motif_File_Selection_Dialog_Widget_Class);
+      Append (Classes, Xt_Motif_Form_Widget_Class);
+--      Append (Classes, Xt_Motif_Form_Dialog_Widget_Class);
+      Append (Classes, Xt_Motif_Frame_Widget_Class);
+      Append (Classes, Xt_Motif_Icon_Gadget_Widget_Class);
+--      Append (Classes, Xt_Motif_Information_Dialog_Widget_Class);
+      Append (Classes, Xt_Motif_Gadget_Widget_Class);
+      Append (Classes, Xt_Motif_Label_Widget_Class);
+      Append (Classes, Xt_Motif_Label_Gadget_Widget_Class);
+      Append (Classes, Xt_Motif_List_Widget_Class);
+      Append (Classes, Xt_Motif_Main_Window_Widget_Class);
+      Append (Classes, Xt_Motif_Manager_Widget_Class);
+      Append (Classes, Xt_Motif_Message_Box_Widget_Class);
+--      Append (Classes, Xt_Motif_Message_Dialog_Widget_Class);
+      Append (Classes, Xt_Motif_Notebook_Widget_Class);
+      Append (Classes, Xt_Motif_Paned_Window_Widget_Class);
+      Append (Classes, Xt_Motif_Primitive_Widget_Class);
+      Append (Classes, Xt_Motif_Push_Button_Widget_Class);
+      Append (Classes, Xt_Motif_Push_Button_Gadget_Widget_Class);
+--      Append (Classes, Xt_Motif_Question_Dialog_Widget_Class);
+      Append (Classes, Xt_Motif_Row_Column_Widget_Class);
+      Append (Classes, Xt_Motif_Scale_Widget_Class);
+      Append (Classes, Xt_Motif_Scroll_Bar_Widget_Class);
+--      Append (Classes, Xt_Motif_Scrolled_List_Widget_Class);
+--      Append (Classes, Xt_Motif_Scrolled_Text_Widget_Class);
+      Append (Classes, Xt_Motif_Scrolled_Window_Widget_Class);
+      Append (Classes, Xt_Motif_Selection_Box_Widget_Class);
+--      Append (Classes, Xt_Motif_Selection_Dialog_Widget_Class);
+      Append (Classes, Xt_Motif_Separator_Widget_Class);
+      Append (Classes, Xt_Motif_Separator_Gadget_Widget_Class);
+      Append (Classes, Xt_Motif_Simple_Spin_Box_Widget_Class);
+      Append (Classes, Xt_Motif_Spin_Box_Widget_Class);
+--      Append (Classes, Xt_Motif_Template_Dialog_Widget_Class);
+      Append (Classes, Xt_Motif_Text_Widget_Class);
+      Append (Classes, Xt_Motif_Text_Field_Widget_Class);
+      Append (Classes, Xt_Motif_Toggle_Button_Widget_Class);
+      Append (Classes, Xt_Motif_Toggle_Button_Gadget_Widget_Class);
+--      Append (Classes, Xt_Motif_Warning_Dialog_Widget_Class);
+--      Append (Classes, Xt_Motif_Working_Dialog_Widget_Class);
+--      Append (Classes, );
+   end Create_Widget_Classes;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Initialize is
+   begin
+      Types := New_List;
+      Classes := New_List;
+
+      Create_Enumerated_Resource_Types;
+      Create_Widget_Classes;
 
       Xt_Motif_Widget_Set := Create_Widget_Set;
       Set_Resource_Types (Xt_Motif_Widget_Set, Types);
+      Set_Widget_Classes (Xt_Motif_Widget_Set, Classes);
    end Initialize;
 
 end Model.Initialization;

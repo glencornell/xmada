@@ -138,6 +138,33 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Widget_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Widget_Class return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                                 => Node_Widget_Class,
+         Parent                               => Null_Node,
+         List                                 => Null_List,
+         Previous                             => Null_Node,
+         Next                                 => Null_Node,
+         WC_Name                              => Null_Name,
+         Is_Meta_Class                        => False,
+         Super_Class                          => Null_Node,
+         Automatically_Created_Parent         => Null_Node,
+         Automatically_Created_Children       => Null_List,
+         Corresponding_Widget_Or_Gadget_Class => Null_Node,
+         Resources                            => Null_List,
+         Constraint_Resources                 => Null_List,
+         Callbacks                            => Null_List,
+         Controls                             => Null_List));
+
+      return Node_Table.Last;
+   end Create_Widget_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Widget_Set
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
