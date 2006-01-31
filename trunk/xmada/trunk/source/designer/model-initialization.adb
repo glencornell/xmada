@@ -54,6 +54,46 @@ package body Model.Initialization is
 
    procedure Create_Widget_Classes;
 
+   --  Типы ресурсов
+
+   Xt_Motif_Alignment_Resource_Type                  : Node_Id;
+   Xt_Motif_Arrow_Direction_Resource_Type            : Node_Id;
+--   Xt_Motif_Arrow_Layout_Resource_Type               : Node_Id;
+--   Xt_Motif_Arrow_Orientation_Resource_Type          : Node_Id;
+--   Xt_Motif_Arrow_Sensitivity_Resource_Type          : Node_Id;
+--   Xt_Motif_Attachment_Resource_Type                 : Node_Id;
+--   Xt_Motif_Audible_Warning_Resource_Type            : Node_Id;
+--   Xt_Motif_Auto_Drag_Model_Resource_Type            : Node_Id;
+--   Xt_Motif_Automatic_Selection_Resource_Type        : Node_Id;
+--   Xt_Motif_Binding_Type_Resource_Type               : Node_Id;
+--   Xt_Motif_Child_Horizontal_Alignment_Resource_Type : Node_Id;
+--   Xt_Motif_Child_Placement_Resource_Type            : Node_Id;
+--   Xt_Motif_Frame_Child_Type_Resource_Type           : Node_Id;
+--   Xt_Motif_Child_Vertical_Alignment_Resource_Type   : Node_Id;
+--   Xt_Motif_Combo_Box_Type_Resource_Type             : Node_Id;
+--   Xt_Motif_Command_Window_Location_Resource_Type    : Node_Id;
+--   Xt_Motif_Default_Button_Type_Resource_Type        : Node_Id;
+--   Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
+--   Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
+--   Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
+--   Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
+   Xt_Motif_Toggle_Indicator_On_Resource_Type        : Node_Id;
+   Xt_Motif_Indicator_Type_Resource_Type             : Node_Id;
+--   Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
+--   Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
+   Xt_Motif_Label_Type_Resource_Type                 : Node_Id;
+--   Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
+--   Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
+--   Xt_Motif_Match_Behavior_Resource_Type             : Node_Id;
+--   Xt_Motif_Multi_Click_Resource_Type                : Node_Id;
+--   Xt_Motif_Navigation_Type_Resource_Type            : Node_Id;
+--   Xt_Motif_Notebook_Child_Type_Resource_Type        : Node_Id;
+--   Xt_Motif_Orientation_Resource_Type                : Node_Id;
+--   Xt_Motif_Outline_Button_Policy_Resource_Type      : Node_Id;
+--   Xt_Motif_Outline_State_Resource_Type              : Node_Id;
+--   Xt_Motif_Packing_Resource_Type                    : Node_Id;
+--   Xt_Motif_Position_Mode_Resource_Type              : Node_Id;
+
    Types   : List_Id;
    Classes : List_Id;
 
@@ -63,8 +103,6 @@ package body Model.Initialization is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Create_Enumerated_Resource_Types is
-      Xt_Motif_Alignment_Resource_Type                  : Node_Id;
-      Xt_Motif_Arrow_Direction_Resource_Type            : Node_Id;
       Xt_Motif_Arrow_Layout_Resource_Type               : Node_Id;
       Xt_Motif_Arrow_Orientation_Resource_Type          : Node_Id;
       Xt_Motif_Arrow_Sensitivity_Resource_Type          : Node_Id;
@@ -84,11 +122,8 @@ package body Model.Initialization is
       Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
       Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
       Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
-      Xt_Motif_Toggle_Indicator_On_Resource_Type        : Node_Id;
-      Xt_Motif_Indicator_Type_Resource_Type             : Node_Id;
       Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
       Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
-      Xt_Motif_Label_Type_Resource_Type                 : Node_Id;
       Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
       Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
       Xt_Motif_Match_Behavior_Resource_Type             : Node_Id;
@@ -1493,76 +1528,75 @@ package body Model.Initialization is
 
    --  Классы виджетов Xt.
 
-   Xt_Motif_Application_Shell_Widget_Class : Node_Id;
-   Xt_Motif_Composite_Widget_Class         : Node_Id;
-   Xt_Motif_Constraint_Widget_Class        : Node_Id;
-   Xt_Motif_Core_Widget_Class              : Node_Id;
-   Xt_Motif_Object_Widget_Class            : Node_Id;
-   Xt_Motif_Override_Shell_Widget_Class    : Node_Id;
-   Xt_Motif_Rect_Obj_Widget_Class          : Node_Id;
-   Xt_Motif_Shell_Widget_Class             : Node_Id;
-   Xt_Motif_Session_Shell_Widget_Class     : Node_Id;
-   Xt_Motif_Top_Level_Shell_Widget_Class   : Node_Id;
-   Xt_Motif_Transient_Shell_Widget_Class   : Node_Id;
-   Xt_Motif_Vendor_Shell_Widget_Class      : Node_Id;
-   Xt_Motif_WM_Shell_Widget_Class          : Node_Id;
+      Xt_Motif_Application_Shell_Widget_Class : Node_Id;
+      Xt_Motif_Composite_Widget_Class         : Node_Id;
+      Xt_Motif_Constraint_Widget_Class        : Node_Id;
+      Xt_Motif_Core_Widget_Class              : Node_Id;
+      Xt_Motif_Object_Widget_Class            : Node_Id;
+      Xt_Motif_Override_Shell_Widget_Class    : Node_Id;
+      Xt_Motif_Rect_Obj_Widget_Class          : Node_Id;
+      Xt_Motif_Shell_Widget_Class             : Node_Id;
+      Xt_Motif_Session_Shell_Widget_Class     : Node_Id;
+      Xt_Motif_Top_Level_Shell_Widget_Class   : Node_Id;
+      Xt_Motif_Transient_Shell_Widget_Class   : Node_Id;
+      Xt_Motif_Vendor_Shell_Widget_Class      : Node_Id;
+      Xt_Motif_WM_Shell_Widget_Class          : Node_Id;
 
-   --  Классы виджетов Motif.
+      --  Классы виджетов Motif.
 
-   Xt_Motif_Arrow_Button_Gadget_Widget_Class   : Node_Id;
-   Xt_Motif_Arrow_Button_Widget_Class          : Node_Id;
-   Xt_Motif_Bulletin_Board_Widget_Class        : Node_Id;
+      Xt_Motif_Arrow_Button_Gadget_Widget_Class   : Node_Id;
+      Xt_Motif_Arrow_Button_Widget_Class          : Node_Id;
+      Xt_Motif_Bulletin_Board_Widget_Class        : Node_Id;
 --   Xt_Motif_Bulletin_Board_Dialog_Widget_Class : Node_Id;
-   Xt_Motif_Cascade_Button_Gadget_Widget_Class : Node_Id;
-   Xt_Motif_Cascade_Button_Widget_Class        : Node_Id;
-   Xt_Motif_Combo_Box_Widget_Class             : Node_Id;
-   Xt_Motif_Command_Widget_Class               : Node_Id;
-   Xt_Motif_Container_Widget_Class             : Node_Id;
-   Xt_Motif_Dialog_Shell_Widget_Class          : Node_Id;
-   Xt_Motif_Drawing_Area_Widget_Class          : Node_Id;
-   Xt_Motif_Drawn_Button_Widget_Class          : Node_Id;
+      Xt_Motif_Cascade_Button_Gadget_Widget_Class : Node_Id;
+      Xt_Motif_Cascade_Button_Widget_Class        : Node_Id;
+      Xt_Motif_Combo_Box_Widget_Class             : Node_Id;
+      Xt_Motif_Command_Widget_Class               : Node_Id;
+      Xt_Motif_Container_Widget_Class             : Node_Id;
+      Xt_Motif_Dialog_Shell_Widget_Class          : Node_Id;
+      Xt_Motif_Drawing_Area_Widget_Class          : Node_Id;
+      Xt_Motif_Drawn_Button_Widget_Class          : Node_Id;
 --   Xt_Motif_Error_Dialog_Widget_Class          : Node_Id;
-   Xt_Motif_File_Selection_Box_Widget_Class    : Node_Id;
+      Xt_Motif_File_Selection_Box_Widget_Class    : Node_Id;
 --   Xt_Motif_File_Selection_Dialog_Widget_Class : Node_Id;
-   Xt_Motif_Form_Widget_Class                  : Node_Id;
+      Xt_Motif_Form_Widget_Class                  : Node_Id;
 --   Xt_Motif_Form_Dialog_Widget_Class           : Node_Id;
-   Xt_Motif_Frame_Widget_Class                 : Node_Id;
-   Xt_Motif_Gadget_Widget_Class                : Node_Id;
-   Xt_Motif_Icon_Gadget_Widget_Class           : Node_Id;
+      Xt_Motif_Frame_Widget_Class                 : Node_Id;
+      Xt_Motif_Gadget_Widget_Class                : Node_Id;
+      Xt_Motif_Icon_Gadget_Widget_Class           : Node_Id;
 --   Xt_Motif_Information_Dialog_Widget_Class    : Node_Id;
-   Xt_Motif_Label_Gadget_Widget_Class          : Node_Id;
-   Xt_Motif_Label_Widget_Class                 : Node_Id;
-   Xt_Motif_List_Widget_Class                  : Node_Id;
-   Xt_Motif_Main_Window_Widget_Class           : Node_Id;
-   Xt_Motif_Manager_Widget_Class               : Node_Id;
-   Xt_Motif_Message_Box_Widget_Class           : Node_Id;
+      Xt_Motif_Label_Gadget_Widget_Class          : Node_Id;
+      Xt_Motif_Label_Widget_Class                 : Node_Id;
+      Xt_Motif_List_Widget_Class                  : Node_Id;
+      Xt_Motif_Main_Window_Widget_Class           : Node_Id;
+      Xt_Motif_Manager_Widget_Class               : Node_Id;
+      Xt_Motif_Message_Box_Widget_Class           : Node_Id;
 --   Xt_Motif_Message_Dialog_Widget_Class        : Node_Id;
-   Xt_Motif_Notebook_Widget_Class              : Node_Id;
-   Xt_Motif_Paned_Window_Widget_Class          : Node_Id;
-   Xt_Motif_Primitive_Widget_Class             : Node_Id;
-   Xt_Motif_Push_Button_Gadget_Widget_Class    : Node_Id;
-   Xt_Motif_Push_Button_Widget_Class           : Node_Id;
+      Xt_Motif_Notebook_Widget_Class              : Node_Id;
+      Xt_Motif_Paned_Window_Widget_Class          : Node_Id;
+      Xt_Motif_Primitive_Widget_Class             : Node_Id;
+      Xt_Motif_Push_Button_Gadget_Widget_Class    : Node_Id;
+      Xt_Motif_Push_Button_Widget_Class           : Node_Id;
 --   Xt_Motif_Question_Dialog_Widget_Class       : Node_Id;
-   Xt_Motif_Row_Column_Widget_Class            : Node_Id;
-   Xt_Motif_Scale_Widget_Class                 : Node_Id;
-   Xt_Motif_Scroll_Bar_Widget_Class            : Node_Id;
+      Xt_Motif_Row_Column_Widget_Class            : Node_Id;
+      Xt_Motif_Scale_Widget_Class                 : Node_Id;
+      Xt_Motif_Scroll_Bar_Widget_Class            : Node_Id;
 --   Xt_Motif_Scrolled_List_Widget_Class         : Node_Id;
 --   Xt_Motif_Scrolled_Text_Widget_Class         : Node_Id;
-   Xt_Motif_Scrolled_Window_Widget_Class       : Node_Id;
-   Xt_Motif_Selection_Box_Widget_Class         : Node_Id;
+      Xt_Motif_Scrolled_Window_Widget_Class       : Node_Id;
+      Xt_Motif_Selection_Box_Widget_Class         : Node_Id;
 --   Xt_Motif_Selection_Dialog_Widget_Class      : Node_Id;
-   Xt_Motif_Separator_Gadget_Widget_Class      : Node_Id;
-   Xt_Motif_Separator_Widget_Class             : Node_Id;
-   Xt_Motif_Simple_Spin_Box_Widget_Class       : Node_Id;
-   Xt_Motif_Spin_Box_Widget_Class              : Node_Id;
+      Xt_Motif_Separator_Gadget_Widget_Class      : Node_Id;
+      Xt_Motif_Separator_Widget_Class             : Node_Id;
+      Xt_Motif_Simple_Spin_Box_Widget_Class       : Node_Id;
+      Xt_Motif_Spin_Box_Widget_Class              : Node_Id;
 --   Xt_Motif_Template_Dialog_Widget_Class       : Node_Id;
-   Xt_Motif_Text_Field_Widget_Class            : Node_Id;
-   Xt_Motif_Text_Widget_Class                  : Node_Id;
-   Xt_Motif_Toggle_Button_Gadget_Widget_Class  : Node_Id;
-   Xt_Motif_Toggle_Button_Widget_Class         : Node_Id;
+      Xt_Motif_Text_Field_Widget_Class            : Node_Id;
+      Xt_Motif_Text_Widget_Class                  : Node_Id;
+      Xt_Motif_Toggle_Button_Gadget_Widget_Class  : Node_Id;
+      Xt_Motif_Toggle_Button_Widget_Class         : Node_Id;
 --   Xt_Motif_Warning_Dialog_Widget_Class        : Node_Id;
 --   Xt_Motif_Working_Dialog_Widget_Class        : Node_Id;
-
 
    begin
 
@@ -1572,12 +1606,33 @@ package body Model.Initialization is
 
       --  Object
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Object_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Object_Widget_Class, Enter ("Object"));
       Set_Is_Meta_Class (Xt_Motif_Object_Widget_Class, True);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  RectObj
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Rect_Obj_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Rect_Obj_Widget_Class, Enter ("RectObj"));
       Set_Super_Class (Xt_Motif_Rect_Obj_Widget_Class,
@@ -1586,6 +1641,11 @@ package body Model.Initialization is
 
       --  Core
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Core_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Core_Widget_Class, Enter ("Core"));
       Set_Super_Class (Xt_Motif_Core_Widget_Class,
@@ -1594,6 +1654,11 @@ package body Model.Initialization is
 
       --  Composite
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Composite_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Composite_Widget_Class, Enter ("Composite"));
       Set_Super_Class (Xt_Motif_Composite_Widget_Class,
@@ -1602,45 +1667,130 @@ package body Model.Initialization is
 
       --  Constraint
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Constraint_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Constraint_Widget_Class, Enter ("Constraint"));
       Set_Super_Class (Xt_Motif_Constraint_Widget_Class,
                        Xt_Motif_Composite_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Constraint_Widget_Class, True);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  Shell
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Shell_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Shell_Widget_Class, Enter ("Shell"));
       Set_Super_Class (Xt_Motif_Shell_Widget_Class,
                        Xt_Motif_Composite_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Shell_Widget_Class, True);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  OverrideShell
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Override_Shell_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Override_Shell_Widget_Class, Enter ("OverrideShell"));
       Set_Super_Class (Xt_Motif_Override_Shell_Widget_Class,
                        Xt_Motif_Shell_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  WMShell
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_WM_Shell_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_WM_Shell_Widget_Class, Enter ("WMShell"));
       Set_Super_Class (Xt_Motif_WM_Shell_Widget_Class,
                        Xt_Motif_Shell_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_WM_Shell_Widget_Class, True);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  VendorShell
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Vendor_Shell_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Vendor_Shell_Widget_Class, Enter ("VendorShell"));
       Set_Super_Class (Xt_Motif_Vendor_Shell_Widget_Class,
                        Xt_Motif_WM_Shell_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Vendor_Shell_Widget_Class, True);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  TransientShell
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Transient_Shell_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Transient_Shell_Widget_Class,
                 Enter ("TransientShell"));
@@ -1648,29 +1798,88 @@ package body Model.Initialization is
                        Xt_Motif_Vendor_Shell_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Transient_Shell_Widget_Class, True);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  TopLevelShell
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Top_Level_Shell_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Top_Level_Shell_Widget_Class,
                 Enter ("TopLevelShell"));
       Set_Super_Class (Xt_Motif_Top_Level_Shell_Widget_Class,
                        Xt_Motif_Vendor_Shell_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  ApplicationShell
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Application_Shell_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Application_Shell_Widget_Class,
                 Enter ("ApplicationShell"));
       Set_Super_Class (Xt_Motif_Application_Shell_Widget_Class,
                        Xt_Motif_Top_Level_Shell_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  SessionShell
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Session_Shell_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Session_Shell_Widget_Class,
                 Enter ("SessionShell"));
       Set_Super_Class (Xt_Motif_Session_Shell_Widget_Class,
                        Xt_Motif_Application_Shell_Widget_Class);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
 
       ------------------------------------------------------------------------
       --  Motif Primitives Widget Classes
@@ -1678,90 +1887,301 @@ package body Model.Initialization is
 
       --  XmPrimitive
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Primitive_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Primitive_Widget_Class, Enter ("XmPrimitive"));
       Set_Super_Class (Xt_Motif_Primitive_Widget_Class,
                        Xt_Motif_Core_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Primitive_Widget_Class, True);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmArrowButton
 
-      Xt_Motif_Arrow_Button_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Arrow_Button_Widget_Class, Enter ("XmArrowButton"));
-      Set_Super_Class (Xt_Motif_Arrow_Button_Widget_Class,
-                       Xt_Motif_Primitive_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Arrow_Button_Widget_Class := Create_Widget_Class;
+         Set_Name
+          (Xt_Motif_Arrow_Button_Widget_Class, Enter ("XmArrowButton"));
+         Set_Super_Class (Xt_Motif_Arrow_Button_Widget_Class,
+                          Xt_Motif_Primitive_Widget_Class);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNarrowDirection"));
+         Set_Internal_Resource_Name (Resource, Enter ("arrowDirection"));
+         Set_Resource_Class_Name (Resource, Enter ("XmNArrowDirection"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("ArrowDirection"));
+         Set_Resource_Type (Resource, Xt_Motif_Arrow_Direction_Resource_Type);
+         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Arrow_Button_Widget_Class, Resources);
+      end;
 
       --  XmLabel
 
-      Xt_Motif_Label_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Label_Widget_Class, Enter ("XmLabel"));
-      Set_Super_Class (Xt_Motif_Label_Widget_Class,
-                       Xt_Motif_Primitive_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Label_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Label_Widget_Class, Enter ("XmLabel"));
+         Set_Super_Class (Xt_Motif_Label_Widget_Class,
+                          Xt_Motif_Primitive_Widget_Class);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNalignment"));
+         Set_Internal_Resource_Name (Resource, Enter ("alignment"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAlignment"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Alignment"));
+         Set_Resource_Type (Resource, Xt_Motif_Alignment_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlabelType"));
+         Set_Internal_Resource_Name (Resource, Enter ("labelType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCLabelType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("LabelType"));
+         Set_Resource_Type (Resource, Xt_Motif_Label_Type_Resource_Type);
+         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Label_Widget_Class, Resources);
+      end;
 
       --  XmCascadeButton
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Cascade_Button_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Cascade_Button_Widget_Class,
                 Enter ("XmCascadeButton"));
       Set_Super_Class (Xt_Motif_Cascade_Button_Widget_Class,
                        Xt_Motif_Label_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmDrawnButton
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Drawn_Button_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Drawn_Button_Widget_Class,
                 Enter ("XmDrawnButton"));
       Set_Super_Class (Xt_Motif_Drawn_Button_Widget_Class,
                        Xt_Motif_Label_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmPushButton
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Push_Button_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Push_Button_Widget_Class, Enter ("XmPushButton"));
       Set_Super_Class (Xt_Motif_Push_Button_Widget_Class,
                        Xt_Motif_Label_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmToggleButton
 
-      Xt_Motif_Toggle_Button_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Toggle_Button_Widget_Class, Enter ("XmToggleButton"));
-      Set_Super_Class (Xt_Motif_Toggle_Button_Widget_Class,
-                       Xt_Motif_Label_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Toggle_Button_Widget_Class := Create_Widget_Class;
+         Set_Name
+          (Xt_Motif_Toggle_Button_Widget_Class, Enter ("XmToggleButton"));
+         Set_Super_Class (Xt_Motif_Toggle_Button_Widget_Class,
+                          Xt_Motif_Label_Widget_Class);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNindicatorOn"));
+         Set_Internal_Resource_Name (Resource, Enter ("indicatorOn"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCIndicatorOn"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("IndicatorOn"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Toggle_Indicator_On_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNindicatorType"));
+         Set_Internal_Resource_Name (Resource, Enter ("indicatorType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCIndicatorType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("IndicatorType"));
+         Set_Resource_Type (Resource, Xt_Motif_Indicator_Type_Resource_Type);
+         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Toggle_Button_Widget_Class, Resources);
+      end;
 
       --  XmList
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_List_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_List_Widget_Class, Enter ("XmList"));
       Set_Super_Class (Xt_Motif_List_Widget_Class,
                        Xt_Motif_Primitive_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmScrollBar
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Scroll_Bar_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Scroll_Bar_Widget_Class, Enter ("XmScrollBar"));
       Set_Super_Class (Xt_Motif_Scroll_Bar_Widget_Class,
                        Xt_Motif_Primitive_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmSeparator
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Separator_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Separator_Widget_Class, Enter ("XmSeparator"));
       Set_Super_Class (Xt_Motif_Separator_Widget_Class,
                        Xt_Motif_Primitive_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmText
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Text_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Text_Widget_Class, Enter ("XmText"));
       Set_Super_Class (Xt_Motif_Text_Widget_Class,
                        Xt_Motif_Primitive_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmTextField
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Text_Field_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Text_Field_Widget_Class, Enter ("XmTextField"));
       Set_Super_Class (Xt_Motif_Text_Field_Widget_Class,
                        Xt_Motif_Primitive_Widget_Class);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
 
       ------------------------------------------------------------------------
       --  Motif Gadgets Widget Classes
@@ -1769,67 +2189,212 @@ package body Model.Initialization is
 
       --  XmGadget
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Gadget_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Gadget_Widget_Class, Enter ("XmGadget"));
       Set_Super_Class (Xt_Motif_Gadget_Widget_Class,
                        Xt_Motif_Rect_Obj_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Gadget_Widget_Class, True);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmArrowButtonGadget
 
-      Xt_Motif_Arrow_Button_Gadget_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
-                Enter ("XmArrowButtonGadget"));
-      Set_Super_Class (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
-                       Xt_Motif_Gadget_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Arrow_Button_Gadget_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
+                   Enter ("XmArrowButtonGadget"));
+         Set_Super_Class (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
+                          Xt_Motif_Gadget_Widget_Class);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNarrowDirection"));
+         Set_Internal_Resource_Name (Resource, Enter ("arrowDirection"));
+         Set_Resource_Class_Name (Resource, Enter ("XmNArrowDirection"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("ArrowDirection"));
+         Set_Resource_Type (Resource, Xt_Motif_Arrow_Direction_Resource_Type);
+         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Arrow_Button_Gadget_Widget_Class, Resources);
+      end;
 
       --  XmIconGadget
 
-      Xt_Motif_Icon_Gadget_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Icon_Gadget_Widget_Class,
-                Enter ("XmIconGadget"));
-      Set_Super_Class (Xt_Motif_Icon_Gadget_Widget_Class,
-                       Xt_Motif_Gadget_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Icon_Gadget_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Icon_Gadget_Widget_Class,
+                   Enter ("XmIconGadget"));
+         Set_Super_Class (Xt_Motif_Icon_Gadget_Widget_Class,
+                          Xt_Motif_Gadget_Widget_Class);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNalignment"));
+         Set_Internal_Resource_Name (Resource, Enter ("alignment"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAlignment"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Alignment"));
+         Set_Resource_Type (Resource, Xt_Motif_Alignment_Resource_Type);
+         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Icon_Gadget_Widget_Class, Resources);
+      end;
 
       --  XmLabelGadget
 
-      Xt_Motif_Label_Gadget_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Label_Gadget_Widget_Class,
-                Enter ("XmLabelGadget"));
-      Set_Super_Class (Xt_Motif_Label_Gadget_Widget_Class,
-                       Xt_Motif_Gadget_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Label_Gadget_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Label_Gadget_Widget_Class,
+                   Enter ("XmLabelGadget"));
+         Set_Super_Class (Xt_Motif_Label_Gadget_Widget_Class,
+                          Xt_Motif_Gadget_Widget_Class);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNalignment"));
+         Set_Internal_Resource_Name (Resource, Enter ("alignment"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAlignment"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Alignment"));
+         Set_Resource_Type (Resource, Xt_Motif_Alignment_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlabelType"));
+         Set_Internal_Resource_Name (Resource, Enter ("labelType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCLabelType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("LabelType"));
+         Set_Resource_Type (Resource, Xt_Motif_Label_Type_Resource_Type);
+         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Label_Gadget_Widget_Class, Resources);
+      end;
 
       --  XmCascadeButtonGadget
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Cascade_Button_Gadget_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Cascade_Button_Gadget_Widget_Class,
                 Enter ("XmCascadeButtonGadget"));
       Set_Super_Class (Xt_Motif_Cascade_Button_Gadget_Widget_Class,
                        Xt_Motif_Label_Gadget_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmPushButtonGadget
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Push_Button_Gadget_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Push_Button_Gadget_Widget_Class,
                 Enter ("XmPushButtonGadget"));
       Set_Super_Class (Xt_Motif_Push_Button_Gadget_Widget_Class,
                        Xt_Motif_Label_Gadget_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmToggleButtonGadget
 
-      Xt_Motif_Toggle_Button_Gadget_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Toggle_Button_Gadget_Widget_Class,
-                Enter ("XmToggleButtonGadget"));
-      Set_Super_Class (Xt_Motif_Toggle_Button_Gadget_Widget_Class,
-                       Xt_Motif_Label_Gadget_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Toggle_Button_Gadget_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Toggle_Button_Gadget_Widget_Class,
+                   Enter ("XmToggleButtonGadget"));
+         Set_Super_Class (Xt_Motif_Toggle_Button_Gadget_Widget_Class,
+                          Xt_Motif_Label_Gadget_Widget_Class);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNindicatorOn"));
+         Set_Internal_Resource_Name (Resource, Enter ("indicatorOn"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCIndicatorOn"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("IndicatorOn"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Toggle_Indicator_On_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNindicatorType"));
+         Set_Internal_Resource_Name (Resource, Enter ("indicatorType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCIndicatorType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("IndicatorType"));
+         Set_Resource_Type (Resource, Xt_Motif_Indicator_Type_Resource_Type);
+         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Toggle_Button_Gadget_Widget_Class, Resources);
+      end;
 
       --  XmSeparatorGadget
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Separator_Gadget_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Separator_Gadget_Widget_Class,
                 Enter ("XmSeparatorGadget"));
       Set_Super_Class (Xt_Motif_Separator_Gadget_Widget_Class,
                        Xt_Motif_Gadget_Widget_Class);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
 
       ------------------------------------------------------------------------
       --  Motif Shells Widget Classes
@@ -1837,10 +2402,26 @@ package body Model.Initialization is
 
       --  XmDialogShell
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Dialog_Shell_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Dialog_Shell_Widget_Class, Enter ("XmDialogShell"));
       Set_Super_Class (Xt_Motif_Dialog_Shell_Widget_Class,
                        Xt_Motif_Transient_Shell_Widget_Class);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
 
       ------------------------------------------------------------------------
       --  Motif Managers Widget Classes
@@ -1848,142 +2429,446 @@ package body Model.Initialization is
 
       --  XmManager
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Manager_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Manager_Widget_Class, Enter ("XmManager"));
       Set_Super_Class (Xt_Motif_Manager_Widget_Class,
                        Xt_Motif_Constraint_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Manager_Widget_Class, True);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmBulletinBoard
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Bulletin_Board_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Bulletin_Board_Widget_Class,
                 Enter ("XmBulletinBoard"));
       Set_Super_Class (Xt_Motif_Bulletin_Board_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmForm
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Form_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Form_Widget_Class, Enter ("XmForm"));
       Set_Super_Class (Xt_Motif_Form_Widget_Class,
                        Xt_Motif_Bulletin_Board_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmMessageBox
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Message_Box_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Message_Box_Widget_Class, Enter ("XmMessageBox"));
       Set_Super_Class (Xt_Motif_Message_Box_Widget_Class,
                        Xt_Motif_Bulletin_Board_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmSelectionBox
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Selection_Box_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Selection_Box_Widget_Class, Enter ("XmSelectionBox"));
       Set_Super_Class (Xt_Motif_Selection_Box_Widget_Class,
                        Xt_Motif_Bulletin_Board_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmCommand
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Command_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Command_Widget_Class, Enter ("XmCommand"));
       Set_Super_Class (Xt_Motif_Command_Widget_Class,
                        Xt_Motif_Selection_Box_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmFileSelectionBox
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_File_Selection_Box_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_File_Selection_Box_Widget_Class,
                 Enter ("XmFileSelectionBox"));
       Set_Super_Class (Xt_Motif_File_Selection_Box_Widget_Class,
                        Xt_Motif_Selection_Box_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmComboBox
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Combo_Box_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Combo_Box_Widget_Class, Enter ("XmComboBox"));
       Set_Super_Class (Xt_Motif_Combo_Box_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmContainer
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Container_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Container_Widget_Class, Enter ("XmContainer"));
       Set_Super_Class (Xt_Motif_Container_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmDrawingArea
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Drawing_Area_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Drawing_Area_Widget_Class, Enter ("XmDrawingArea"));
       Set_Super_Class (Xt_Motif_Drawing_Area_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmFrame
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Frame_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Frame_Widget_Class, Enter ("XmFrame"));
       Set_Super_Class (Xt_Motif_Frame_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmNotebook
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Notebook_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Notebook_Widget_Class, Enter ("XmNotebook"));
       Set_Super_Class (Xt_Motif_Notebook_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmPanedWindow
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Paned_Window_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Paned_Window_Widget_Class, Enter ("XmPanedWindow"));
       Set_Super_Class (Xt_Motif_Paned_Window_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmRowColumn
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Row_Column_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Row_Column_Widget_Class, Enter ("XmRowColumn"));
       Set_Super_Class (Xt_Motif_Row_Column_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmScale
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Scale_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Scale_Widget_Class, Enter ("XmScale"));
       Set_Super_Class (Xt_Motif_Scale_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmScrolledWindow
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Scrolled_Window_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Scrolled_Window_Widget_Class,
                 Enter ("XmScrolledWindow"));
       Set_Super_Class (Xt_Motif_Scrolled_Window_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmMainWindow
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Main_Window_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Main_Window_Widget_Class,
                 Enter ("XmMainWindow"));
       Set_Super_Class (Xt_Motif_Main_Window_Widget_Class,
                        Xt_Motif_Scrolled_Window_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmSimpleSpinBox
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Simple_Spin_Box_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Simple_Spin_Box_Widget_Class,
                 Enter ("XmSimpleSpinBox"));
       Set_Super_Class (Xt_Motif_Simple_Spin_Box_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
+
       --  XmSpinBox
 
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+--
+--      begin
       Xt_Motif_Spin_Box_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Spin_Box_Widget_Class, Enter ("XmSpinBox"));
       Set_Super_Class (Xt_Motif_Spin_Box_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+--
+--         Set_Resources (, Resources);
+--      end;
 
       ------------------------------------------------------------------------
       --  Motif Specialized Widget Classes

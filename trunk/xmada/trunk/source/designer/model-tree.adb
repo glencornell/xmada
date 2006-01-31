@@ -83,6 +83,29 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Constraint_Resources
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Constraint_Resources (Node : in Node_Id) return List_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class
+                       or else Node_Kind (Node) = Node_Widget_Instance);
+
+      case Node_Kind (Node) is
+         when Node_Widget_Class =>
+            return Node_Table.Table (Node).WC_Constraint_Resources;
+
+         when Node_Widget_Instance =>
+            return Node_Table.Table (Node).WI_Constraint_Resources;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Constraint_Resources;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> File_Name
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -130,6 +153,32 @@ package body Model.Tree is
             raise Program_Error;
       end case;
    end Internal_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Internal_Resource_Class_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Internal_Resource_Class_Name (Node : in Node_Id) return Name_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      return Node_Table.Table (Node).Internal_Resource_Class_Name;
+   end Internal_Resource_Class_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Internal_Resource_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Internal_Resource_Name (Node : in Node_Id) return Name_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      return Node_Table.Table (Node).Internal_Resource_Name;
+   end Internal_Resource_Name;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -203,6 +252,45 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Resource_Class_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Class_Name (Node : in Node_Id) return Name_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      return Node_Table.Table (Node).Resource_Class_Name;
+   end Resource_Class_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Resource_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Name (Node : in Node_Id) return Name_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      return Node_Table.Table (Node).Resource_Name;
+   end Resource_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Resource_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Type (Node : in Node_Id) return Node_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      return Node_Table.Table (Node).Resource_Type;
+   end Resource_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Resource_Types
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -213,6 +301,29 @@ package body Model.Tree is
 
       return Node_Table.Table (Node).Resource_Types;
    end Resource_Types;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Resources
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resources (Node : in Node_Id) return List_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class
+                       or else Node_Kind (Node) = Node_Widget_Instance);
+
+      case Node_Kind (Node) is
+         when Node_Widget_Class =>
+            return Node_Table.Table (Node).WC_Resources;
+
+         when Node_Widget_Instance =>
+            return Node_Table.Table (Node).WI_Resources;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Resources;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -256,6 +367,33 @@ package body Model.Tree is
       Node_Table.Table (Node).Component_Classes := Value;
       Set_Parent_Node (Value, Node);
    end Set_Component_Classes;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Constraint_Resources
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Constraint_Resources (Node  : in Node_Id;
+                                       Value : in List_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class
+                       or Node_Kind (Node) = Node_Widget_Instance);
+
+      case Node_Kind (Node) is
+         when Node_Widget_Class =>
+            Node_Table.Table (Node).WC_Constraint_Resources := Value;
+
+         when Node_Widget_Instance =>
+            Node_Table.Table (Node).WI_Constraint_Resources := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+
+      Set_Parent_Node (Value, Node);
+   end Set_Constraint_Resources;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -312,6 +450,36 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Internal_Resource_Class_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Internal_Resource_Class_Name (Node  : in Node_Id;
+                                         Value : in Name_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Node_Table.Table (Node).Internal_Resource_Class_Name := Value;
+   end Set_Internal_Resource_Class_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Internal_Resource_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Internal_Resource_Name (Node  : in Node_Id;
+                                         Value : in Name_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Node_Table.Table (Node).Internal_Resource_Name := Value;
+   end Set_Internal_Resource_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Is_Meta_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -361,6 +529,45 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Resource_Class_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Class_Name (Node : in Node_Id; Value : in Name_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Node_Table.Table (Node).Resource_Class_Name := Value;
+   end Set_Resource_Class_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Resource_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Name (Node : in Node_Id; Value : in Name_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Node_Table.Table (Node).Resource_Name := Value;
+   end Set_Resource_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Resource_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Type (Node : in Node_Id; Value : in Node_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Node_Table.Table (Node).Resource_Type := Value;
+   end Set_Resource_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Resource_Types
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -372,6 +579,31 @@ package body Model.Tree is
       Node_Table.Table (Node).Resource_Types := Value;
       Set_Parent_Node (Value, Node);
    end Set_Resource_Types;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Resources
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resources (Node : in Node_Id; Value : in List_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class
+                       or Node_Kind (Node) = Node_Widget_Instance);
+
+      case Node_Kind (Node) is
+         when Node_Widget_Class =>
+            Node_Table.Table (Node).WC_Resources := Value;
+
+         when Node_Widget_Instance =>
+            Node_Table.Table (Node).WI_Resources := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+
+      Set_Parent_Node (Value, Node);
+   end Set_Resources;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

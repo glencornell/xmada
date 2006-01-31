@@ -46,4 +46,8 @@ package Model.Queries is
 
    function Internal_Name_Image (Node : in Node_Id) return Wide_String;
 
+   function Resource_Name_Image (Node : in Node_Id) return Wide_String;
+
+   function Resource_Class_Name_Image (Node : in Node_Id) return Wide_String;
+
 end Model.Queries;
