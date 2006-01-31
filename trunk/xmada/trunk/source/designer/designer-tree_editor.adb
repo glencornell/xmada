@@ -59,7 +59,8 @@ package body Designer.Tree_Editor is
    use Xt;
    use Xt.Ancillary_Types;
 
-   Container : Widget;
+   Project_Container   : Widget;
+   Component_Container : Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -90,10 +91,17 @@ package body Designer.Tree_Editor is
       Button := Xt_Name_To_Widget (Notebook, "PageScroller");
       Xt_Unmanage_Child (Button);
 
-      Button := Xm_Create_Managed_Push_Button_Gadget (Notebook,
-                                                      "page_component");
-      Button := Xm_Create_Managed_Push_Button_Gadget (Notebook,
-                                                      "page_project");
+      Args (0 .. Arg_List'Length - 1) := Arg_List;
+      Xt_Set_Arg (Args (Arg_List'Length), Xm_N_Scrolling_Policy, Xm_Automatic);
+      Scrolled :=
+        Xm_Create_Managed_Scrolled_Window
+         (Notebook, "scrolled", Args (0 .. Arg_List'Length));
+
+      Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
+      Project_Container :=
+        Xm_Create_Managed_Container (Scrolled, "project_tree", Args (0 .. 0));
+
+      Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "project");
 
       Args (0 .. Arg_List'Length - 1) := Arg_List;
       Xt_Set_Arg (Args (Arg_List'Length), Xm_N_Scrolling_Policy, Xm_Automatic);
@@ -102,8 +110,11 @@ package body Designer.Tree_Editor is
          (Notebook, "scrolled", Args (0 .. Arg_List'Length));
 
       Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
-      Container :=
-        Xm_Create_Managed_Container (Scrolled, "tree", Args (0 .. 0));
+      Component_Container :=
+        Xm_Create_Managed_Container
+         (Scrolled, "component_tree", Args (0 .. 0));
+
+      Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "component");
    end Initialize;
 
    ---------------------------------------------------------------------------
