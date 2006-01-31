@@ -204,6 +204,15 @@ package Model.Tree is
    procedure Set_Application_Class_Name (Node  : in Node_Id;
                                          Value : in Name_Id);
 
+   function Widget_Classes (Node : in Node_Id) return List_Id;
+   procedure Set_Widget_Classes (Node : in Node_Id; Value : in List_Id);
+
+   function Is_Meta_Class (Node : in Node_Id) return Boolean;
+   procedure Set_Is_Meta_Class (Node : in Node_Id; Value : in Boolean);
+
+   function Super_Class (Node : in Node_Id) return Node_Id;
+   procedure Set_Super_Class (Node : in Node_Id; Value : in Node_Id);
+
 private
 
    type Node_Record (Kind : Node_Kinds := Node_Empty) is record
