@@ -67,4 +67,12 @@ package Designer.Operations is
    ---------------------------------------------------------------------------
    procedure Save_Project (File_Name : in Wide_String);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Save_Project
+   --!    <Purpose> Производит сохранение проекта в текущем файле.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Save_Project;
+
 end Designer.Operations;
