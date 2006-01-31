@@ -221,6 +221,9 @@ package body Designer.Main_Window is
    Save_Dialog    : Widget;
    Message_Text   : Widget;
    Message_Buffer : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+   --  Временный буфер для хранения текста диагностических сообщений,
+   --  выводимых до фактического создания виджета отображения диагностических
+   --  сообщений.
 
    ---------------
    -- Callbacks --
@@ -631,7 +634,8 @@ package body Designer.Main_Window is
                        Callbacks.On_Hide_Show_Button'Access,
                        To_Closure (Show_Messages));
 
-      --  Создание текстового поля отображения сообщений.
+      --  Создание текстового виджета для вывода диагностических сообщений
+      --  и загрузка в него всех накопленных диагностических сообщений.
 
       Xt_Set_Arg (Args (0), Xm_N_Editable, Xt_False);
       Xt_Set_Arg (Args (1), Xm_N_Edit_Mode, Xm_Multi_Line_Edit);
@@ -643,9 +647,8 @@ package body Designer.Main_Window is
       Message_Text :=
         Xm_Create_Managed_Scrolled_Text
          (Message_Form, "message_text", Args (0 .. 6));
-      Xm_Text_Insert_Wcs
+      Xm_Text_Set_String_Wcs
        (Message_Text,
-        Xm_Text_Get_Last_Position (Message_Text),
         Ada.Strings.Wide_Unbounded.To_Wide_String (Message_Buffer));
       Xm_Text_Set_Insertion_Position
        (Message_Text, Xm_Text_Get_Last_Position (Message_Text));
