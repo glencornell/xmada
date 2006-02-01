@@ -165,6 +165,16 @@ package body Designer.Tree_Editor is
 
    end Callbacks;
 
+   Selected_Item       : Node_Id := Null_Node;
+   --  Элемент модели, выбранный пользователем в настоящий момент и для
+   --  отображены страницы редактора дерева.
+
+   Project_Container   : Widget;
+   --  Контейнер, в котором содержится дерево проекта.
+
+   Component_Container : Widget;
+   --  Контейнер, в котором содержится дерево компонентов.
+
    package body Callbacks is
 
       ------------------------------------------------------------------------
@@ -246,16 +256,6 @@ package body Designer.Tree_Editor is
 
       return Icon;
    end Add_Child;
-
-   Selected_Item : Node_Id := Null_Node;
-   --  Элемент модели, выбранный пользователем в настоящий момент и для
-   --  отображены страницы редактора дерева.
-
-   Project_Container   : Widget;
-   --  Контейнер, в котором содержится дерево проекта.
-
-   Component_Container : Widget;
-   --  Контейнер, в котором содержится дерево компонентов.
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
