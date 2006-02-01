@@ -364,7 +364,8 @@ package body Designer.Operations is
       --!    <Purpose> Преобразует XML-структуру в узел Node_Application.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      function Xml_To_Application (Tag : in Element_Id) return Node_Id;
+      procedure Xml_To_Application (Tag         : in Element_Id;
+                                    Application : in Node_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -372,15 +373,17 @@ package body Designer.Operations is
       --!    <Purpose> Преобразует XML-структуру в узел Node_Component_Class.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      function Xml_To_Component_Class (Tag : in Element_Id) return Node_Id;
+      procedure Xml_To_Component_Class (Tag             : in Element_Id;
+                                        Component_Class : in Node_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Xml_To_Application
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function Xml_To_Application (Tag : in Element_Id) return Node_Id is
-         Application : constant Node_Id := Create_Application;
+      procedure Xml_To_Application (Tag         : in Element_Id;
+                                    Application : in Node_Id)
+      is
          Components  : constant List_Id := New_List;
 
       begin
@@ -406,6 +409,9 @@ package body Designer.Operations is
             end loop;
          end;
 
+         Designer.Main_Window.Insert_Item (Application);
+         --  Извещение компонентов дизайнера о создании нового приложения.
+
          --  Обработка дочерних тегов тега Application.
 
          declare
@@ -414,7 +420,14 @@ package body Designer.Operations is
          begin
             while Child /= Null_Element_Id loop
                if Elements.Name (Child) = Component_Class_Tag then
-                  Append (Components, Xml_To_Component_Class (Child));
+                  declare
+                     Component_Class : constant Node_Id
+                       := Create_Component_Class;
+
+                  begin
+                     Append (Components, Component_Class);
+                     Xml_To_Component_Class (Child, Component_Class);
+                  end;
 
                else
                   raise Program_Error;
@@ -423,8 +436,6 @@ package body Designer.Operations is
                Child := Elements.Next (Child);
             end loop;
          end;
-
-         return Application;
       end Xml_To_Application;
 
       ------------------------------------------------------------------------
@@ -432,9 +443,9 @@ package body Designer.Operations is
       --!    <Unit> Xml_To_Component_Class
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function Xml_To_Component_Class (Tag : in Element_Id) return Node_Id is
-         Component_Class : constant Node_Id := Create_Component_Class;
-
+      procedure Xml_To_Component_Class (Tag             : in Element_Id;
+                                        Component_Class : in Node_Id)
+      is
       begin
          --  Обработка атрибутов тега Component_Class.
 
@@ -456,15 +467,12 @@ package body Designer.Operations is
             end loop;
          end;
 
-         --  XXX Designer.Main_Window.Insert_Item (Component);
-         --  Извещение компонентов дизайнера
-         --  о создании нового компонента.
+         Designer.Main_Window.Insert_Item (Component_Class);
+         --  Извещение компонентов дизайнера о создании нового компонента.
 
-         --  XXX Designer.Main_Window.Select_Item (Component);
-         --  Извещение компонентов дизайнера
-         --  о выборе нового компонента.
+         Designer.Main_Window.Select_Item (Component_Class);
+         --  Извещение компонентов дизайнера о выборе нового компонента.
 
-         return Component_Class;
       end Xml_To_Component_Class;
 
       Project              : constant Node_Id := Create_Project;
@@ -501,6 +509,9 @@ package body Designer.Operations is
          end loop;
       end;
 
+      Designer.Main_Window.Insert_Item (Project);
+      --  Извещение компонентов дизайнера о создании нового проекта.
+
 --    Append (Imported_Widget_Sets, Xt_Motif_Widget_Set);
 
       --  Обработка вложенных тегов тега Project.
@@ -511,11 +522,13 @@ package body Designer.Operations is
       begin
          while Child /= Null_Element_Id loop
             if Elements.Name (Child) = Application_Tag then
-               Append (Applications, Xml_To_Application (Child));
+               declare
+                  Application : constant Node_Id := Create_Application;
 
-               --  XXX Designer.Main_Window.Insert_Item (Application);
-               --  Извещение компонентов дизайнера
-               --  о создании нового приложения.
+               begin
+                  Append (Applications, Application);
+                  Xml_To_Application (Child, Application);
+               end;
 
             else
                raise Program_Error;
@@ -524,9 +537,6 @@ package body Designer.Operations is
             Child := Elements.Next (Child);
          end loop;
       end;
-
-      Designer.Main_Window.Insert_Item (Project);
-      --  Извещение компонентов дизайнера о создании нового проекта.
 
       return Project;
    end Xml_To_Project;
