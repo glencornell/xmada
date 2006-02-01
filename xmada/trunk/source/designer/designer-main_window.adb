@@ -178,19 +178,6 @@ package body Designer.Main_Window is
                               Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Save_File);
 
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> On_Close
-      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
-      --! закрытия файла.
-      --!    <Exceptions>
-      ------------------------------------------------------------------------
-      procedure On_Close (The_Widget : in Widget;
-                          Closure    : in Xt_Pointer;
-                          Call_Data  : in Xt_Pointer);
-      pragma Convention (C, On_Close);
-
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Exit
@@ -230,29 +217,6 @@ package body Designer.Main_Window is
    ---------------
 
    package body Callbacks is
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> On_Close
-      --!    <ImplementationNotes>
-      ------------------------------------------------------------------------
-      procedure On_Close (The_Widget : in Widget;
-                          Closure    : in Xt_Pointer;
-                          Call_Data  : in Xt_Pointer)
-      is
-         pragma Unreferenced (The_Widget);
-         pragma Unreferenced (Closure);
-         pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
-
-      begin
-         Operations.Save_Project;
-         Operations.New_Project;
-
-      exception
-         when E : others =>
-            null;
-      end On_Close;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -555,11 +519,6 @@ package body Designer.Main_Window is
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Save_As'Access);
-      Element       :=
-        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "close");
-      Xt_Add_Callback (Element,
-                       Xm_N_Activate_Callback,
-                       Callbacks.On_Close'Access);
       Element       :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "quit");
       Xt_Add_Callback (Element,
