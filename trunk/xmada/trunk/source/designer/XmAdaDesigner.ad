@@ -1,4 +1,3 @@
-
 !!  Шрифт по умолчанию для всех виджетов.
 *renderTable:
 *renderTable.fontType: FONT_IS_FONTSET
