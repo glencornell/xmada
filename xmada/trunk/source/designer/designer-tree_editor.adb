@@ -52,6 +52,7 @@ with Xm_Push_Button_Gadget;
 with Xm_Scrolled_Window;
 with Xm_String_Defs;
 
+with Designer.Main_Window;
 with Model.Allocations;
 with Model.Queries;
 with Model.Tree;
@@ -168,6 +169,18 @@ package body Designer.Tree_Editor is
                             Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Destroy);
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Select
+      --!    <Purpose> Подпрограмма обратного вызова при выделении
+      --! виджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Select (The_Widget : in Widget;
+                           Closure    : in Xt_Pointer;
+                           Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Select);
+
    end Callbacks;
 
    Selected_Item       : Node_Id := Null_Node;
@@ -209,6 +222,49 @@ package body Designer.Tree_Editor is
          when E : others =>
             null;
       end On_Destroy;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Select
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Select (The_Widget : in Widget;
+                           Closure    : in Xt_Pointer;
+                           Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+
+         Data : constant Xm_Container_Select_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+         if Data.Selected_Items = null then
+            Main_Window.Select_Item (Null_Node);
+
+         else
+            declare
+               Node     : Xt_Arg_Val;
+               Args     : Xt_Arg_List (0 .. 0);
+               Selected : constant Xt_Widget_List
+                 := To_Xt_Widget_List (Data.Selected_Items,
+                                       Cardinal (Data.Selected_Item_Count));
+
+            begin
+               if Selected'Length = 1 then
+                  Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+                  Xt_Get_Values (Selected (Selected'First), Args (0 .. 0));
+
+                  Main_Window.Select_Item (Node_Id (Node));
+               end if;
+            end;
+         end if;
+
+      exception
+         when E : others =>
+            null;
+      end On_Select;
+
    end Callbacks;
 
    ---------------------------------------------------------------------------
@@ -372,8 +428,13 @@ package body Designer.Tree_Editor is
          (Notebook, "scrolled", Args (0 .. Arg_List'Length));
 
       Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
+      Xt_Set_Arg (Args (1), Xm_N_Automatic_Selection, Xm_No_Auto_Select);
       Project_Container :=
-        Xm_Create_Managed_Container (Scrolled, "project_tree", Args (0 .. 0));
+        Xm_Create_Managed_Container (Scrolled, "project_tree", Args (0 .. 1));
+
+      Xt_Add_Callback (Project_Container,
+                       Xm_N_Selection_Callback,
+                       Callbacks.On_Select'Access);
 
       Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "project");
 
@@ -387,9 +448,14 @@ package body Designer.Tree_Editor is
          (Notebook, "scrolled", Args (0 .. Arg_List'Length));
 
       Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
+      Xt_Set_Arg (Args (1), Xm_N_Automatic_Selection, Xm_No_Auto_Select);
       Component_Container :=
         Xm_Create_Managed_Container
-         (Scrolled, "component_tree", Args (0 .. 0));
+         (Scrolled, "component_tree", Args (0 .. 1));
+
+      Xt_Add_Callback (Component_Container,
+                       Xm_N_Selection_Callback,
+                       Callbacks.On_Select'Access);
 
       Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "component");
    end Initialize;
@@ -526,8 +592,44 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Update_Item (Node : in Model.Node_Id) is
+      Str        : Xm_String;
+      Args       : Xt_Arg_List (0 .. 3);
+      The_Widget : Widget;
+      Annotation : Annotation_Record;
+
    begin
-      null;
+      if Node = Null_Node then
+         return;
+      end if;
+
+      --  У приложения нет своего имени, но есть имя класса приложения.
+
+      if Node_Kind (Node) = Node_Application then
+         Str := Xm_String_Generate (Application_Class_Image (Node));
+
+      else
+         Str := Xm_String_Generate (Name_Image (Node));
+      end if;
+
+      Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
+
+      case Annotation.Kind is
+         when Annotation_Node_Project
+           | Annotation_Node_Application =>
+             Xt_Set_Values (Get_Project_Widget (Annotation), Args);
+
+         when Annotation_Component_Class =>
+            Xt_Set_Values (Get_Project_Widget (Annotation), Args);
+            Xt_Set_Values (Get_Component_Widget (Annotation), Args);
+
+         when Annotation_Widget_Instance =>
+            Xt_Set_Values (Get_Component_Widget (Annotation), Args);
+
+         when Annotation_Empty =>
+            null;
+      end case;
+
+      Xm_String_Free (Str);
    end Update_Item;
 
 end Designer.Tree_Editor;
