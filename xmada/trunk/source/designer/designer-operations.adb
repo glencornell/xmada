@@ -324,9 +324,6 @@ package body Designer.Operations is
 
       Root := Elements.Create_Tag (0, Project_Tag);
 
-      Attributes.Create_Attribute (Root, Class_Name_Attr,
-                                   Strings.Store ("-- this is a stub --"));
-
       Attributes.Create_Attribute
        (Root,
         Name_Attr,
