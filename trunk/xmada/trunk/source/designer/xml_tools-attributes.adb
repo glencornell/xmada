@@ -54,7 +54,7 @@ package body XML_Tools.Attributes is
    package Attributes is
      new GNAT.Table (Table_Component_Type => Attribute_Record,
                      Table_Index_Type     => Attribute_Id,
-                     Table_Low_Bound      => Attribute_Id'First,
+                     Table_Low_Bound      => Attribute_Id'First + 1,
                      Table_Initial        => Allocation.Attributes_Initial,
                      Table_Increment      => Allocation.Attributes_Increment);
 
