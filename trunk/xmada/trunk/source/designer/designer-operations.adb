@@ -36,12 +36,20 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Characters.Handling;
 with Designer.Main_Window;
 with Model.Initialization.Designer;
 with Model.Names;
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
 with Model.Xt_Motif;
+with XML_Tools.Attributes;
+with XML_Tools.Elements;
+with XML_Tools.Implementation;
+with XML_Tools.Names;
+with XML_Tools.Parser;
+with XML_Tools.Printer;
+with XML_Tools.Strings;
 
 package body Designer.Operations is
 
@@ -54,6 +62,30 @@ package body Designer.Operations is
 
    Project : Node_Id := Null_Node;
    --  Узел дерева модели текущего редактируемого проекта.
+
+   Application_Tag     : XML_Tools.Name_Id;
+   Component_Class_Tag : XML_Tools.Name_Id;
+   Project_Tag         : XML_Tools.Name_Id;
+   Widget_Instance_Tag : XML_Tools.Name_Id;
+   Class_Name_Attr     : XML_Tools.Name_Id;
+   File_Name_Attr      : XML_Tools.Name_Id;
+   Name_Attr           : XML_Tools.Name_Id;
+
+   procedure Init_XML_Tools;
+
+   procedure Init_XML_Tools is
+   begin
+      XML_Tools.Implementation.Initialize;
+
+      Application_Tag     := XML_Tools.Names.Store ("Application");
+      Component_Class_Tag := XML_Tools.Names.Store ("ComponentClass");
+      Project_Tag         := XML_Tools.Names.Store ("Project");
+      Widget_Instance_Tag := XML_Tools.Names.Store ("WidgetInstance");
+
+      Class_Name_Attr     := XML_Tools.Names.Store ("classname");
+      File_Name_Attr      := XML_Tools.Names.Store ("filename");
+      Name_Attr           := XML_Tools.Names.Store ("name");
+   end Init_XML_Tools;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -129,8 +161,146 @@ package body Designer.Operations is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Open_Project (File_Name : in Wide_String) is
+      use XML_Tools;
+
+      Root : constant Element_Id := 1;
+      L    : List_Id;
+      A    : Attribute_Id;
+      E    : Element_Id;
+
+      Application : Node_Id;
+
    begin
-      null;
+      Init_XML_Tools;
+
+      Parser.Parse (Ada.Characters.Handling.To_String (File_Name));
+
+      --  Создание узла представления проекта и установка необходимых
+      --  атрибутов узла.
+
+      if Elements.Name (Root) /= Project_Tag then
+         raise Program_Error;
+      end if;
+
+      Project := Create_Project;
+
+      A := Elements.Attribute (Root);
+
+      while A /= Null_Attribute_Id loop
+         if Attributes.Name (A) = Name_Attr then
+            Set_Name (Project,
+                      Enter (XML_Tools.Strings.Image (Attributes.Value (A))));
+
+         elsif Attributes.Name (A) = File_Name_Attr then
+            Set_File_Name
+             (Project,
+              Enter (XML_Tools.Strings.Image (Attributes.Value (A))));
+
+         else
+            raise Program_Error;
+
+         end if;
+
+         A := Attributes.Next (A);
+      end loop;
+
+--    L := New_List;
+--    Append (L, Xt_Motif_Widget_Set);
+--    Set_Imported_Widget_Sets (Project, L);
+
+      Designer.Main_Window.Insert_Item (Project);
+      --  Извещение компонентов дизайнера о создании нового проекта.
+
+      --  Создание списка приложений.
+
+      L := New_List;
+      Set_Applications (Project, L);
+
+      E := Elements.Child (Root);
+
+      while E /= Null_Element_Id loop
+         if Elements.Name (E) = Application_Tag then
+            --  Создание узла приложения и добавление его в состав проекта.
+
+            Application := Create_Application;
+            Append (L, Application);
+
+            A := Elements.Attribute (E);
+
+            while A /= Null_Attribute_Id loop
+               if Attributes.Name (A) = Class_Name_Attr then
+                  Set_Application_Class_Name
+                   (Application,
+                    Enter (XML_Tools.Strings.Image (Attributes.Value (A))));
+
+               else
+                  raise Program_Error;
+               end if;
+
+               A := Attributes.Next (A);
+            end loop;
+
+            Designer.Main_Window.Insert_Item (Application);
+            --  Извещение компонентов дизайнера о создании нового приложения.
+
+            declare
+               L : List_Id := New_List;
+               E2 : Element_Id := Elements.Child (E);
+
+               Component : Node_Id;
+
+            begin
+               --  Создание списка компонентов приложения.
+
+               Set_Component_Classes (Application, L);
+
+
+               while E2 /= Null_Element_Id loop
+                  if Elements.Name (E2) = Component_Class_Tag then
+                     --  Создание узла компонента и добавление
+                     --  его в состав приложения.
+
+                     Component := Create_Component_Class;
+                     Append (L, Component);
+
+                     A := Elements.Attribute (E2);
+
+                     while A /= Null_Attribute_Id loop
+                        if Attributes.Name (A) = Name_Attr then
+                           Set_Name
+                            (Component,
+                             Enter (XML_Tools.Strings.Image
+                                     (Attributes.Value (A))));
+
+                        else
+                           raise Program_Error;
+                        end if;
+
+                        A := Attributes.Next (A);
+                     end loop;
+
+                     Designer.Main_Window.Insert_Item (Component);
+                     --  Извещение компонентов дизайнера
+                     --  о создании нового компонента.
+
+                     Designer.Main_Window.Select_Item (Component);
+                     --  Извещение компонентов дизайнера
+                     --  о выборе нового компонента.
+
+                  else
+                     raise Program_Error;
+                  end if;
+
+                  E2 := Elements.Next (E2);
+               end loop;
+            end;
+
+         else
+            raise Program_Error;
+         end if;
+
+         E := Elements.Next (E);
+      end loop;
    end Open_Project;
 
    ---------------------------------------------------------------------------
@@ -139,8 +309,86 @@ package body Designer.Operations is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Save_Project (File_Name : in Wide_String) is
+      use XML_Tools;
+
+      Root        : Element_Id;
+      Application : Node_Id;
+
    begin
-      null;
+      Set_File_Name (Project, Enter (File_Name));
+      --  Запоминаем имя файла проекта.
+
+      Init_XML_Tools;
+
+      --  Создаем Project.
+
+      Root := Elements.Create_Tag (0, Project_Tag);
+
+      Attributes.Create_Attribute (Root, Class_Name_Attr,
+                                   Strings.Store ("-- this is a stub --"));
+
+      Attributes.Create_Attribute
+       (Root,
+        Name_Attr,
+        Strings.Store (Model.Names.Image (Name (Project))));
+
+      Attributes.Create_Attribute
+       (Root,
+        File_Name_Attr,
+        Strings.Store (Model.Names.Image (Model.Tree.File_Name (Project))));
+
+      --  Создаем Applications.
+
+      Application := First (Applications (Project));
+
+      while Application /= Null_Node loop
+         declare
+            App : constant Element_Id
+              := Elements.Create_Tag (Root, Application_Tag);
+
+            Component : Node_Id;
+
+         begin
+            Attributes.Create_Attribute
+             (App,
+              Class_Name_Attr,
+              Strings.Store
+               (Model.Names.Image (Application_Class_Name (Application))));
+
+            --  Создаем Component_Classes.
+
+            Component := First (Component_Classes (Application));
+
+            while Component /= Null_Node loop
+               declare
+                  E : constant Element_Id
+                    := Elements.Create_Tag (App, Component_Class_Tag);
+
+               begin
+                  Attributes.Create_Attribute
+                   (E,
+                    Name_Attr,
+                    Strings.Store
+                     (Model.Names.Image (Name (Component))));
+
+                  --  Создаем Widget_Instance.
+                  --  XXX
+
+               end;
+
+               Component := Next (Component);
+            end loop;
+
+            Application := Next (Application);
+         end;
+      end loop;
+
+      --  Создаем Imported_Widget_Sets.
+      --  XXX
+
+      Printer.Print
+       (Ada.Characters.Handling.To_String
+         (Model.Names.Image (Model.Tree.File_Name (Project))));
    end Save_Project;
 
    ---------------------------------------------------------------------------
@@ -150,7 +398,7 @@ package body Designer.Operations is
    ---------------------------------------------------------------------------
    procedure Save_Project is
    begin
-      null;
+      Save_Project (Image (File_Name (Project)));
    end Save_Project;
 
 end Designer.Operations;
