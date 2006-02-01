@@ -212,11 +212,6 @@ package body Designer.Operations is
             Set_Name (Project,
                       Enter (XML_Tools.Strings.Image (Attributes.Value (A))));
 
-         elsif Attributes.Name (A) = File_Name_Attr then
-            Set_File_Name
-             (Project,
-              Enter (XML_Tools.Strings.Image (Attributes.Value (A))));
-
          else
             raise Program_Error;
 
@@ -420,11 +415,6 @@ package body Designer.Operations is
        (Root,
         Name_Attr,
         Strings.Store (Model.Names.Image (Name (Project))));
-
-      Attributes.Create_Attribute
-       (Root,
-        File_Name_Attr,
-        Strings.Store (Model.Names.Image (Model.Tree.File_Name (Project))));
 
       --  Создаем Applications.
 
