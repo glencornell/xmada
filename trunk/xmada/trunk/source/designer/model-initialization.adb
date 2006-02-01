@@ -96,8 +96,10 @@ package body Model.Initialization is
 --   Xt_Motif_Packing_Resource_Type                    : Node_Id;
 --   Xt_Motif_Position_Mode_Resource_Type              : Node_Id;
 
+   Xt_Motif_Dimension_Resource_Type                  : Node_Id;
    Xt_Motif_Horizontal_Dimension_Resource_Type       : Node_Id;
    Xt_Motif_Horizontal_Position_Resource_Type        : Node_Id;
+   Xt_Motif_Position_Resource_Type                   : Node_Id;
    Xt_Motif_Vertical_Dimension_Resource_Type         : Node_Id;
    Xt_Motif_Vertical_Position_Resource_Type          : Node_Id;
 
@@ -1525,11 +1527,6 @@ package body Model.Initialization is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Create_Predefined_Resource_Types is
-      --  X Toolkit Intrinsics
-
-      Xt_Motif_Dimension_Resource_Type : Node_Id;
-      Xt_Motif_Position_Resource_Type  : Node_Id;
-
    begin
       --
       --  Xt
@@ -1709,14 +1706,103 @@ package body Model.Initialization is
 
       --  Object
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
       Xt_Motif_Object_Widget_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Object_Widget_Class, Enter ("Object"));
       Set_Is_Meta_Class (Xt_Motif_Object_Widget_Class, True);
+
+      --  TODO XmNdestroyCallback
+
+      --  RectObj
+
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Rect_Obj_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Rect_Obj_Widget_Class, Enter ("RectObj"));
+         Set_Super_Class (Xt_Motif_Rect_Obj_Widget_Class,
+                          Xt_Motif_Object_Widget_Class);
+         Set_Is_Meta_Class (Xt_Motif_Rect_Obj_Widget_Class, True);
+
+         --  TODO XmNancestorSensitive
+         --  TODO XmNsensitive
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XtNborderWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("borderWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XtCBorderWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("BorderWidth"));
+         Set_Resource_Type (Resource, Xt_Motif_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XtNheight"));
+         Set_Internal_Resource_Name (Resource, Enter ("height"));
+         Set_Resource_Class_Name (Resource, Enter ("XtCHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Height"));
+         Set_Resource_Type (Resource, Xt_Motif_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XtNwidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("width"));
+         Set_Resource_Class_Name (Resource, Enter ("XtCWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Width"));
+         Set_Resource_Type (Resource, Xt_Motif_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XtNx"));
+         Set_Internal_Resource_Name (Resource, Enter ("x"));
+         Set_Resource_Class_Name (Resource, Enter ("XtCPosition"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Position"));
+         Set_Resource_Type (Resource, Xt_Motif_Position_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XtNy"));
+         Set_Internal_Resource_Name (Resource, Enter ("y"));
+         Set_Resource_Class_Name (Resource, Enter ("XtCPosition"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Position"));
+         Set_Resource_Type (Resource, Xt_Motif_Position_Resource_Type);
+         Append (Resources, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Rect_Obj_Widget_Class, Resources);
+      end;
+
+      --  Core
+
+--      declare
+--         Resources : constant List_Id := New_List;
+--         Resource  : Node_Id;
+
+--      begin
+         Xt_Motif_Core_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Core_Widget_Class, Enter ("Core"));
+         Set_Super_Class (Xt_Motif_Core_Widget_Class,
+                          Xt_Motif_Rect_Obj_Widget_Class);
+         Set_Is_Meta_Class (Xt_Motif_Core_Widget_Class, True);
+
+         --  TODO XmNaccelerators
+         --  TODO XmNbackground
+         --  TODO XmNbackgroundPixmap
+         --  TODO XmNborderColor
+         --  TODO XmNborderPixmap
+         --  TODO XmNcolormap
+         --  TODO XmNdepth
+         --  TODO XmNinitialResourcesPersistent
+         --  TODO XmNmappedWhenManaged
+         --  TODO XmNscreen
+         --  TODO XmNtranslations
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -1728,32 +1814,6 @@ package body Model.Initialization is
 --
 --         Set_Resources (, Resources);
 --      end;
-
-      --  RectObj
-
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Rect_Obj_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Rect_Obj_Widget_Class, Enter ("RectObj"));
-      Set_Super_Class (Xt_Motif_Rect_Obj_Widget_Class,
-                       Xt_Motif_Object_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_Rect_Obj_Widget_Class, True);
-
-      --  Core
-
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Core_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Core_Widget_Class, Enter ("Core"));
-      Set_Super_Class (Xt_Motif_Core_Widget_Class,
-                       Xt_Motif_Rect_Obj_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_Core_Widget_Class, True);
 
       --  Composite
 
@@ -1768,18 +1828,9 @@ package body Model.Initialization is
                        Xt_Motif_Core_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Composite_Widget_Class, True);
 
-      --  Constraint
-
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Constraint_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Constraint_Widget_Class, Enter ("Constraint"));
-      Set_Super_Class (Xt_Motif_Constraint_Widget_Class,
-                       Xt_Motif_Composite_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_Constraint_Widget_Class, True);
+         --  TODO XmNchildren
+         --  TODO XmNinsertPosition
+         --  TODO XmNnumChildren
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -1791,6 +1842,14 @@ package body Model.Initialization is
 --
 --         Set_Resources (, Resources);
 --      end;
+
+      --  Constraint
+
+      Xt_Motif_Constraint_Widget_Class := Create_Widget_Class;
+      Set_Name (Xt_Motif_Constraint_Widget_Class, Enter ("Constraint"));
+      Set_Super_Class (Xt_Motif_Constraint_Widget_Class,
+                       Xt_Motif_Composite_Widget_Class);
+      Set_Is_Meta_Class (Xt_Motif_Constraint_Widget_Class, True);
 
       --  Shell
 
@@ -1804,6 +1863,15 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_Shell_Widget_Class,
                        Xt_Motif_Composite_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Shell_Widget_Class, True);
+
+         --  TODO XmNallowShellResize
+         --  TODO XmNcreatePopupChildProc
+         --  TODO XmNgeometry
+         --  TODO XmNoverrideRedirect
+         --  TODO XmNpopdownCallback
+         --  TODO XmNpopupCallback
+         --  TODO XmNsaveUnder
+         --  TODO XmNvisual
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -1852,6 +1920,33 @@ package body Model.Initialization is
                        Xt_Motif_Shell_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_WM_Shell_Widget_Class, True);
 
+         --  TODO XmNbaseHeight
+         --  TODO XmNbaseWidth
+         --  TODO XmNheightInc
+         --  TODO XmNiconMask
+         --  TODO XmNiconPixmap
+         --  TODO XmNiconWindow
+         --  TODO XmNiconX
+         --  TODO XmNiconY
+         --  TODO XmNinitialState
+         --  TODO XmNinput
+         --  TODO XmNmaxAspectX
+         --  TODO XmNmaxAspectY
+         --  TODO XmNmaxHeight
+         --  TODO XmNmaxWidth
+         --  TODO XmNminAspectX
+         --  TODO XmNminAspectY
+         --  TODO XmNminHeight
+         --  TODO XmNminWidth
+         --  TODO XmNtitle
+         --  TODO XmNtitleEncoding
+         --  TODO XmNtransient
+         --  TODO XmNwaitForWm
+         --  TODO XmNwidthInc
+         --  TODO XmNwindowGroup
+         --  TODO XmNwinGravity
+         --  TODO XmNwmTimeout
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -1875,6 +1970,29 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_Vendor_Shell_Widget_Class,
                        Xt_Motif_WM_Shell_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Vendor_Shell_Widget_Class, True);
+
+         --  TODO XmNaudibleWarning
+         --  TODO XmNbuttonFontList
+         --  TODO XmNbuttonRenderTable
+         --  TODO XmNdefaultFontList
+         --  TODO XmNdeleteResponse
+         --  TODO XmNinputMethod
+         --  TODO XmNinputPolicy
+         --  TODO XmNkeyboardFocusPolicy
+         --  TODO XmNlabelFontList
+         --  TODO XmNlabelRenderTable
+         --  TODO XmNlayoutDirection
+         --  TODO XmNmwmDecorations
+         --  TODO XmNmwmFunctions
+         --  TODO XmNmwmInputMode
+         --  TODO XmNmwmMenu
+         --  TODO XmNpreeditType
+         --  TODO XmNverifyPreedit
+         --  TODO XmNshellUnitType
+         --  TODO XmNtextFontList
+         --  TODO XmNtextRenderTable
+         --  TODO XmNunitType
+         --  TODO XmNuseAsyncGeometry
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -1901,6 +2019,8 @@ package body Model.Initialization is
                        Xt_Motif_Vendor_Shell_Widget_Class);
       Set_Is_Meta_Class (Xt_Motif_Transient_Shell_Widget_Class, True);
 
+         --  TODO XmNtransientFor
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -1925,6 +2045,10 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_Top_Level_Shell_Widget_Class,
                        Xt_Motif_Vendor_Shell_Widget_Class);
 
+         --  TODO XmNiconic
+         --  TODO XmNiconName
+         --  TODO XmNiconNameEncoding
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -1948,6 +2072,9 @@ package body Model.Initialization is
                 Enter ("ApplicationShell"));
       Set_Super_Class (Xt_Motif_Application_Shell_Widget_Class,
                        Xt_Motif_Top_Level_Shell_Widget_Class);
+
+         --  TODO XmNargc
+         --  TODO XmNargv
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2000,6 +2127,25 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Primitive_Widget_Class,
                           Xt_Motif_Core_Widget_Class);
          Set_Is_Meta_Class (Xt_Motif_Primitive_Widget_Class, True);
+
+         --  TODO XmNbottomShadowColor
+         --  TODO XmNbottomShadowPixmap
+         --  TODO XmNforeground
+         --  TODO XmNhighlightColor
+         --  TODO XmNhighlightOnEnter
+         --  TODO XmNhighlightPixmap
+         --  TODO XmNhighlightThickness
+         --  TODO XmNlayoutDirection
+         --  TODO XmNnavigationType
+         --  TODO XmNtopShadowColor
+         --  TODO XmNtopShadowPixmap
+         --  TODO XmNtraversalOn
+         --  TODO XmNunitType
+         --  TODO XmNuserData
+
+         --  TODO XmNconvertCallback
+         --  TODO XmNhelpCallback
+         --  TODO XmNpopupHandlerCallback
 
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNborderWidth"));
@@ -2080,6 +2226,12 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Arrow_Button_Widget_Class,
                           Xt_Motif_Primitive_Widget_Class);
 
+         --  TODO XmNmultiClick
+
+         --  TODO XmNactivateCallback
+         --  TODO XmNarmCallback
+         --  TODO XmNdisarmCallback
+
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNarrowDirection"));
          Set_Internal_Resource_Name (Resource, Enter ("arrowDirection"));
@@ -2087,6 +2239,25 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("ArrowDirection"));
          Set_Resource_Type (Resource, Xt_Motif_Arrow_Direction_Resource_Type);
          Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNdetailShadowThickness"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("detailShadowThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Arrow_Button_Widget_Class, Resources);
       end;
@@ -2103,6 +2274,10 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Label_Widget_Class,
                           Xt_Motif_Primitive_Widget_Class);
 
+         --  TODO
+         --  TODO
+         --  TODO
+
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNalignment"));
          Set_Internal_Resource_Name (Resource, Enter ("alignment"));
@@ -2118,6 +2293,14 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("LabelType"));
          Set_Resource_Type (Resource, Xt_Motif_Label_Type_Resource_Type);
          Append (Resources, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Label_Widget_Class, Resources);
       end;
