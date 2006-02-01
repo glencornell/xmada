@@ -118,6 +118,26 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Predefined_Resource_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Predefined_Resource_Type return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind              => Node_Predefined_Resource_Type,
+         Parent            => Null_Node,
+         List              => Null_List,
+         Previous          => Null_Node,
+         Next              => Null_Node,
+         PRT_Name          => Null_Name,
+         PRT_Internal_Name => Null_Name,
+         Type_Kind         => Type_Unspecified));
+
+      return Node_Table.Last;
+   end Create_Predefined_Resource_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Project
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------

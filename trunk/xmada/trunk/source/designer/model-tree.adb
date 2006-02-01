@@ -140,11 +140,15 @@ package body Model.Tree is
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
        (Node_Kind (Node) = Node_Enumeration_Value_Specification
-          or else Node_Kind (Node) = Node_Enumerated_Resource_Type);
+          or else Node_Kind (Node) = Node_Enumerated_Resource_Type
+          or else Node_Kind (Node) = Node_Predefined_Resource_Type);
 
       case Node_Kind (Node) is
          when Node_Enumeration_Value_Specification =>
             return Node_Table.Table (Node).EVS_Internal_Name;
+
+         when Node_Predefined_Resource_Type =>
+            return Node_Table.Table (Node).PRT_Internal_Name;
 
          when Node_Enumerated_Resource_Type =>
             return Node_Table.Table (Node).ERT_Internal_Name;
@@ -206,7 +210,8 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Component_Class
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type
           or else Node_Kind (Node) = Node_Project
-          or else Node_Kind (Node) = Node_Widget_Class);
+          or else Node_Kind (Node) = Node_Widget_Class
+          or else Node_Kind (Node) = Node_Predefined_Resource_Type);
 
       case Node_Kind (Node) is
          when Node_Component_Class =>
@@ -214,6 +219,9 @@ package body Model.Tree is
 
          when Node_Enumeration_Value_Specification =>
             return Node_Table.Table (Node).EVS_Name;
+
+         when Node_Predefined_Resource_Type =>
+            return Node_Table.Table (Node).PRT_Name;
 
          when Node_Enumerated_Resource_Type =>
             return Node_Table.Table (Node).ERT_Name;
@@ -442,11 +450,15 @@ package body Model.Tree is
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
        (Node_Kind (Node) = Node_Enumeration_Value_Specification
+          or else Node_Kind (Node) = Node_Predefined_Resource_Type
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type);
 
       case Node_Kind (Node) is
          when Node_Enumeration_Value_Specification =>
             Node_Table.Table (Node).EVS_Internal_Name := Value;
+
+         when Node_Predefined_Resource_Type =>
+            Node_Table.Table (Node).PRT_Internal_Name := Value;
 
          when Node_Enumerated_Resource_Type =>
             Node_Table.Table (Node).ERT_Internal_Name := Value;
@@ -509,6 +521,7 @@ package body Model.Tree is
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
        (Node_Kind (Node) = Node_Enumeration_Value_Specification
+          or else Node_Kind (Node) = Node_Predefined_Resource_Type
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type
           or else Node_Kind (Node) = Node_Project
           or else Node_Kind (Node) = Node_Component_Class
@@ -517,6 +530,9 @@ package body Model.Tree is
       case Node_Kind (Node) is
          when Node_Enumeration_Value_Specification =>
             Node_Table.Table (Node).EVS_Name := Value;
+
+         when Node_Predefined_Resource_Type =>
+            Node_Table.Table (Node).PRT_Name := Value;
 
          when Node_Enumerated_Resource_Type =>
             Node_Table.Table (Node).ERT_Name := Value;
@@ -628,6 +644,21 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Type_Kind
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Type_Kind (Node  : in Node_Id;
+                            Value : in Predefined_Resource_Type_Kind)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Predefined_Resource_Type);
+
+      Node_Table.Table (Node).Type_Kind := Value;
+   end Set_Type_Kind;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Value_Specifications
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -668,6 +699,21 @@ package body Model.Tree is
 
       return Node_Table.Table (Node).Super_Class;
    end Super_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Type_Kind
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Type_Kind (Node : in Node_Id)
+     return Predefined_Resource_Type_Kind
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Predefined_Resource_Type);
+
+      return Node_Table.Table (Node).Type_Kind;
+   end Type_Kind;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

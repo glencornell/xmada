@@ -49,10 +49,6 @@ package Model.Tree is
    --
    --  Описание экземпляра компонента.
 
-   --  Node_Predefined_Resource_Type
-   --
-   --  Описание предопределенного типа ресурсов.
-
    --  Node_Resource_Value
    --
    --  Описание значения ресурса.
@@ -88,7 +84,8 @@ package Model.Tree is
      Node_Widget_Set,
      --  Описание набора компонентов.
 
---     Node_Predefined_Resource_Type,
+     Node_Predefined_Resource_Type,
+     --  Описание предопределённого типа ресурса.
 
      Node_Enumerated_Resource_Type,
      --  Описание перечислимого типа ресурса.
@@ -147,7 +144,10 @@ package Model.Tree is
    --        horizontal_float;
 
    type Predefined_Resource_Type_Kind is
-    (x);
+    (Type_Unspecified,
+     Type_Position,
+     Type_Dimension,
+     Type_Widget_Reference);
 
    function Node_Kind (Node : in Node_Id) return Node_Kinds;
    function Parent_Node (Node : in Node_Id) return Node_Id;
@@ -212,6 +212,10 @@ package Model.Tree is
    function Constraint_Resources (Node : in Node_Id) return List_Id;
    procedure Set_Constraint_Resources (Node : in Node_Id; Value : in List_Id);
 
+   function Type_Kind (Node : in Node_Id) return Predefined_Resource_Type_Kind;
+   procedure Set_Type_Kind (Node  : in Node_Id;
+                            Value : in Predefined_Resource_Type_Kind);
+
 private
 
    type Node_Record (Kind : Node_Kinds := Node_Empty) is record
@@ -257,6 +261,17 @@ private
 
             Widget_Classes : List_Id;
             --  Классы виджетов.
+
+         when Node_Predefined_Resource_Type =>
+            PRT_Name          : Name_Id;
+            --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
+
+            PRT_Internal_Name : Name_Id;
+            --  Внутреннее имя типа ресурса, используемое Xt для преобразований
+            --  типов ресурсов.
+
+            Type_Kind         : Predefined_Resource_Type_Kind;
+            --  Вид предопределённого типа ресурсов.
 
          when Node_Enumerated_Resource_Type =>
             --  Data_Type_Name (Name)  -- ??? Связка?
