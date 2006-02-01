@@ -51,7 +51,10 @@ package body XML_Tools.Printer is
    use XML_Tools.Names;
    use XML_Tools.Strings;
 
-   procedure Print (Element : in Element_Id);
+   procedure Print (File    : in Ada.Wide_Text_IO.File_Type;
+                    Element : in Element_Id);
+
+   procedure Print_Xml (File : in Ada.Wide_Text_IO.File_Type);
 
    Indent : Count;
 
@@ -62,24 +65,22 @@ package body XML_Tools.Printer is
 
    procedure Print is
    begin
-      Put ("<?xml version = '1.0' encoding = 'UTF8' ?>");
-
-      Indent := 1;
-
-      Print (1);
+      Print_Xml (Standard_Output);
    end Print;
 
    -----------
    -- Print --
    -----------
 
-   procedure Print (Element : in Element_Id) is
+   procedure Print (File    : in Ada.Wide_Text_IO.File_Type;
+                    Element : in Element_Id)
+   is
    begin
-      Set_Col (Indent);
+      Set_Col (File, Indent);
 
       case Kind (Element) is
          when A_Tag =>
-            Put ('<' & Image (Name (Element)));
+            Put (File, '<' & Image (Name (Element)));
 
             declare
                Aux : Attribute_Id := Attribute (Element);
@@ -95,20 +96,20 @@ package body XML_Tools.Printer is
 
                   begin
                      if Col + Str'Length > 79 then
-                        Set_Col (Indent + 3);
+                        Set_Col (File, Indent + 3);
                      end if;
 
-                     Put (Str);
+                     Put (File, Str);
                      Aux := Next (Aux);
                   end;
                end loop;
             end;
 
             if Child (Element) = Null_Element_Id then
-               Put ("/>");
+               Put (File, "/>");
 
             else
-               Put ('>');
+               Put (File, '>');
 
                Indent := Indent + 1;
 
@@ -117,7 +118,7 @@ package body XML_Tools.Printer is
 
                begin
                   while Aux /= Null_Element_Id loop
-                     Print (Aux);
+                     Print (File, Aux);
 
                      Aux := Next (Aux);
                   end loop;
@@ -125,14 +126,42 @@ package body XML_Tools.Printer is
 
                Indent := Indent - 1;
 
-               Set_Col (Indent);
-               Put ("</" & Image (Name (Element)) & '>');
+               Set_Col (File, Indent);
+               Put (File, "</" & Image (Name (Element)) & '>');
             end if;
 
 
          when A_String =>
-            Put_Line (Image (Value (Element)));
+            Put_Line (File, Image (Value (Element)));
       end case;
    end Print;
+
+   -----------
+   -- Print --
+   -----------
+
+   procedure Print (Filename : in String) is
+      File : Ada.Wide_Text_IO.File_Type;
+
+   begin
+      Create (File => File,
+              Mode => Out_File,
+              Name => Filename);
+      Print_Xml (File);
+      Close (File);
+    end Print;
+
+   ---------------
+   -- Print_Xml --
+   ---------------
+
+   procedure Print_Xml (File : in Ada.Wide_Text_IO.File_Type) is
+   begin
+      Put (File, "<?xml version = '1.0' encoding = 'UTF8' ?>");
+
+      Indent := 1;
+
+      Print (File, 1);
+   end Print_Xml;
 
 end XML_Tools.Printer;

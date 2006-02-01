@@ -41,4 +41,6 @@ package XML_Tools.Printer is
 
    procedure Print;
 
+   procedure Print (Filename : in String);
+
 end XML_Tools.Printer;
