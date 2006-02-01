@@ -71,8 +71,29 @@ package body Designer.Operations is
    File_Name_Attr      : XML_Tools.Name_Id;
    Name_Attr           : XML_Tools.Name_Id;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Init_XML_Tools
+   --!    <Purpose> Инициализирует модули пакета XML_Tools
+   --! и создает таблицу имен используемых тегов и атрибутов.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
    procedure Init_XML_Tools;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Project_To_Xml
+   --!    <Purpose> Преобразовывает структуру дерева узлов проекта
+   --! в XML-структуру.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Project_To_Xml (Project : in Node_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Init_XML_Tools
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
    procedure Init_XML_Tools is
    begin
       XML_Tools.Implementation.Initialize;
@@ -244,7 +265,7 @@ package body Designer.Operations is
             --  Извещение компонентов дизайнера о создании нового приложения.
 
             declare
-               L : List_Id := New_List;
+               L : constant List_Id := New_List;
                E2 : Element_Id := Elements.Child (E);
 
                Component : Node_Id;
@@ -305,19 +326,90 @@ package body Designer.Operations is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Save_Project
+   --!    <Unit> Project_To_Xml
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Save_Project (File_Name : in Wide_String) is
+   procedure Project_To_Xml (Project : in Node_Id) is
       use XML_Tools;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Application_To_Xml
+      --!    <Purpose> Преобразует узел Node_Application в
+      --! XML-структуру и присоединяет созданный тег к тегу Parent.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Application_To_Xml (Application : in Node_Id;
+                                    Parent      : in Element_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Component_Class_To_Xml
+      --!    <Purpose> Преобразует узел Node_Component_Class в
+      --! XML-структуру и присоединяет созданный тег к тегу Parent.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Component_Class_To_Xml (Component_Class : in Node_Id;
+                                        Parent          : in Element_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Application_To_Xml
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Application_To_Xml (Application : in Node_Id;
+                                    Parent      : in Element_Id)
+      is
+         Tag             : constant Element_Id
+           := Elements.Create_Tag (Parent, Application_Tag);
+         Component_Class : Node_Id;
+
+      begin
+         --  Присоединяем атрибуты Application.
+
+         Attributes.Create_Attribute
+          (Tag,
+           Class_Name_Attr,
+           Strings.Store
+            (Model.Names.Image (Application_Class_Name (Application))));
+
+         --  Создаем Component_Classes.
+
+         Component_Class := First (Component_Classes (Application));
+
+         while Component_Class /= Null_Node loop
+            Component_Class_To_Xml (Component_Class, Tag);
+            Component_Class := Next (Component_Class);
+         end loop;
+
+      end Application_To_Xml;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Component_Class_To_Xml
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Component_Class_To_Xml (Component_Class : in Node_Id;
+                                        Parent          : in Element_Id)
+      is
+         Tag : constant Element_Id
+           := Elements.Create_Tag (Parent, Component_Class_Tag);
+      begin
+         Attributes.Create_Attribute
+          (Tag,
+           Name_Attr,
+           Strings.Store
+            (Model.Names.Image (Name (Component_Class))));
+
+         --  Создаем Widget_Instance.
+         --  XXX
+
+      end Component_Class_To_Xml;
 
       Root        : Element_Id;
       Application : Node_Id;
 
    begin
-      Set_File_Name (Project, Enter (File_Name));
-      --  Запоминаем имя файла проекта.
-
       Init_XML_Tools;
 
       --  Создаем Project.
@@ -339,49 +431,28 @@ package body Designer.Operations is
       Application := First (Applications (Project));
 
       while Application /= Null_Node loop
-         declare
-            App : constant Element_Id
-              := Elements.Create_Tag (Root, Application_Tag);
-
-            Component : Node_Id;
-
-         begin
-            Attributes.Create_Attribute
-             (App,
-              Class_Name_Attr,
-              Strings.Store
-               (Model.Names.Image (Application_Class_Name (Application))));
-
-            --  Создаем Component_Classes.
-
-            Component := First (Component_Classes (Application));
-
-            while Component /= Null_Node loop
-               declare
-                  E : constant Element_Id
-                    := Elements.Create_Tag (App, Component_Class_Tag);
-
-               begin
-                  Attributes.Create_Attribute
-                   (E,
-                    Name_Attr,
-                    Strings.Store
-                     (Model.Names.Image (Name (Component))));
-
-                  --  Создаем Widget_Instance.
-                  --  XXX
-
-               end;
-
-               Component := Next (Component);
-            end loop;
-
-            Application := Next (Application);
-         end;
+         Application_To_Xml (Application, Root);
+         Application := Next (Application);
       end loop;
 
       --  Создаем Imported_Widget_Sets.
       --  XXX
+
+   end Project_To_Xml;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Save_Project
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Save_Project (File_Name : in Wide_String) is
+      use XML_Tools;
+
+   begin
+      Set_File_Name (Project, Enter (File_Name));
+      --  Запоминаем имя файла проекта.
+
+      Project_To_Xml (Project);
 
       Printer.Print
        (Ada.Characters.Handling.To_String
