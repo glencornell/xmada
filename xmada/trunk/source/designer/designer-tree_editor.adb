@@ -36,22 +36,42 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with GNAT.Table;
+
+with Xt.Callbacks;
 with Xt.Composite_Management;
+with Xt.Instance_Management;
+with Xt.Resource_Management;
 with Xt.Utilities;
 with Xm.Resource_Management;
+with Xm.Strings;
 with Xm_Container;
+with Xm_Icon_Gadget;
 with Xm_Notebook;
 with Xm_Push_Button_Gadget;
 with Xm_Scrolled_Window;
 with Xm_String_Defs;
 
+with Model.Allocations;
+with Model.Queries;
+with Model.Tree;
+
 package body Designer.Tree_Editor is
 
+   use Model;
+   use Model.Allocations;
+   use Model.Queries;
+   use Model.Tree;
+   use Xt.Callbacks;
    use Xt.Composite_Management;
+   use Xt.Instance_Management;
+   use Xt.Resource_Management;
    use Xt.Utilities;
    use Xm;
    use Xm.Resource_Management;
+   use Xm.Strings;
    use Xm_Container;
+   use Xm_Icon_Gadget;
    use Xm_Notebook;
    use Xm_Push_Button_Gadget;
    use Xm_Scrolled_Window;
@@ -59,8 +79,183 @@ package body Designer.Tree_Editor is
    use Xt;
    use Xt.Ancillary_Types;
 
+   --  Для каждого узла создаётся (по запросу) свой собственный редактор
+   --  дерева. Уже созданные редакторы свойств сохраняются в таблице
+   --  Annotation_Table.
+
+   type Annotation_Kinds is
+    (Annotation_Component_Class,
+     Annotation_Empty,
+     Annotation_Node_Application,
+     Annotation_Node_Project,
+     Annotation_Widget_Instance);
+
+   type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
+   record
+      case Kind is
+         when Annotation_Empty =>
+            null;
+
+         when others           =>
+            Project_Widget   : Widget;
+            Component_Widget : Widget;
+      end case;
+   end record;
+
+--    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
+--    record
+--       case Kind is
+--          when Annotation_Component_Class  =>
+--             Component_Widget : Widget;
+--             Instance_Widget  : Widget;
+--
+--          when Annotation_Widget_Instance  =>
+--             Instance_Widget  : Widget;
+--
+--          when Annotation_Node_Project
+--            | Annotation_Node_Application  =>
+--             Component_Widget : Widget;
+--
+--          when Annotation_Empty            =>
+--             null;
+--       end case;
+--
+--    end record;
+
+   package Annotation_Table is
+     new GNAT.Table
+          (Table_Component_Type => Annotation_Record,
+           Table_Index_Type     => Node_Id,
+           Table_Low_Bound      => Node_Id'First + 1,
+           Table_Initial        => Model.Allocations.Node_Table_Initial,
+           Table_Increment      => Model.Allocations.Node_Table_Increment);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Relocate_Node_Table
+   --!    <Purpose> Производит расширение таблицы для обеспечения возможности
+   --! её использования для указанного узла. Все добавленные элементы
+   --! инициализируются значениями по умолчанию.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table (Node : in Node_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Add_Child
+   --!    <Purpose> Добавляет в дерево элемент потомок.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Add_Child (Container : in Widget;
+                       Parent    : in Widget;
+                       Node      : in Node_Id) return Widget;
+
+   package Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Destroy
+      --!    <Purpose> Подпрограмма обратного вызова
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Destroy (The_Widget : in Widget;
+                            Closure    : in Xt_Pointer;
+                            Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Destroy);
+
+   end Callbacks;
+
+   package body Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Destroy
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Destroy (The_Widget : in Widget;
+                            Closure    : in Xt_Pointer;
+                            Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+         Node : Xt_Arg_Val;
+         Args : Xt_Arg_List (0 .. 1);
+
+      begin
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args);
+
+         Annotation_Table.Table (Node_Id (Node)) :=
+           (Kind => Annotation_Empty);
+
+      exception
+         when E : others =>
+            null;
+      end On_Destroy;
+   end Callbacks;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Add_Child
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Add_Child (Container : in Widget;
+                       Parent    : in Widget;
+                       Node      : in Node_Id)
+     return Widget
+   is
+      Str  : Xm_String;
+      Args : Xt_Arg_List (0 .. 3);
+      Icon : Widget;
+
+   begin
+      --  У приложения нет своего имени, но есть имя класса приложения.
+
+      if Node_Kind (Node) = Node_Application then
+         Str := Xm_String_Generate (Application_Class_Image (Node));
+
+      else
+         Str := Xm_String_Generate (Name_Image (Node));
+      end if;
+
+      Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
+      Xt_Set_Arg (Args (1), Xm_N_Outline_State, Xm_Expanded);
+      Xt_Set_Arg (Args (2), Xm_N_User_Data, Xt_Arg_Val (Node));
+
+      --  Если элемент находится в самом верху иерархии, то
+      --  его предка устанавливать не надо.
+
+      if Parent /= Null_Widget then
+         Xt_Set_Arg (Args (3), Xm_N_Entry_Parent, Parent);
+         Icon :=
+           Xm_Create_Managed_Icon_Gadget (Container, "item", Args (0 .. 3));
+
+      else
+         Icon :=
+           Xm_Create_Managed_Icon_Gadget (Container, "item", Args (0 .. 2));
+      end if;
+
+      --  Функция будет вызвана при уничтожении виджета и предназначена для
+      --  очиски элемента таблицы Annotation_Table.
+
+      Xt_Add_Callback
+        (Icon, Xm_N_Destroy_Callback, Callbacks.On_Destroy'Access);
+
+      Xm_String_Free (Str);
+
+      return Icon;
+   end Add_Child;
+
+   Selected_Item : Node_Id := Null_Node;
+   --  Элемент модели, выбранный пользователем в настоящий момент и для
+   --  отображены страницы редактора дерева.
+
    Project_Container   : Widget;
+   --  Контейнер, в котором содержится дерево проекта.
+
    Component_Container : Widget;
+   --  Контейнер, в котором содержится дерево компонентов.
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -68,8 +263,29 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
+      Annotation : Annotation_Record
+        renames Annotation_Table.Table (Node);
+
    begin
-      null;
+      if Selected_Item = Node then
+         Selected_Item := Null_Node;
+      end if;
+
+      case Annotation.Kind is
+         when Annotation_Node_Project
+           | Annotation_Node_Application =>
+            Xt_Destroy_Widget (Annotation.Project_Widget);
+
+         when Annotation_Component_Class =>
+            Xt_Destroy_Widget (Annotation.Component_Widget);
+            Xt_Destroy_Widget (Annotation.Project_Widget);
+
+         when Annotation_Widget_Instance =>
+            Xt_Destroy_Widget (Annotation.Project_Widget);
+
+         when Annotation_Empty =>
+            null;
+      end case;
    end Delete_Item;
 
    ---------------------------------------------------------------------------
@@ -88,8 +304,13 @@ package body Designer.Tree_Editor is
    begin
       Notebook := Xm_Create_Managed_Notebook (Parent, "notebook", Arg_List);
 
+      --  С ноутбука удаляется элемент PageScroller.
+
       Button := Xt_Name_To_Widget (Notebook, "PageScroller");
       Xt_Unmanage_Child (Button);
+
+      --  Добавляется вкладка "project tree" содержащая элемент
+      --  Container.
 
       Args (0 .. Arg_List'Length - 1) := Arg_List;
       Xt_Set_Arg (Args (Arg_List'Length), Xm_N_Scrolling_Policy, Xm_Automatic);
@@ -102,6 +323,9 @@ package body Designer.Tree_Editor is
         Xm_Create_Managed_Container (Scrolled, "project_tree", Args (0 .. 0));
 
       Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "project");
+
+      --  Добавляется вкладка "component tree" содержащая элемент
+      --  Container.
 
       Args (0 .. Arg_List'Length - 1) := Arg_List;
       Xt_Set_Arg (Args (Arg_List'Length), Xm_N_Scrolling_Policy, Xm_Automatic);
@@ -123,8 +347,55 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Insert_Item (Node : in Model.Node_Id) is
+      Component : Widget;
+      Project   : Widget;
+      Parent    : Widget;
+
    begin
-      null;
+      Relocate_Annotation_Table (Node);
+      --  Увеличение размеров таблицы (при необходимости).
+
+      case Node_Kind (Node) is
+         when Node_Component_Class =>
+            Parent    :=
+              Annotation_Table.Table (Parent_Node (Node)).Project_Widget;
+            Project   := Add_Child (Project_Container, Parent, Node);
+            Component :=
+              Add_Child (Component_Container, Null_Widget, Node);
+            Annotation_Table.Set_Item
+             (Node, (Kind             => Annotation_Component_Class,
+                     Component_Widget => Component,
+                     Project_Widget   => Project));
+
+         when Node_Widget_Instance =>
+            Parent    :=
+              Annotation_Table.Table (Parent_Node (Node)).Component_Widget;
+            Component := Add_Child (Component_Container, Parent, Node);
+            Annotation_Table.Set_Item
+             (Node, (Kind             => Annotation_Widget_Instance,
+                     Component_Widget => Component,
+                     Project_Widget   => Null_Widget));
+
+         when Node_Application     =>
+            Parent  :=
+              Annotation_Table.Table (Parent_Node (Node)).Project_Widget;
+            Project :=
+              Add_Child (Project_Container, Parent, Node);
+            Annotation_Table.Set_Item
+             (Node, (Kind             => Annotation_Node_Application,
+                     Project_Widget   => Project,
+                     Component_Widget => Null_Widget));
+
+         when Node_Project          =>
+            Project := Add_Child (Project_Container, Null_Widget, Node);
+            Annotation_Table.Set_Item
+             (Node, (Kind             => Annotation_Node_Project,
+                     Project_Widget   => Project,
+                     Component_Widget => Null_Widget));
+
+         when others               =>
+            null;
+      end case;
    end Insert_Item;
 
    ---------------------------------------------------------------------------
@@ -133,9 +404,58 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Reinitialize is
+      Annotation : Annotation_Record;
+
    begin
-      null;
+
+     --  Удаление всех виджетов из таблицы.
+
+      for J in Annotation_Table.First .. Annotation_Table.Last loop
+         Annotation := Annotation_Table.Table (J);
+         case Annotation.Kind is
+            when Annotation_Component_Class  =>
+               Xt_Destroy_Widget (Annotation.Project_Widget);
+               Xt_Destroy_Widget (Annotation.Component_Widget);
+
+            when Annotation_Node_Application
+               | Annotation_Node_Project     =>
+               Xt_Destroy_Widget (Annotation.Project_Widget);
+
+            when Annotation_Widget_Instance  =>
+               Xt_Destroy_Widget (Annotation.Component_Widget);
+
+            when Annotation_Empty            =>
+               null;
+         end case;
+      end loop;
+
+      --  Очистка самой таблицы.
+
+      Annotation_Table.Free;
+      Annotation_Table.Init;
    end Reinitialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Relocate_Annotation_Table
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table (Node : in Node_Id) is
+      First : constant Node_Id := Annotation_Table.Last + 1;
+
+   begin
+      if Annotation_Table.Last >= Node then
+         --  Таблица уже имеет достаточный размер и не нуждается в расширении.
+
+         return;
+      end if;
+
+      Annotation_Table.Set_Last (Node);
+
+      for J in First .. Node loop
+         Annotation_Table.Table (J) := (Kind => Annotation_Empty);
+      end loop;
+   end Relocate_Annotation_Table;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -144,7 +464,7 @@ package body Designer.Tree_Editor is
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
    begin
-      null;
+      Selected_Item := Node;
    end Select_Item;
 
    ---------------------------------------------------------------------------
