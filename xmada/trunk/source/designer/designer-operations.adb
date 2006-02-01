@@ -91,6 +91,15 @@ package body Designer.Operations is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Xml_To_Project
+   --!    <Purpose> Преобразовывает XML-структуру в дерево узлов проекта.
+   --! Возвращает Node_Id нового проекта.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Xml_To_Project return Node_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Init_XML_Tools
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -182,141 +191,10 @@ package body Designer.Operations is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Open_Project (File_Name : in Wide_String) is
-      use XML_Tools;
-
-      Root : constant Element_Id := 1;
-      L    : List_Id;
-      A    : Attribute_Id;
-      E    : Element_Id;
-
-      Application : Node_Id;
-
    begin
       Init_XML_Tools;
-
-      Parser.Parse (Ada.Characters.Handling.To_String (File_Name));
-
-      --  Создание узла представления проекта и установка необходимых
-      --  атрибутов узла.
-
-      if Elements.Name (Root) /= Project_Tag then
-         raise Program_Error;
-      end if;
-
-      Project := Create_Project;
-
-      A := Elements.Attribute (Root);
-
-      while A /= Null_Attribute_Id loop
-         if Attributes.Name (A) = Name_Attr then
-            Set_Name (Project,
-                      Enter (XML_Tools.Strings.Image (Attributes.Value (A))));
-
-         else
-            raise Program_Error;
-
-         end if;
-
-         A := Attributes.Next (A);
-      end loop;
-
---    L := New_List;
---    Append (L, Xt_Motif_Widget_Set);
---    Set_Imported_Widget_Sets (Project, L);
-
-      Designer.Main_Window.Insert_Item (Project);
-      --  Извещение компонентов дизайнера о создании нового проекта.
-
-      --  Создание списка приложений.
-
-      L := New_List;
-      Set_Applications (Project, L);
-
-      E := Elements.Child (Root);
-
-      while E /= Null_Element_Id loop
-         if Elements.Name (E) = Application_Tag then
-            --  Создание узла приложения и добавление его в состав проекта.
-
-            Application := Create_Application;
-            Append (L, Application);
-
-            A := Elements.Attribute (E);
-
-            while A /= Null_Attribute_Id loop
-               if Attributes.Name (A) = Class_Name_Attr then
-                  Set_Application_Class_Name
-                   (Application,
-                    Enter (XML_Tools.Strings.Image (Attributes.Value (A))));
-
-               else
-                  raise Program_Error;
-               end if;
-
-               A := Attributes.Next (A);
-            end loop;
-
-            Designer.Main_Window.Insert_Item (Application);
-            --  Извещение компонентов дизайнера о создании нового приложения.
-
-            declare
-               L : constant List_Id := New_List;
-               E2 : Element_Id := Elements.Child (E);
-
-               Component : Node_Id;
-
-            begin
-               --  Создание списка компонентов приложения.
-
-               Set_Component_Classes (Application, L);
-
-
-               while E2 /= Null_Element_Id loop
-                  if Elements.Name (E2) = Component_Class_Tag then
-                     --  Создание узла компонента и добавление
-                     --  его в состав приложения.
-
-                     Component := Create_Component_Class;
-                     Append (L, Component);
-
-                     A := Elements.Attribute (E2);
-
-                     while A /= Null_Attribute_Id loop
-                        if Attributes.Name (A) = Name_Attr then
-                           Set_Name
-                            (Component,
-                             Enter (XML_Tools.Strings.Image
-                                     (Attributes.Value (A))));
-
-                        else
-                           raise Program_Error;
-                        end if;
-
-                        A := Attributes.Next (A);
-                     end loop;
-
-                     Designer.Main_Window.Insert_Item (Component);
-                     --  Извещение компонентов дизайнера
-                     --  о создании нового компонента.
-
-                     Designer.Main_Window.Select_Item (Component);
-                     --  Извещение компонентов дизайнера
-                     --  о выборе нового компонента.
-
-                  else
-                     raise Program_Error;
-                  end if;
-
-                  E2 := Elements.Next (E2);
-               end loop;
-            end;
-
-         else
-            raise Program_Error;
-         end if;
-
-         E := Elements.Next (E);
-      end loop;
+      XML_Tools.Parser.Parse (Ada.Characters.Handling.To_String (File_Name));
+      Project := Xml_To_Project;
    end Open_Project;
 
    ---------------------------------------------------------------------------
@@ -436,17 +314,10 @@ package body Designer.Operations is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Save_Project (File_Name : in Wide_String) is
-      use XML_Tools;
-
    begin
       Set_File_Name (Project, Enter (File_Name));
-      --  Запоминаем имя файла проекта.
-
       Project_To_Xml (Project);
-
-      Printer.Print
-       (Ada.Characters.Handling.To_String
-         (Model.Names.Image (Model.Tree.File_Name (Project))));
+      XML_Tools.Printer.Print (Ada.Characters.Handling.To_String (File_Name));
    end Save_Project;
 
    ---------------------------------------------------------------------------
@@ -458,5 +329,186 @@ package body Designer.Operations is
    begin
       Save_Project (Image (File_Name (Project)));
    end Save_Project;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xml_To_Project
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Xml_To_Project return Node_Id is
+      use XML_Tools;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Xml_To_Application
+      --!    <Purpose> Преобразует XML-структуру в узел Node_Application.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      function Xml_To_Application (Tag : in Element_Id) return Node_Id;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Xml_To_Application
+      --!    <Purpose> Преобразует XML-структуру в узел Node_Component_Class.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      function Xml_To_Component_Class (Tag : in Element_Id) return Node_Id;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Xml_To_Application
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function Xml_To_Application (Tag : in Element_Id) return Node_Id is
+         Application : constant Node_Id := Create_Application;
+         Components  : constant List_Id := New_List;
+
+      begin
+         Set_Component_Classes (Application, Components);
+
+         --  Обработка атрибутов тега Application.
+
+         declare
+            A : Attribute_Id := Elements.Attribute (Tag);
+
+         begin
+            while A /= Null_Attribute_Id loop
+               if Attributes.Name (A) = Class_Name_Attr then
+                  Set_Application_Class_Name
+                   (Application,
+                    Enter (XML_Tools.Strings.Image (Attributes.Value (A))));
+
+               else
+                  raise Program_Error;
+               end if;
+
+               A := Attributes.Next (A);
+            end loop;
+         end;
+
+         --  Обработка дочерних тегов тега Application.
+
+         declare
+            Child : Element_Id := Elements.Child (Tag);
+
+         begin
+            while Child /= Null_Element_Id loop
+               if Elements.Name (Child) = Component_Class_Tag then
+                  Append (Components, Xml_To_Component_Class (Child));
+
+               else
+                  raise Program_Error;
+               end if;
+
+               Child := Elements.Next (Child);
+            end loop;
+         end;
+
+         return Application;
+      end Xml_To_Application;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Xml_To_Component_Class
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function Xml_To_Component_Class (Tag : in Element_Id) return Node_Id is
+         Component_Class : constant Node_Id := Create_Component_Class;
+
+      begin
+         --  Обработка атрибутов тега Component_Class.
+
+         declare
+            A : Attribute_Id := Elements.Attribute (Tag);
+
+         begin
+            while A /= Null_Attribute_Id loop
+               if Attributes.Name (A) = Name_Attr then
+                  Set_Name (Component_Class,
+                            Enter (XML_Tools.Strings.Image
+                                    (Attributes.Value (A))));
+
+               else
+                  raise Program_Error;
+               end if;
+
+               A := Attributes.Next (A);
+            end loop;
+         end;
+
+         --  XXX Designer.Main_Window.Insert_Item (Component);
+         --  Извещение компонентов дизайнера
+         --  о создании нового компонента.
+
+         --  XXX Designer.Main_Window.Select_Item (Component);
+         --  Извещение компонентов дизайнера
+         --  о выборе нового компонента.
+
+         return Component_Class;
+      end Xml_To_Component_Class;
+
+      Project              : constant Node_Id := Create_Project;
+      Applications         : constant List_Id := New_List;
+      Imported_Widget_Sets : constant List_Id := New_List;
+
+      Root : constant Element_Id := 1;
+
+   begin
+      Set_Applications (Project, Applications);
+      Set_Imported_Widget_Sets (Project, Imported_Widget_Sets);
+
+      if Elements.Name (Root) /= Project_Tag then
+         raise Program_Error;
+      end if;
+
+      --  Обработка атрибутов тега Project.
+
+      declare
+         A : Attribute_Id := Elements.Attribute (Root);
+
+      begin
+         while A /= Null_Attribute_Id loop
+            if Attributes.Name (A) = Name_Attr then
+               Set_Name (Project,
+                         Enter (XML_Tools.Strings.Image
+                                 (Attributes.Value (A))));
+
+            else
+               raise Program_Error;
+            end if;
+
+            A := Attributes.Next (A);
+         end loop;
+      end;
+
+--    Append (Imported_Widget_Sets, Xt_Motif_Widget_Set);
+
+      Designer.Main_Window.Insert_Item (Project);
+      --  Извещение компонентов дизайнера о создании нового проекта.
+
+      --  Обработка вложенных тегов тега Project.
+
+      declare
+         Child : Element_Id := Elements.Child (Root);
+
+      begin
+         while Child /= Null_Element_Id loop
+            if Elements.Name (Child) = Application_Tag then
+               Append (Applications, Xml_To_Application (Child));
+
+               --  XXX Designer.Main_Window.Insert_Item (Application);
+               --  Извещение компонентов дизайнера
+               --  о создании нового приложения.
+
+            else
+               raise Program_Error;
+            end if;
+
+            Child := Elements.Next (Child);
+         end loop;
+      end;
+
+      return Project;
+   end Xml_To_Project;
 
 end Designer.Operations;
