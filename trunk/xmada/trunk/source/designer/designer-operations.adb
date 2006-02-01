@@ -82,6 +82,14 @@ package body Designer.Operations is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <Purpose> Инициализирует проект.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Project_To_Xml
    --!    <Purpose> Преобразовывает структуру дерева узлов проекта
    --! в XML-структуру.
@@ -122,11 +130,7 @@ package body Designer.Operations is
    --!    <Unit> New_Project
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure New_Project is
-      Application : Node_Id;
-      Component   : Node_Id;
-      List        : List_Id;
-
+   procedure Initialize is
    begin
       --  Освобождение всех используемых внутренних структур компонентов
       --  дизайнера и их повторная инициализация.
@@ -138,6 +142,21 @@ package body Designer.Operations is
 
       Model.Initialization.Initialize;
       Model.Initialization.Designer.Initialize;
+
+   end Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> New_Project
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure New_Project is
+      Application : Node_Id;
+      Component   : Node_Id;
+      List        : List_Id;
+
+   begin
+      Initialize;
 
       --  Создание узла представления проекта и установка необходимых
       --  атрибутов узла.
@@ -192,6 +211,7 @@ package body Designer.Operations is
    ---------------------------------------------------------------------------
    procedure Open_Project (File_Name : in Wide_String) is
    begin
+      Initialize;
       Init_XML_Tools;
       XML_Tools.Parser.Parse (Ada.Characters.Handling.To_String (File_Name));
       Project := Xml_To_Project;
@@ -483,9 +503,6 @@ package body Designer.Operations is
 
 --    Append (Imported_Widget_Sets, Xt_Motif_Widget_Set);
 
-      Designer.Main_Window.Insert_Item (Project);
-      --  Извещение компонентов дизайнера о создании нового проекта.
-
       --  Обработка вложенных тегов тега Project.
 
       declare
@@ -507,6 +524,9 @@ package body Designer.Operations is
             Child := Elements.Next (Child);
          end loop;
       end;
+
+      Designer.Main_Window.Insert_Item (Project);
+      --  Извещение компонентов дизайнера о создании нового проекта.
 
       return Project;
    end Xml_To_Project;
