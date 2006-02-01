@@ -50,6 +50,8 @@ package Model.Tree.Constructors is
 
    function Create_Enumeration_Value_Specification return Node_Id;
 
+   function Create_Predefined_Resource_Type return Node_Id;
+
    function Create_Project return Node_Id;
 
    function Create_Resource_Specification return Node_Id;

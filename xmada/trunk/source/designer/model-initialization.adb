@@ -50,6 +50,8 @@ package body Model.Initialization is
    use Model.Tree.Constructors;
    use Model.Xt_Motif;
 
+   procedure Create_Predefined_Resource_Types;
+
    procedure Create_Enumerated_Resource_Types;
 
    procedure Create_Widget_Classes;
@@ -93,6 +95,11 @@ package body Model.Initialization is
 --   Xt_Motif_Outline_State_Resource_Type              : Node_Id;
 --   Xt_Motif_Packing_Resource_Type                    : Node_Id;
 --   Xt_Motif_Position_Mode_Resource_Type              : Node_Id;
+
+   Xt_Motif_Horizontal_Dimension_Resource_Type       : Node_Id;
+   Xt_Motif_Horizontal_Position_Resource_Type        : Node_Id;
+   Xt_Motif_Vertical_Dimension_Resource_Type         : Node_Id;
+   Xt_Motif_Vertical_Position_Resource_Type          : Node_Id;
 
    Types   : List_Id;
    Classes : List_Id;
@@ -1514,6 +1521,102 @@ package body Model.Initialization is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Predefined_Resource_Types
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Create_Predefined_Resource_Types is
+      --  X Toolkit Intrinsics
+
+      Xt_Motif_Dimension_Resource_Type : Node_Id;
+      Xt_Motif_Position_Resource_Type  : Node_Id;
+
+   begin
+      --
+      --  Xt
+      --
+
+      --  Position
+
+      Xt_Motif_Position_Resource_Type := Create_Predefined_Resource_Type;
+      Set_Name (Xt_Motif_Position_Resource_Type, Enter ("XtRPosition"));
+      Set_Internal_Name (Xt_Motif_Position_Resource_Type, Enter ("Position"));
+      Set_Type_Kind (Xt_Motif_Position_Resource_Type, Type_Position);
+
+      --  Dimension
+
+      Xt_Motif_Dimension_Resource_Type := Create_Predefined_Resource_Type;
+      Set_Name (Xt_Motif_Dimension_Resource_Type, Enter ("XtRDimension"));
+      Set_Internal_Name
+       (Xt_Motif_Dimension_Resource_Type, Enter ("Dimension"));
+      Set_Type_Kind (Xt_Motif_Dimension_Resource_Type, Type_Dimension);
+
+      --
+      --  Motif
+      --
+
+      --  HorizontalPosition
+
+      Xt_Motif_Horizontal_Position_Resource_Type :=
+        Create_Predefined_Resource_Type;
+      Set_Name
+       (Xt_Motif_Horizontal_Position_Resource_Type,
+        Enter ("XmRHorizontalPosition"));
+      Set_Internal_Name
+       (Xt_Motif_Horizontal_Position_Resource_Type,
+        Enter ("HorizontalPosition"));
+      Set_Type_Kind
+       (Xt_Motif_Horizontal_Position_Resource_Type, Type_Position);
+
+      --  VerticalPosition
+
+      Xt_Motif_Vertical_Position_Resource_Type :=
+        Create_Predefined_Resource_Type;
+      Set_Name
+       (Xt_Motif_Vertical_Position_Resource_Type,
+        Enter ("XmRVerticalPosition"));
+      Set_Internal_Name
+       (Xt_Motif_Vertical_Position_Resource_Type, Enter ("VerticalPosition"));
+      Set_Type_Kind
+       (Xt_Motif_Vertical_Position_Resource_Type, Type_Position);
+
+      --  HorizontalDimension
+
+      Xt_Motif_Horizontal_Dimension_Resource_Type :=
+        Create_Predefined_Resource_Type;
+      Set_Name
+       (Xt_Motif_Horizontal_Dimension_Resource_Type,
+        Enter ("XmRHorizontalDimension"));
+      Set_Internal_Name
+       (Xt_Motif_Horizontal_Dimension_Resource_Type,
+        Enter ("HorizontalDimension"));
+      Set_Type_Kind
+       (Xt_Motif_Horizontal_Dimension_Resource_Type, Type_Dimension);
+
+      --  VerticalDimension
+
+      Xt_Motif_Vertical_Dimension_Resource_Type :=
+        Create_Predefined_Resource_Type;
+      Set_Name
+       (Xt_Motif_Vertical_Dimension_Resource_Type,
+        Enter ("XmRVerticalDimension"));
+      Set_Internal_Name
+       (Xt_Motif_Vertical_Dimension_Resource_Type,
+        Enter ("VerticalDimension"));
+      Set_Type_Kind
+       (Xt_Motif_Vertical_Dimension_Resource_Type, Type_Dimension);
+
+      --  Формирование списка предопределенных типов ресурсов.
+
+      Append (Types, Xt_Motif_Dimension_Resource_Type);
+      Append (Types, Xt_Motif_Horizontal_Dimension_Resource_Type);
+      Append (Types, Xt_Motif_Horizontal_Position_Resource_Type);
+      Append (Types, Xt_Motif_Vertical_Dimension_Resource_Type);
+      Append (Types, Xt_Motif_Vertical_Position_Resource_Type);
+      Append (Types, Xt_Motif_Position_Resource_Type);
+   end Create_Predefined_Resource_Types;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Widget_Classes
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -1887,16 +1990,71 @@ package body Model.Initialization is
 
       --  XmPrimitive
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Primitive_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Primitive_Widget_Class, Enter ("XmPrimitive"));
-      Set_Super_Class (Xt_Motif_Primitive_Widget_Class,
-                       Xt_Motif_Core_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_Primitive_Widget_Class, True);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Primitive_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Primitive_Widget_Class, Enter ("XmPrimitive"));
+         Set_Super_Class (Xt_Motif_Primitive_Widget_Class,
+                          Xt_Motif_Core_Widget_Class);
+         Set_Is_Meta_Class (Xt_Motif_Primitive_Widget_Class, True);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNborderWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("borderWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCBorderWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("BorderWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNheight"));
+         Set_Internal_Resource_Name (Resource, Enter ("height"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCDimension"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNshadowThickness"));
+         Set_Internal_Resource_Name (Resource, Enter ("shadowThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNwidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("width"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCDimension"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNx"));
+         Set_Internal_Resource_Name (Resource, Enter ("x"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCPosition"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Position"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Position_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNy"));
+         Set_Internal_Resource_Name (Resource, Enter ("y"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCPosition"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Position"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Position_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -1905,9 +2063,9 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Primitive_Widget_Class, Resources);
+      end;
 
       --  XmArrowButton
 
@@ -2189,16 +2347,71 @@ package body Model.Initialization is
 
       --  XmGadget
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Gadget_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Gadget_Widget_Class, Enter ("XmGadget"));
-      Set_Super_Class (Xt_Motif_Gadget_Widget_Class,
-                       Xt_Motif_Rect_Obj_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_Gadget_Widget_Class, True);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Gadget_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Gadget_Widget_Class, Enter ("XmGadget"));
+         Set_Super_Class (Xt_Motif_Gadget_Widget_Class,
+                          Xt_Motif_Rect_Obj_Widget_Class);
+         Set_Is_Meta_Class (Xt_Motif_Gadget_Widget_Class, True);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNborderWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("borderWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCBorderWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("BorderWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNheight"));
+         Set_Internal_Resource_Name (Resource, Enter ("height"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCDimension"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNshadowThickness"));
+         Set_Internal_Resource_Name (Resource, Enter ("shadowThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNwidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("width"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCDimension"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNx"));
+         Set_Internal_Resource_Name (Resource, Enter ("x"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCPosition"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Position"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Position_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNy"));
+         Set_Internal_Resource_Name (Resource, Enter ("y"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCPosition"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Position"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Position_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2207,9 +2420,9 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Gadget_Widget_Class, Resources);
+      end;
 
       --  XmArrowButtonGadget
 
@@ -2429,16 +2642,71 @@ package body Model.Initialization is
 
       --  XmManager
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Manager_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Manager_Widget_Class, Enter ("XmManager"));
-      Set_Super_Class (Xt_Motif_Manager_Widget_Class,
-                       Xt_Motif_Constraint_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_Manager_Widget_Class, True);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Manager_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Manager_Widget_Class, Enter ("XmManager"));
+         Set_Super_Class (Xt_Motif_Manager_Widget_Class,
+                          Xt_Motif_Constraint_Widget_Class);
+         Set_Is_Meta_Class (Xt_Motif_Manager_Widget_Class, True);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNborderWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("borderWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCBorderWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("BorderWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNheight"));
+         Set_Internal_Resource_Name (Resource, Enter ("height"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCDimension"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNshadowThickness"));
+         Set_Internal_Resource_Name (Resource, Enter ("shadowThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNwidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("width"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCDimension"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNx"));
+         Set_Internal_Resource_Name (Resource, Enter ("x"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCPosition"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Position"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Position_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNy"));
+         Set_Internal_Resource_Name (Resource, Enter ("y"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCPosition"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Position"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Position_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2447,9 +2715,17 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Manager_Widget_Class, Resources);
+      end;
 
       --  XmBulletinBoard
 
@@ -2959,6 +3235,7 @@ package body Model.Initialization is
       Types := New_List;
       Classes := New_List;
 
+      Create_Predefined_Resource_Types;
       Create_Enumerated_Resource_Types;
       Create_Widget_Classes;
 
