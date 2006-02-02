@@ -36,7 +36,6 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Characters.Handling;
 with GNAT.Table;
 
 with Xt.Callbacks;
@@ -60,7 +59,6 @@ with Model.Tree;
 
 package body Designer.Tree_Editor is
 
-   use Ada.Characters.Handling;
    use Model;
    use Model.Allocations;
    use Model.Queries;
@@ -99,8 +97,8 @@ package body Designer.Tree_Editor is
          when Annotation_Component_Class  =>
             CC_Project   : Widget;  --  Иконка в дереве проекта.
             CC_Component : Widget;  --  Иконка в дереве сомпонент.
-            CC_Window    : Widget;  --  Окно компонент.
-            CC_Button    : Widget;  --  Закладка на ноутбуке.
+            Window       : Widget;  --  Окно компонент.
+            Button       : Widget;  --  Закладка на ноутбуке.
 
          when Annotation_Widget_Instance  =>
             WI_Component : Widget;  --  Иконка в дереве компонент.
@@ -228,7 +226,7 @@ package body Designer.Tree_Editor is
          Xt_Get_Values (The_Widget, Args);
 
          Annotation_Table.Table (Node_Id (Node)) :=
-           (Kind => Annotation_Empty);
+          (Kind => Annotation_Empty);
 
       exception
          when E : others =>
@@ -347,8 +345,8 @@ package body Designer.Tree_Editor is
              Xt_Destroy_Widget (Get_Project_Widget (Node));
 
          when Annotation_Component_Class =>
-            Xt_Destroy_Widget (Annotation.CC_Window);
-            Xt_Destroy_Widget (Annotation.CC_Button);
+            Xt_Destroy_Widget (Annotation.Window);
+            Xt_Destroy_Widget (Annotation.Button);
             Xt_Destroy_Widget (Get_Project_Widget (Node));
             Xt_Destroy_Widget (Get_Component_Widget (Node));
 
@@ -501,6 +499,7 @@ package body Designer.Tree_Editor is
          Annotation : Annotation_Record (Annotation_Component_Class);
          Args       : Xt_Arg_List (0 .. 2);
          Component  : Widget;
+         Name       : Xm_String;
 
       begin
          --  Добавляется вкладка "component tree" содержащая элемент
@@ -512,22 +511,28 @@ package body Designer.Tree_Editor is
 
          Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
          Xt_Set_Arg (Args (1), Xm_N_Automatic_Selection, Xm_No_Auto_Select);
-         Annotation.CC_Window :=
+         Xt_Set_Arg (Args (2), Xm_N_Selection_Policy, Xm_Single_Select);
+         Annotation.Window :=
            Xm_Create_Managed_Container
-            (Component, "component_tree", Args (0 .. 1));
+            (Component, "component_tree", Args (0 .. 2));
 
-         Xt_Add_Callback (Annotation.CC_Window,
-                          Xm_N_Selection_Callback,
+         Xt_Add_Callback (Annotation.Window,
+                          Xm_N_Default_Action_Callback,
                           Callbacks.On_Select'Access);
+
+         Name := Xm_String_Generate (Name_Image (Node));
 
          --  Добавляем вкладку на ноутбук.
          --  При добавлении вкладка должна быть как Managed, иначе
          --  мотиф не назначит необходимые ей ресурсы.
 
-         Annotation.CC_Button :=
+         Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+         Annotation.Button :=
            Xm_Create_Managed_Push_Button_Gadget
-            (Notebook, To_String (Name_Image (Node)));
-         Xt_Unmanage_Child (Annotation.CC_Button);
+             (Notebook, "component", Args (0 .. 0));
+         Xt_Unmanage_Child (Annotation.Button);
+
+         Xm_String_Free (Name);
 
          return Annotation;
       end Create_Tab;
@@ -551,7 +556,7 @@ package body Designer.Tree_Editor is
                  Add_Child (Project_Container, Parent, Node);
 
                Annotation.CC_Component :=
-                 Add_Child (Annotation.CC_Window, Null_Widget, Node);
+                 Add_Child (Annotation.Window, Null_Widget, Node);
 
                Annotation_Table.Set_Item (Node, Annotation);
             end;
@@ -559,7 +564,7 @@ package body Designer.Tree_Editor is
          when Node_Widget_Instance =>
             Parent    := Get_Component_Widget (Parent_Node (Node));
             Component := Add_Child
-                          (Get_Component_Class (Node).CC_Window,
+                          (Get_Component_Class (Node).Window,
                            Parent,
                            Node);
             Annotation_Table.Set_Item
@@ -603,8 +608,8 @@ package body Designer.Tree_Editor is
             when Annotation_Component_Class  =>
                Xt_Destroy_Widget (Xt_Parent
                                    (Xt_Parent
-                                     (Annotation.CC_Window)));
-               Xt_Destroy_Widget (Annotation.CC_Button);
+                                     (Annotation.Window)));
+               Xt_Destroy_Widget (Annotation.Button);
                Xt_Destroy_Widget (Get_Project_Widget (J));
 
             when Annotation_Node_Application
@@ -624,7 +629,7 @@ package body Designer.Tree_Editor is
       Annotation_Table.Free;
       Annotation_Table.Init;
 
-      Xt_Set_Arg (Args (0), Xm_N_Page_Number, Xt_Arg_Val (0));
+      Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (0));
       Xt_Set_Values (Notebook, Args (0 .. 0));
    end Reinitialize;
 
@@ -668,12 +673,17 @@ package body Designer.Tree_Editor is
       --  Получаем номер вклаки, и делаем ее активной.
 
       Xt_Set_Arg (Args (0), Xm_N_Page_Number, Number'Address);
-      Xt_Get_Values (Class.CC_Button, Args (0 .. 0));
+      Xt_Get_Values (Class.Button, Args (0 .. 0));
 
       Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (Number));
       Xt_Set_Values (Notebook, Args (0 .. 0));
 
-      Xt_Manage_Child (Class.CC_Button);
+      Xt_Set_Arg
+        (Args (0), Xm_N_Selected_Objects, Get_Component_Widget (Node));
+      Xt_Set_Arg (Args (1), Xm_N_Selected_Object_Count, Xt_Arg_Val (1));
+      Xt_Set_Values (Class.Window, Args (0 .. 1));
+
+      Xt_Manage_Child (Class.Button);
       --  Передаем на управление motif вкладку.
    end Select_Item;
 
