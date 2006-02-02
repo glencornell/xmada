@@ -20,7 +20,7 @@ ADALFLAGS = $(LIBS)
 CLEANFILES = *.ali *.o XmAdaDesigner b~designer-driver.ad[sb] designer
 
 all: XmAdaDesigner
-	gnatmake $(ADAFLAGS) designer-driver.adb -o designer -bargs $(ADABFLAGS) -largs $(ADALFLAGS)
+	gnatmake $(ADAFLAGS) designer-driver.adb -o designer -bargs $(ADABFLAGS) -bargs -E -largs $(ADALFLAGS)
 
 XmAdaDesigner:
 	ln -s $(srcdir)/XmAdaDesigner.ad XmAdaDesigner
