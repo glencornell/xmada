@@ -37,47 +37,37 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with GNAT.Table;
-with Ada.Characters.Handling;
 
-with Xm;
-with Xm_Cascade_Button_Gadget;
+with Xt.Ancillary_Types;
+with Xm.Resource_Management;
+with Xm.Strings;
 with Xm_Notebook;
 with Xm_Push_Button_Gadget;
-with Xm.Resource_Management;
 with Xm_Row_Column;
 with Xm_String_Defs;
-with Xm.Strings;
-with Xt;
-with Xt.Ancillary_Types;
-with Xt.Composite_Management;
-with Xt.Resource_Management;
 
 with Designer.Properties_Editor.Component_Class;
 with Designer.Properties_Editor.Widget_Instance;
 with Model.Allocations;
+with Model.Queries;
 with Model.Tree;
 with Model.Tree.Lists;
-with Model.Names;
 
 package body Designer.Properties_Editor is
 
-   use Xt;
-   use Xt.Ancillary_Types;
-   use Xt.Composite_Management;
-   use Xt.Resource_Management;
-   use Ada.Characters.Handling;
    use Model;
+   use Model.Queries;
    use Model.Tree;
    use Model.Tree.Lists;
-   use Model.Names;
    use Xm;
-   use Xm_Cascade_Button_Gadget;
+   use Xm.Resource_Management;
+   use Xm.Strings;
    use Xm_Notebook;
    use Xm_Push_Button_Gadget;
-   use Xm.Resource_Management;
    use Xm_Row_Column;
    use Xm_String_Defs;
-   use Xm.Strings;
+   use Xt;
+   use Xt.Ancillary_Types;
 
    type Node_Properties_Editor_Access is
      access all Node_Properties_Editor'Class;
@@ -174,59 +164,61 @@ package body Designer.Properties_Editor is
       case Node_Kind (Node) is
          when Node_Project =>
             --  Построение меню для элементов перечислимых типов.
+
             declare
-               Current          : Node_Id;
-               Resource_Current : Node_Id;
-               Value_Current    : Node_Id;
-               Argl             : Xt_Arg_List (0 .. 0);
-               Text             : Xm_String;
+               Current_Set   : Node_Id;
+               Current_Type  : Node_Id;
+               Current_Value : Node_Id;
+               Argl          : Xt_Arg_List (0 .. 0);
+               Str           : Xm_String;
 
             begin
-               Current := First (Imported_Widget_Sets (Node));
+               Current_Set := First (Imported_Widget_Sets (Node));
 
-               while Current /= Null_Node loop
-                  Resource_Current := First (Resource_Types (Current));
-
+               while Current_Set /= Null_Node loop
                   --  Построение меню для каждого элемента типа ресурсов.
 
-                  while Resource_Current /= Null_Node loop
-                     Relocate_Annotation_Table (Resource_Current);
-                     Annotation_Table.Table (Resource_Current).Menu :=
-                       Xm_Create_Pulldown_Menu (Notebook, "resource_menu");
+                  Current_Type := First (Resource_Types (Current_Set));
 
-                     Value_Current
-                        := First (Value_Specifications (Resource_Current));
+                  while Current_Type /= Null_Node loop
+                     if Node_Kind (Current_Type)
+                          = Node_Enumerated_Resource_Type
+                     then
+                        Relocate_Annotation_Table (Current_Type);
 
-                     Xt_Set_Arg (Argl (0),
-                                 Xm_N_Sub_Menu_Id,
-                                 Annotation_Table.Table (Resource_Current).Menu);
+                        Annotation_Table.Table (Current_Type).Menu :=
+                          Xm_Create_Pulldown_Menu
+                           (Notebook, "resourcetype__menu");
 
-                     --  Задание списков возможных значений для каждого меню
-                     --  элемента типа ресурсов.
+                        --  Задание списков возможных значений для каждого меню
+                        --  элемента типа ресурсов.
 
-                     while Value_Current /= Null_Node loop
-                        Relocate_Annotation_Table (Value_Current);
+                        Current_Value :=
+                          First (Value_Specifications (Current_Type));
 
-                        Text := Xm_String_Generate
-                          (To_String (Image (Name (Value_Current))));
+                        while Current_Value /= Null_Node loop
+                           Relocate_Annotation_Table (Current_Value);
 
-                        Xt_Set_Arg (Argl (0), Xm_N_Label_String, Text);
+                           Str :=
+                             Xm_String_Generate (Name_Image (Current_Value));
+                           Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
+                           Annotation_Table.Table (Current_Value).Button :=
+                             Xm_Create_Managed_Push_Button_Gadget
+                              (Annotation_Table.Table (Current_Type).Menu,
+                               "value",
+                               Argl (0 .. 0));
+                           Xm_String_Free (Str);
 
-                        Annotation_Table.Table (Value_Current).Button :=
-                          Xm_Create_Managed_Push_Button_Gadget
-                            (Notebook, "value_button", Argl (0 .. 0));
+                           Current_Value := Next (Current_Value);
+                        end loop;
+                     end if;
 
-                        Value_Current := Next (Value_Current);
-                        Xm_String_Free (Text);
-                     end loop;
-
-                     Resource_Current := Next (Resource_Current);
+                     Current_Type := Next (Current_Type);
                   end loop;
 
-                  Current := Next (Current);
+                  Current_Set := Next (Current_Set);
                end loop;
             end;
-
 
          when Node_Application =>
             null;
@@ -255,7 +247,7 @@ package body Designer.Properties_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Relocate_Annotation_Table (Node : in Node_Id) is
-      First : Node_Id := Annotation_Table.Last + 1;
+      First : constant Node_Id := Annotation_Table.Last + 1;
 
    begin
       if Annotation_Table.Last >= Node then
