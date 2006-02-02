@@ -63,36 +63,36 @@ package body Model.Initialization is
 --   Xt_Motif_Arrow_Layout_Resource_Type               : Node_Id;
 --   Xt_Motif_Arrow_Orientation_Resource_Type          : Node_Id;
 --   Xt_Motif_Arrow_Sensitivity_Resource_Type          : Node_Id;
---   Xt_Motif_Attachment_Resource_Type                 : Node_Id;
+   Xt_Motif_Attachment_Resource_Type                 : Node_Id;
 --   Xt_Motif_Audible_Warning_Resource_Type            : Node_Id;
 --   Xt_Motif_Auto_Drag_Model_Resource_Type            : Node_Id;
 --   Xt_Motif_Automatic_Selection_Resource_Type        : Node_Id;
 --   Xt_Motif_Binding_Type_Resource_Type               : Node_Id;
---   Xt_Motif_Child_Horizontal_Alignment_Resource_Type : Node_Id;
+   Xt_Motif_Child_Horizontal_Alignment_Resource_Type : Node_Id;
 --   Xt_Motif_Child_Placement_Resource_Type            : Node_Id;
---   Xt_Motif_Frame_Child_Type_Resource_Type           : Node_Id;
---   Xt_Motif_Child_Vertical_Alignment_Resource_Type   : Node_Id;
+   Xt_Motif_Frame_Child_Type_Resource_Type           : Node_Id;
+   Xt_Motif_Child_Vertical_Alignment_Resource_Type   : Node_Id;
 --   Xt_Motif_Combo_Box_Type_Resource_Type             : Node_Id;
 --   Xt_Motif_Command_Window_Location_Resource_Type    : Node_Id;
 --   Xt_Motif_Default_Button_Type_Resource_Type        : Node_Id;
 --   Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
 --   Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
---   Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
+   Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
 --   Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
    Xt_Motif_Toggle_Indicator_On_Resource_Type        : Node_Id;
    Xt_Motif_Indicator_Type_Resource_Type             : Node_Id;
 --   Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
 --   Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
    Xt_Motif_Label_Type_Resource_Type                 : Node_Id;
---   Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
---   Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
+   Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
+   Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
 --   Xt_Motif_Match_Behavior_Resource_Type             : Node_Id;
 --   Xt_Motif_Multi_Click_Resource_Type                : Node_Id;
 --   Xt_Motif_Navigation_Type_Resource_Type            : Node_Id;
---   Xt_Motif_Notebook_Child_Type_Resource_Type        : Node_Id;
---   Xt_Motif_Orientation_Resource_Type                : Node_Id;
---   Xt_Motif_Outline_Button_Policy_Resource_Type      : Node_Id;
---   Xt_Motif_Outline_State_Resource_Type              : Node_Id;
+   Xt_Motif_Notebook_Child_Type_Resource_Type        : Node_Id;
+   Xt_Motif_Orientation_Resource_Type                : Node_Id;
+   Xt_Motif_Outline_Button_Policy_Resource_Type      : Node_Id;
+   Xt_Motif_Outline_State_Resource_Type              : Node_Id;
 --   Xt_Motif_Packing_Resource_Type                    : Node_Id;
 --   Xt_Motif_Position_Mode_Resource_Type              : Node_Id;
 
@@ -115,33 +115,22 @@ package body Model.Initialization is
       Xt_Motif_Arrow_Layout_Resource_Type               : Node_Id;
       Xt_Motif_Arrow_Orientation_Resource_Type          : Node_Id;
       Xt_Motif_Arrow_Sensitivity_Resource_Type          : Node_Id;
-      Xt_Motif_Attachment_Resource_Type                 : Node_Id;
       Xt_Motif_Audible_Warning_Resource_Type            : Node_Id;
       Xt_Motif_Auto_Drag_Model_Resource_Type            : Node_Id;
       Xt_Motif_Automatic_Selection_Resource_Type        : Node_Id;
       Xt_Motif_Binding_Type_Resource_Type               : Node_Id;
-      Xt_Motif_Child_Horizontal_Alignment_Resource_Type : Node_Id;
       Xt_Motif_Child_Placement_Resource_Type            : Node_Id;
-      Xt_Motif_Frame_Child_Type_Resource_Type           : Node_Id;
-      Xt_Motif_Child_Vertical_Alignment_Resource_Type   : Node_Id;
       Xt_Motif_Combo_Box_Type_Resource_Type             : Node_Id;
       Xt_Motif_Command_Window_Location_Resource_Type    : Node_Id;
       Xt_Motif_Default_Button_Type_Resource_Type        : Node_Id;
       Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
       Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
-      Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
       Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
       Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
       Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
-      Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
-      Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
       Xt_Motif_Match_Behavior_Resource_Type             : Node_Id;
       Xt_Motif_Multi_Click_Resource_Type                : Node_Id;
       Xt_Motif_Navigation_Type_Resource_Type            : Node_Id;
-      Xt_Motif_Notebook_Child_Type_Resource_Type        : Node_Id;
-      Xt_Motif_Orientation_Resource_Type                : Node_Id;
-      Xt_Motif_Outline_Button_Policy_Resource_Type      : Node_Id;
-      Xt_Motif_Outline_State_Resource_Type              : Node_Id;
       Xt_Motif_Packing_Resource_Type                    : Node_Id;
       Xt_Motif_Position_Mode_Resource_Type              : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
@@ -2134,7 +2123,6 @@ package body Model.Initialization is
          --  TODO XmNhighlightColor
          --  TODO XmNhighlightOnEnter
          --  TODO XmNhighlightPixmap
-         --  TODO XmNhighlightThickness
          --  TODO XmNlayoutDirection
          --  TODO XmNnavigationType
          --  TODO XmNtopShadowColor
@@ -2163,6 +2151,16 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
          Set_Resource_Type
           (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNhighlightThickness"));
+         Set_Internal_Resource_Name (Resource, Enter ("highlightThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCHighlightThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("HighlightThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
@@ -2274,9 +2272,17 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Label_Widget_Class,
                           Xt_Motif_Primitive_Widget_Class);
 
-         --  TODO
-         --  TODO
-         --  TODO
+         --  TODO XmNaccelerator
+         --  TODO XmNacceleratorText
+         --  TODO XmNfontList
+         --  TODO XmNlabelInsensitivePixmap
+         --  TODO XmNlabelPixmap
+         --  TODO XmNlabelString
+         --  TODO XmNmnemonic
+         --  TODO XmNmnemonicCharSet
+         --  TODO XmNrecomputeSize
+         --  TODO XmNrenderTable
+         --  TODO XmNstringDirection
 
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNalignment"));
@@ -2292,6 +2298,60 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCLabelType"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("LabelType"));
          Set_Resource_Type (Resource, Xt_Motif_Label_Type_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginBottom"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginBottom"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginBottom"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginBottom"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginLeft"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginLeft"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginLeft"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginLeft"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginRight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginRight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginRight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginRight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginTop"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginTop"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginTop"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginTop"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
          Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
@@ -2318,6 +2378,13 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_Cascade_Button_Widget_Class,
                        Xt_Motif_Label_Widget_Class);
 
+         --  TODO XmNcascadePixmap
+         --  TODO XmNmappingDelay
+         --  TODO XmNsubMenuId
+
+         --  TODO XmNactivateCallback
+         --  TODO XmNcascadingCallback
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -2342,6 +2409,16 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_Drawn_Button_Widget_Class,
                        Xt_Motif_Label_Widget_Class);
 
+         --  TODO XmNmultiClick
+         --  TODO XmNpushButtonEnabled
+         --  TODO XmNshadowType
+
+         --  TODO XmNactivateCallback
+         --  TODO XmNarmCallback
+         --  TODO XmNdisarmCallback
+         --  TODO XmNexposeCallback
+         --  TODO XmNresizeCallback
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -2355,15 +2432,38 @@ package body Model.Initialization is
 
       --  XmPushButton
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Push_Button_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Push_Button_Widget_Class, Enter ("XmPushButton"));
-      Set_Super_Class (Xt_Motif_Push_Button_Widget_Class,
-                       Xt_Motif_Label_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Push_Button_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Push_Button_Widget_Class, Enter ("XmPushButton"));
+         Set_Super_Class (Xt_Motif_Push_Button_Widget_Class,
+                          Xt_Motif_Label_Widget_Class);
+
+         --  TODO XmNarmColor
+         --  TODO XmNarmPixmap
+         --  TODO XmNfillOnArm
+         --  TODO XmNmultiClick
+         --  TODO XmNshowAsDefault
+
+         --  TODO XmNactivateCallback
+         --  TODO XmNarmCallback
+         --  TODO XmNdisarmCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name
+          (Resource, Enter ("XmNdefaultButtonShadowThickness"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("defaultButtonShadowThickness"));
+         Set_Resource_Class_Name
+          (Resource, Enter ("XmCDefaultButtonShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("DefaultButtonShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2372,9 +2472,9 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Push_Button_Widget_Class, Resources);
+      end;
 
       --  XmToggleButton
 
@@ -2389,6 +2489,31 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Toggle_Button_Widget_Class,
                           Xt_Motif_Label_Widget_Class);
 
+         --  TODO XmNfillOnSelect
+         --  TODO XmNindeterminatePixmap
+         --  TODO XmNselectColor
+         --  TODO XmNselectInsensitivePixmap
+         --  TODO XmNselectPixmap
+         --  TODO XmNset
+         --  TODO XmNtoggleMode
+         --  TODO XmNunselectColor
+         --  TODO XmNvisibleWhenOff
+
+         --  TODO XmNarmCallback
+         --  TODO XmNdisarmCallback
+         --  TODO XmNvalueChangedCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNdetailShadowThickness"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("detailShadowThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNindicatorOn"));
          Set_Internal_Resource_Name (Resource, Enter ("indicatorOn"));
@@ -2399,6 +2524,15 @@ package body Model.Initialization is
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNindicatorSize"));
+         Set_Internal_Resource_Name (Resource, Enter ("indicatorSize"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCIndicatorSize"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("IndicatorSize"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNindicatorType"));
          Set_Internal_Resource_Name (Resource, Enter ("indicatorType"));
          Set_Resource_Class_Name (Resource, Enter ("XmCIndicatorType"));
@@ -2406,20 +2540,14 @@ package body Model.Initialization is
          Set_Resource_Type (Resource, Xt_Motif_Indicator_Type_Resource_Type);
          Append (Resources, Resource);
 
-         Set_Resources (Xt_Motif_Toggle_Button_Widget_Class, Resources);
-      end;
-
-      --  XmList
-
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_List_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_List_Widget_Class, Enter ("XmList"));
-      Set_Super_Class (Xt_Motif_List_Widget_Class,
-                       Xt_Motif_Primitive_Widget_Class);
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNspacing"));
+         Set_Internal_Resource_Name (Resource, Enter ("spacing"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCSpacing"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Spacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2428,9 +2556,96 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Toggle_Button_Widget_Class, Resources);
+      end;
+
+      --  XmList
+
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_List_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_List_Widget_Class, Enter ("XmList"));
+         Set_Super_Class (Xt_Motif_List_Widget_Class,
+                          Xt_Motif_Primitive_Widget_Class);
+
+         --  TODO XmNautomaticSelection
+         --  TODO XmNdoubleClickInterval
+         --  TODO XmNfontList
+         --  TODO XmNitemCount
+         --  TODO XmNitems
+         --  TODO XmNlistSizePolicy
+         --  TODO XmNmatchBehavior
+         --  TODO XmNprimaryOwnership
+         --  TODO XmNrenderTable
+         --  TODO XmNscrollBarDisplayPolicy
+         --  TODO XmNselectColor
+         --  TODO XmNselectedItemCount
+         --  TODO XmNselectedItems
+         --  TODO XmNselectedPositionCount
+         --  TODO XmNselectedPositions
+         --  TODO XmNselectionMode
+         --  TODO XmNselectionPolicy
+         --  TODO XmNstringDirection
+         --  TODO XmNtopItemPosition
+         --  TODO XmNvisibleItemCount
+
+         --  TODO XmNbrowseSelectionCallback
+         --  TODO XmNdefaultActionCallback
+         --  TODO XmNdestinationCallback
+         --  TODO XmNextendedSelectionCallback
+         --  TODO XmNmultipleSelectionCallback
+         --  TODO XmNsingleSelectionCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlistMarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("listMarginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCListMarginHeight"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ListMarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlistMarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("listMarginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCListMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("ListMarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlistSpacing"));
+         Set_Internal_Resource_Name (Resource, Enter ("listSpacing"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCListSpacing"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("ListSpacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_List_Widget_Class, Resources);
+      end;
 
       --  XmScrollBar
 
@@ -2443,6 +2658,33 @@ package body Model.Initialization is
       Set_Name (Xt_Motif_Scroll_Bar_Widget_Class, Enter ("XmScrollBar"));
       Set_Super_Class (Xt_Motif_Scroll_Bar_Widget_Class,
                        Xt_Motif_Primitive_Widget_Class);
+
+         --  TODO XmNeditable
+         --  TODO XmNincrement
+         --  TODO XmNinitialDelay
+         --  TODO XmNmaximum
+         --  TODO XmNminimum
+         --  TODO XmNorientation
+         --  TODO XmNpageIncrement
+         --  TODO XmNprocessingDirection
+         --  TODO XmNrepeatDelay
+         --  TODO XmNshowArrows
+         --  TODO XmNsliderSize
+         --  TODO XmNsliderMark
+         --  TODO XmNsliderVisual
+         --  TODO XmNslidingMode
+         --  TODO XmNsnapBackMultiple
+         --  TODO XmNtroughColor
+         --  TODO XmNvalue
+
+         --  TODO XmNdecrementCallback
+         --  TODO XmNdragCallback
+         --  TODO XmNincrementCallback
+         --  TODO XmNpageDecrementCallback
+         --  TODO XmNpageIncrementCallback
+         --  TODO XmNtoBottomCallback
+         --  TODO XmNtoTopCallback
+         --  TODO XmNvalueChangedCallback
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2457,15 +2699,34 @@ package body Model.Initialization is
 
       --  XmSeparator
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Separator_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Separator_Widget_Class, Enter ("XmSeparator"));
-      Set_Super_Class (Xt_Motif_Separator_Widget_Class,
-                       Xt_Motif_Primitive_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Separator_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Separator_Widget_Class, Enter ("XmSeparator"));
+         Set_Super_Class (Xt_Motif_Separator_Widget_Class,
+                          Xt_Motif_Primitive_Widget_Class);
+
+         --  TODO XmNseparatorType
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmargin"));
+         Set_Internal_Resource_Name (Resource, Enter ("margin"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMargin"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Margin"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNorientation"));
+         Set_Internal_Resource_Name (Resource, Enter ("orientation"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCOrientation"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Orientation"));
+         Set_Resource_Type (Resource, Xt_Motif_Orientation_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2474,21 +2735,85 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Separator_Widget_Class, Resources);
+      end;
 
       --  XmText
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Text_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Text_Widget_Class, Enter ("XmText"));
-      Set_Super_Class (Xt_Motif_Text_Widget_Class,
-                       Xt_Motif_Primitive_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Text_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Text_Widget_Class, Enter ("XmText"));
+         Set_Super_Class (Xt_Motif_Text_Widget_Class,
+                          Xt_Motif_Primitive_Widget_Class);
+
+         --  TODO XmNautoShowCursorPosition
+         --  TODO XmNcursorPosition
+         --  TODO XmNcursorPositionVisible
+         --  TODO XmNeditable
+         --  TODO XmNeditMode
+         --  TODO XmNmaxLength
+         --  TODO XmtotalLines
+         --  TODO XmNsource
+         --  TODO XmNtopCharacter
+         --  TODO XmNvalue
+         --  TODO XmNvalueWcs * cannot be set in resource file
+         --  TODO XmNverifyBell
+
+         --  TODO XmNpendingDelete
+         --  TODO XmNselectionArray
+         --  TODO XmNselectionArrayCount
+         --  TODO XmNselectThreshold
+
+         --  TODO XmNblinkRate
+         --  TODO XmNcolumns
+         --  TODO XmNcursorPositionVisible
+         --  TODO XmNfontList
+         --  TODO XmNrenderTable
+         --  TODO XmNresizeHeight
+         --  TODO XmNresizeWidth
+         --  TODO XmNrows
+         --  TODO XmNwordWrap
+
+         --  TODO XmNactivateCallback
+         --  TODO XmNdestinationCallback
+         --  TODO XmNfocusCallback
+         --  TODO XmNgainPrimaryCallback
+         --  TODO XmNlosePrimaryCallback
+         --  TODO XmNlosingFocusCallback
+         --  TODO XmNmodifyVerifyCallback
+         --  TODO XmNmodifyVerifyCallbackWcs
+         --  TODO XmNmotionVerifyCallback
+         --  TODO XmNvalueChangedCallback
+
+         --  Нижеследующие ресурсы долько для XmScrolledText:
+
+         --  TODO XmNscrollHorizontal
+         --  TODO XmNscrollLeftSide
+         --  TODO XmNscrollTopSide
+         --  TODO XmNscrollVertical
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2497,21 +2822,67 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Text_Widget_Class, Resources);
+      end;
 
       --  XmTextField
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Text_Field_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Text_Field_Widget_Class, Enter ("XmTextField"));
-      Set_Super_Class (Xt_Motif_Text_Field_Widget_Class,
-                       Xt_Motif_Primitive_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Text_Field_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Text_Field_Widget_Class, Enter ("XmTextField"));
+         Set_Super_Class (Xt_Motif_Text_Field_Widget_Class,
+                          Xt_Motif_Primitive_Widget_Class);
+
+         --  TODO XmNblinkRate
+         --  TODO XmNcolumns
+         --  TODO XmNcursorPosition
+         --  TODO XmNcursorPositionVisible
+         --  TODO XmNeditable
+         --  TODO XmNfontList
+         --  TODO XmNmaxLength
+         --  TODO XmNpendingDelete
+         --  TODO XmNrenderTable
+         --  TODO XmNresizeWidth
+         --  TODO XmNselectionArray
+         --  TODO XmNselectionArrayCount
+         --  TODO XmNselectThreshold
+         --  TODO XmNvalue
+         --  TODO XmNvalueWcs ! cannot be set in resource file
+         --  TODO XmNverifyBell
+
+         --  TODO XmNactivateCallback
+         --  TODO XmNdestinationCallback
+         --  TODO XmNfocusCallback
+         --  TODO XmNgainPrimaryCallback
+         --  TODO XmNlosePrimaryCallback
+         --  TODO XmNlosingFocusCallback
+         --  TODO XmNmodifyVerifyCallback
+         --  TODO XmNmodifyVerifyCallbackWcs
+         --  TODO XmNmotionVerifyCallback
+         --  TODO XmNvalueChangedCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2520,9 +2891,9 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Text_Field_Widget_Class, Resources);
+      end;
 
       ------------------------------------------------------------------------
       --  Motif Gadgets Widget Classes
@@ -2541,6 +2912,23 @@ package body Model.Initialization is
                           Xt_Motif_Rect_Obj_Widget_Class);
          Set_Is_Meta_Class (Xt_Motif_Gadget_Widget_Class, True);
 
+         --  TODO XmNbackground
+         --  TODO XmNbackgroundPixmap
+         --  TODO XmNbottomShadowColor
+         --  TODO XmNbottomShadowPixmap
+         --  TODO XmNhelpCallback
+         --  TODO XmNforeground
+         --  TODO XmNhighlightColor
+         --  TODO XmNhighlightOnEnter
+         --  TODO XmNhighlightPixmap
+         --  TODO XmNlayoutDirection
+         --  TODO XmNnavigationType
+         --  TODO XmNtopShadowColor
+         --  TODO XmNtopShadowPixmap
+         --  TODO XmNtraversalOn
+         --  TODO XmNunitType
+         --  TODO XmNuserData
+
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNborderWidth"));
          Set_Internal_Resource_Name (Resource, Enter ("borderWidth"));
@@ -2557,6 +2945,16 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
          Set_Resource_Type
           (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNhighlightThickness"));
+         Set_Internal_Resource_Name (Resource, Enter ("highlightThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCHighlightThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("HighlightThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
@@ -2620,6 +3018,12 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
                           Xt_Motif_Gadget_Widget_Class);
 
+         --  TODO XmNmultiClick
+
+         --  TODO XmNactivateCallback
+         --  TODO XmNarmCallback
+         --  TODO XmNdisarmCallback
+
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNarrowDirection"));
          Set_Internal_Resource_Name (Resource, Enter ("arrowDirection"));
@@ -2627,6 +3031,25 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("ArrowDirection"));
          Set_Resource_Type (Resource, Xt_Motif_Arrow_Direction_Resource_Type);
          Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNdetailShadowThickness"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("detailShadowThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Arrow_Button_Gadget_Widget_Class, Resources);
       end;
@@ -2644,6 +3067,18 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Icon_Gadget_Widget_Class,
                           Xt_Motif_Gadget_Widget_Class);
 
+         --  TODO XmNdetail
+         --  TODO XmNdetailCount
+         --  TODO XmNfontList
+         --  TODO XmNlabelString
+         --  TODO XmNlargeIconMask
+         --  TODO XmNlargeIconPixmap
+         --  TODO XmNrenderTable
+         --  TODO XmNsmallIconMask
+         --  TODO XmNsmallIconPixmap
+         --  TODO XmNviewType
+         --  TODO XmNvisualEmphasis
+
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNalignment"));
          Set_Internal_Resource_Name (Resource, Enter ("alignment"));
@@ -2651,6 +3086,41 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("Alignment"));
          Set_Resource_Type (Resource, Xt_Motif_Alignment_Resource_Type);
          Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNspacing"));
+         Set_Internal_Resource_Name (Resource, Enter ("spacing"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCSpacing"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Spacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Icon_Gadget_Widget_Class, Resources);
       end;
@@ -2668,6 +3138,18 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Label_Gadget_Widget_Class,
                           Xt_Motif_Gadget_Widget_Class);
 
+         --  TODO XmNaccelerator
+         --  TODO XmNacceleratorText
+         --  TODO XmNfontList
+         --  TODO XmNlabelInsensitivePixmap
+         --  TODO XmNlabelPixmap
+         --  TODO XmNlabelString
+         --  TODO XmNmnemonic
+         --  TODO XmNmnemonicCharSet
+         --  TODO XmNrecomputeSize
+         --  TODO XmNrenderTable
+         --  TODO XmNstringDirection
+
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNalignment"));
          Set_Internal_Resource_Name (Resource, Enter ("alignment"));
@@ -2683,6 +3165,68 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("LabelType"));
          Set_Resource_Type (Resource, Xt_Motif_Label_Type_Resource_Type);
          Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginBottom"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginBottom"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginBottom"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginBottom"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginLeft"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginLeft"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginLeft"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginLeft"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginRight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginRight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginRight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginRight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginTop"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginTop"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginTop"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginTop"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Label_Gadget_Widget_Class, Resources);
       end;
@@ -2700,6 +3244,13 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_Cascade_Button_Gadget_Widget_Class,
                        Xt_Motif_Label_Gadget_Widget_Class);
 
+         --  TODO XmNcascadePixmap
+         --  TODO XmNmappingDelay
+         --  TODO XmNsubMenuId
+
+         --  TODO XmNactivateCallback
+         --  TODO XmNcascadingCallback
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -2713,16 +3264,39 @@ package body Model.Initialization is
 
       --  XmPushButtonGadget
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Push_Button_Gadget_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Push_Button_Gadget_Widget_Class,
-                Enter ("XmPushButtonGadget"));
-      Set_Super_Class (Xt_Motif_Push_Button_Gadget_Widget_Class,
-                       Xt_Motif_Label_Gadget_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Push_Button_Gadget_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Push_Button_Gadget_Widget_Class,
+                   Enter ("XmPushButtonGadget"));
+         Set_Super_Class (Xt_Motif_Push_Button_Gadget_Widget_Class,
+                          Xt_Motif_Label_Gadget_Widget_Class);
+
+         --  TODO XmNarmColor
+         --  TODO XmNarmPixmap
+         --  TODO XmNfillOnArm
+         --  TODO XmNmultiClick
+         --  TODO XmNshowAsDefault
+
+         --  TODO XmNactivateCallback
+         --  TODO XmNarmCallback
+         --  TODO XmNdisarmCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name
+          (Resource, Enter ("XmNdefaultButtonShadowThickness"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("defaultButtonShadowThickness"));
+         Set_Resource_Class_Name
+          (Resource, Enter ("XmCDefaultButtonShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("DefaultButtonShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2731,9 +3305,9 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Push_Button_Gadget_Widget_Class, Resources);
+      end;
 
       --  XmToggleButtonGadget
 
@@ -2748,6 +3322,31 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Toggle_Button_Gadget_Widget_Class,
                           Xt_Motif_Label_Gadget_Widget_Class);
 
+         --  TODO XmNfillOnSelect
+         --  TODO XmNindeterminatePixmap
+         --  TODO XmNselectColor
+         --  TODO XmNselectInsensitivePixmap
+         --  TODO XmNselectPixmap
+         --  TODO XmNset
+         --  TODO XmNtoggleMode
+         --  TODO XmNunselectColor
+         --  TODO XmNvisibleWhenOff
+
+         --  TODO XmNarmCallback
+         --  TODO XmNdisarmCallback
+         --  TODO XmNvalueChangedCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNdetailShadowThickness"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("detailShadowThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNindicatorOn"));
          Set_Internal_Resource_Name (Resource, Enter ("indicatorOn"));
@@ -2758,6 +3357,15 @@ package body Model.Initialization is
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNindicatorSize"));
+         Set_Internal_Resource_Name (Resource, Enter ("indicatorSize"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCIndicatorSize"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("IndicatorSize"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNindicatorType"));
          Set_Internal_Resource_Name (Resource, Enter ("indicatorType"));
          Set_Resource_Class_Name (Resource, Enter ("XmCIndicatorType"));
@@ -2765,21 +3373,14 @@ package body Model.Initialization is
          Set_Resource_Type (Resource, Xt_Motif_Indicator_Type_Resource_Type);
          Append (Resources, Resource);
 
-         Set_Resources (Xt_Motif_Toggle_Button_Gadget_Widget_Class, Resources);
-      end;
-
-      --  XmSeparatorGadget
-
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Separator_Gadget_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Separator_Gadget_Widget_Class,
-                Enter ("XmSeparatorGadget"));
-      Set_Super_Class (Xt_Motif_Separator_Gadget_Widget_Class,
-                       Xt_Motif_Gadget_Widget_Class);
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNspacing"));
+         Set_Internal_Resource_Name (Resource, Enter ("spacing"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCSpacing"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Spacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2788,9 +3389,52 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Toggle_Button_Gadget_Widget_Class, Resources);
+      end;
+
+      --  XmSeparatorGadget
+
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Separator_Gadget_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Separator_Gadget_Widget_Class,
+                   Enter ("XmSeparatorGadget"));
+         Set_Super_Class (Xt_Motif_Separator_Gadget_Widget_Class,
+                          Xt_Motif_Gadget_Widget_Class);
+
+         --  TODO XmNseparatorType
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmargin"));
+         Set_Internal_Resource_Name (Resource, Enter ("margin"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMargin"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Margin"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNorientation"));
+         Set_Internal_Resource_Name (Resource, Enter ("orientation"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCOrientation"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Orientation"));
+         Set_Resource_Type (Resource, Xt_Motif_Orientation_Resource_Type);
+         Append (Resources, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+
+         Set_Resources (Xt_Motif_Separator_Gadget_Widget_Class, Resources);
+      end;
 
       ------------------------------------------------------------------------
       --  Motif Shells Widget Classes
@@ -2835,6 +3479,24 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Manager_Widget_Class,
                           Xt_Motif_Constraint_Widget_Class);
          Set_Is_Meta_Class (Xt_Motif_Manager_Widget_Class, True);
+
+         --  TODO XmNbottomShadowColor
+         --  TODO XmNbottomShadowPixmap
+         --  TODO XmNforeground
+         --  TODO XmNhighlightColor
+         --  TODO XmNhighlightPixmap
+         --  TODO XmNinitialFocus
+         --  TODO XmNlayoutDirection
+         --  TODO XmNnavigationType
+         --  TODO XmNstringDirection
+         --  TODO XmNtopShadowColor
+         --  TODO XmNtopShadowPixmap
+         --  TODO XmNtraversalOn
+         --  TODO XmNunitType
+         --  TODO XmNuserData
+
+         --  TODO XmNhelpCallback
+         --  TODO XmNpopupHandlerCallback
 
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNborderWidth"));
@@ -2912,16 +3574,56 @@ package body Model.Initialization is
 
       --  XmBulletinBoard
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Bulletin_Board_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Bulletin_Board_Widget_Class,
-                Enter ("XmBulletinBoard"));
-      Set_Super_Class (Xt_Motif_Bulletin_Board_Widget_Class,
-                       Xt_Motif_Manager_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Bulletin_Board_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Bulletin_Board_Widget_Class,
+                   Enter ("XmBulletinBoard"));
+         Set_Super_Class (Xt_Motif_Bulletin_Board_Widget_Class,
+                          Xt_Motif_Manager_Widget_Class);
+
+         --  TODO XmNallowOverlap
+         --  TODO XmNautoUnmanage
+         --  TODO XmNbuttonFontList
+         --  TODO XmNbuttonRenderTable
+         --  TODO XmNcancelButton
+         --  TODO XmNdefaultButton
+         --  TODO XmNdefaultPosition
+         --  TODO XmNdialogStyle
+         --  TODO XmNdialogTitle
+         --  TODO XmNlabelFontList
+         --  TODO XmNlabelRenderTable
+         --  TODO XmNnoResize
+         --  TODO XmNresizePolicy
+         --  TODO XmNshadowType
+         --  TODO XmNtextFontList
+         --  TODO XmNtextRenderTable
+         --  TODO XmNtextTranslations
+
+         --  TODO XmNfocusCallback
+         --  TODO XmNmapCallback
+         --  TODO XmNunmapCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2930,21 +3632,57 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Bulletin_Board_Widget_Class, Resources);
+      end;
 
       --  XmForm
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Form_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Form_Widget_Class, Enter ("XmForm"));
-      Set_Super_Class (Xt_Motif_Form_Widget_Class,
-                       Xt_Motif_Bulletin_Board_Widget_Class);
+      declare
+         Resources   : constant List_Id := New_List;
+         Constraints : constant List_Id := New_List;
+         Resource    : Node_Id;
+
+      begin
+         Xt_Motif_Form_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Form_Widget_Class, Enter ("XmForm"));
+         Set_Super_Class (Xt_Motif_Form_Widget_Class,
+                          Xt_Motif_Bulletin_Board_Widget_Class);
+
+         --  TODO XmNfractionBase
+         --  TODO XmNrubberPositioning
+
+         --  TODO XmNbottomOffset
+         --  TODO XmNbottomPosition
+         --  TODO XmNbottomWidget
+         --  TODO XmNleftOffset
+         --  TODO XmNleftPosition
+         --  TODO XmNleftWidget
+         --  TODO XmNresizable
+         --  TODO XmNrightOffset
+         --  TODO XmNrightPosition
+         --  TODO XmNrightWidget
+         --  TODO XmNtopOffset
+         --  TODO XmNtopPosition
+         --  TODO XmNtopWidget
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNhorizontalSpacing"));
+         Set_Internal_Resource_Name (Resource, Enter ("horizontalSpacing"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCSpacing"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Spacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNverticalSpacing"));
+         Set_Internal_Resource_Name (Resource, Enter ("verticalSpacing"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCSpacing"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Spacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2953,21 +3691,97 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNbottomAttachment"));
+         Set_Internal_Resource_Name (Resource, Enter ("bottomAttachment"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAttachment"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Attachment"));
+         Set_Resource_Type (Resource, Xt_Motif_Attachment_Resource_Type);
+         Append (Constraints, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNleftAttachment"));
+         Set_Internal_Resource_Name (Resource, Enter ("leftAttachment"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAttachment"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Attachment"));
+         Set_Resource_Type (Resource, Xt_Motif_Attachment_Resource_Type);
+         Append (Constraints, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrightAttachment"));
+         Set_Internal_Resource_Name (Resource, Enter ("rightAttachment"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAttachment"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Attachment"));
+         Set_Resource_Type (Resource, Xt_Motif_Attachment_Resource_Type);
+         Append (Constraints, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNtopAttachment"));
+         Set_Internal_Resource_Name (Resource, Enter ("topAttachment"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAttachment"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Attachment"));
+         Set_Resource_Type (Resource, Xt_Motif_Attachment_Resource_Type);
+         Append (Constraints, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Constraints, Resource);
+
+         Set_Resources (Xt_Motif_Form_Widget_Class, Resources);
+         Set_Constraint_Resources (Xt_Motif_Form_Widget_Class, Constraints);
+      end;
 
       --  XmMessageBox
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Message_Box_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Message_Box_Widget_Class, Enter ("XmMessageBox"));
-      Set_Super_Class (Xt_Motif_Message_Box_Widget_Class,
-                       Xt_Motif_Bulletin_Board_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Message_Box_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Message_Box_Widget_Class, Enter ("XmMessageBox"));
+         Set_Super_Class (Xt_Motif_Message_Box_Widget_Class,
+                          Xt_Motif_Bulletin_Board_Widget_Class);
+
+         --  TODO XmNcancelLabelString
+         --  TODO XmNdefaultButtonType
+         --  TODO XmNhelpLabelString
+         --  TODO XmNmessageString
+         --  TODO XmNminimizeButtons
+         --  TODO XmNokLabelString
+         --  TODO XmNsymbolPixmap
+
+         --  TODO XmNcancelCallback
+         --  TODO XmNokCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNdialogType"));
+         Set_Internal_Resource_Name (Resource, Enter ("dialogType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCDialogType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("DialogType"));
+         Set_Resource_Type (Resource, Xt_Motif_Dialog_Type_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmessageAlignment"));
+         Set_Internal_Resource_Name (Resource, Enter ("messageAlignment"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAlignment"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Alignment"));
+         Set_Resource_Type (Resource, Xt_Motif_Alignment_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2976,9 +3790,9 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Message_Box_Widget_Class, Resources);
+      end;
 
       --  XmSelectionBox
 
@@ -2991,6 +3805,28 @@ package body Model.Initialization is
       Set_Name (Xt_Motif_Selection_Box_Widget_Class, Enter ("XmSelectionBox"));
       Set_Super_Class (Xt_Motif_Selection_Box_Widget_Class,
                        Xt_Motif_Bulletin_Board_Widget_Class);
+
+         --  TODO XmNapplyLabelString
+         --  TODO XmNcancelLabelString
+         --  TODO XmNchildPlacement
+         --  TODO XmNdialogType
+         --  TODO XmNhelpLabelString
+         --  TODO XmNlistItemCount
+         --  TODO XmNlistItems
+         --  TODO XmNlistLabelString
+         --  TODO XmNlistVisibleItemCount
+         --  TODO XmNminimizeButtons
+         --  TODO XmNmustMatch
+         --  TODO XmNokLabelString
+         --  TODO XmNselectionLabelString
+         --  TODO XmNtextAccelerators
+         --  TODO XmNtextColumns
+         --  TODO XmNtextString
+
+         --  TODO XmNapplyCallback
+         --  TODO XmNcancelCallback
+         --  TODO XmNnoMatchCallback
+         --  TODO XmNokCallback
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3014,6 +3850,15 @@ package body Model.Initialization is
       Set_Name (Xt_Motif_Command_Widget_Class, Enter ("XmCommand"));
       Set_Super_Class (Xt_Motif_Command_Widget_Class,
                        Xt_Motif_Selection_Box_Widget_Class);
+
+         --  TODO XmNcommand
+         --  TODO XmNcommandChangedCallback
+         --  TODO XmNcommandEnteredCallback
+         --  TODO XmNhistoryItems
+         --  TODO XmNhistoryItemCount
+         --  TODO XmNhistoryMaxItems
+         --  TODO XmNhistoryVisibleItemCount
+         --  TODO XmNpromptString
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3039,6 +3884,28 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_File_Selection_Box_Widget_Class,
                        Xt_Motif_Selection_Box_Widget_Class);
 
+         --  TODO XmNdirectory
+         --  TODO XmNdirectoryValid
+         --  TODO XmNdirListItems
+         --  TODO XmNdirListItemCount
+         --  TODO XmNdirListLabelString
+         --  TODO XmNdirMask
+         --  TODO XmNdirSearchProc
+         --  TODO XmNdirSpec
+         --  TODO XmNdirTextLabelString
+         --  TODO XmNfileFilterStyle
+         --  TODO XmNfileListItems
+         --  TODO XmNfileListItemCount
+         --  TODO XmNfileListLabelString
+         --  TODO XmNfileSearchProc
+         --  TODO XmNfileTypeMask
+         --  TODO XmNfilterLabelString
+         --  TODO XmNlistUpdated
+         --  TODO XmNnoMatchString
+         --  TODO XmNpathMode
+         --  TODO XmNpattern
+         --  TODO XmNqualifySearchDataProc
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -3052,15 +3919,76 @@ package body Model.Initialization is
 
       --  XmComboBox
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Combo_Box_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Combo_Box_Widget_Class, Enter ("XmComboBox"));
-      Set_Super_Class (Xt_Motif_Combo_Box_Widget_Class,
-                       Xt_Motif_Manager_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Combo_Box_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Combo_Box_Widget_Class, Enter ("XmComboBox"));
+         Set_Super_Class (Xt_Motif_Combo_Box_Widget_Class,
+                          Xt_Motif_Manager_Widget_Class);
+
+         --  TODO XmNcolumns
+         --  TODO XmNcomboBoxType
+         --  TODO XmNfontList
+         --  TODO XmNitemCount
+         --  TODO XmNitems
+         --  TODO XmNlist
+         --  TODO XmNmatchBehavior
+         --  TODO XmNpositionMode
+         --  TODO XmNrenderTable
+         --  TODO XmNselectedItem
+         --  TODO XmNselectedPosition
+         --  TODO XmNselectionCallback
+         --  TODO XmNtextField
+         --  TODO XmNvisibleItemCount
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNarrowSize"));
+         Set_Internal_Resource_Name (Resource, Enter ("arrowSize"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCArrowSize"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("ArrowSize"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNarrowSpacing"));
+         Set_Internal_Resource_Name (Resource, Enter ("arrowSpacing"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCArrowSpacing"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("ArrowSpacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNhighlightThickness"));
+         Set_Internal_Resource_Name (Resource, Enter ("highlightThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCHighlightThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("HighlightThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3069,21 +3997,155 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Combo_Box_Widget_Class, Resources);
+      end;
 
       --  XmContainer
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Container_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Container_Widget_Class, Enter ("XmContainer"));
-      Set_Super_Class (Xt_Motif_Container_Widget_Class,
-                       Xt_Motif_Manager_Widget_Class);
+      declare
+         Resources   : constant List_Id := New_List;
+         Constraints : constant List_Id := New_List;
+         Resource    : Node_Id;
+
+      begin
+         Xt_Motif_Container_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Container_Widget_Class, Enter ("XmContainer"));
+         Set_Super_Class (Xt_Motif_Container_Widget_Class,
+                          Xt_Motif_Manager_Widget_Class);
+
+         --  TODO XmNautomaticSelection
+         --  TODO XmNcollapsedStatePixmap
+         --  TODO XmNdetailColumnHeading
+         --  TODO XmNdetailColumnHeadingCount
+         --  TODO XmNdetailOrder
+         --  TODO XmNdetailOrderCount
+         --  TODO XmNdetailTabList
+         --  TODO XmNentryViewType
+         --  TODO XmNexpandedStatePixmap
+         --  TODO XmNfontList
+         --  TODO XmNprimaryOwnership
+         --  TODO XmNrenderTable
+         --  TODO XmNselectColor
+         --  TODO XmNselectedObjects
+         --  TODO XmNselectedObjectCount
+         --  TODO XmNselectionPolicy
+         --  TODO XmNselectionTechnique
+         --  TODO XmNspatialIncludeModel
+         --  TODO XmNspatialResizeModel
+         --  TODO XmNspatialSnapModel
+         --  TODO XmNspatialStyle
+
+         --  TODO XmNentryParent
+         --  TODO XmNoutlineState
+         --  TODO XmNpositionIndex
+
+         --  TODO XmNconvertCallback
+         --  TODO XmNdefaultActionCallback
+         --  TODO XmNdestinationCallback
+         --  TODO XmNoutlineChangedCallback
+         --  TODO XmNselectionCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlargeCellHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("largeCellHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCCellHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("CellHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlargeCellWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("largeCellWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCCellWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("CellWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlayoutType"));
+         Set_Internal_Resource_Name (Resource, Enter ("layoutType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCLayoutType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("LayoutType"));
+         Set_Resource_Type (Resource, Xt_Motif_Layout_Type_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNoutlineButtonPolicy"));
+         Set_Internal_Resource_Name (Resource, Enter ("outlineButtonPolicy"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCOutlineButtonPolicy"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("OutlineButtonPolicy"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Outline_Button_Policy_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNoutlineColumnWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("outlineColumnWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCOutlineColumnWidth"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("OutlineColumnWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNoutlineIndentation"));
+         Set_Internal_Resource_Name (Resource, Enter ("outlineIndentation"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCOutlineIndentation"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("OutlineIndentation"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNoutlineLineStyle"));
+         Set_Internal_Resource_Name (Resource, Enter ("outlineLineStyle"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCLineStyle"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("LineStyle"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Container_Line_Style_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNsmallCellHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("smallCellHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCCellHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("CellHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNsmallCellWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("smallCellWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCCellWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("CellWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3092,21 +4154,74 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Constraints, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNoutlineState"));
+         Set_Internal_Resource_Name (Resource, Enter ("outlineState"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCOutlineState"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("OutlineState"));
+         Set_Resource_Type (Resource, Xt_Motif_Outline_State_Resource_Type);
+         Append (Constraints, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Constraints, Resource);
+
+         Set_Resources (Xt_Motif_Container_Widget_Class, Resources);
+         Set_Constraint_Resources
+          (Xt_Motif_Container_Widget_Class, Constraints);
+      end;
 
       --  XmDrawingArea
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Drawing_Area_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Drawing_Area_Widget_Class, Enter ("XmDrawingArea"));
-      Set_Super_Class (Xt_Motif_Drawing_Area_Widget_Class,
-                       Xt_Motif_Manager_Widget_Class);
+      declare
+         Resources : constant List_Id := New_List;
+         Resource  : Node_Id;
+
+      begin
+         Xt_Motif_Drawing_Area_Widget_Class := Create_Widget_Class;
+         Set_Name
+          (Xt_Motif_Drawing_Area_Widget_Class, Enter ("XmDrawingArea"));
+         Set_Super_Class (Xt_Motif_Drawing_Area_Widget_Class,
+                          Xt_Motif_Manager_Widget_Class);
+
+         --  TODO XmNresizePolicy
+
+         --  TODO XmNconvertCallback
+         --  TODO XmNdestinationCallback
+         --  TODO XmNexposeCallback
+         --  TODO XmNinputCallback
+         --  TODO XmNresizeCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3115,21 +4230,45 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Set_Resources (Xt_Motif_Drawing_Area_Widget_Class, Resources);
+      end;
 
       --  XmFrame
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Frame_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Frame_Widget_Class, Enter ("XmFrame"));
-      Set_Super_Class (Xt_Motif_Frame_Widget_Class,
-                       Xt_Motif_Manager_Widget_Class);
+      --  Ресурс XmNchildType дублируется XmNframeChildType и сохранён для
+      --  обеспечения обратной совместимости. Используется новое имя ресурса.
+
+      declare
+         Resources   : constant List_Id := New_List;
+         Constraints : constant List_Id := New_List;
+         Resource    : Node_Id;
+
+      begin
+         Xt_Motif_Frame_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Frame_Widget_Class, Enter ("XmFrame"));
+         Set_Super_Class (Xt_Motif_Frame_Widget_Class,
+                          Xt_Motif_Manager_Widget_Class);
+
+         --  TODO XmNshadowType
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginHeight"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("marginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMarginWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3138,21 +4277,160 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNchildHorizontalAlignment"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("childHorizontalAlignment"));
+         Set_Resource_Class_Name
+          (Resource, Enter ("XmCChildHorizontalAlignment"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ChildHorizontalAlignment"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Child_Horizontal_Alignment_Resource_Type);
+         Append (Constraints, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNchildHorizontalSpacing"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("childHorizontalSpacing"));
+         Set_Resource_Class_Name
+          (Resource, Enter ("XmCChildHorizontalSpacing"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ChildHorizontalSpacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Constraints, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNchildVerticalAlignment"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("childVerticalAlignment"));
+         Set_Resource_Class_Name
+          (Resource, Enter ("XmCChildVerticalAlignment"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ChildVerticalAlignment"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Child_Vertical_Alignment_Resource_Type);
+         Append (Constraints, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNframeChildType"));
+         Set_Internal_Resource_Name (Resource, Enter ("frameChildType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCFrameChildType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("FrameChildType"));
+         Set_Resource_Type (Resource, Xt_Motif_Frame_Child_Type_Resource_Type);
+         Append (Constraints, Resource);
+
+         Set_Resources (Xt_Motif_Frame_Widget_Class, Resources);
+         Set_Constraint_Resources (Xt_Motif_Frame_Widget_Class, Constraints);
+      end;
 
       --  XmNotebook
 
---      declare
---         Resources : constant List_Id := New_List;
---         Resource  : Node_Id;
---
---      begin
-      Xt_Motif_Notebook_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Notebook_Widget_Class, Enter ("XmNotebook"));
-      Set_Super_Class (Xt_Motif_Notebook_Widget_Class,
-                       Xt_Motif_Manager_Widget_Class);
+      declare
+         Resources   : constant List_Id := New_List;
+         Constraints : constant List_Id := New_List;
+         Resource    : Node_Id;
+
+      begin
+         Xt_Motif_Notebook_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Notebook_Widget_Class, Enter ("XmNotebook"));
+         Set_Super_Class (Xt_Motif_Notebook_Widget_Class,
+                          Xt_Motif_Manager_Widget_Class);
+
+         --  TODO XmNbackPageBackground
+         --  TODO XmNbackPageForeground
+         --  TODO XmNbackPageNumber
+         --  TODO XmNbackPagePlacement
+         --  TODO XmNbindingPixmap
+         --  TODO XmNbindingType
+         --  TODO XmNcurrentPageNumber
+         --  TODO XmNfirstPageNumber
+         --  TODO XmNframeBackground
+         --  TODO XmNlastPageNumber
+
+         --  TODO XmNnotebookChildType
+         --  TODO XmNpageNumber
+         --  TODO XmNresizable
+
+         --  TODO XmNpageChangedCallback
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNbackPageSize"));
+         Set_Internal_Resource_Name (Resource, Enter ("backPageSize"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCBackPageSize"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("BackPageSize"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNbindingWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("bindingWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCBindingWidth"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("BindingWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNframeShadowThickness"));
+         Set_Internal_Resource_Name (Resource, Enter ("frameShadowThickness"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowThickness"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("ShadowThickness"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNinnerMarginHeight"));
+         Set_Internal_Resource_Name (Resource, Enter ("innerMarginHeight"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCInnerMarginHeight"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("InnerMarginHeight"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNinnerMarginWidth"));
+         Set_Internal_Resource_Name (Resource, Enter ("innerMarginWidth"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCInnerMarginWidth"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("InnerMarginWidth"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmajorTabSpacing"));
+         Set_Internal_Resource_Name (Resource, Enter ("majorTabSpacing"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMajorTabSpacing"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("MajorTabSpacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNminorTabSpacing"));
+         Set_Internal_Resource_Name (Resource, Enter ("minorTabSpacing"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMinorTabSpacing"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("MinorTabSpacing"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNorientation"));
+         Set_Internal_Resource_Name (Resource, Enter ("orientation"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCOrientation"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Orientation"));
+         Set_Resource_Type (Resource, Xt_Motif_Orientation_Resource_Type);
+         Append (Resources, Resource);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3161,9 +4439,29 @@ package body Model.Initialization is
 --         Set_Internal_Resource_Class_Name (Resource, Enter (""));
 --         Set_Resource_Type (Resource, );
 --         Append (Resources, Resource);
---
---         Set_Resources (, Resources);
---      end;
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNnotebookChildType"));
+         Set_Internal_Resource_Name (Resource, Enter ("notebookChildType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCNotebookChildType"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("NotebookChildType"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_Notebook_Child_Type_Resource_Type);
+         Append (Constraints, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, );
+--         Append (Constraints, Resource);
+
+         Set_Resources (Xt_Motif_Notebook_Widget_Class, Resources);
+         Set_Constraint_Resources
+          (Xt_Motif_Notebook_Widget_Class, Constraints);
+      end;
 
       --  XmPanedWindow
 
@@ -3176,6 +4474,23 @@ package body Model.Initialization is
       Set_Name (Xt_Motif_Paned_Window_Widget_Class, Enter ("XmPanedWindow"));
       Set_Super_Class (Xt_Motif_Paned_Window_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
+
+         --  TODO XmNmarginHeight !
+         --  TODO XmNmarginWidth !
+         --  TODO XmNorientation
+         --  TODO XmNrefigureMode
+         --  TODO XmNsashHeight !
+         --  TODO XmNsashIndent !
+         --  TODO XmNsashShadowThickness !
+         --  TODO XmNsashWidth !
+         --  TODO XmNseparatorOn
+         --  TODO XmNspacing !
+
+         --  TODO XmNallowResize
+         --  TODO XmNpaneMaximum !
+         --  TODO XmNpaneMinimum !
+         --  TODO XmNpositionIndex
+         --  TODO XmNskipAdjust
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3200,6 +4515,46 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_Row_Column_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+         --  TODO XmNadjustLast
+         --  TODO XmNadjustMargin
+         --  TODO XmNentryAlignment
+         --  TODO XmNentryBorder !
+         --  TODO XmNentryClass
+         --  TODO XmNentryVerticalAlignment
+         --  TODO XmNisAligned
+         --  TODO XmNisHomogeneous
+         --  TODO XmNlabelString
+         --  TODO XmNmarginHeight !
+         --  TODO XmNmarginWidth !
+         --  TODO XmNmenuAccelerator
+         --  TODO XmNmenuHelpWidget
+         --  TODO XmNmenuHistory
+         --  TODO XmNmenuPost
+         --  TODO XmNmnemonic
+         --  TODO XmNmnemonicCharSet
+         --  TODO XmNnumColumns
+         --  TODO XmNorientation
+         --  TODO XmNpacking
+         --  TODO XmNpopupEnabled
+         --  TODO XmNradioAlwaysOne
+         --  TODO XmNradioBehavior
+         --  TODO XmNresizeHeight
+         --  TODO XmNresizeWidth
+         --  TODO XmNrowColumnType
+         --  TODO XmNspacing !
+         --  TODO XmNsubMenuId
+         --  TODO XmNtearOffModel
+         --  TODO XmNtearOffTitle
+         --  TODO XmNwhichButton
+
+         --  TODO XmNpositionIndex
+
+         --  TODO XmNentryCallback
+         --  TODO XmNmapCallback
+         --  TODO XmNtearOffMenuActivateCallback
+         --  TODO XmNtearOffMenuDeactivateCallback
+         --  TODO XmNunmapCallback
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -3222,6 +4577,31 @@ package body Model.Initialization is
       Set_Name (Xt_Motif_Scale_Widget_Class, Enter ("XmScale"));
       Set_Super_Class (Xt_Motif_Scale_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
+
+         --  TODO XmNdecimalPoints
+         --  TODO XmNeditable
+         --  TODO XmNfontList
+         --  TODO XmNhighlightOnEnter
+         --  TODO XmNhighlightThickness !
+         --  TODO XmNmaximum
+         --  TODO XmNminimum
+         --  TODO XmNorientation
+         --  TODO XmNprocessingDirection
+         --  TODO XmNscaleHeight !
+         --  TODO XmNscaleMultiple
+         --  TODO XmNscaleWidth !
+         --  TODO XmNrenderTable
+         --  TODO XmNshowArrows
+         --  TODO XmNshowValue
+         --  TODO XmNsliderMark
+         --  TODO XmNsliderVisual
+         --  TODO XmNslidingMode
+         --  TODO XmNtitleString
+         --  TODO XmNvalue
+
+         --  TODO XmNconvertCallback
+         --  TODO XmNdragCallback
+         --  TODO XmNvalueChangedCallback
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3247,6 +4627,23 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_Scrolled_Window_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+         --  TODO XmNautoDragModel
+         --  TODO XmNclipWindow
+         --  TODO XmNhorizontalScrollBar
+         --  TODO XmNscrollBarDisplayPolicy
+         --  TODO XmNscrollBarPlacement
+         --  TODO XmNscrolledWindowMarginHeight !
+         --  TODO XmNscrolledWindowMarginWidth !
+         --  TODO XmNscrollingPolicy
+         --  TODO XmNspacing !
+         --  TODO XmNverticalScrollBar
+         --  TODO XmNvisualPolicy
+         --  TODO XmNworkWindow
+
+         --  TODO XmNscrolledWindowChildType
+
+         --  TODO XmNtraverseObscuredCallback
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -3270,6 +4667,14 @@ package body Model.Initialization is
                 Enter ("XmMainWindow"));
       Set_Super_Class (Xt_Motif_Main_Window_Widget_Class,
                        Xt_Motif_Scrolled_Window_Widget_Class);
+
+         --  TODO XmNcommandWindow
+         --  TODO XmNcommandWindowLocation
+         --  TODO XmNmainWindowMarginHeight !
+         --  TODO XmNmainWindowMarginWidth !
+         --  TODO XmNmenuBar
+         --  TODO XmNmessageWindow
+         --  TODO XmNshowSeparator
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -3295,6 +4700,25 @@ package body Model.Initialization is
       Set_Super_Class (Xt_Motif_Simple_Spin_Box_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
+         --  TODO XmNarrowLayout
+         --  TODO XmNarrowSensitivity
+         --  TODO XmNcolumns
+         --  TODO XmNdecimalPoints
+         --  TODO XmNeditable
+         --  TODO XmNincrementValue
+         --  TODO XmNinitialDelay
+         --  TODO XmNmaximumValue
+         --  TODO XmNminimumValue
+         --  TODO XmNnumValues
+         --  TODO XmNposition
+         --  TODO XmNrepeatDelay
+         --  TODO XmNspinBoxChildType
+         --  TODO XmNtextField
+         --  TODO XmNvalues
+
+         --  TODO XmNmodifyVerifyCallback
+         --  TODO XmNvalueChangedCallback
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -3317,6 +4741,30 @@ package body Model.Initialization is
       Set_Name (Xt_Motif_Spin_Box_Widget_Class, Enter ("XmSpinBox"));
       Set_Super_Class (Xt_Motif_Spin_Box_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
+
+         --  TODO XmNarrowLayout
+         --  TODO XmNarrowOrientation
+         --  TODO XmNarrowSize !
+         --  TODO XmNdefaultArrowSensitivity
+         --  TODO XmNdetailShadowThickness !
+         --  TODO XmNinitialDelay
+         --  TODO XmNmarginHeight !
+         --  TODO XmNmarginWidth !
+         --  TODO XmNmodifyVerifyCallback
+         --  TODO XmNrepeatDelay
+         --  TODO XmNspacing
+         --  TODO XmNvalueChangedCallback
+
+         --  TODO XmNarrowSensitivity
+         --  TODO XmNdecimalPoints
+         --  TODO XmNincrementValue
+         --  TODO XmNmaximumValue
+         --  TODO XmNminimumValue
+         --  TODO XmNnumValues
+         --  TODO XmNposition
+         --  TODO XmNpositionType
+         --  TODO XmNspinBoxChildType
+         --  TODO XmNvalues
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
