@@ -40,7 +40,6 @@ with Ada.Characters.Handling;
 with Ada.Characters.Wide_Latin_1;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Unchecked_Conversion;
-with Interfaces.C;
 
 with Xt.Ancillary_Types;
 with Xt.Callbacks;
@@ -73,8 +72,6 @@ with Designer.Visual_Editor;
 
 package body Designer.Main_Window is
 
-   use Ada.Strings.Wide_Unbounded;
-   use Interfaces.C;
    use Xm;
    use Xm.Class_Management;
    use Xm.Resource_Management;
@@ -334,6 +331,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
+         use type Xm.Xm_Callback_Reason;
+
          Data      : constant Xm_File_Selection_Box_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
          File_Name : constant Wide_String
@@ -345,6 +344,9 @@ package body Designer.Main_Window is
 
          elsif Data.Reason = Xm_CR_Cancel then
             null;
+
+         else
+            raise Program_Error;
          end if;
 
          Xt_Unmanage_Child (The_Widget);
@@ -411,6 +413,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
+         use type Xm.Xm_Callback_Reason;
+
          Data      : constant Xm_File_Selection_Box_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
          File_Name : constant Wide_String
@@ -422,6 +426,9 @@ package body Designer.Main_Window is
 
          elsif Data.Reason = Xm_CR_Cancel then
             null;
+
+         else
+            raise Program_Error;
          end if;
 
          Xt_Unmanage_Child (The_Widget);
@@ -473,8 +480,8 @@ package body Designer.Main_Window is
    begin
       --  Создание диалога открытия файлов.
 
-      Open_Dialog  := Xm_Create_File_Selection_Dialog (App_Shell,
-                                                       "open_file_dialog");
+      Open_Dialog :=
+        Xm_Create_File_Selection_Dialog (App_Shell, "open_file_dialog");
       Xt_Add_Callback
        (Open_Dialog,
         Xm_N_Ok_Callback,
@@ -508,6 +515,7 @@ package body Designer.Main_Window is
 
       Button      := Xt_Name_To_Widget (Palette, "PageScroller");
       Xt_Unmanage_Child (Button);
+
       --
       --  Создание главного меню.
       --
@@ -515,37 +523,39 @@ package body Designer.Main_Window is
       Menu          := Xm_Create_Managed_Menu_Bar (Main_Window, "main_menu");
       File_Pulldown := Xm_Create_Pulldown_Menu (Menu, "file_pulldown");
 
-      Element       :=
+      Element :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "new");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_New'Access);
-      Element       :=
+
+      Element :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "open");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Open'Access);
-      Element       :=
+
+      Element :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "save");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Save'Access);
-      Element       :=
+
+      Element :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "save_as");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Save_As'Access);
-      Element       :=
+
+      Element :=
         Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "quit");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Exit'Access);
 
       Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, File_Pulldown);
-
       Button :=
-        Xm_Create_Managed_Cascade_Button_Gadget
-         (Menu, "file", Args (0 .. 0));
+        Xm_Create_Managed_Cascade_Button_Gadget (Menu, "file", Args (0 .. 0));
 
       --
       --  Создание панели редактирования свойств.
