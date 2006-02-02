@@ -46,7 +46,7 @@
 *main_window.horizontal_paned.tree_form.allowResize: TRUE
 *main_window.horizontal_paned.tree_form.tree_hide.arrowDirection: ARROW_RIGHT
 *main_window.horizontal_paned.tree_form.tree_label.labelString: Tree editor
-*main_window.horizontal_paned.tree_form*notebook.component.notebookChildType: MINOR_TAB
+*main_window.horizontal_paned.tree_form*notebook.XmPushButtonGadget.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.tree_form*notebook.component.labelString: Component
 *main_window.horizontal_paned.tree_form*notebook.project.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.tree_form*notebook.project.labelString: Project
