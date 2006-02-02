@@ -36,6 +36,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Characters.Handling;
 with Ada.Characters.Wide_Latin_1;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Unchecked_Conversion;
@@ -238,7 +239,7 @@ package body Designer.Main_Window is
 
       exception
          when E : others =>
-            null;
+            Put_Exception_In_Callback ("On_Exit", E);
       end On_Exit;
 
       ------------------------------------------------------------------------
@@ -274,7 +275,7 @@ package body Designer.Main_Window is
 
       exception
          when E : others =>
-            null;
+            Put_Exception_In_Callback ("On_Hide_Show_Button", E);
       end On_Hide_Show_Button;
 
       ------------------------------------------------------------------------
@@ -296,7 +297,7 @@ package body Designer.Main_Window is
 
       exception
          when E : others =>
-            null;
+            Put_Exception_In_Callback ("On_New", E);
       end On_New;
 
       ------------------------------------------------------------------------
@@ -318,7 +319,7 @@ package body Designer.Main_Window is
 
       exception
          when E : others =>
-            null;
+            Put_Exception_In_Callback ("On_Open", E);
       end On_Open;
 
       ------------------------------------------------------------------------
@@ -350,7 +351,7 @@ package body Designer.Main_Window is
 
       exception
          when E : others =>
-            null;
+            Put_Exception_In_Callback ("On_Open_File_Dialog_Ok_Or_Cancel", E);
       end On_Open_File_Dialog_Ok_Or_Cancel;
 
       ------------------------------------------------------------------------
@@ -372,7 +373,7 @@ package body Designer.Main_Window is
 
       exception
          when E : others =>
-            null;
+            Put_Exception_In_Callback ("On_Save", E);
       end On_Save;
 
       ------------------------------------------------------------------------
@@ -394,7 +395,7 @@ package body Designer.Main_Window is
 
       exception
          when E : others =>
-            null;
+            Put_Exception_In_Callback ("On_Save_As", E);
       end On_Save_As;
 
       ------------------------------------------------------------------------
@@ -427,7 +428,8 @@ package body Designer.Main_Window is
 
       exception
          when E : others =>
-            null;
+            Put_Exception_In_Callback
+             ("On_Save_File_As_Dialog_Ok_Or_Cancel", E);
       end On_Save_File_As_Dialog_Ok_Or_Cancel;
 
    end Callbacks;
@@ -711,6 +713,22 @@ package body Designer.Main_Window is
       Designer.Visual_Editor.Insert_Item (Node);
       Designer.Properties_Editor.Insert_Item (Node);
    end Insert_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Put_Exception_In_Callback
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Put_Exception_In_Callback
+    (Name       : in Wide_String;
+     Occurrence : in Ada.Exceptions.Exception_Occurrence)
+   is
+   begin
+      Put_Line ("Unhandled exception in " & Name & ':');
+      Put_Line
+       (Ada.Characters.Handling.To_Wide_String
+         (Ada.Exceptions.Exception_Information (Occurrence)));
+   end Put_Exception_In_Callback;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
