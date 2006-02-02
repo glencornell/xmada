@@ -267,6 +267,7 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type
           or else Node_Kind (Node) = Node_Project
           or else Node_Kind (Node) = Node_Widget_Class
+          or else Node_Kind (Node) = Node_Widget_Instance
           or else Node_Kind (Node) = Node_Predefined_Resource_Type);
 
       case Node_Kind (Node) is
@@ -287,6 +288,9 @@ package body Model.Tree is
 
          when Node_Widget_Class =>
             return Node_Table.Table (Node).WC_Name;
+
+         when Node_Widget_Instance =>
+            return Node_Table.Table (Node).WI_Name;
 
          when others =>
             raise Program_Error;
@@ -461,6 +465,19 @@ package body Model.Tree is
             raise Program_Error;
       end case;
    end Resources;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Root_Widget_Instance
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Root_Widget_Instance (Node : in Node_Id) return Node_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+      return Node_Table.Table (Node).Root;
+   end Root_Widget_Instance;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -704,7 +721,8 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type
           or else Node_Kind (Node) = Node_Project
           or else Node_Kind (Node) = Node_Component_Class
-          or else Node_Kind (Node) = Node_Widget_Class);
+          or else Node_Kind (Node) = Node_Widget_Class
+          or else Node_Kind (Node) = Node_Widget_Instance);
 
       case Node_Kind (Node) is
          when Node_Enumeration_Value_Specification =>
@@ -724,6 +742,9 @@ package body Model.Tree is
 
          when Node_Widget_Class =>
             Node_Table.Table (Node).WC_Name := Value;
+
+         when Node_Widget_Instance =>
+            Node_Table.Table (Node).WI_Name := Value;
 
          when others =>
             raise Program_Error;
@@ -874,6 +895,21 @@ package body Model.Tree is
 
       Set_Parent_Node (Value, Node);
    end Set_Resources;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Root_Widget_Instance
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Root_Widget_Instance (Node  : in Node_Id;
+                                       Value : in Node_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+      Node_Table.Table (Node).Root := Value;
+   end Set_Root_Widget_Instance;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

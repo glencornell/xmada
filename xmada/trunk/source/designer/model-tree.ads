@@ -239,6 +239,9 @@ package Model.Tree is
    function Is_Hardcoded (Node : in Node_Id) return Boolean;
    procedure Set_Is_Hardcoded (Node : in Node_Id; Value : in Boolean);
 
+   function Root_Widget_Instance (Node : in Node_Id) return Node_Id;
+   procedure Set_Root_Widget_Instance (Node : in Node_Id; Value : in Node_Id);
+
 private
 
    type Node_Record (Kind : Node_Kinds := Node_Empty) is record
