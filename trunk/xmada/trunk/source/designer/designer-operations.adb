@@ -215,6 +215,7 @@ package body Designer.Operations is
       Init_XML_Tools;
       XML_Tools.Parser.Parse (Ada.Characters.Handling.To_String (File_Name));
       Project := Xml_To_Project;
+      Set_File_Name (Project, Enter (File_Name));
    end Open_Project;
 
    ---------------------------------------------------------------------------
