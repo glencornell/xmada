@@ -108,15 +108,15 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Open_File
+      --!    <Unit> On_Open_File_Dialog_Ok_Or_Cancel
       --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
       --! клавиши OK/Cancel в диалоге открытия файла.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure On_Open_File (The_Widget : in Widget;
-                              Closure    : in Xt_Pointer;
-                              Call_Data  : in Xt_Pointer);
-      pragma Convention (C, On_Open_File);
+      procedure On_Open_File_Dialog_Ok_Or_Cancel (The_Widget : in Widget;
+                                                  Closure    : in Xt_Pointer;
+                                                  Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Open_File_Dialog_Ok_Or_Cancel);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -168,15 +168,16 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Save_File
+      --!    <Unit> On_Save_File_As_Dialog_Ok_Or_Cancel
       --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
       --! клавиши OK/Cancel в диалоге сохранения файла.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure On_Save_File (The_Widget : in Widget;
-                              Closure    : in Xt_Pointer;
-                              Call_Data  : in Xt_Pointer);
-      pragma Convention (C, On_Save_File);
+      procedure On_Save_File_As_Dialog_Ok_Or_Cancel
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Save_File_As_Dialog_Ok_Or_Cancel);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -205,7 +206,7 @@ package body Designer.Main_Window is
 
    Status_Bar     : Widget;
    Open_Dialog    : Widget;
-   Save_Dialog    : Widget;
+   Save_As_Dialog : Widget;
    Message_Text   : Widget;
    Message_Buffer : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
    --  Временный буфер для хранения текста диагностических сообщений,
@@ -322,12 +323,12 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Open_File
+      --!    <Unit> On_Open_File_Dialog_Ok_Or_Cancel
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure On_Open_File (The_Widget : in Widget;
-                              Closure    : in Xt_Pointer;
-                              Call_Data  : in Xt_Pointer)
+      procedure On_Open_File_Dialog_Ok_Or_Cancel (The_Widget : in Widget;
+                                                  Closure    : in Xt_Pointer;
+                                                  Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
@@ -350,7 +351,7 @@ package body Designer.Main_Window is
       exception
          when E : others =>
             null;
-      end On_Open_File;
+      end On_Open_File_Dialog_Ok_Or_Cancel;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -389,7 +390,7 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         Xt_Manage_Child (Save_Dialog);
+         Xt_Manage_Child (Save_As_Dialog);
 
       exception
          when E : others =>
@@ -398,12 +399,13 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Open_File
+      --!    <Unit> On_Save_File_As_Dialog_Ok_Or_Cancel
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure On_Save_File (The_Widget : in Widget;
-                              Closure    : in Xt_Pointer;
-                              Call_Data  : in Xt_Pointer)
+      procedure On_Save_File_As_Dialog_Ok_Or_Cancel
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
@@ -426,7 +428,7 @@ package body Designer.Main_Window is
       exception
          when E : others =>
             null;
-      end On_Save_File;
+      end On_Save_File_As_Dialog_Ok_Or_Cancel;
 
    end Callbacks;
 
@@ -471,15 +473,27 @@ package body Designer.Main_Window is
 
       Open_Dialog  := Xm_Create_File_Selection_Dialog (App_Shell,
                                                        "open_file_dialog");
-      Xt_Add_Callback (Open_Dialog, Xm_N_Ok_Callback, On_Open_File'Access);
-      Xt_Add_Callback (Open_Dialog, Xm_N_Cancel_Callback, On_Open_File'Access);
+      Xt_Add_Callback
+       (Open_Dialog,
+        Xm_N_Ok_Callback,
+        On_Open_File_Dialog_Ok_Or_Cancel'Access);
+      Xt_Add_Callback
+       (Open_Dialog,
+        Xm_N_Cancel_Callback,
+        On_Open_File_Dialog_Ok_Or_Cancel'Access);
 
       --  Создание диалога сохранения файлов.
 
-      Save_Dialog  := Xm_Create_File_Selection_Dialog (App_Shell,
-                                                      "save_file_dialog");
-      Xt_Add_Callback (Save_Dialog, Xm_N_Ok_Callback, On_Save_File'Access);
-      Xt_Add_Callback (Save_Dialog, Xm_N_Cancel_Callback, On_Save_File'Access);
+      Save_As_Dialog :=
+        Xm_Create_File_Selection_Dialog (App_Shell, "save_file_as_dialog");
+      Xt_Add_Callback
+       (Save_As_Dialog,
+        Xm_N_Ok_Callback,
+        On_Save_File_As_Dialog_Ok_Or_Cancel'Access);
+      Xt_Add_Callback
+       (Save_As_Dialog,
+        Xm_N_Cancel_Callback,
+        On_Save_File_As_Dialog_Ok_Or_Cancel'Access);
 
       --  Создание основного окна приложения.
 
