@@ -38,6 +38,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Exceptions;
+
 with Xt;
 
 with Model;
@@ -93,6 +95,17 @@ package Designer.Main_Window is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Put_Line (Item : in Wide_String);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Put_Exception_In_Callback
+   --!    <Purpose> Выводит диагностическое сообщение об обнаружении исключения
+   --! в подпрограмме обратного вызова.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Put_Exception_In_Callback
+    (Name       : in Wide_String;
+     Occurrence : in Ada.Exceptions.Exception_Occurrence);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
