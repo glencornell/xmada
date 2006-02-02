@@ -36,6 +36,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Characters.Handling;
 with GNAT.Table;
 
 with Xt.Callbacks;
@@ -59,6 +60,7 @@ with Model.Tree;
 
 package body Designer.Tree_Editor is
 
+   use Ada.Characters.Handling;
    use Model;
    use Model.Allocations;
    use Model.Queries;
@@ -95,15 +97,17 @@ package body Designer.Tree_Editor is
    record
       case Kind is
          when Annotation_Component_Class  =>
-            CC_Project   : Widget;
-            CC_Component : Widget;
+            CC_Project   : Widget;  --  Иконка в дереве проекта.
+            CC_Component : Widget;  --  Иконка в дереве сомпонент.
+            CC_Window    : Widget;  --  Окно компонент.
+            CC_Button    : Widget;  --  Закладка на ноутбуке.
 
          when Annotation_Widget_Instance  =>
-            WI_Component : Widget;
+            WI_Component : Widget;  --  Иконка в дереве компонент.
 
          when Annotation_Node_Project
            | Annotation_Node_Application  =>
-            NP_Project : Widget;
+            NP_Project : Widget;    --  Иконка в дереве проекта.
 
          when Annotation_Empty            =>
             null;
@@ -118,6 +122,17 @@ package body Designer.Tree_Editor is
            Table_Low_Bound      => Node_Id'First + 1,
            Table_Initial        => Model.Allocations.Node_Table_Initial,
            Table_Increment      => Model.Allocations.Node_Table_Increment);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_Component_Class_Widget
+   --!    <Purpose>  Возвращает виджет, соответствующий контейнеру, в котором
+   --! должен отображаться данный элемент. Если контейнер не найден, то
+   --! возвращается значение Null_Widget.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Get_Component_Class (Node : in Node_Id)
+     return Annotation_Record;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -138,6 +153,7 @@ package body Designer.Tree_Editor is
    function Add_Child (Container : in Widget;
                        Parent    : in Widget;
                        Node      : in Node_Id) return Widget;
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Get_Project_Widget
@@ -145,7 +161,7 @@ package body Designer.Tree_Editor is
    --! находящегося на project tree.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Get_Project_Widget (Value : in Annotation_Record) return Widget;
+   function Get_Project_Widget (Node : in Node_Id) return Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -154,7 +170,7 @@ package body Designer.Tree_Editor is
    --! находящегося на component tree.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Get_Component_Widget (Value : in Annotation_Record) return Widget;
+   function Get_Component_Widget (Node : in Node_Id) return Widget;
 
    package Callbacks is
 
@@ -183,15 +199,11 @@ package body Designer.Tree_Editor is
 
    end Callbacks;
 
-   Selected_Item       : Node_Id := Null_Node;
-   --  Элемент модели, выбранный пользователем в настоящий момент и для
-   --  отображены страницы редактора дерева.
+   Notebook          : Widget;
+   --  элемент, на котором находятся все вкладки
 
-   Project_Container   : Widget;
+   Project_Container : Widget;
    --  Контейнер, в котором содержится дерево проекта.
-
-   Component_Container : Widget;
-   --  Контейнер, в котором содержится дерево компонентов.
 
    package body Callbacks is
 
@@ -329,21 +341,19 @@ package body Designer.Tree_Editor is
         renames Annotation_Table.Table (Node);
 
    begin
-      if Selected_Item = Node then
-         Selected_Item := Null_Node;
-      end if;
-
       case Annotation.Kind is
          when Annotation_Node_Project
            | Annotation_Node_Application =>
-             Xt_Destroy_Widget (Get_Project_Widget (Annotation));
+             Xt_Destroy_Widget (Get_Project_Widget (Node));
 
          when Annotation_Component_Class =>
-            Xt_Destroy_Widget (Get_Project_Widget (Annotation));
-            Xt_Destroy_Widget (Get_Component_Widget (Annotation));
+            Xt_Destroy_Widget (Annotation.CC_Window);
+            Xt_Destroy_Widget (Annotation.CC_Button);
+            Xt_Destroy_Widget (Get_Project_Widget (Node));
+            Xt_Destroy_Widget (Get_Component_Widget (Node));
 
          when Annotation_Widget_Instance =>
-            Xt_Destroy_Widget (Get_Component_Widget (Annotation));
+            Xt_Destroy_Widget (Get_Component_Widget (Node));
 
          when Annotation_Empty =>
             null;
@@ -352,24 +362,55 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Get_Component_Class_Widget
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Get_Component_Class (Node : in Node_Id)
+     return Annotation_Record
+   is
+      Aux : Node_Id := Node;
+
+   begin
+      while Aux /= Null_Node loop
+         if Node_Kind (Aux) = Node_Component_Class then
+            return Annotation_Table.Table (Aux);
+         end if;
+
+         Aux := Parent_Node (Aux);
+      end loop;
+
+      return (Kind => Annotation_Empty);
+   end Get_Component_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Get_Component_Widget
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Get_Component_Widget (Value : in Annotation_Record)
+   function Get_Component_Widget (Node : in Node_Id)
      return Widget
    is
    begin
-      case Value.Kind is
-         when Annotation_Component_Class  =>
-            return Value.CC_Component;
+      if Node = Null_Node then
+         return Null_Widget;
+      end if;
 
-         when  Annotation_Widget_Instance =>
-            return Value.WI_Component;
+      declare
+         Value : constant Annotation_Record := Annotation_Table.Table (Node);
 
-         when others =>
-            raise Constraint_Error;
+      begin
+         case Value.Kind is
+            when Annotation_Component_Class  =>
+               return Value.CC_Component;
 
-      end case;
+            when  Annotation_Widget_Instance =>
+               return Value.WI_Component;
+
+            when others =>
+               raise Constraint_Error;
+
+         end case;
+      end;
    end Get_Component_Widget;
 
    ---------------------------------------------------------------------------
@@ -377,24 +418,32 @@ package body Designer.Tree_Editor is
    --!    <Unit> Get_Project_Widget
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Get_Project_Widget (Value : in Annotation_Record)
+   function Get_Project_Widget (Node : in Node_Id)
      return Widget
    is
    begin
-      case Value.Kind is
-         when Annotation_Node_Project     =>
-            return Value.NP_Project;
+      if Node = Null_Node then
+         return Null_Widget;
+      end if;
 
-         when Annotation_Node_Application =>
-            return Value.NP_Project;
+      declare
+         Value : constant Annotation_Record := Annotation_Table.Table (Node);
+      begin
+         case Value.Kind is
+            when Annotation_Node_Project     =>
+               return Value.NP_Project;
 
-         when Annotation_Component_Class  =>
-            return Value.CC_Project;
+            when Annotation_Node_Application =>
+               return Value.NP_Project;
 
-         when others =>
-            raise Constraint_Error;
+            when Annotation_Component_Class  =>
+               return Value.CC_Project;
 
-      end case;
+            when others =>
+               raise Constraint_Error;
+
+         end case;
+      end;
    end Get_Project_Widget;
 
    ---------------------------------------------------------------------------
@@ -407,7 +456,6 @@ package body Designer.Tree_Editor is
    is
       Args     : Xt_Arg_List (0 .. Arg_List'Length);
       Scrolled : Widget;
-      Notebook : Widget;
       Button   : Widget;
 
    begin
@@ -421,6 +469,7 @@ package body Designer.Tree_Editor is
       --  Добавляется вкладка "project tree" содержащая элемент
       --  Container.
 
+      --  TODO следующую строку удалить.
       Args (0 .. Arg_List'Length - 1) := Arg_List;
       Xt_Set_Arg (Args (Arg_List'Length), Xm_N_Scrolling_Policy, Xm_Automatic);
       Scrolled :=
@@ -429,35 +478,16 @@ package body Designer.Tree_Editor is
 
       Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
       Xt_Set_Arg (Args (1), Xm_N_Automatic_Selection, Xm_No_Auto_Select);
+      Xt_Set_Arg (Args (2), Xm_N_Selection_Policy, Xm_Single_Select);
       Project_Container :=
-        Xm_Create_Managed_Container (Scrolled, "project_tree", Args (0 .. 1));
+        Xm_Create_Managed_Container (Scrolled, "project_tree", Args (0 .. 2));
 
       Xt_Add_Callback (Project_Container,
-                       Xm_N_Selection_Callback,
+                       Xm_N_Default_Action_Callback,
                        Callbacks.On_Select'Access);
 
       Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "project");
 
-      --  Добавляется вкладка "component tree" содержащая элемент
-      --  Container.
-
-      Args (0 .. Arg_List'Length - 1) := Arg_List;
-      Xt_Set_Arg (Args (Arg_List'Length), Xm_N_Scrolling_Policy, Xm_Automatic);
-      Scrolled :=
-        Xm_Create_Managed_Scrolled_Window
-         (Notebook, "scrolled", Args (0 .. Arg_List'Length));
-
-      Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
-      Xt_Set_Arg (Args (1), Xm_N_Automatic_Selection, Xm_No_Auto_Select);
-      Component_Container :=
-        Xm_Create_Managed_Container
-         (Scrolled, "component_tree", Args (0 .. 1));
-
-      Xt_Add_Callback (Component_Container,
-                       Xm_N_Selection_Callback,
-                       Callbacks.On_Select'Access);
-
-      Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "component");
    end Initialize;
 
    ---------------------------------------------------------------------------
@@ -466,9 +496,45 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Insert_Item (Node : in Model.Node_Id) is
-      Component : Widget;
-      Project   : Widget;
-      Parent    : Widget;
+      function Create_Tab return Annotation_Record;
+      function Create_Tab return Annotation_Record is
+         Annotation : Annotation_Record (Annotation_Component_Class);
+         Args       : Xt_Arg_List (0 .. 2);
+         Component  : Widget;
+
+      begin
+         --  Добавляется вкладка "component tree" содержащая элемент
+         --  Container.
+
+         Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
+         Component := Xm_Create_Managed_Scrolled_Window
+                       (Notebook, "scrolled", Args (0 .. 0));
+
+         Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
+         Xt_Set_Arg (Args (1), Xm_N_Automatic_Selection, Xm_No_Auto_Select);
+         Annotation.CC_Window :=
+           Xm_Create_Managed_Container
+            (Component, "component_tree", Args (0 .. 1));
+
+         Xt_Add_Callback (Annotation.CC_Window,
+                          Xm_N_Selection_Callback,
+                          Callbacks.On_Select'Access);
+
+         --  Добавляем вкладку на ноутбук.
+         --  При добавлении вкладка должна быть как Managed, иначе
+         --  мотиф не назначит необходимые ей ресурсы.
+
+         Annotation.CC_Button :=
+           Xm_Create_Managed_Push_Button_Gadget
+            (Notebook, To_String (Name_Image (Node)));
+         Xt_Unmanage_Child (Annotation.CC_Button);
+
+         return Annotation;
+      end Create_Tab;
+
+      Component  : Widget;
+      Project    : Widget;
+      Parent     : Widget;
 
    begin
       Relocate_Annotation_Table (Node);
@@ -476,32 +542,33 @@ package body Designer.Tree_Editor is
 
       case Node_Kind (Node) is
          when Node_Component_Class =>
-            Parent    :=
-              Get_Project_Widget
-                (Annotation_Table.Table (Parent_Node (Node)));
-            Project   := Add_Child (Project_Container, Parent, Node);
-            Component :=
-              Add_Child (Component_Container, Null_Widget, Node);
-            Annotation_Table.Set_Item
-             (Node, (Kind         => Annotation_Component_Class,
-                     CC_Component => Component,
-                     CC_Project   => Project));
+            declare
+               Annotation : Annotation_Record := Create_Tab;
+
+            begin
+               Parent  := Get_Project_Widget (Parent_Node (Node));
+               Annotation.CC_Project :=
+                 Add_Child (Project_Container, Parent, Node);
+
+               Annotation.CC_Component :=
+                 Add_Child (Annotation.CC_Window, Null_Widget, Node);
+
+               Annotation_Table.Set_Item (Node, Annotation);
+            end;
 
          when Node_Widget_Instance =>
-            Parent    :=
-              Get_Component_Widget
-                (Annotation_Table.Table (Parent_Node (Node)));
-            Component := Add_Child (Component_Container, Parent, Node);
+            Parent    := Get_Component_Widget (Parent_Node (Node));
+            Component := Add_Child
+                          (Get_Component_Class (Node).CC_Window,
+                           Parent,
+                           Node);
             Annotation_Table.Set_Item
              (Node, (Kind         => Annotation_Widget_Instance,
                      WI_Component => Component));
 
          when Node_Application     =>
-            Parent  :=
-              Get_Project_Widget
-                (Annotation_Table.Table (Parent_Node (Node)));
-            Project :=
-              Add_Child (Project_Container, Parent, Node);
+            Parent  := Get_Project_Widget (Parent_Node (Node));
+            Project := Add_Child (Project_Container, Parent, Node);
             Annotation_Table.Set_Item
              (Node, (Kind       => Annotation_Node_Application,
                      NP_Project => Project));
@@ -524,6 +591,7 @@ package body Designer.Tree_Editor is
    ---------------------------------------------------------------------------
    procedure Reinitialize is
       Annotation : Annotation_Record;
+      Args       : Xt_Arg_List (0 .. 0);
 
    begin
 
@@ -533,15 +601,18 @@ package body Designer.Tree_Editor is
          Annotation := Annotation_Table.Table (J);
          case Annotation.Kind is
             when Annotation_Component_Class  =>
-               Xt_Destroy_Widget (Get_Component_Widget (Annotation));
-               Xt_Destroy_Widget (Get_Project_Widget (Annotation));
+               Xt_Destroy_Widget (Xt_Parent
+                                   (Xt_Parent
+                                     (Annotation.CC_Window)));
+               Xt_Destroy_Widget (Annotation.CC_Button);
+               Xt_Destroy_Widget (Get_Project_Widget (J));
 
             when Annotation_Node_Application
                | Annotation_Node_Project     =>
-               Xt_Destroy_Widget (Get_Project_Widget (Annotation));
+               Xt_Destroy_Widget (Get_Project_Widget (J));
 
             when Annotation_Widget_Instance  =>
-               Xt_Destroy_Widget (Get_Component_Widget (Annotation));
+               Xt_Destroy_Widget (Get_Component_Widget (J));
 
             when Annotation_Empty            =>
                null;
@@ -552,6 +623,9 @@ package body Designer.Tree_Editor is
 
       Annotation_Table.Free;
       Annotation_Table.Init;
+
+      Xt_Set_Arg (Args (0), Xm_N_Page_Number, Xt_Arg_Val (0));
+      Xt_Set_Values (Notebook, Args (0 .. 0));
    end Reinitialize;
 
    ---------------------------------------------------------------------------
@@ -582,8 +656,25 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
+      Class  : constant Annotation_Record := Get_Component_Class (Node);
+      Args   : Xt_Arg_List (0 .. 2);
+      Number : Integer;
+
    begin
-      Selected_Item := Node;
+      if Class.Kind = Annotation_Empty then
+         return;
+      end if;
+
+      --  Получаем номер вклаки, и делаем ее активной.
+
+      Xt_Set_Arg (Args (0), Xm_N_Page_Number, Number'Address);
+      Xt_Get_Values (Class.CC_Button, Args (0 .. 0));
+
+      Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (Number));
+      Xt_Set_Values (Notebook, Args (0 .. 0));
+
+      Xt_Manage_Child (Class.CC_Button);
+      --  Передаем на управление motif вкладку.
    end Select_Item;
 
    ---------------------------------------------------------------------------
@@ -592,10 +683,8 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Update_Item (Node : in Model.Node_Id) is
-      Str        : Xm_String;
-      Args       : Xt_Arg_List (0 .. 3);
-      The_Widget : Widget;
-      Annotation : Annotation_Record;
+      Str  : Xm_String;
+      Args : Xt_Arg_List (0 .. 0);
 
    begin
       if Node = Null_Node then
@@ -611,19 +700,21 @@ package body Designer.Tree_Editor is
          Str := Xm_String_Generate (Name_Image (Node));
       end if;
 
+      --  Задаем имя компонента.
+
       Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
 
-      case Annotation.Kind is
+      case Annotation_Table.Table (Node).Kind is
          when Annotation_Node_Project
            | Annotation_Node_Application =>
-             Xt_Set_Values (Get_Project_Widget (Annotation), Args);
+            Xt_Set_Values (Get_Project_Widget (Node), Args);
 
          when Annotation_Component_Class =>
-            Xt_Set_Values (Get_Project_Widget (Annotation), Args);
-            Xt_Set_Values (Get_Component_Widget (Annotation), Args);
+            Xt_Set_Values (Get_Project_Widget (Node), Args);
+            Xt_Set_Values (Get_Component_Widget (Node), Args);
 
          when Annotation_Widget_Instance =>
-            Xt_Set_Values (Get_Component_Widget (Annotation), Args);
+            Xt_Set_Values (Get_Component_Widget (Node), Args);
 
          when Annotation_Empty =>
             null;

@@ -471,9 +471,6 @@ package body Designer.Operations is
          Designer.Main_Window.Insert_Item (Component_Class);
          --  Извещение компонентов дизайнера о создании нового компонента.
 
-         Designer.Main_Window.Select_Item (Component_Class);
-         --  Извещение компонентов дизайнера о выборе нового компонента.
-
       end Xml_To_Component_Class;
 
       Project              : constant Node_Id := Create_Project;
