@@ -97,6 +97,27 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Enumeration_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Enumeration_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                        => Node_Enumeration_Resource_Value,
+         Parent                      => Null_Node,
+         List                        => Null_List,
+         Previous                    => Null_Node,
+         Next                        => Null_Node,
+         ERV_Resource_Specification  => Null_Node,
+         ERV_Resource_Value          => Null_Node,
+         ERV_Is_Resource_Class_Value => False,
+         ERV_Is_Hardcoded            => False));
+
+      return Node_Table.Last;
+   end Create_Enumeration_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Enumeration_Value_Specification
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -115,6 +136,27 @@ package body Model.Tree.Constructors is
 
       return Node_Table.Last;
    end Create_Enumeration_Value_Specification;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Integer_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Integer_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                        => Node_Integer_Resource_Value,
+         Parent                      => Null_Node,
+         List                        => Null_List,
+         Previous                    => Null_Node,
+         Next                        => Null_Node,
+         IRV_Resource_Specification  => Null_Node,
+         IRV_Resource_Value          => 0,
+         IRV_Is_Resource_Class_Value => False,
+         IRV_Is_Hardcoded            => False));
+
+      return Node_Table.Last;
+   end Create_Integer_Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -229,6 +271,27 @@ package body Model.Tree.Constructors is
 
       return Node_Table.Last;
    end Create_Widget_Instance;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Widget_Reference_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Widget_Reference_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                         => Node_Widget_Reference_Resource_Value,
+         Parent                       => Null_Node,
+         List                         => Null_List,
+         Previous                     => Null_Node,
+         Next                         => Null_Node,
+         WRRV_Resource_Specification  => Null_Node,
+         WRRV_Resource_Value          => Null_Node,
+         WRRV_Is_Resource_Class_Value => False,
+         WRRV_Is_Hardcoded            => False));
+
+      return Node_Table.Last;
+   end Create_Widget_Reference_Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
