@@ -99,11 +99,17 @@ package Model.Tree is
      Node_Resource_Specification,
      --  Описание ресурса класса виджетов.
 
-     Node_Widget_Instance);
+     Node_Widget_Instance,
      --  Описание экземпляра виджета.
 
---     Node_Resource_Value,
---     Node_Resource_Class_Value);
+     Node_Integer_Resource_Value,
+     --  Значение ресурса, содержащего любую целочисленную величину.
+
+     Node_Widget_Reference_Resource_Value,
+     --  Значение ресурса, содержащего ссылку на экземпляр виджета.
+
+     Node_Enumeration_Resource_Value);
+     --  Значение ресурса, содержащего ссылку на величину перечислимого типа.
 
    --  Предопределенные типы данных.
 
@@ -215,6 +221,23 @@ package Model.Tree is
    function Type_Kind (Node : in Node_Id) return Predefined_Resource_Type_Kind;
    procedure Set_Type_Kind (Node  : in Node_Id;
                             Value : in Predefined_Resource_Type_Kind);
+
+   function Resource_Specification (Node : in Node_Id) return Node_Id;
+   procedure Set_Resource_Specification (Node  : in Node_Id;
+                                         Value : in Node_Id);
+
+   function Is_Resource_Class_Value (Node : in Node_Id) return Boolean;
+   procedure Set_Is_Resource_Class_Value (Node  : in Node_Id;
+                                          Value : in Boolean);
+
+   function Resource_Value (Node : in Node_Id) return Node_Id;
+   procedure Set_Resource_Value (Node : in Node_Id; Value : in Node_Id);
+
+   function Resource_Value (Node : in Node_Id) return Integer;
+   procedure Set_Resource_Value (Node : in Node_Id; Value : in Integer);
+
+   function Is_Hardcoded (Node : in Node_Id) return Boolean;
+   procedure Set_Is_Hardcoded (Node : in Node_Id; Value : in Boolean);
 
 private
 
@@ -379,6 +402,54 @@ private
             WI_Automatically_Created_Children : List_Id;
             --  Автоматически создаваемые дочерние виджеты.
 
+            --  TODO Список обратных связей (кто зависит от этого виджета).
+
+          when Node_Widget_Reference_Resource_Value =>
+             WRRV_Resource_Specification  : Node_Id;
+             --  Ссылка на спецификацию ресурса.
+
+             WRRV_Is_Resource_Class_Value : Boolean;
+             --  Признак значения класса ресурса (а не ресурса).
+
+             WRRV_Resource_Value          : Node_Id;
+             --  Ссылка на экземпляр виджета, используемого в качестве
+             --  значения ресурса.
+
+             WRRV_Is_Hardcoded            : Boolean;
+             --  Признак необходимости жесткой фиксации значения ресурса
+             --  в генерируемом коде программы. В противном случае значение
+             --  ресурса по возможности будет сохраняться в файле ресурсов.
+
+          when Node_Integer_Resource_Value =>
+             IRV_Resource_Specification  : Node_Id;
+             --  Ссылка на спецификацию ресурса.
+
+             IRV_Is_Resource_Class_Value : Boolean;
+             --  Признак значения класса ресурса (а не ресурса).
+
+             IRV_Resource_Value          : Integer;
+             --  Целочисленное значение ресурса.
+
+             IRV_Is_Hardcoded            : Boolean;
+             --  Признак необходимости жесткой фиксации значения ресурса
+             --  в генерируемом коде программы. В противном случае значение
+             --  ресурса по возможности будет сохраняться в файле ресурсов.
+
+          when Node_Enumeration_Resource_Value =>
+             ERV_Resource_Specification  : Node_Id;
+             --  Ссылка на спецификацию ресурса.
+
+             ERV_Is_Resource_Class_Value : Boolean;
+             --  Признак значения класса ресурса (а не ресурса).
+
+             ERV_Resource_Value          : Node_Id;
+             --  Ссылка на спецификацию значения перечислимого типа,
+             --  используемого в качестве значения ресурса.
+
+             ERV_Is_Hardcoded            : Boolean;
+             --  Признак необходимости жесткой фиксации значения ресурса
+             --  в генерируемом коде программы. В противном случае значение
+             --  ресурса по возможности будет сохраняться в файле ресурсов.
       end case;
    end record;
 

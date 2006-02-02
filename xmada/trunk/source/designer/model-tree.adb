@@ -186,6 +186,34 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Is_Hardcoded
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Hardcoded (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            return Node_Table.Table (Node).ERV_Is_Hardcoded;
+
+         when Node_Integer_Resource_Value =>
+            return Node_Table.Table (Node).IRV_Is_Hardcoded;
+
+         when Node_Widget_Reference_Resource_Value =>
+            return Node_Table.Table (Node).WRRV_Is_Hardcoded;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Is_Hardcoded;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Is_Meta_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -196,6 +224,34 @@ package body Model.Tree is
 
       return Node_Table.Table (Node).Is_Meta_Class;
    end Is_Meta_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Is_Resource_Class_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Resource_Class_Value (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            return Node_Table.Table (Node).ERV_Is_Resource_Class_Value;
+
+         when Node_Integer_Resource_Value =>
+            return Node_Table.Table (Node).IRV_Is_Resource_Class_Value;
+
+         when Node_Widget_Reference_Resource_Value =>
+            return Node_Table.Table (Node).WRRV_Is_Resource_Class_Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Is_Resource_Class_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -294,6 +350,34 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Resource_Specification
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Specification (Node : in Node_Id) return Node_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            return Node_Table.Table (Node).ERV_Resource_Specification;
+
+         when Node_Integer_Resource_Value =>
+            return Node_Table.Table (Node).IRV_Resource_Specification;
+
+         when Node_Widget_Reference_Resource_Value =>
+            return Node_Table.Table (Node).WRRV_Resource_Specification;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Resource_Specification;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Resource_Type
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -317,6 +401,43 @@ package body Model.Tree is
 
       return Node_Table.Table (Node).Resource_Types;
    end Resource_Types;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Value (Node : in Node_Id) return Integer is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Integer_Resource_Value);
+
+      return Node_Table.Table (Node).IRV_Resource_Value;
+   end Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Value (Node : in Node_Id) return Node_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            return Node_Table.Table (Node).ERV_Resource_Value;
+
+         when Node_Widget_Reference_Resource_Value =>
+            return Node_Table.Table (Node).WRRV_Resource_Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -500,6 +621,34 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Is_Hardcoded
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Is_Hardcoded (Node : in Node_Id; Value : in Boolean) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            Node_Table.Table (Node).ERV_Is_Hardcoded := Value;
+
+         when Node_Integer_Resource_Value =>
+            Node_Table.Table (Node).IRV_Is_Hardcoded := Value;
+
+         when Node_Widget_Reference_Resource_Value =>
+            Node_Table.Table (Node).WRRV_Is_Hardcoded := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Set_Is_Hardcoded;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Is_Meta_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -510,6 +659,36 @@ package body Model.Tree is
 
       Node_Table.Table (Node).Is_Meta_Class := Value;
    end Set_Is_Meta_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Is_Resource_Class_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Is_Resource_Class_Value (Node  : in Node_Id;
+                                          Value : in Boolean)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            Node_Table.Table (Node).ERV_Is_Resource_Class_Value := Value;
+
+         when Node_Integer_Resource_Value =>
+            Node_Table.Table (Node).IRV_Is_Resource_Class_Value := Value;
+
+         when Node_Widget_Reference_Resource_Value =>
+            Node_Table.Table (Node).WRRV_Is_Resource_Class_Value := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Set_Is_Resource_Class_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -579,6 +758,36 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Resource_Specification
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Specification (Node  : in Node_Id;
+                                         Value : in Node_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            Node_Table.Table (Node).ERV_Resource_Specification := Value;
+
+         when Node_Integer_Resource_Value =>
+            Node_Table.Table (Node).IRV_Resource_Specification := Value;
+
+         when Node_Widget_Reference_Resource_Value =>
+            Node_Table.Table (Node).WRRV_Resource_Specification := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Set_Resource_Specification;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Resource_Type
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -603,6 +812,43 @@ package body Model.Tree is
       Node_Table.Table (Node).Resource_Types := Value;
       Set_Parent_Node (Value, Node);
    end Set_Resource_Types;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Value (Node : in Node_Id; Value : in Integer) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Integer_Resource_Value);
+
+      Node_Table.Table (Node).IRV_Resource_Value := Value;
+   end Set_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Value (Node : in Node_Id; Value : in Node_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            Node_Table.Table (Node).ERV_Resource_Value := Value;
+
+         when Node_Widget_Reference_Resource_Value =>
+            Node_Table.Table (Node).WRRV_Resource_Value := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Set_Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
