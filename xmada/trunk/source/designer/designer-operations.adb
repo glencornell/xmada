@@ -37,6 +37,7 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
+with Ada.Wide_Text_IO;
 with Designer.Main_Window;
 with Model.Initialization.Designer;
 with Model.Names;
@@ -73,6 +74,14 @@ package body Designer.Operations is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Error_Message
+   --!    <Purpose> Выводит сообщение в Standard_Error.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Error_Message (Message : in Wide_String);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Init_XML_Tools
    --!    <Purpose> Инициализирует модули пакета XML_Tools
    --! и создает таблицу имен используемых тегов и атрибутов.
@@ -105,6 +114,17 @@ package body Designer.Operations is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Xml_To_Project return Node_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Error_Message
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Error_Message (Message : in Wide_String) is
+   begin
+      Ada.Wide_Text_IO.Put_Line (Ada.Wide_Text_IO.Standard_Error,
+                                 "ERROR: " & Message);
+   end Error_Message;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -248,6 +268,16 @@ package body Designer.Operations is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> Widget_Instance_To_Xml
+      --!    <Purpose> Преобразует узел Node_Widget_Instance в
+      --! XML-структуру и присоединяет созданный тег к тегу Parent.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Widget_Instance_To_Xml (Widget_Instance : in Node_Id;
+                                        Parent          : in Element_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> Application_To_Xml
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -288,17 +318,44 @@ package body Designer.Operations is
       is
          Tag : constant Element_Id
            := Elements.Create_Tag (Parent, Component_Class_Tag);
+
       begin
          Attributes.Create_Attribute
           (Tag,
            Name_Attr,
-           Strings.Store
-            (Model.Names.Image (Name (Component_Class))));
+           Strings.Store (Model.Names.Image (Name (Component_Class))));
 
          --  Создаем Widget_Instance.
-         --  XXX
 
+         declare
+            Widget_Instance : constant Node_Id
+              := Root_Widget_Instance (Component_Class);
+
+         begin
+            if Widget_Instance /= Null_Node then
+               Widget_Instance_To_Xml (Widget_Instance, Tag);
+            end if;
+         end;
       end Component_Class_To_Xml;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Widget_Instance_To_Xml
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Widget_Instance_To_Xml (Widget_Instance : in Node_Id;
+                                        Parent          : in Element_Id)
+      is
+         Tag : constant Element_Id
+           := Elements.Create_Tag (Parent, Widget_Instance_Tag);
+
+      begin
+         Attributes.Create_Attribute
+          (Tag,
+           Name_Attr,
+           Strings.Store (Model.Names.Image (Name (Widget_Instance))));
+
+      end Widget_Instance_To_Xml;
 
       Root        : Element_Id;
       Application : Node_Id;
@@ -370,12 +427,21 @@ package body Designer.Operations is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Xml_To_Application
+      --!    <Unit> Xml_To_Component_Class
       --!    <Purpose> Преобразует XML-структуру в узел Node_Component_Class.
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure Xml_To_Component_Class (Tag             : in Element_Id;
                                         Component_Class : in Node_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Xml_To_Widget_Instance
+      --!    <Purpose> Преобразует XML-структуру в узел Node_Widget_Instance.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Xml_To_Widget_Instance (Tag             : in Element_Id;
+                                        Widget_Instance : in Node_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -403,6 +469,8 @@ package body Designer.Operations is
                     Enter (XML_Tools.Strings.Image (Attributes.Value (A))));
 
                else
+                  Error_Message ("Unknown attribute name: "
+                    & XML_Tools.Names.Image (Attributes.Name (A)));
                   raise Program_Error;
                end if;
 
@@ -431,6 +499,8 @@ package body Designer.Operations is
                   end;
 
                else
+                  Error_Message ("Unknown element name: "
+                    & XML_Tools.Names.Image (Elements.Name (Child)));
                   raise Program_Error;
                end if;
 
@@ -461,6 +531,8 @@ package body Designer.Operations is
                                     (Attributes.Value (A))));
 
                else
+                  Error_Message ("Unknown attribute name: "
+                    & XML_Tools.Names.Image (Attributes.Name (A)));
                   raise Program_Error;
                end if;
 
@@ -471,7 +543,87 @@ package body Designer.Operations is
          Designer.Main_Window.Insert_Item (Component_Class);
          --  Извещение компонентов дизайнера о создании нового компонента.
 
+         --  Обработка дочерних тегов тега Component_Class.
+
+         declare
+            Child : Element_Id := Elements.Child (Tag);
+
+         begin
+            while Child /= Null_Element_Id loop
+               if Elements.Name (Child) = Widget_Instance_Tag then
+                  declare
+                     Widget_Instance : Node_Id := Create_Widget_Instance;
+
+                  begin
+                     Set_Root_Widget_Instance (Component_Class,
+                                               Widget_Instance);
+                     Xml_To_Widget_Instance (Child, Widget_Instance);
+                  end;
+
+               else
+                  Error_Message ("Unknown element name: "
+                    & XML_Tools.Names.Image (Elements.Name (Child)));
+                  raise Program_Error;
+               end if;
+
+               Child := Elements.Next (Child);
+            end loop;
+         end;
       end Xml_To_Component_Class;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Xml_To_Widget_Instance
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Xml_To_Widget_Instance (Tag             : in Element_Id;
+                                        Widget_Instance : in Node_Id)
+      is
+      begin
+         --  Обработка атрибутов тега Widget_Instance.
+
+         declare
+            A : Attribute_Id := Elements.Attribute (Tag);
+
+         begin
+            while A /= Null_Attribute_Id loop
+               if Attributes.Name (A) = Name_Attr then
+                  Set_Name (Widget_Instance,
+                            Enter (XML_Tools.Strings.Image
+                                    (Attributes.Value (A))));
+
+               else
+                  Error_Message ("Unknown attribute name: "
+                    & XML_Tools.Names.Image (Attributes.Name (A)));
+                  raise Program_Error;
+               end if;
+
+               A := Attributes.Next (A);
+            end loop;
+         end;
+
+         --  Обработка дочерних тегов тега Widget_Instance.
+
+         declare
+            Child : Element_Id := Elements.Child (Tag);
+
+         begin
+            while Child /= Null_Element_Id loop
+               if Elements.Name (Child) = Widget_Instance_Tag then
+                  Error_Message ("Unknown element name: "
+                    & XML_Tools.Names.Image (Elements.Name (Child)));
+                  raise Program_Error;
+
+               else
+                  Error_Message ("Unknown element name: "
+                    & XML_Tools.Names.Image (Elements.Name (Child)));
+                  raise Program_Error;
+               end if;
+
+               Child := Elements.Next (Child);
+            end loop;
+         end;
+      end Xml_To_Widget_Instance;
 
       Project              : constant Node_Id := Create_Project;
       Applications         : constant List_Id := New_List;
@@ -484,6 +636,8 @@ package body Designer.Operations is
       Set_Imported_Widget_Sets (Project, Imported_Widget_Sets);
 
       if Elements.Name (Root) /= Project_Tag then
+         Error_Message ("The root tag must be <Project> instead "
+           & XML_Tools.Names.Image (Elements.Name (Root)));
          raise Program_Error;
       end if;
 
@@ -500,6 +654,8 @@ package body Designer.Operations is
                                  (Attributes.Value (A))));
 
             else
+               Error_Message ("Unknown attribute name: "
+                 & XML_Tools.Names.Image (Attributes.Name (A)));
                raise Program_Error;
             end if;
 
@@ -529,6 +685,8 @@ package body Designer.Operations is
                end;
 
             else
+               Error_Message ("Unknown element name: "
+                 & XML_Tools.Names.Image (Elements.Name (Child)));
                raise Program_Error;
             end if;
 
