@@ -97,10 +97,13 @@ package body Designer.Tree_Editor is
          when Annotation_Component_Class =>
             CC_Project_Tree_Icon   : Widget;
             --  Иконка в дереве проекта.
+
             CC_Component_Tree_Icon : Widget;
             --  Иконка в дереве класса компонент.
+
             Component_Container    : Widget;
             --  Контайнер страницы класса компонент.
+
             Component_Tab          : Widget;
             --  Закладка страницы класса компонент.
 
