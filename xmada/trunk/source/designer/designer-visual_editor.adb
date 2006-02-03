@@ -44,6 +44,8 @@ with Xm_Scrolled_Window;
 
 with Designer.Main_Window;
 with Model.Queries;
+with Model.Tree.Constructors;
+with Model.Tree.Designer;
 with Model.Tree.Lists;
 
 package body Designer.Visual_Editor is
@@ -51,6 +53,8 @@ package body Designer.Visual_Editor is
    use Model;
    use Model.Queries;
    use Model.Tree;
+   use Model.Tree.Constructors;
+   use Model.Tree.Designer;
    use Model.Tree.Lists;
    use Xm.Representation_Type_Management;
    use Xm_Drawing_Area;
@@ -114,6 +118,7 @@ package body Designer.Visual_Editor is
       case Node_Kind (Node) is
          when Node_Project =>
             --  Устанавливаем обратные конверторы типов ресурсов.
+
             declare
                Set : Node_Id := First (Imported_Widget_Sets (Node));
 
@@ -131,7 +136,77 @@ package body Designer.Visual_Editor is
             null;
 
          when Node_Widget_Instance =>
-            null;
+            --  Производим формирование списков значений всех ресурсов и
+            --  ресурсов ограничений добавленного экземпляра виджета для
+            --  обеспечения взаимодействия с редактором свойств.
+
+            declare
+               Aux   : Node_Id := First (Resources (Class (Node)));
+               List  : List_Id := New_List;
+               Value : Node_Id;
+
+            begin
+               --  Формирование списков значений ресурсов.
+
+               while Aux /= Null_Node loop
+                  case Node_Kind (Resource_Type (Aux)) is
+                     when Node_Predefined_Resource_Type =>
+                        null;
+
+                     when Node_Enumerated_Resource_Type =>
+                        Value := Create_Enumeration_Resource_Value;
+                        Set_Resource_Specification (Value, Aux);
+
+                     when others =>
+                        raise Program_Error;
+                  end case;
+
+                  Append (List, Value);
+
+                  Aux := Next (Aux);
+               end loop;
+
+               Set_All_Resources (Node, List);
+
+               --  Формирование списка значений ресурсов ограничений -
+               --  список ресурсов извлекается у класса родительского виджета.
+
+               List := New_List;
+               Aux :=
+                 First (Constraint_Resources (Class (Parent_Node (Node))));
+               --  XXX  Простейший случай - нет автоматически создаваемого
+               --  родительского виджета.
+
+               while Aux /= Null_Node loop
+                  case Node_Kind (Resource_Type (Aux)) is
+                     when Node_Predefined_Resource_Type =>
+                        case Type_Kind (Resource_Type (Aux)) is
+                           when Type_Unspecified =>
+                              raise Program_Error;
+
+                           when Type_Position | Type_Dimension | Type_C_Int =>
+                              Value := Create_Integer_Resource_Value;
+
+                           when Type_Widget_Reference =>
+                              Value := Create_Widget_Reference_Resource_Value;
+                        end case;
+
+                     when Node_Enumerated_Resource_Type =>
+                        Value := Create_Enumeration_Resource_Value;
+
+                     when others =>
+                        raise Program_Error;
+                  end case;
+
+                  Set_Resource_Specification (Value, Aux);
+
+                  Append (List, Value);
+
+                  Aux := Next (Aux);
+               end loop;
+
+               Set_All_Constraint_Resources (Node, List);
+            end;
 
          when others =>
             raise Program_Error;

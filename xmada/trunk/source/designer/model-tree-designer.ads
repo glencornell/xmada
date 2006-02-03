@@ -42,4 +42,10 @@
 
 package Model.Tree.Designer is
 
+   function All_Resources (Node : in Node_Id) return List_Id;
+   procedure Set_All_Resources (Node : in Node_Id; Value : in List_Id);
+
+   function All_Constraint_Resources (Node : in Node_Id) return List_Id;
+   procedure Set_All_Constraint_Resources (Node  : in Node_Id;
+                                           Value : in List_Id);
 end Model.Tree.Designer;

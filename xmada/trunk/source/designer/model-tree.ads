@@ -252,6 +252,9 @@ package Model.Tree is
    function Root_Widget_Instance (Node : in Node_Id) return Node_Id;
    procedure Set_Root_Widget_Instance (Node : in Node_Id; Value : in Node_Id);
 
+   function Class (Node : in Node_Id) return Node_Id;
+   procedure Set_Class (Node : in Node_Id; Value : in Node_Id);
+
 private
 
    type Node_Record (Kind : Node_Kinds := Node_Empty) is record
