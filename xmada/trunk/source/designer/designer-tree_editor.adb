@@ -229,6 +229,9 @@ package body Designer.Tree_Editor is
    Selected_Item     : Widget;
    --  Текущий выделенный элемент на акладке компонент.
 
+   Is_Callback_Disabled : Boolean := False;
+   --  Признак блокировки функции обратного вызова.
+
    package body Callbacks is
 
       ------------------------------------------------------------------------
@@ -264,6 +267,10 @@ package body Designer.Tree_Editor is
             begin
                Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
                Xt_Get_Values (Selected (Selected'First), Args (0 .. 0));
+
+               if Node_Kind (Node_Id (Node)) /= Node_Component_Class then
+                  return;
+               end if;
 
                --  Получаем номер вклаки, и делаем ее активной.
 
@@ -327,6 +334,10 @@ package body Designer.Tree_Editor is
            := To_Callback_Struct_Access (Call_Data);
 
       begin
+         if Is_Callback_Disabled then
+            return;
+         end if;
+
          if Data.Selected_Items = null then
             Main_Window.Select_Item (Null_Node);
 
@@ -772,10 +783,14 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
-      Class  : constant Node_Id := Enclosing_Component_Class (Node);
-      Args   : Xt_Arg_List (0 .. 2);
+      Class   : constant Node_Id := Enclosing_Component_Class (Node);
+      Kind    : Node_Kinds;
+      Element : Widget;
+      List    : Xt_Widget_List (0 .. 1);
+      Args    : Xt_Arg_List (0 .. 2);
 
    begin
+      Is_Callback_Disabled := True;
 
       --  TODO возможны проблемы с рекурсивным вызовом данной функции,
       --  связанные с вызовом callback функции On_Select.
@@ -790,29 +805,43 @@ package body Designer.Tree_Editor is
 
       --  Если компонент не выбран, то убираем все выделение.
 
-      if Class = Null_Node then
+      if Node = Null_Node then
          Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Xt_Arg_Val (0));
          Xt_Set_Values (Project_Container, Args (0 .. 0));
 
       else
-         --  Выделяем элемент на вкладке компонент.
+         Kind := Node_Kind (Node);
 
-         Selected_Item := Component_Tree_Icon (Node);
+         if Kind = Node_Component_Class or Kind = Node_Widget_Instance then
+            --  Выделяем элемент на вкладке компонент.
 
-         Xt_Set_Arg (Args (0), Xm_N_Selected_Objects, Selected_Item);
+            Selected_Item := Component_Tree_Icon (Node);
+            List (0) := Selected_Item;
+            Xt_Set_Arg (Args (0), Xm_N_Selected_Objects, List'Address);
+            Xt_Set_Arg (Args (1), Xm_N_Selected_Object_Count, Xt_Arg_Val (1));
+            Xt_Set_Values (Component_Container (Class), Args (0 .. 1));
+
+            Xt_Manage_Child (Component_Tab (Class));
+            --  Передаем на управление motif вкладку.
+         end if;
+
+         --  Выделяем элемент, соответствующий классу виджета
+         --  на вкладке проекта.
+
+         if Kind = Node_Widget_Instance then
+            Element := Project_Tree_Icon (Class);
+
+         else
+            Element := Project_Tree_Icon (Node);
+         end if;
+
+         List (0) := Element;
+         Xt_Set_Arg (Args (0), Xm_N_Selected_Objects, List'Address);
          Xt_Set_Arg (Args (1), Xm_N_Selected_Object_Count, Xt_Arg_Val (1));
-         Xt_Set_Values (Component_Container (Class), Args (0 .. 1));
-
-         --  Выделяем элемент на вкладке проекта.
-
-         Xt_Set_Arg
-           (Args (0), Xm_N_Selected_Objects, Project_Tree_Icon (Node));
          Xt_Set_Values (Project_Container, Args (0 .. 1));
-         --  XXX Кто сказал, что так можно делать ???
-
-         Xt_Manage_Child (Component_Tab (Class));
-         --  Передаем на управление motif вкладку.
       end if;
+
+      Is_Callback_Disabled := False;
    end Select_Item;
 
    ---------------------------------------------------------------------------
