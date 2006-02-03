@@ -39,24 +39,25 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+
 package Model.Tools is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Project_To_Xml
+   --!    <Unit> Project_To_XML
    --!    <Purpose> Преобразовывает структуру дерева узлов проекта в XML-файл.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Project_To_Xml (Project : in Node_Id;
+   procedure Project_To_XML (Project   : in Node_Id;
                              File_Name : in Wide_String);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Xml_To_Project
+   --!    <Unit> XML_To_Project
    --!    <Purpose> Преобразовывает XML-файл в дерево узлов проекта.
    --! Возвращает Node_Id нового проекта.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Xml_To_Project (File_Name : in Wide_String) return Node_Id;
+   function XML_To_Project (File_Name : in Wide_String) return Node_Id;
 
 end Model.Tools;
