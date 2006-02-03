@@ -38,11 +38,24 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt;
+
+with Model;
 
 private package Designer.Properties_Editor.Component_Class is
 
    type Component_Class_Properties_Editor is
      new Node_Properties_Editor with private;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create
+   --!    <Purpose> Создает реализацию редактора свойств.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Create (Parent : in Xt.Widget;
+                    Node   : in Model.Node_Id)
+     return Node_Properties_Editor_Access;
 
 private
 
@@ -64,5 +77,13 @@ private
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Hide (Object : access Component_Class_Properties_Editor);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Finalize
+   --!    <Purpose> Уничтожение экземпляра редактора свойств.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Finalize (Object : in out Component_Class_Properties_Editor);
 
 end Designer.Properties_Editor.Component_Class;

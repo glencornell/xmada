@@ -38,6 +38,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Finalization;
+
 with Xt.Ancillary_Types;
 
 with Model;
@@ -111,7 +113,10 @@ package Designer.Properties_Editor is
 private
 
    type Node_Properties_Editor (Node : Model.Node_Id) is
-     abstract tagged limited null record;
+     abstract new Ada.Finalization.Limited_Controlled with null record;
+
+   type Node_Properties_Editor_Access is
+     access all Node_Properties_Editor'Class;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

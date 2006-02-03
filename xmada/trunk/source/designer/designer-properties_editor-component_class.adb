@@ -39,6 +39,37 @@
 
 package body Designer.Properties_Editor.Component_Class is
 
+   use Xt;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create (Parent : in Widget;
+                    Node   : in Model.Node_Id)
+     return Node_Properties_Editor_Access
+   is
+      pragma Unreferenced (Parent);
+      --  XXX будет использовано при реализации.
+
+      Result : constant Node_Properties_Editor_Access
+        := new Component_Class_Properties_Editor (Node);
+
+   begin
+      return Result;
+   end Create;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Finalize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Finalize (Object : in out Component_Class_Properties_Editor) is
+   begin
+      null;
+   end Finalize;
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Hide

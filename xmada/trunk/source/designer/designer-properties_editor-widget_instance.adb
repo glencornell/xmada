@@ -36,8 +36,97 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt.Ancillary_Types;
+with Xt.Instance_Management;
+with Xm.Resource_Management;
+with Xm_Push_Button_Gadget;
+with Xm_Scrolled_Window;
+with Xm_String_Defs;
+with Xm_Row_Column;
 
 package body Designer.Properties_Editor.Widget_Instance is
+
+   use Xt;
+   use Xt.Ancillary_Types;
+   use Xt.Instance_Management;
+   use Xm;
+   use Xm.Resource_Management;
+   use Xm_Push_Button_Gadget;
+   use Xm_Scrolled_Window;
+   use Xm_String_Defs;
+   use Xm_Row_Column;
+   use Model;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create (Parent : in Widget;
+                    Node   : in Model.Node_Id)
+     return Node_Properties_Editor_Access
+   is
+      Result  : constant Widget_Instance_Properties_Editor_Access
+        := new Widget_Instance_Properties_Editor (Node);
+      Element : Widget;
+      Args    : Xt_Arg_List (0 .. 5);
+
+   begin
+
+     --  Создаем вкладку "Свойства".
+
+      Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
+      Element               :=
+        Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
+      Result.Properties     :=
+        Xm_Create_Managed_Row_Column (Element, "row_column");
+      Result.Properties_Tab :=
+        Xm_Create_Managed_Push_Button_Gadget (Parent, "properties");
+
+     --  Создаем вкладку "ограничения".
+
+      Element                :=
+        Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
+      Result.Constraints     :=
+        Xm_Create_Managed_Row_Column (Element, "row_column");
+      Result.Constraints_Tab :=
+        Xm_Create_Managed_Push_Button_Gadget (Parent, "constraints");
+
+      --  Создаем вкладку "функции обратного вызова".
+
+      Element              :=
+        Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
+      Result.Callbacks     :=
+        Xm_Create_Managed_Row_Column (Element, "row_column");
+      Result.Callbacks_Tab :=
+        Xm_Create_Managed_Push_Button_Gadget (Parent, "callbacks");
+
+      return Node_Properties_Editor_Access (Result);
+   end Create;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Finalize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Finalize (Object : in out Widget_Instance_Properties_Editor) is
+   begin
+
+      --  Удаление вкладки "Свойства".
+
+      Xt_Destroy_Widget (Xt_Parent (Xt_Parent (Object.Properties)));
+      Xt_Destroy_Widget (Object.Properties_Tab);
+
+      --  Удаление вкладки "Ограничения".
+
+      Xt_Destroy_Widget (Xt_Parent (Xt_Parent (Object.Constraints)));
+      Xt_Destroy_Widget (Object.Constraints_Tab);
+
+      --  Удаление вкладки "Функции обратного вызова".
+
+      Xt_Destroy_Widget (Xt_Parent (Xt_Parent (Object.Callbacks)));
+      Xt_Destroy_Widget (Object.Callbacks_Tab);
+   end Finalize;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -59,4 +148,4 @@ package body Designer.Properties_Editor.Widget_Instance is
       null;
    end Show;
 
-end Designer.Properties_Editor.Widget_instance;
+end Designer.Properties_Editor.Widget_Instance;

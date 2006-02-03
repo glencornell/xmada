@@ -69,9 +69,6 @@ package body Designer.Properties_Editor is
    use Xt;
    use Xt.Ancillary_Types;
 
-   type Node_Properties_Editor_Access is
-     access all Node_Properties_Editor'Class;
-
    --  Для каждого узла создаётся (по запросу) свой собственный редактор
    --  свойств. Уже созданные редакторы свойств сохраняются в таблице
    --  Annotation_Table.
@@ -263,7 +260,8 @@ package body Designer.Properties_Editor is
 
       for J in First .. Node loop
          case Node_Kind (J) is
-            when Node_Component_Class =>
+            when Node_Component_Class
+              | Node_Widget_Instance =>
                Annotation_Table.Table (J) :=
                 (Kind              => Annotation_Component_Class,
                  Properties_Editor => null);
@@ -291,36 +289,43 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
    begin
-      null;
+
+      if Node = Null_Node
+        or else Node_Kind (Node) /= Node_Widget_Instance
+      then
+         return;
+      end if;
 
       --  Прототип реализации.
 
---      Relocate_Annotation_Table (Node);
---
---      if Selected_Item /= Null_Node then
---         Hide (Annotation_Table.Table (Selected_Item));
---      end if;
---
---      Selected_Item := Node;
---
---      if Selected_Item /= Null_Node then
---         if Annotation_Table.Table (Selected_Item) = null then
---            --  Создание страниц редактора свойств.
---
---            case Node_Kind (Selected_Item) is
---               when Node_Component_Class =>
---                  null;
---
---               when Node_Widget_Instance =>
---                  null;
---
---               when others =>
---                  raise Program_Error;
---            end case;
---         end if;
---
---         Show (Annotation_Table.Table (Selected_Item));
---      end if;
+      Relocate_Annotation_Table (Node);
+
+     if Selected_Item /= Null_Node then
+        Hide (Annotation_Table.Table (Selected_Item).Properties_Editor);
+     end if;
+
+     Selected_Item := Node;
+
+     if Selected_Item /= Null_Node then
+        if Annotation_Table.Table (Selected_Item).Properties_Editor = null then
+           --  Создание страниц редактора свойств.
+
+           case Node_Kind (Selected_Item) is
+              when Node_Component_Class =>
+                 Annotation_Table.Table (Selected_Item).Properties_Editor :=
+                   Component_Class.Create (Notebook, Node);
+
+              when Node_Widget_Instance =>
+                 Annotation_Table.Table (Selected_Item).Properties_Editor :=
+                   Widget_Instance.Create (Notebook, Node);
+
+              when others =>
+                 raise Program_Error;
+           end case;
+        end if;
+
+        Show (Annotation_Table.Table (Selected_Item).Properties_Editor);
+     end if;
    end Select_Item;
 
    ---------------------------------------------------------------------------

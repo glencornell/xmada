@@ -179,7 +179,7 @@ package body Designer.Visual_Editor is
 
                if Node_Kind (Parent_Node (Node)) = Node_Widget_Instance then
                   --  Формирование списка значений ресурсов ограничений -
-		  --  список ресурсов извлекается у класса родительского
+                  --  список ресурсов извлекается у класса родительского
                   --  виджета.
 
                   List := New_List;
