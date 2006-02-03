@@ -151,9 +151,19 @@ package Model.Tree is
 
    type Predefined_Resource_Type_Kind is
     (Type_Unspecified,
+     --  Тип не определён. Используется только как начальное значение.
+
      Type_Position,
+     --  Тип Position - координата Xt.
+
      Type_Dimension,
+     --  Тип Dimension - размер Xt.
+
+     Type_C_Int,
+     --  Тип int языка C.
+
      Type_Widget_Reference);
+     --  Ссылка на экземпляр виджета.
 
    function Node_Kind (Node : in Node_Id) return Node_Kinds;
    function Parent_Node (Node : in Node_Id) return Node_Id;
