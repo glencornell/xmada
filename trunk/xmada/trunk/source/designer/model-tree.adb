@@ -70,6 +70,19 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Class (Node : in Node_Id) return Node_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+      return Node_Table.Table (Node).Class;
+   end Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Component_Classes
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -507,6 +520,19 @@ package body Model.Tree is
       Node_Table.Table (Node).Applications := Value;
       Set_Parent_Node (Value, Node);
    end Set_Applications;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Class (Node : in Node_Id; Value : in Node_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+      Node_Table.Table (Node).Class := Value;
+   end Set_Class;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
