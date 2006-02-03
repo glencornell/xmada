@@ -266,6 +266,7 @@ package body Model.Tree.Constructors is
          WI_Automatically_Created_Parent      => Null_Node,
          WI_Automatically_Created_Children    => Null_List,
          WI_Resources                         => Null_List,
+         Children                             => Null_List,
          WI_Constraint_Resources              => Null_List,
          WI_Callbacks                         => Null_List));
 

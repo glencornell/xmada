@@ -249,11 +249,14 @@ package Model.Tree is
    function Is_Hardcoded (Node : in Node_Id) return Boolean;
    procedure Set_Is_Hardcoded (Node : in Node_Id; Value : in Boolean);
 
-   function Root_Widget_Instance (Node : in Node_Id) return Node_Id;
-   procedure Set_Root_Widget_Instance (Node : in Node_Id; Value : in Node_Id);
+   function Root (Node : in Node_Id) return Node_Id;
+   procedure Set_Root (Node : in Node_Id; Value : in Node_Id);
 
    function Class (Node : in Node_Id) return Node_Id;
    procedure Set_Class (Node : in Node_Id; Value : in Node_Id);
+
+   function Children (Node : in Node_Id) return List_Id;
+   procedure Set_Children (Node : in Node_Id; Value : in List_Id);
 
 private
 
@@ -411,6 +414,9 @@ private
 
             WI_Callbacks                      : List_Id;
             --  Подпрограммы обратного вызова.
+
+            Children                          : List_Id;
+            --  Список дочерних экземпляров виджетов.
 
             WI_Automatically_Created_Parent   : Node_Id;
             --  Автоматически создаваемый родительский виджет.

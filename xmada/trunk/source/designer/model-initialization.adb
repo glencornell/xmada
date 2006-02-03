@@ -1700,7 +1700,7 @@ package body Model.Initialization is
 --   Xt_Motif_Error_Dialog_Widget_Class          : Node_Id;
       Xt_Motif_File_Selection_Box_Widget_Class    : Node_Id;
 --   Xt_Motif_File_Selection_Dialog_Widget_Class : Node_Id;
-      Xt_Motif_Form_Widget_Class                  : Node_Id;
+--  in Xt      Xt_Motif_Form_Widget_Class                  : Node_Id;
 --   Xt_Motif_Form_Dialog_Widget_Class           : Node_Id;
       Xt_Motif_Frame_Widget_Class                 : Node_Id;
       Xt_Motif_Gadget_Widget_Class                : Node_Id;

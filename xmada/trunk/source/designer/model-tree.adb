@@ -70,6 +70,19 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Children
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Children (Node : in Node_Id) return List_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+      return Node_Table.Table (Node).Children;
+   end Children;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -481,16 +494,16 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Root_Widget_Instance
+   --!    <Unit> Root
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Root_Widget_Instance (Node : in Node_Id) return Node_Id is
+   function Root (Node : in Node_Id) return Node_Id is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert (Node_Kind (Node) = Node_Component_Class);
 
       return Node_Table.Table (Node).Root;
-   end Root_Widget_Instance;
+   end Root;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -520,6 +533,20 @@ package body Model.Tree is
       Node_Table.Table (Node).Applications := Value;
       Set_Parent_Node (Value, Node);
    end Set_Applications;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Children
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Children (Node : in Node_Id; Value : in List_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+      Node_Table.Table (Node).Children := Value;
+      Set_Parent_Node (Value, Node);
+   end Set_Children;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -924,18 +951,16 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Set_Root_Widget_Instance
+   --!    <Unit> Set_Root
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Set_Root_Widget_Instance (Node  : in Node_Id;
-                                       Value : in Node_Id)
-   is
+   procedure Set_Root (Node : in Node_Id; Value : in Node_Id) is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert (Node_Kind (Node) = Node_Component_Class);
 
       Node_Table.Table (Node).Root := Value;
-   end Set_Root_Widget_Instance;
+   end Set_Root;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
