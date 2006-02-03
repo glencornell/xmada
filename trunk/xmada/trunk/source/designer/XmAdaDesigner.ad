@@ -13,6 +13,7 @@
 *XmTextField.renderTable.fontName: -*-courier-medium-r-normal--12-*
 
 !!  Главное окно.
+
 *open_file_dialog.dialogTitle : Open existing file
 *save_file_dialog.dialogTitle : Save current file
 *main_window.main_menu*file.labelString : File
@@ -36,12 +37,25 @@
 *main_window.main_menu*file_pulldown*quit.labelString: Exit
 *main_window.main_menu*file_pulldown*quit.mnemonic: x
 *main_window.horizontal_paned.orientation: HORIZONTAL
+
+!!  Окно редактора свойств
+
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
+*main_window.horizontal_paned.properties_form.notebook.row_column.orientation: VERTICAL
+*main_window.horizontal_paned.properties_form.notebook.properties.labelString: Properties
+*main_window.horizontal_paned.properties_form.notebook.properties.notebookChildType: MINOR_TAB
+*main_window.horizontal_paned.properties_form.notebook.constraints.labelString: Constraints
+*main_window.horizontal_paned.properties_form.notebook.constraints.notebookChildType: MINOR_TAB
+*main_window.horizontal_paned.properties_form.notebook.callbacks.labelString: Callbacks
+*main_window.horizontal_paned.properties_form.notebook.callbacks.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.properties_hide.arrowDirection: ARROW_LEFT
 *main_window.horizontal_paned.properties_form.properties_label.labelString: Properties editor
 *main_window.horizontal_paned.properties_show.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_show.arrowDirection: ARROW_RIGHT
+
+!!  Окно редактора дерева
+
 *main_window.horizontal_paned.tree_form.skipAdjust: TRUE
 *main_window.horizontal_paned.tree_form.allowResize: TRUE
 *main_window.horizontal_paned.tree_form.tree_hide.arrowDirection: ARROW_RIGHT
@@ -51,8 +65,14 @@
 *main_window.horizontal_paned.tree_form*notebook.project.labelString: Project
 *main_window.horizontal_paned.tree_show.skipAdjust: TRUE
 *main_window.horizontal_paned.tree_show.arrowDirection: ARROW_LEFT
+
+!!  Окно дизайна интерфейса
+
 *main_window*vertical_paned.paneMaximum: 16383
 *main_window*vertical_paned*drawing.background: white
+
+!!  Окно диагностических сообщений
+
 *main_window*vertical_paned.message_form.skipAdjust: TRUE
 *main_window*vertical_paned.message_form.message_hide.arrowDirection: ARROW_DOWN
 *main_window*vertical_paned.message_form*message_text.cursorPositionVisible: FALSE
