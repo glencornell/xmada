@@ -52,4 +52,14 @@ package Model.Queries is
 
    function Resource_Class_Name_Image (Node : in Node_Id) return Wide_String;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Enclosing_Component_Class
+   --!    <Purpose> Возвращает узел класса компонента, заключающего указанный
+   --! узел. Если узел находится вне класса компонента, то возвращает
+   --! Null_Node.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Enclosing_Component_Class (Node : in Node_Id) return Node_Id;
+
 end Model.Queries;

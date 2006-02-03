@@ -123,17 +123,6 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Get_Component_Class_Widget
-   --!    <Purpose>  Возвращает узел, соответствующий контейнеру, в котором
-   --! должен отображаться данный элемент. Если контейнер не найден, то
-   --! возвращается значение Null_Node.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Get_Component_Class (Node : in Node_Id)
-     return Node_Id;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
    --!    <Unit> Get_Window
    --!    <Purpose> функция возвращает виджет контейнера сомпонентов.
    --!    <Exceptions>
@@ -271,7 +260,8 @@ package body Designer.Tree_Editor is
 
                --  Получаем номер вклаки, и делаем ее активной.
 
-               Button := Get_Button (Get_Component_Class (Node_Id (Node)));
+               Button :=
+                 Get_Button (Enclosing_Component_Class (Node_Id (Node)));
                Xt_Set_Arg (Args (0), Xm_N_Page_Number, Number'Address);
                Xt_Get_Values (Button, Args (0 .. 0));
 
@@ -450,26 +440,6 @@ package body Designer.Tree_Editor is
    begin
       return Annotation_Table.Table (Node).Button;
    end Get_Button;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Get_Component_Class_Widget
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Get_Component_Class (Node : in Node_Id) return Node_Id is
-      Aux : Node_Id := Node;
-
-   begin
-      while Aux /= Null_Node loop
-         if Node_Kind (Aux) = Node_Component_Class then
-            return Aux;
-         end if;
-
-         Aux := Parent_Node (Aux);
-      end loop;
-
-      return Null_Node;
-   end Get_Component_Class;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -678,7 +648,9 @@ package body Designer.Tree_Editor is
                Parent := Get_Component_Widget (Parent_Node (Node));
                Annotation.WI_Component :=
                  Add_Child
-                  (Get_Window (Get_Component_Class (Node)), Parent, Node);
+                  (Get_Window (Enclosing_Component_Class (Node)),
+                   Parent,
+                   Node);
 
             when Node_Application     =>
                Parent := Get_Project_Widget (Parent_Node (Node));
@@ -802,7 +774,7 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
-      Class  : constant Node_Id := Get_Component_Class (Node);
+      Class  : constant Node_Id := Enclosing_Component_Class (Node);
       Args   : Xt_Arg_List (0 .. 2);
 
    begin

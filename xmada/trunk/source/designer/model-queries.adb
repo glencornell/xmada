@@ -56,6 +56,26 @@ package body Model.Queries is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Enclosing_Component_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Enclosing_Component_Class (Node : in Node_Id) return Node_Id is
+      Aux : Node_Id := Node;
+
+   begin
+      while Aux /= Null_Node loop
+         if Node_Kind (Aux) = Node_Component_Class then
+            return Aux;
+         end if;
+
+         Aux := Parent_Node (Aux);
+      end loop;
+
+      return Null_Node;
+   end Enclosing_Component_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Internal_Name_Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
