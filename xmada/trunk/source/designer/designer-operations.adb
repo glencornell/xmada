@@ -186,7 +186,7 @@ package body Designer.Operations is
    procedure Open_Project (File_Name : in Wide_String) is
    begin
       Initialize;
-      Project := Model.Tools.Xml_To_Project (File_Name);
+      Project := Model.Tools.XML_To_Project (File_Name);
 
       Notify_Main_Window (Project);
    end Open_Project;
@@ -198,7 +198,7 @@ package body Designer.Operations is
    ---------------------------------------------------------------------------
    procedure Save_Project (File_Name : in Wide_String) is
    begin
-      Model.Tools.Project_To_Xml (Project, File_Name);
+      Model.Tools.Project_To_XML (Project, File_Name);
    end Save_Project;
 
    ---------------------------------------------------------------------------

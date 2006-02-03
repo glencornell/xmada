@@ -38,9 +38,7 @@
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
 with Ada.Wide_Text_IO;
-with Model.Names;
-with Model.Tree.Constructors;
-with Model.Tree.Lists;
+
 with XML_Tools.Attributes;
 with XML_Tools.Elements;
 with XML_Tools.Implementation;
@@ -48,6 +46,10 @@ with XML_Tools.Names;
 with XML_Tools.Parser;
 with XML_Tools.Printer;
 with XML_Tools.Strings;
+
+with Model.Names;
+with Model.Tree.Constructors;
+with Model.Tree.Lists;
 
 package body Model.Tools is
 
@@ -62,7 +64,6 @@ package body Model.Tools is
    Project_Tag         : XML_Tools.Name_Id;
    Widget_Instance_Tag : XML_Tools.Name_Id;
    Class_Name_Attr     : XML_Tools.Name_Id;
-   File_Name_Attr      : XML_Tools.Name_Id;
    Name_Attr           : XML_Tools.Name_Id;
 
    ---------------------------------------------------------------------------
@@ -84,21 +85,21 @@ package body Model.Tools is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Project_To_Xml
+   --!    <Unit> Project_To_XML
    --!    <Purpose> Преобразовывает структуру дерева узлов проекта
    --! в XML-структуру.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Project_To_Xml (Project : in Node_Id);
+   procedure Project_To_XML (Project : in Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Xml_To_Project
+   --!    <Unit> XML_To_Project
    --!    <Purpose> Преобразовывает XML-структуру в дерево узлов проекта.
    --! Возвращает Node_Id нового проекта.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Xml_To_Project return Node_Id;
+   function XML_To_Project return Node_Id;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -126,54 +127,53 @@ package body Model.Tools is
       Widget_Instance_Tag := XML_Tools.Names.Store ("WidgetInstance");
 
       Class_Name_Attr     := XML_Tools.Names.Store ("classname");
-      File_Name_Attr      := XML_Tools.Names.Store ("filename");
       Name_Attr           := XML_Tools.Names.Store ("name");
    end Init_XML_Tools;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Project_To_Xml
+   --!    <Unit> Project_To_XML
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Project_To_Xml (Project : in Node_Id) is
+   procedure Project_To_XML (Project : in Node_Id) is
       use XML_Tools;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Application_To_Xml
+      --!    <Unit> Application_To_XML
       --!    <Purpose> Преобразует узел Node_Application в
       --! XML-структуру и присоединяет созданный тег к тегу Parent.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure Application_To_Xml (Application : in Node_Id;
+      procedure Application_To_XML (Application : in Node_Id;
                                     Parent      : in Element_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Component_Class_To_Xml
+      --!    <Unit> Component_Class_To_XML
       --!    <Purpose> Преобразует узел Node_Component_Class в
       --! XML-структуру и присоединяет созданный тег к тегу Parent.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure Component_Class_To_Xml (Component_Class : in Node_Id;
+      procedure Component_Class_To_XML (Component_Class : in Node_Id;
                                         Parent          : in Element_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Widget_Instance_To_Xml
+      --!    <Unit> Widget_Instance_To_XML
       --!    <Purpose> Преобразует узел Node_Widget_Instance в
       --! XML-структуру и присоединяет созданный тег к тегу Parent.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure Widget_Instance_To_Xml (Widget_Instance : in Node_Id;
+      procedure Widget_Instance_To_XML (Widget_Instance : in Node_Id;
                                         Parent          : in Element_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Application_To_Xml
+      --!    <Unit> Application_To_XML
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure Application_To_Xml (Application : in Node_Id;
+      procedure Application_To_XML (Application : in Node_Id;
                                     Parent      : in Element_Id)
       is
          Tag             : constant Element_Id
@@ -194,18 +194,18 @@ package body Model.Tools is
          Component_Class := First (Component_Classes (Application));
 
          while Component_Class /= Null_Node loop
-            Component_Class_To_Xml (Component_Class, Tag);
+            Component_Class_To_XML (Component_Class, Tag);
             Component_Class := Next (Component_Class);
          end loop;
 
-      end Application_To_Xml;
+      end Application_To_XML;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Component_Class_To_Xml
+      --!    <Unit> Component_Class_To_XML
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure Component_Class_To_Xml (Component_Class : in Node_Id;
+      procedure Component_Class_To_XML (Component_Class : in Node_Id;
                                         Parent          : in Element_Id)
       is
          Tag : constant Element_Id
@@ -225,17 +225,17 @@ package body Model.Tools is
 
          begin
             if Widget_Instance /= Null_Node then
-               Widget_Instance_To_Xml (Widget_Instance, Tag);
+               Widget_Instance_To_XML (Widget_Instance, Tag);
             end if;
          end;
-      end Component_Class_To_Xml;
+      end Component_Class_To_XML;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Widget_Instance_To_Xml
+      --!    <Unit> Widget_Instance_To_XML
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure Widget_Instance_To_Xml (Widget_Instance : in Node_Id;
+      procedure Widget_Instance_To_XML (Widget_Instance : in Node_Id;
                                         Parent          : in Element_Id)
       is
          Tag : constant Element_Id
@@ -247,7 +247,7 @@ package body Model.Tools is
            Name_Attr,
            Strings.Store (Model.Names.Image (Name (Widget_Instance))));
 
-      end Widget_Instance_To_Xml;
+      end Widget_Instance_To_XML;
 
       Root        : Element_Id;
       Application : Node_Id;
@@ -269,69 +269,71 @@ package body Model.Tools is
       Application := First (Applications (Project));
 
       while Application /= Null_Node loop
-         Application_To_Xml (Application, Root);
+         Application_To_XML (Application, Root);
          Application := Next (Application);
       end loop;
 
       --  Создаем Imported_Widget_Sets.
       --  XXX
 
-   end Project_To_Xml;
+   end Project_To_XML;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Project_To_Xml
+   --!    <Unit> Project_To_XML
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Project_To_Xml (Project : in Node_Id; File_Name : in Wide_String)
+   procedure Project_To_XML (Project   : in Node_Id;
+                             File_Name : in Wide_String)
    is
    begin
       Set_File_Name (Project, Enter (File_Name));
-      Model.Tools.Project_To_Xml (Project);
+      Model.Tools.Project_To_XML (Project);
       XML_Tools.Printer.Print (Ada.Characters.Handling.To_String (File_Name));
-   end Project_To_Xml;
+   end Project_To_XML;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Xml_To_Project
+   --!    <Unit> XML_To_Project
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Xml_To_Project return Node_Id is
+   function XML_To_Project return Node_Id is
+
       use XML_Tools;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Xml_To_Application
+      --!    <Unit> XML_To_Application
       --!    <Purpose> Преобразует XML-структуру в узел Node_Application.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure Xml_To_Application (Tag         : in Element_Id;
+      procedure XML_To_Application (Tag         : in Element_Id;
                                     Application : in Node_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Xml_To_Component_Class
+      --!    <Unit> XML_To_Component_Class
       --!    <Purpose> Преобразует XML-структуру в узел Node_Component_Class.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure Xml_To_Component_Class (Tag             : in Element_Id;
+      procedure XML_To_Component_Class (Tag             : in Element_Id;
                                         Component_Class : in Node_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Xml_To_Widget_Instance
+      --!    <Unit> XML_To_Widget_Instance
       --!    <Purpose> Преобразует XML-структуру в узел Node_Widget_Instance.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure Xml_To_Widget_Instance (Tag             : in Element_Id;
+      procedure XML_To_Widget_Instance (Tag             : in Element_Id;
                                         Widget_Instance : in Node_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Xml_To_Application
+      --!    <Unit> XML_To_Application
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure Xml_To_Application (Tag         : in Element_Id;
+      procedure XML_To_Application (Tag         : in Element_Id;
                                     Application : in Node_Id)
       is
          Components  : constant List_Id := New_List;
@@ -375,7 +377,7 @@ package body Model.Tools is
 
                   begin
                      Append (Components, Component_Class);
-                     Xml_To_Component_Class (Child, Component_Class);
+                     XML_To_Component_Class (Child, Component_Class);
                   end;
 
                else
@@ -387,14 +389,14 @@ package body Model.Tools is
                Child := Elements.Next (Child);
             end loop;
          end;
-      end Xml_To_Application;
+      end XML_To_Application;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Xml_To_Component_Class
+      --!    <Unit> XML_To_Component_Class
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure Xml_To_Component_Class (Tag             : in Element_Id;
+      procedure XML_To_Component_Class (Tag             : in Element_Id;
                                         Component_Class : in Node_Id)
       is
       begin
@@ -435,7 +437,7 @@ package body Model.Tools is
                   begin
                      Set_Root_Widget_Instance (Component_Class,
                                                Widget_Instance);
-                     Xml_To_Widget_Instance (Child, Widget_Instance);
+                     XML_To_Widget_Instance (Child, Widget_Instance);
                   end;
 
                else
@@ -447,14 +449,14 @@ package body Model.Tools is
                Child := Elements.Next (Child);
             end loop;
          end;
-      end Xml_To_Component_Class;
+      end XML_To_Component_Class;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Xml_To_Widget_Instance
+      --!    <Unit> XML_To_Widget_Instance
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure Xml_To_Widget_Instance (Tag             : in Element_Id;
+      procedure XML_To_Widget_Instance (Tag             : in Element_Id;
                                         Widget_Instance : in Node_Id)
       is
       begin
@@ -501,7 +503,7 @@ package body Model.Tools is
                --  Child := Elements.Next (Child);
             end loop;
          end;
-      end Xml_To_Widget_Instance;
+      end XML_To_Widget_Instance;
 
       Project              : constant Node_Id := Create_Project;
       Applications         : constant List_Id := New_List;
@@ -556,7 +558,7 @@ package body Model.Tools is
 
                begin
                   Append (Applications, Application);
-                  Xml_To_Application (Child, Application);
+                  XML_To_Application (Child, Application);
                end;
 
             else
@@ -570,24 +572,24 @@ package body Model.Tools is
       end;
 
       return Project;
-   end Xml_To_Project;
+   end XML_To_Project;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Xml_To_Project
+   --!    <Unit> XML_To_Project
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Xml_To_Project (File_Name : in Wide_String) return Node_Id is
+   function XML_To_Project (File_Name : in Wide_String) return Node_Id is
       Project : Node_Id;
 
    begin
       Init_XML_Tools;
       XML_Tools.Parser.Parse (Ada.Characters.Handling.To_String (File_Name));
-      Project := Xml_To_Project;
+      Project := XML_To_Project;
       Set_File_Name (Project, Enter (File_Name));
 
       return Project;
-   end Xml_to_Project;
+   end XML_To_Project;
 
 end Model.Tools;
 
