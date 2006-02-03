@@ -280,7 +280,7 @@ package body Designer.Tree_Editor is
 
       exception
          when E : others =>
-            null;
+            Designer.Main_Window.Put_Exception_In_Callback ("On_Activate", E);
       end On_Activate;
 
       ------------------------------------------------------------------------
@@ -308,7 +308,7 @@ package body Designer.Tree_Editor is
 
       exception
          when E : others =>
-            null;
+            Designer.Main_Window.Put_Exception_In_Callback ("On_Destroy", E);
       end On_Destroy;
 
       ------------------------------------------------------------------------
@@ -350,7 +350,7 @@ package body Designer.Tree_Editor is
 
       exception
          when E : others =>
-            null;
+            Designer.Main_Window.Put_Exception_In_Callback ("On_Select", E);
       end On_Select;
 
    end Callbacks;
