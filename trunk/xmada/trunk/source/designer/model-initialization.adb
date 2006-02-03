@@ -5420,7 +5420,7 @@ package body Model.Initialization is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Merge_Inherited_Resources (Class : in Node_Id) is
-      Super : Node_Id := Super_Class (Class);
+      Super : constant Node_Id := Super_Class (Class);
 
    begin
       --  Наличие унаследованных ресурсов возможно только при наличии
