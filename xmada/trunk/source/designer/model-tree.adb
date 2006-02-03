@@ -960,6 +960,7 @@ package body Model.Tree is
       pragma Assert (Node_Kind (Node) = Node_Component_Class);
 
       Node_Table.Table (Node).Root := Value;
+      Node_Table.Table (Value).Parent := Node;
    end Set_Root;
 
    ---------------------------------------------------------------------------
