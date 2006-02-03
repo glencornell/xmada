@@ -47,6 +47,8 @@ package Model.Tree.Lists is
 
    procedure Append (List : in List_Id; Node : in Node_Id);
 
+   procedure Insert_Before (Before : in Node_Id; Node : in Node_Id);
+
    function First (List : in List_Id) return Node_Id;
 
    function Next (Node : in Node_Id) return Node_Id;
