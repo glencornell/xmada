@@ -85,29 +85,34 @@ package body Designer.Tree_Editor is
    --  Annotation_Table.
 
    type Annotation_Kinds is
-    (Annotation_Component_Class,
-     Annotation_Empty,
-     Annotation_Node_Application,
-     Annotation_Node_Project,
+    (Annotation_Empty,
+     Annotation_Component_Class,
+     Annotation_Application,
+     Annotation_Project,
      Annotation_Widget_Instance);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
       case Kind is
-         when Annotation_Component_Class  =>
-            CC_Project   : Widget;  --  Иконка в дереве проекта.
-            CC_Component : Widget;  --  Иконка в дереве сомпонент.
-            Window       : Widget;  --  Окно компонент.
-            Button       : Widget;  --  Закладка на ноутбуке.
+         when Annotation_Component_Class =>
+            CC_Project_Tree_Icon   : Widget;
+            --  Иконка в дереве проекта.
+            CC_Component_Tree_Icon : Widget;
+            --  Иконка в дереве класса компонент.
+            Component_Container    : Widget;
+            --  Контайнер страницы класса компонент.
+            Component_Tab          : Widget;
+            --  Закладка страницы класса компонент.
 
-         when Annotation_Widget_Instance  =>
-            WI_Component : Widget;  --  Иконка в дереве компонент.
+         when Annotation_Widget_Instance =>
+            WI_Component_Tree_Icon : Widget;
+            --  Иконка в дереве класса компонент.
 
-         when Annotation_Node_Project
-           | Annotation_Node_Application  =>
-            NP_Project : Widget;    --  Иконка в дереве проекта.
+         when Annotation_Project | Annotation_Application =>
+            NP_Project_Tree_Icon   : Widget;
+            --  Иконка в дереве проекта.
 
-         when Annotation_Empty            =>
+         when Annotation_Empty =>
             null;
       end case;
 
@@ -123,19 +128,19 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Get_Window
-   --!    <Purpose> функция возвращает виджет контейнера сомпонентов.
+   --!    <Unit> Component_Container
+   --!    <Purpose> Возвращает виджет контейнера класса компонента.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Get_Window (Node : in Node_Id) return Widget;
+   function Component_Container (Node : in Node_Id) return Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Get_Button
-   --!    <Purpose> функция возвращает виджет закладки.
+   --!    <Unit> Component_Tab
+   --!    <Purpose> Возвращает виджет закладки страницы класса компонента.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Get_Button (Node : in Node_Id) return Widget;
+   function Component_Tab (Node : in Node_Id) return Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -159,28 +164,28 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Get_Project_Widget
-   --!    <Purpose> функция возвращает виджет компонента,
-   --! находящегося на project tree.
+   --!    <Unit> Project_Tree_Icon
+   --!    <Purpose> Возвращает виджет элемента модели, представляющий элемент
+   --! на дереве проекта.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Get_Project_Widget (Node : in Node_Id) return Widget;
+   function Project_Tree_Icon (Node : in Node_Id) return Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Get_Project_Widget
-   --!    <Purpose> функция возвращает виджет компонента,
-   --! находящегося на component tree.
+   --!    <Unit> Component_Container_Icon
+   --!    <Purpose> Возвращает виджет элемента модели, представляющий элемент
+   --! на дереве компонента.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Get_Component_Widget (Node : in Node_Id) return Widget;
+   function Component_Tree_Icon (Node : in Node_Id) return Widget;
 
    package Callbacks is
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Activate
-      --!    <Purpose> Подпрограмма обратного вызова при выделении
-      --! виджета.
+      --!    <Purpose> Подпрограмма обратного вызова при выделении виджета.
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure On_Activate (The_Widget : in Widget;
@@ -191,7 +196,7 @@ package body Designer.Tree_Editor is
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Destroy
-      --!    <Purpose> Подпрограмма обратного вызова
+      --!    <Purpose> Подпрограмма обратного вызова,
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure On_Destroy (The_Widget : in Widget;
@@ -202,8 +207,7 @@ package body Designer.Tree_Editor is
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Select
-      --!    <Purpose> Подпрограмма обратного вызова при выделении
-      --! виджета.
+      --!    <Purpose> Подпрограмма обратного вызова при выделении виджета.
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure On_Select (The_Widget : in Widget;
@@ -261,7 +265,7 @@ package body Designer.Tree_Editor is
                --  Получаем номер вклаки, и делаем ее активной.
 
                Button :=
-                 Get_Button (Enclosing_Component_Class (Node_Id (Node)));
+                 Component_Tab (Enclosing_Component_Class (Node_Id (Node)));
                Xt_Set_Arg (Args (0), Xm_N_Page_Number, Number'Address);
                Xt_Get_Values (Button, Args (0 .. 0));
 
@@ -402,120 +406,80 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Component_Container
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Component_Container (Node : in Node_Id) return Widget is
+   begin
+      pragma Assert (Node in Annotation_Table.First .. Annotation_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+      return Annotation_Table.Table (Node).Component_Container;
+   end Component_Container;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Component_Tab
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Component_Tab (Node : in Node_Id) return Widget is
+   begin
+      pragma Assert (Node in Annotation_Table.First .. Annotation_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+      return Annotation_Table.Table (Node).Component_Tab;
+   end Component_Tab;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Component_Tree_Icon
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Component_Tree_Icon (Node : in Node_Id) return Widget is
+   begin
+      pragma Assert (Node in Annotation_Table.First .. Annotation_Table.Last);
+      pragma Assert
+       (Annotation_Table.Table (Node).Kind = Annotation_Component_Class
+          or else Annotation_Table.Table (Node).Kind
+                    = Annotation_Widget_Instance);
+
+      case Annotation_Table.Table (Node).Kind is
+         when Annotation_Component_Class  =>
+            return Annotation_Table.Table (Node).CC_Component_Tree_Icon;
+
+         when  Annotation_Widget_Instance =>
+            return Annotation_Table.Table (Node).WI_Component_Tree_Icon;
+
+         when others =>
+            raise Program_Error;
+
+      end case;
+   end Component_Tree_Icon;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Delete_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
-      Annotation : Annotation_Record
-        renames Annotation_Table.Table (Node);
-
    begin
-      case Annotation.Kind is
-         when Annotation_Node_Project
-           | Annotation_Node_Application =>
-             Xt_Destroy_Widget (Get_Project_Widget (Node));
+      case Annotation_Table.Table (Node).Kind is
+         when Annotation_Project | Annotation_Application =>
+             Xt_Destroy_Widget (Project_Tree_Icon (Node));
 
          when Annotation_Component_Class =>
-            Xt_Destroy_Widget (Annotation.Window);
-            Xt_Destroy_Widget (Annotation.Button);
-            Xt_Destroy_Widget (Get_Project_Widget (Node));
-            Xt_Destroy_Widget (Get_Component_Widget (Node));
+            Xt_Destroy_Widget (Project_Tree_Icon (Node));
+            Xt_Destroy_Widget (Component_Tree_Icon (Node));
+            Xt_Destroy_Widget (Component_Container (Node));
+            Xt_Destroy_Widget (Component_Tab (Node));
 
          when Annotation_Widget_Instance =>
-            Xt_Destroy_Widget (Get_Component_Widget (Node));
+            Xt_Destroy_Widget (Component_Tree_Icon (Node));
 
          when Annotation_Empty =>
             null;
       end case;
    end Delete_Item;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Get_Button
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Get_Button (Node : in Node_Id) return Widget is
-      pragma Assert (Node_Kind (Node) = Node_Component_Class);
-
-   begin
-      return Annotation_Table.Table (Node).Button;
-   end Get_Button;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Get_Component_Widget
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Get_Component_Widget (Node : in Node_Id)
-     return Widget
-   is
-   begin
-      if Node = Null_Node then
-         return Null_Widget;
-      end if;
-
-      declare
-         Value : Annotation_Record renames Annotation_Table.Table (Node);
-
-      begin
-         case Value.Kind is
-            when Annotation_Component_Class  =>
-               return Value.CC_Component;
-
-            when  Annotation_Widget_Instance =>
-               return Value.WI_Component;
-
-            when others =>
-               raise Constraint_Error;
-
-         end case;
-      end;
-   end Get_Component_Widget;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Get_Project_Widget
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Get_Project_Widget (Node : in Node_Id)
-     return Widget
-   is
-   begin
-      if Node = Null_Node then
-         return Null_Widget;
-      end if;
-
-      declare
-         Value : Annotation_Record renames Annotation_Table.Table (Node);
-      begin
-         case Value.Kind is
-            when Annotation_Node_Project     =>
-               return Value.NP_Project;
-
-            when Annotation_Node_Application =>
-               return Value.NP_Project;
-
-            when Annotation_Component_Class  =>
-               return Value.CC_Project;
-
-            when others =>
-               raise Constraint_Error;
-
-         end case;
-      end;
-   end Get_Project_Widget;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Get_Window
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Get_Window (Node : in Node_Id) return Widget is
-      pragma Assert (Node_Kind (Node) = Node_Component_Class);
-
-   begin
-      return Annotation_Table.Table (Node).Window;
-   end Get_Window;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -622,48 +586,77 @@ package body Designer.Tree_Editor is
          Xm_String_Free (Name);
       end Create_Tab;
 
-      Parent : Widget;
-
    begin
       Relocate_Annotation_Table (Node);
 
-      declare
-         Annotation : Annotation_Record renames Annotation_Table.Table (Node);
-      begin
+      --  Увеличение размеров таблицы (при необходимости).
 
-         --  Увеличение размеров таблицы (при необходимости).
+      case Node_Kind (Node) is
+         when Node_Component_Class =>
+            Create_Tab
+             (Annotation_Table.Table (Node).Component_Container,
+              Annotation_Table.Table (Node).Component_Tab);
+            --  XXX Совершенно не корректно!!! Не известно, где фактически
+            --  будут сохранены значения!!!
+            Annotation_Table.Table (Node).CC_Project_Tree_Icon :=
+              Add_Child
+               (Project_Container,
+                Project_Tree_Icon (Parent_Node (Node)),
+                Node);
+            Annotation_Table.Table (Node).CC_Component_Tree_Icon :=
+              Add_Child (Component_Container (Node), Null_Widget, Node);
 
-         case Node_Kind (Node) is
-            when Node_Component_Class =>
-               Create_Tab (Annotation.Window, Annotation.Button);
-               Parent  := Get_Project_Widget (Parent_Node (Node));
-               Annotation.CC_Project :=
-                 Add_Child (Project_Container, Parent, Node);
-               Annotation.CC_Component :=
-                 Add_Child (Annotation.Window, Null_Widget, Node);
+         when Node_Widget_Instance =>
+            Annotation_Table.Table (Node).WI_Component_Tree_Icon :=
+              Add_Child
+               (Component_Container (Enclosing_Component_Class (Node)),
+                Component_Tree_Icon (Parent_Node (Node)),
+                Node);
 
-            when Node_Widget_Instance =>
-               Parent := Get_Component_Widget (Parent_Node (Node));
-               Annotation.WI_Component :=
-                 Add_Child
-                  (Get_Window (Enclosing_Component_Class (Node)),
-                   Parent,
-                   Node);
+         when Node_Application     =>
+            Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
+              Add_Child
+               (Project_Container,
+                Project_Tree_Icon (Parent_Node (Node)),
+                Node);
 
-            when Node_Application     =>
-               Parent := Get_Project_Widget (Parent_Node (Node));
-               Annotation.NP_Project :=
-                 Add_Child (Project_Container, Parent, Node);
+         when Node_Project          =>
+            Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
+              Add_Child (Project_Container, Null_Widget, Node);
 
-            when Node_Project          =>
-               Annotation.NP_Project :=
-                 Add_Child (Project_Container, Null_Widget, Node);
-
-            when others                =>
-               null;
-         end case;
-      end;
+         when others                =>
+            null;
+      end case;
    end Insert_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Project_Tree_Icon
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Project_Tree_Icon (Node : in Node_Id) return Widget is
+   begin
+      pragma Assert (Node in Annotation_Table.First .. Annotation_Table.Last);
+      pragma Assert
+       (Annotation_Table.Table (Node).Kind = Annotation_Project
+          or else Annotation_Table.Table (Node).Kind = Annotation_Application
+          or else Annotation_Table.Table (Node).Kind
+                    = Annotation_Component_Class);
+
+      case Annotation_Table.Table (Node).Kind is
+         when Annotation_Project =>
+            return Annotation_Table.Table (Node).NP_Project_Tree_Icon;
+
+         when Annotation_Application =>
+            return Annotation_Table.Table (Node).NP_Project_Tree_Icon;
+
+         when Annotation_Component_Class =>
+            return Annotation_Table.Table (Node).CC_Project_Tree_Icon;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Project_Tree_Icon;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -675,6 +668,8 @@ package body Designer.Tree_Editor is
 
    begin
       --  Убираем выделение с выбранного элемента на вкладке компонент.
+      --  XXX Насколько это необходимо делать? Ведь далее производится удаление
+      --  всей страницы.
 
       if Selected_Item /= Null_Widget then
          Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Xt_Arg_Val (0));
@@ -689,21 +684,23 @@ package body Designer.Tree_Editor is
             Annotation : Annotation_Record renames Annotation_Table.Table (J);
          begin
             case Annotation.Kind is
-               when Annotation_Component_Class  =>
+               when Annotation_Component_Class =>
+                  Xt_Destroy_Widget (Project_Tree_Icon (J));
                   Xt_Destroy_Widget (Xt_Parent
                                       (Xt_Parent
-                                        (Get_Window (J))));
-                  Xt_Destroy_Widget (Get_Button (J));
-                  Xt_Destroy_Widget (Get_Project_Widget (J));
+                                        (Component_Container (J))));
+                  Xt_Destroy_Widget (Component_Tab (J));
+                  --  Значок дерева класса компонента удаляется при удалении
+                  --  его контейнера, содержащегося на странице дерева класса
+                  --  компонента.
 
-               when Annotation_Node_Application
-                  | Annotation_Node_Project     =>
-                  Xt_Destroy_Widget (Get_Project_Widget (J));
+               when Annotation_Application | Annotation_Project =>
+                  Xt_Destroy_Widget (Project_Tree_Icon (J));
 
-               when Annotation_Widget_Instance  =>
-                  Xt_Destroy_Widget (Get_Component_Widget (J));
+               when Annotation_Widget_Instance =>
+                  Xt_Destroy_Widget (Component_Tree_Icon (J));
 
-               when Annotation_Empty            =>
+               when Annotation_Empty =>
                   null;
             end case;
          end;
@@ -739,26 +736,26 @@ package body Designer.Tree_Editor is
          case Node_Kind (J) is
            when Node_Application     =>
               Annotation_Table.Table (J) :=
-               (Kind       => Annotation_Node_Application,
-                NP_Project => Null_Widget);
+               (Kind                 => Annotation_Application,
+                NP_Project_Tree_Icon => Null_Widget);
 
            when Node_Project         =>
               Annotation_Table.Table (J) :=
-               (Kind       => Annotation_Node_Project,
-                NP_Project => Null_Widget);
+               (Kind                 => Annotation_Project,
+                NP_Project_Tree_Icon => Null_Widget);
 
            when Node_Component_Class =>
               Annotation_Table.Table (J) :=
-               (Kind         => Annotation_Component_Class,
-                CC_Project   => Null_Widget,
-                CC_Component => Null_Widget,
-                Window       => Null_Widget,
-                Button       => Null_Widget);
+               (Kind                   => Annotation_Component_Class,
+                CC_Project_Tree_Icon   => Null_Widget,
+                CC_Component_Tree_Icon => Null_Widget,
+                Component_Container    => Null_Widget,
+                Component_Tab          => Null_Widget);
 
            when Node_Widget_Instance =>
                Annotation_Table.Table (J) :=
                 (Kind         => Annotation_Widget_Instance,
-                 WI_Component => Null_Widget);
+                 WI_Component_Tree_Icon => Null_Widget);
 
            when others               =>
               Annotation_Table.Table (J) := (Kind => Annotation_Empty);
@@ -797,19 +794,20 @@ package body Designer.Tree_Editor is
       else
          --  Выделяем элемент на вкладке компонент.
 
-         Selected_Item := Get_Component_Widget (Node);
+         Selected_Item := Component_Tree_Icon (Node);
 
          Xt_Set_Arg (Args (0), Xm_N_Selected_Objects, Selected_Item);
          Xt_Set_Arg (Args (1), Xm_N_Selected_Object_Count, Xt_Arg_Val (1));
-         Xt_Set_Values (Get_Window (Class), Args (0 .. 1));
+         Xt_Set_Values (Component_Container (Class), Args (0 .. 1));
 
          --  Выделяем элемент на вкладке проекта.
 
          Xt_Set_Arg
-           (Args (0), Xm_N_Selected_Objects, Get_Project_Widget (Node));
+           (Args (0), Xm_N_Selected_Objects, Project_Tree_Icon (Node));
          Xt_Set_Values (Project_Container, Args (0 .. 1));
+         --  XXX Кто сказал, что так можно делать ???
 
-         Xt_Manage_Child (Get_Button (Class));
+         Xt_Manage_Child (Component_Tab (Class));
          --  Передаем на управление motif вкладку.
       end if;
    end Select_Item;
@@ -824,10 +822,6 @@ package body Designer.Tree_Editor is
       Args : Xt_Arg_List (0 .. 0);
 
    begin
-      if Node = Null_Node then
-         return;
-      end if;
-
       --  У приложения нет своего имени, но есть имя класса приложения.
 
       if Node_Kind (Node) = Node_Application then
@@ -842,16 +836,15 @@ package body Designer.Tree_Editor is
       Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
 
       case Annotation_Table.Table (Node).Kind is
-         when Annotation_Node_Project
-           | Annotation_Node_Application =>
-            Xt_Set_Values (Get_Project_Widget (Node), Args);
+         when Annotation_Project | Annotation_Application =>
+            Xt_Set_Values (Project_Tree_Icon (Node), Args);
 
          when Annotation_Component_Class =>
-            Xt_Set_Values (Get_Project_Widget (Node), Args);
-            Xt_Set_Values (Get_Component_Widget (Node), Args);
+            Xt_Set_Values (Project_Tree_Icon (Node), Args);
+            Xt_Set_Values (Component_Tree_Icon (Node), Args);
 
          when Annotation_Widget_Instance =>
-            Xt_Set_Values (Get_Component_Widget (Node), Args);
+            Xt_Set_Values (Component_Tree_Icon (Node), Args);
 
          when Annotation_Empty =>
             null;
