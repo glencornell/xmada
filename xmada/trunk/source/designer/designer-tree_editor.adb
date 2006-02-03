@@ -540,12 +540,10 @@ package body Designer.Tree_Editor is
       --  Добавляется вкладка "project tree" содержащая элемент
       --  Container.
 
-      --  TODO следующую строку удалить.
-      Args (0 .. Arg_List'Length - 1) := Arg_List;
-      Xt_Set_Arg (Args (Arg_List'Length), Xm_N_Scrolling_Policy, Xm_Automatic);
+      Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
       Scrolled :=
         Xm_Create_Managed_Scrolled_Window
-         (Notebook, "scrolled", Args (0 .. Arg_List'Length));
+         (Notebook, "scrolled", Args (0 .. 0));
 
       Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
       Xt_Set_Arg (Args (1), Xm_N_Automatic_Selection, Xm_No_Auto_Select);
@@ -778,6 +776,10 @@ package body Designer.Tree_Editor is
       Args   : Xt_Arg_List (0 .. 2);
 
    begin
+
+      --  TODO возможны проблемы с рекурсивным вызовом данной функции,
+      --  связанные с вызовом callback функции On_Select.
+
       --  Убираем выделение с выбранного элемента на вкладке компонент.
 
       if Selected_Item /= Null_Widget then
