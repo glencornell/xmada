@@ -226,6 +226,9 @@ package body Designer.Properties_Editor is
          when Node_Component_Class =>
             null;
 
+         when Node_Widget_Instance =>
+            null;
+
          when others =>
             raise Program_Error;
       end case;
