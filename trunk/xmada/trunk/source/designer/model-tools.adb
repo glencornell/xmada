@@ -220,8 +220,7 @@ package body Model.Tools is
          --  Создаем Widget_Instance.
 
          declare
-            Widget_Instance : constant Node_Id
-              := Root_Widget_Instance (Component_Class);
+            Widget_Instance : constant Node_Id := Root (Component_Class);
 
          begin
             if Widget_Instance /= Null_Node then
@@ -435,8 +434,7 @@ package body Model.Tools is
                        := Create_Widget_Instance;
 
                   begin
-                     Set_Root_Widget_Instance (Component_Class,
-                                               Widget_Instance);
+                     Set_Root (Component_Class, Widget_Instance);
                      XML_To_Widget_Instance (Child, Widget_Instance);
                   end;
 

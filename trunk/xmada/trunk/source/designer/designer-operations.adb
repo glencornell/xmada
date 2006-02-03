@@ -66,11 +66,12 @@ package body Designer.Operations is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Notify_Main_Window
-   --!    <Purpose> Уведомление главного окна о созданных узлах.
+   --!    <Unit> Notify_Designer_Components
+   --!    <Purpose> Извещение компонент дизайнера о добавлении нового проекта
+   --! и его составляющих.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Notify_Main_Window (Project : in Node_Id);
+   procedure Notify_Designer_Components (Project : in Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -100,6 +101,7 @@ package body Designer.Operations is
    procedure New_Project is
       Application : Node_Id;
       Component   : Node_Id;
+      Widget      : Node_Id;
       List        : List_Id;
 
    begin
@@ -134,15 +136,111 @@ package body Designer.Operations is
       Append (List, Component);
       Set_Component_Classes (Application, List);
 
-      Notify_Main_Window (Project);
+      --  XXX  Временно с целью отладки - до завершения работ по чтению из XML.
+
+      Widget := Create_Widget_Instance;
+      Set_Name (Widget, Enter ("Form1"));
+      Set_Class (Widget, Model.Xt_Motif.Xt_Motif_Form_Widget_Class);
+
+      Set_Root (Component, Widget);
+
+      --  XXX  Временно с целью отладки - до завершения работ по чтению из XML.
+
+      Notify_Designer_Components (Project);
    end New_Project;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Notify_Main_Window
+   --!    <Unit> Notify_Designer_Components
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Notify_Main_Window (Project : in Node_Id) is
+   procedure Notify_Designer_Components (Project : in Node_Id) is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Process_Application
+      --!    <Purpose> Производит извещение компонентов дизайнера о добавлении
+      --! в модель приложения и его составляющих.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Process_Application (Node : in Node_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Process_Component_Class
+      --!    <Purpose> Производит извещение компонентов дизайнера о добавлении
+      --! в модель класса компонента и его составляющих.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Process_Component_Class (Node : in Node_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Process_Widget_Instance
+      --!    <Purpose> Производит извещение компонентов дизайнера о добавлении
+      --! в модель экземпляра виджета и его составляющих.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Process_Widget_Instance (Node : in Node_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Process_Application
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Process_Application (Node : in Node_Id) is
+      begin
+         Designer.Main_Window.Insert_Item (Node);
+
+         if Component_Classes (Node) /= Null_List then
+            declare
+               Aux : Node_Id := First (Component_Classes (Node));
+
+            begin
+               while Aux /= Null_Node loop
+                  Process_Component_Class (Aux);
+                  Aux := Next (Aux);
+               end loop;
+            end;
+         end if;
+      end Process_Application;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Process_Component_Class
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Process_Component_Class (Node : in Node_Id) is
+      begin
+         Designer.Main_Window.Insert_Item (Node);
+
+         if Root (Node) /= Null_Node then
+            Process_Widget_Instance (Root (Node));
+         end if;
+      end Process_Component_Class;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Process_Widget_Instance
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Process_Widget_Instance (Node : in Node_Id) is
+      begin
+         Designer.Main_Window.Insert_Item (Node);
+
+         if Children (Node) /= Null_List then
+            declare
+               Aux : Node_Id := First (Children (Node));
+
+            begin
+               while Aux /= Null_Node loop
+                  Process_Widget_Instance (Aux);
+                  Aux := Next (Aux);
+               end loop;
+            end;
+         end if;
+      end Process_Widget_Instance;
+
    begin
       --  Извещение компонентов дизайнера о создании нового проекта.
 
@@ -150,33 +248,18 @@ package body Designer.Operations is
 
       --  Извещение компонентов дизайнера о создании нового приложения.
 
-      declare
-         Application : Node_Id := First (Applications (Project));
+      if Applications (Project) /= Null_List then
+         declare
+            Aux : Node_Id := First (Applications (Project));
 
-      begin
-         while Application /= Null_Node loop
-            Designer.Main_Window.Insert_Item (Application);
-
-            --  Извещение компонентов дизайнера о создании
-            --  нового класса компонента.
-
-            declare
-               Component_Class : Node_Id
-                 := First (Component_Classes (Application));
-
-            begin
-               while Component_Class /= Null_Node loop
-                  Designer.Main_Window.Insert_Item (Component_Class);
-
-                  Component_Class := Next (Component_Class);
-               end loop;
-            end;
-
-            Application := Next (Application);
-         end loop;
-      end;
-
-   end Notify_Main_Window;
+         begin
+            while Aux /= Null_Node loop
+               Process_Application (Aux);
+               Aux := Next (Aux);
+            end loop;
+         end;
+      end if;
+   end Notify_Designer_Components;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -188,7 +271,7 @@ package body Designer.Operations is
       Initialize;
       Project := Model.Tools.XML_To_Project (File_Name);
 
-      Notify_Main_Window (Project);
+      Notify_Designer_Components (Project);
    end Open_Project;
 
    ---------------------------------------------------------------------------
