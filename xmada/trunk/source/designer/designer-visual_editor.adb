@@ -151,7 +151,16 @@ package body Designer.Visual_Editor is
                while Aux /= Null_Node loop
                   case Node_Kind (Resource_Type (Aux)) is
                      when Node_Predefined_Resource_Type =>
-                        null;
+                        case Type_Kind (Resource_Type (Aux)) is
+                           when Type_Unspecified =>
+                              raise Program_Error;
+
+                           when Type_Position | Type_Dimension | Type_C_Int =>
+                              Value := Create_Integer_Resource_Value;
+
+                           when Type_Widget_Reference =>
+                              Value := Create_Widget_Reference_Resource_Value;
+                        end case;
 
                      when Node_Enumerated_Resource_Type =>
                         Value := Create_Enumeration_Resource_Value;
@@ -168,44 +177,51 @@ package body Designer.Visual_Editor is
 
                Set_All_Resources (Node, List);
 
-               --  Формирование списка значений ресурсов ограничений -
-               --  список ресурсов извлекается у класса родительского виджета.
+               if Node_Kind (Parent_Node (Node)) = Node_Widget_Instance then
+                  --  Формирование списка значений ресурсов ограничений -
+		  --  список ресурсов извлекается у класса родительского
+                  --  виджета.
 
-               List := New_List;
-               Aux :=
-                 First (Constraint_Resources (Class (Parent_Node (Node))));
-               --  XXX  Простейший случай - нет автоматически создаваемого
-               --  родительского виджета.
+                  List := New_List;
+                  Aux :=
+                    First (Constraint_Resources (Class (Parent_Node (Node))));
+                  --  XXX  Простейший случай - нет автоматически создаваемого
+                  --  родительского виджета.
 
-               while Aux /= Null_Node loop
-                  case Node_Kind (Resource_Type (Aux)) is
-                     when Node_Predefined_Resource_Type =>
-                        case Type_Kind (Resource_Type (Aux)) is
-                           when Type_Unspecified =>
-                              raise Program_Error;
+                  while Aux /= Null_Node loop
+                     case Node_Kind (Resource_Type (Aux)) is
+                        when Node_Predefined_Resource_Type =>
+                           case Type_Kind (Resource_Type (Aux)) is
+                              when Type_Unspecified =>
+                                 raise Program_Error;
 
-                           when Type_Position | Type_Dimension | Type_C_Int =>
-                              Value := Create_Integer_Resource_Value;
+                              when Type_Position
+                                | Type_Dimension
+                                | Type_C_Int
+                              =>
+                                 Value := Create_Integer_Resource_Value;
 
-                           when Type_Widget_Reference =>
-                              Value := Create_Widget_Reference_Resource_Value;
-                        end case;
+                              when Type_Widget_Reference =>
+                                 Value :=
+                                   Create_Widget_Reference_Resource_Value;
+                           end case;
 
-                     when Node_Enumerated_Resource_Type =>
-                        Value := Create_Enumeration_Resource_Value;
+                        when Node_Enumerated_Resource_Type =>
+                           Value := Create_Enumeration_Resource_Value;
 
-                     when others =>
-                        raise Program_Error;
-                  end case;
+                        when others =>
+                           raise Program_Error;
+                     end case;
 
-                  Set_Resource_Specification (Value, Aux);
+                     Set_Resource_Specification (Value, Aux);
 
-                  Append (List, Value);
+                     Append (List, Value);
 
-                  Aux := Next (Aux);
-               end loop;
+                     Aux := Next (Aux);
+                  end loop;
 
-               Set_All_Constraint_Resources (Node, List);
+                  Set_All_Constraint_Resources (Node, List);
+               end if;
             end;
 
          when others =>
