@@ -36,8 +36,37 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Characters.Handling;
+with Ada.Command_Line;
+
+with Generator.Application_Resources;
+with Model.Tools;
+with Model.Tree.Lists;
+with Model.Initialization;
 
 procedure Compiler.Driver is
+
+   use Ada.Command_Line;
+   use Model;
+   use Model.Tree;
+   use Model.Tree.Lists;
+
+   Project     : Node_Id;
+   Application : Node_Id;
+
 begin
-   null;
+   Model.Initialization.Initialize;
+
+   if Argument_Count = 1 then
+      Project :=
+        Model.Tools.XML_To_Project
+         (Ada.Characters.Handling.To_Wide_String (Argument (1)));
+
+      Application := First (Applications (Project));
+
+      while Application /= Null_Node loop
+         Generator.Application_Resources.Generate (Application);
+         Application := Next (Application);
+      end loop;
+   end if;
 end Compiler.Driver;
