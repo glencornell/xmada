@@ -37,7 +37,9 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Xt.Ancillary_Types;
+with Xt.Composite_Management;
 with Xt.Instance_Management;
+with Xt.Resource_Management;
 with Xm.Resource_Management;
 with Xm_Push_Button_Gadget;
 with Xm_Scrolled_Window;
@@ -48,7 +50,9 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    use Xt;
    use Xt.Ancillary_Types;
+   use Xt.Composite_Management;
    use Xt.Instance_Management;
+   use Xt.Resource_Management;
    use Xm;
    use Xm.Resource_Management;
    use Xm_Push_Button_Gadget;
@@ -72,6 +76,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       Args    : Xt_Arg_List (0 .. 5);
 
    begin
+     Result.Notebook := Parent;
 
      --  Создаем вкладку "Свойства".
 
@@ -135,7 +140,9 @@ package body Designer.Properties_Editor.Widget_Instance is
    ---------------------------------------------------------------------------
    procedure Hide (Object : access Widget_Instance_Properties_Editor) is
    begin
-      null;
+      Xt_Unmanage_Child (Object.Properties_Tab);
+      Xt_Unmanage_Child (Object.Constraints_Tab);
+      Xt_Unmanage_Child (Object.Callbacks_Tab);
    end Hide;
 
    ---------------------------------------------------------------------------
@@ -144,8 +151,19 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Show (Object : access Widget_Instance_Properties_Editor) is
+      Args : Xt_Arg_List (0 .. 0);
+      Page : Xt_Arg_Val;
+
    begin
-      null;
+      Xt_Manage_Child (Object.Properties_Tab);
+      Xt_Manage_Child (Object.Constraints_Tab);
+      Xt_Manage_Child (Object.Callbacks_Tab);
+
+      Xt_Set_Arg (Args (0), Xm_N_Page_Number, Page'Address);
+      Xt_Get_Values (Object.Properties_Tab, Args (0 .. 0));
+
+      Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Page);
+      Xt_Set_Values (Object.Notebook, Args (0 .. 0));
    end Show;
 
 end Designer.Properties_Editor.Widget_Instance;

@@ -76,6 +76,10 @@ private
 
       Callbacks     : Xt.Widget;
       Callbacks_Tab : Xt.Widget;
+
+      --  Контейнер, в котором содержатся все вкладки.
+
+      Notebook : Xt.Widget;
    end record;
 
    type Widget_Instance_Properties_Editor_Access is

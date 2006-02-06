@@ -469,19 +469,40 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Assert_Destroy_Widget
+      --!    <Purpose> Удаление не пустого виджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Assert_Destroy_Widget (Value : in Widget);
+
+      -------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Assert_Destroy_Widget
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Assert_Destroy_Widget (Value : in Widget) is
+      begin
+         if Value /= Null_Widget then
+            Xt_Destroy_Widget (Value);
+         end if;
+      end Assert_Destroy_Widget;
+
    begin
       case Annotation_Table.Table (Node).Kind is
          when Annotation_Project | Annotation_Application =>
-             Xt_Destroy_Widget (Project_Tree_Icon (Node));
+             Assert_Destroy_Widget (Project_Tree_Icon (Node));
 
          when Annotation_Component_Class =>
-            Xt_Destroy_Widget (Project_Tree_Icon (Node));
-            Xt_Destroy_Widget (Component_Tree_Icon (Node));
-            Xt_Destroy_Widget (Component_Container (Node));
-            Xt_Destroy_Widget (Component_Tab (Node));
+            Assert_Destroy_Widget (Project_Tree_Icon (Node));
+            Assert_Destroy_Widget (Component_Tree_Icon (Node));
+            Assert_Destroy_Widget (Component_Container (Node));
+            Assert_Destroy_Widget (Component_Tab (Node));
 
          when Annotation_Widget_Instance =>
-            Xt_Destroy_Widget (Component_Tree_Icon (Node));
+            Assert_Destroy_Widget (Component_Tree_Icon (Node));
 
          when Annotation_Empty =>
             null;
@@ -688,33 +709,10 @@ package body Designer.Tree_Editor is
          Selected_Item := Null_Node;
       end if;
 
-     --  Удаление всех виджетов из таблицы.
+      --  Удаление всех виджетов из таблицы.
 
       for J in Annotation_Table.First .. Annotation_Table.Last loop
-         declare
-            Annotation : Annotation_Record renames Annotation_Table.Table (J);
-         begin
-            case Annotation.Kind is
-               when Annotation_Component_Class =>
-                  Xt_Destroy_Widget (Project_Tree_Icon (J));
-                  Xt_Destroy_Widget (Xt_Parent
-                                      (Xt_Parent
-                                        (Component_Container (J))));
-                  Xt_Destroy_Widget (Component_Tab (J));
-                  --  Значок дерева класса компонента удаляется при удалении
-                  --  его контейнера, содержащегося на странице дерева класса
-                  --  компонента.
-
-               when Annotation_Application | Annotation_Project =>
-                  Xt_Destroy_Widget (Project_Tree_Icon (J));
-
-               when Annotation_Widget_Instance =>
-                  Xt_Destroy_Widget (Component_Tree_Icon (J));
-
-               when Annotation_Empty =>
-                  null;
-            end case;
-         end;
+         Delete_Item (J);
       end loop;
 
       --  Очистка самой таблицы.
