@@ -229,9 +229,6 @@ package body Designer.Tree_Editor is
    Selected_Item     : Node_Id;
    --  Текущий выделенный элемент модели.
 
-   Is_Callback_Disabled : Boolean := False;
-   --  Признак блокировки функции обратного вызова.
-
    package body Callbacks is
 
       ------------------------------------------------------------------------
@@ -334,10 +331,6 @@ package body Designer.Tree_Editor is
            := To_Callback_Struct_Access (Call_Data);
 
       begin
-         if Is_Callback_Disabled then
-            return;
-         end if;
-
          if Data.Selected_Items = null then
             Main_Window.Select_Item (Null_Node);
 
@@ -792,11 +785,6 @@ package body Designer.Tree_Editor is
       Args      : Xt_Arg_List (0 .. 1);
 
    begin
-      Is_Callback_Disabled := True;
-
-      --  TODO возможны проблемы с рекурсивным вызовом данной функции,
-      --  связанные с вызовом callback функции On_Select.
-
       if Selected_Item /= Null_Node then
          Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Xt_Arg_Val (0));
 
@@ -865,8 +853,6 @@ package body Designer.Tree_Editor is
                raise Program_Error;
          end case;
       end if;
-
-      Is_Callback_Disabled := False;
    end Select_Item;
 
    ---------------------------------------------------------------------------
