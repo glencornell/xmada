@@ -36,9 +36,11 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Unchecked_Deallocation;
 with GNAT.Table;
 
 with Xt.Ancillary_Types;
+with Xt.Instance_Management;
 with Xm.Resource_Management;
 with Xm.Strings;
 with Xm_Notebook;
@@ -68,6 +70,11 @@ package body Designer.Properties_Editor is
    use Xm_String_Defs;
    use Xt;
    use Xt.Ancillary_Types;
+   use Xt.Instance_Management;
+
+   procedure Free is
+     new Ada.Unchecked_Deallocation (Node_Properties_Editor'Class,
+                                     Node_Properties_Editor_Access);
 
    --  Для каждого узла создаётся (по запросу) свой собственный редактор
    --  свойств. Уже созданные редакторы свойств сохраняются в таблице
@@ -134,7 +141,31 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
    begin
-      null;
+
+      if Selected_Item = Node then
+         Selected_Item := Null_Node;
+      end if;
+
+      case Annotation_Table.Table (Node).Kind is
+         when Annotation_Component_Class
+           | Annotation_Widget_Instance                   =>
+            if Annotation_Table.Table (Node).Properties_Editor /= null then
+               Free (Annotation_Table.Table (Node).Properties_Editor);
+            end if;
+
+         when Annotation_Enumerated_Resource_Type         =>
+            if Annotation_Table.Table (Node).Menu /= Null_Widget then
+               Xt_Destroy_Widget (Annotation_Table.Table (Node).Menu);
+            end if;
+
+         when Annotation_Enumeration_Value_Specification  =>
+            if Annotation_Table.Table (Node).Button /= Null_Widget then
+               Xt_Destroy_Widget (Annotation_Table.Table (Node).Button);
+            end if;
+
+         when Annotation_Empty                            =>
+            null;
+      end case;
    end Delete_Item;
 
    ---------------------------------------------------------------------------
@@ -238,7 +269,12 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Reinitialize is
    begin
-      null;
+      for J in Annotation_Table.First .. Annotation_Table.Last loop
+         Delete_Item (J);
+      end loop;
+
+      Annotation_Table.Free;
+      Annotation_Table.Init;
    end Reinitialize;
 
    ---------------------------------------------------------------------------
@@ -295,8 +331,6 @@ package body Designer.Properties_Editor is
       then
          return;
       end if;
-
-      --  Прототип реализации.
 
       Relocate_Annotation_Table (Node);
 
