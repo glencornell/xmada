@@ -280,6 +280,9 @@ package Model.Tree is
    function Children (Node : in Node_Id) return List_Id;
    procedure Set_Children (Node : in Node_Id; Value : in List_Id);
 
+   function Is_Managed (Node : in Node_Id) return Boolean;
+   procedure Set_Is_Managed (Node : in Node_Id; Value : in Boolean);
+
 private
 
    type Node_Record (Kind : Node_Kinds := Node_Empty) is record

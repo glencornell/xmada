@@ -240,6 +240,19 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Is_Managed
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Managed (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+      return Node_Table.Table (Node).Is_Managed;
+   end Is_Managed;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Is_Meta_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -716,6 +729,19 @@ package body Model.Tree is
             raise Program_Error;
       end case;
    end Set_Is_Hardcoded;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Is_Managed
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Is_Managed (Node : in Node_Id; Value : in Boolean) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+      Node_Table.Table (Node).Is_Managed := Value;
+   end Set_Is_Managed;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
