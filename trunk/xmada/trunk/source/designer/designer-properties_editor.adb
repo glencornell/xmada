@@ -141,31 +141,7 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
    begin
-
-      if Selected_Item = Node then
-         Selected_Item := Null_Node;
-      end if;
-
-      case Annotation_Table.Table (Node).Kind is
-         when Annotation_Component_Class
-           | Annotation_Widget_Instance                   =>
-            if Annotation_Table.Table (Node).Properties_Editor /= null then
-               Free (Annotation_Table.Table (Node).Properties_Editor);
-            end if;
-
-         when Annotation_Enumerated_Resource_Type         =>
-            if Annotation_Table.Table (Node).Menu /= Null_Widget then
-               Xt_Destroy_Widget (Annotation_Table.Table (Node).Menu);
-            end if;
-
-         when Annotation_Enumeration_Value_Specification  =>
-            if Annotation_Table.Table (Node).Button /= Null_Widget then
-               Xt_Destroy_Widget (Annotation_Table.Table (Node).Button);
-            end if;
-
-         when Annotation_Empty                            =>
-            null;
-      end case;
+      null;
    end Delete_Item;
 
    ---------------------------------------------------------------------------
@@ -270,8 +246,30 @@ package body Designer.Properties_Editor is
    procedure Reinitialize is
    begin
       for J in Annotation_Table.First .. Annotation_Table.Last loop
-         Delete_Item (J);
+         case Annotation_Table.Table (J).Kind is
+            when Annotation_Component_Class
+              | Annotation_Widget_Instance
+            =>
+               if Annotation_Table.Table (J).Properties_Editor /= null then
+                  Free (Annotation_Table.Table (J).Properties_Editor);
+               end if;
+
+            when Annotation_Enumerated_Resource_Type         =>
+               if Annotation_Table.Table (J).Menu /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Menu);
+               end if;
+
+            when Annotation_Enumeration_Value_Specification  =>
+               if Annotation_Table.Table (J).Button /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Button);
+               end if;
+
+            when Annotation_Empty                            =>
+               null;
+         end case;
       end loop;
+
+      Selected_Item := Null_Node;
 
       Annotation_Table.Free;
       Annotation_Table.Init;
