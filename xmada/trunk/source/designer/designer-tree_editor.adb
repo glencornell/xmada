@@ -333,10 +333,9 @@ package body Designer.Tree_Editor is
            := To_Callback_Struct_Access (Call_Data);
 
       begin
-         if Data.Selected_Items = null then
-            Main_Window.Select_Item (Null_Node);
+         Main_Window.Select_Item (Null_Node);
 
-         else
+         if Data.Selected_Items /= null then
             declare
                Node     : Xt_Arg_Val;
                Args     : Xt_Arg_List (0 .. 0);
@@ -350,6 +349,9 @@ package body Designer.Tree_Editor is
                   Xt_Get_Values (Selected (Selected'First), Args (0 .. 0));
 
                   Main_Window.Select_Item (Node_Id (Node));
+
+               else
+                  raise Program_Error;
                end if;
             end;
          end if;
