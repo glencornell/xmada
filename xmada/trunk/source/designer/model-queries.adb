@@ -86,6 +86,18 @@ package body Model.Queries is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Internal_Resource_Name_Image
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Internal_Resource_Name_Image (Node : in Node_Id)
+     return Wide_String
+   is
+   begin
+      return Image (Internal_Resource_Name (Node));
+   end Internal_Resource_Name_Image;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Name_Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
