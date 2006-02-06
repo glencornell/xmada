@@ -44,8 +44,8 @@
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
 *main_window.horizontal_paned.properties_form.notebook.row_column.orientation: VERTICAL
-*main_window.horizontal_paned.properties_form.notebook.properties.labelString: Properties
-*main_window.horizontal_paned.properties_form.notebook.properties.notebookChildType: MINOR_TAB
+*main_window.horizontal_paned.properties_form.notebook.resources.labelString: Resources
+*main_window.horizontal_paned.properties_form.notebook.resources.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.notebook.constraints.labelString: Constraints
 *main_window.horizontal_paned.properties_form.notebook.constraints.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.notebook.callbacks.labelString: Callbacks
