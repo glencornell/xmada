@@ -268,6 +268,20 @@ package body Model.Tools is
             Attributes.Create_Attribute (Tag, Is_Managed_Attr, No_Value);
          end if;
 
+         --  Создаем список ресурсов виджета.
+
+         if Resources (Widget_Instance) /= Null_List then
+            declare
+               Resource : Node_Id := First (Resources (Widget_Instance));
+
+            begin
+               while Resource /= Null_Node loop
+                  Resource := Next (Resource);
+                  raise Program_Error;
+               end loop;
+            end;
+         end if;
+
          --  Создаем дочерние виджеты.
 
          if Children (Widget_Instance) /= Null_List then
