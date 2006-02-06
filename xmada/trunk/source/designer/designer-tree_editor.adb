@@ -780,9 +780,8 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
-      Component : constant Node_Id := Enclosing_Component_Class (Node);
-      List      : Xt_Widget_List (0 .. 0);
-      Args      : Xt_Arg_List (0 .. 1);
+      List : Xt_Widget_List (0 .. 0);
+      Args : Xt_Arg_List (0 .. 1);
 
    begin
       if Selected_Item /= Null_Node then
@@ -824,9 +823,13 @@ package body Designer.Tree_Editor is
                Xt_Set_Arg (Args (0), Xm_N_Selected_Objects, List'Address);
                Xt_Set_Arg
                 (Args (1), Xm_N_Selected_Object_Count, Xt_Arg_Val (1));
-               Xt_Set_Values (Component_Container (Component), Args (0 .. 1));
+               Xt_Set_Values
+                (Component_Container
+                  (Enclosing_Component_Class (Selected_Item)),
+                 Args (0 .. 1));
 
-               Xt_Manage_Child (Component_Tab (Component));
+               Xt_Manage_Child
+                (Component_Tab (Enclosing_Component_Class (Selected_Item)));
                --  Передаем закладку страницы на управление.
 
             when Node_Project | Node_Application =>
