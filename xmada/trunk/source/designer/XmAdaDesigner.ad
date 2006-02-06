@@ -40,6 +40,7 @@
 
 !!  Окно редактора свойств
 
+*main_window.horizontal_paned.properties_form.width: 300
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
 *main_window.horizontal_paned.properties_form.notebook.row_column.orientation: VERTICAL
@@ -56,6 +57,7 @@
 
 !!  Окно редактора дерева
 
+*main_window.horizontal_paned.tree_form.width: 250
 *main_window.horizontal_paned.tree_form.skipAdjust: TRUE
 *main_window.horizontal_paned.tree_form.allowResize: TRUE
 *main_window.horizontal_paned.tree_form.tree_hide.arrowDirection: ARROW_RIGHT
