@@ -72,7 +72,6 @@ package body Designer.Properties_Editor.Widget_Instance is
    is
       Result  : constant Widget_Instance_Properties_Editor_Access
         := new Widget_Instance_Properties_Editor (Node);
-      Element : Widget;
       Args    : Xt_Arg_List (0 .. 5);
 
    begin
@@ -81,29 +80,32 @@ package body Designer.Properties_Editor.Widget_Instance is
      --  Создаем вкладку "Свойства".
 
       Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
-      Element               :=
+      Result.Properties_Container :=
         Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
-      Result.Properties     :=
-        Xm_Create_Managed_Row_Column (Element, "row_column");
-      Result.Properties_Tab :=
-        Xm_Create_Managed_Push_Button_Gadget (Parent, "properties");
+      Result.Properties           :=
+        Xm_Create_Managed_Row_Column (Result.Properties_Container,
+                                      "row_column");
+      Result.Properties_Tab       :=
+        Xm_Create_Managed_Push_Button_Gadget (Parent, "resources");
 
      --  Создаем вкладку "ограничения".
 
-      Element                :=
+      Result.Constraints_Container :=
         Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
-      Result.Constraints     :=
-        Xm_Create_Managed_Row_Column (Element, "row_column");
-      Result.Constraints_Tab :=
+      Result.Constraints           :=
+        Xm_Create_Managed_Row_Column (Result.Constraints_Container,
+                                      "row_column");
+      Result.Constraints_Tab       :=
         Xm_Create_Managed_Push_Button_Gadget (Parent, "constraints");
 
       --  Создаем вкладку "функции обратного вызова".
 
-      Element              :=
+      Result.Callbacks_Container   :=
         Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
-      Result.Callbacks     :=
-        Xm_Create_Managed_Row_Column (Element, "row_column");
-      Result.Callbacks_Tab :=
+      Result.Callbacks             :=
+        Xm_Create_Managed_Row_Column (Result.Callbacks_Container,
+                                      "row_column");
+      Result.Callbacks_Tab         :=
         Xm_Create_Managed_Push_Button_Gadget (Parent, "callbacks");
 
       return Node_Properties_Editor_Access (Result);
@@ -119,17 +121,17 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       --  Удаление вкладки "Свойства".
 
-      Xt_Destroy_Widget (Xt_Parent (Xt_Parent (Object.Properties)));
+      Xt_Destroy_Widget (Object.Properties_Container);
       Xt_Destroy_Widget (Object.Properties_Tab);
 
       --  Удаление вкладки "Ограничения".
 
-      Xt_Destroy_Widget (Xt_Parent (Xt_Parent (Object.Constraints)));
+      Xt_Destroy_Widget (Object.Constraints_Container);
       Xt_Destroy_Widget (Object.Constraints_Tab);
 
       --  Удаление вкладки "Функции обратного вызова".
 
-      Xt_Destroy_Widget (Xt_Parent (Xt_Parent (Object.Callbacks)));
+      Xt_Destroy_Widget (Object.Callbacks_Container);
       Xt_Destroy_Widget (Object.Callbacks_Tab);
    end Finalize;
 
@@ -143,6 +145,10 @@ package body Designer.Properties_Editor.Widget_Instance is
       Xt_Unmanage_Child (Object.Properties_Tab);
       Xt_Unmanage_Child (Object.Constraints_Tab);
       Xt_Unmanage_Child (Object.Callbacks_Tab);
+
+      Xt_Unmanage_Child (Object.Properties_Container);
+      Xt_Unmanage_Child (Object.Constraints_Container);
+      Xt_Unmanage_Child (Object.Callbacks_Container);
    end Hide;
 
    ---------------------------------------------------------------------------
@@ -158,6 +164,10 @@ package body Designer.Properties_Editor.Widget_Instance is
       Xt_Manage_Child (Object.Properties_Tab);
       Xt_Manage_Child (Object.Constraints_Tab);
       Xt_Manage_Child (Object.Callbacks_Tab);
+
+      Xt_Manage_Child (Object.Properties_Container);
+      Xt_Manage_Child (Object.Constraints_Container);
+      Xt_Manage_Child (Object.Callbacks_Container);
 
       Xt_Set_Arg (Args (0), Xm_N_Page_Number, Page'Address);
       Xt_Get_Values (Object.Properties_Tab, Args (0 .. 0));

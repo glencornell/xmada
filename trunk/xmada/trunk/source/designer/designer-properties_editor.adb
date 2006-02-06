@@ -323,6 +323,10 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
    begin
+      if Selected_Item /= Null_Node then
+        Hide (Annotation_Table.Table (Selected_Item).Properties_Editor);
+        Selected_Item := Null_Node;
+      end if;
 
       if Node = Null_Node
         or else Node_Kind (Node) /= Node_Widget_Instance
@@ -332,31 +336,26 @@ package body Designer.Properties_Editor is
 
       Relocate_Annotation_Table (Node);
 
-     if Selected_Item /= Null_Node then
-        Hide (Annotation_Table.Table (Selected_Item).Properties_Editor);
-     end if;
-
-     Selected_Item := Node;
-
-     if Selected_Item /= Null_Node then
-        if Annotation_Table.Table (Selected_Item).Properties_Editor = null then
+     if Node /= Null_Node then
+        if Annotation_Table.Table (Node).Properties_Editor = null then
            --  Создание страниц редактора свойств.
 
-           case Node_Kind (Selected_Item) is
+           case Node_Kind (Node) is
               when Node_Component_Class =>
-                 Annotation_Table.Table (Selected_Item).Properties_Editor :=
+                 Annotation_Table.Table (Node).Properties_Editor :=
                    Component_Class.Create (Notebook, Node);
 
               when Node_Widget_Instance =>
-                 Annotation_Table.Table (Selected_Item).Properties_Editor :=
+                 Annotation_Table.Table (Node).Properties_Editor :=
                    Widget_Instance.Create (Notebook, Node);
 
               when others =>
-                 raise Program_Error;
+                 null;
            end case;
         end if;
 
-        Show (Annotation_Table.Table (Selected_Item).Properties_Editor);
+        Show (Annotation_Table.Table (Node).Properties_Editor);
+        Selected_Item := Node;
      end if;
    end Select_Item;
 

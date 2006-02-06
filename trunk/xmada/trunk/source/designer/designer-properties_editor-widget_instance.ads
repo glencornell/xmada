@@ -64,18 +64,21 @@ private
    record
      --  Вкладка "свойства".
 
-      Properties     : Xt.Widget;
-      Properties_Tab : Xt.Widget;
+      Properties_Container : Xt.Widget;
+      Properties           : Xt.Widget;
+      Properties_Tab       : Xt.Widget;
 
       --  Вкладка "ограничения".
 
-      Constraints     : Xt.Widget;
-      Constraints_Tab : Xt.Widget;
+      Constraints           : Xt.Widget;
+      Constraints_Container : Xt.Widget;
+      Constraints_Tab       : Xt.Widget;
 
       --  Вкладка "Функции обратного вызова".
 
-      Callbacks     : Xt.Widget;
-      Callbacks_Tab : Xt.Widget;
+      Callbacks           : Xt.Widget;
+      Callbacks_Container : Xt.Widget;
+      Callbacks_Tab       : Xt.Widget;
 
       --  Контейнер, в котором содержатся все вкладки.
 
