@@ -256,8 +256,6 @@ package body Model.Tools is
            Name_Attr,
            Strings.Store (Model.Names.Image (Name (Widget_Instance))));
 
-         Error_Message (Node_Id'Wide_Image (Class (Widget_Instance)));
-
          Attributes.Create_Attribute
           (Tag,
            Class_Name_Attr,
@@ -268,6 +266,21 @@ package body Model.Tools is
 
          else
             Attributes.Create_Attribute (Tag, Is_Managed_Attr, No_Value);
+         end if;
+
+         --  Создаем дочерние виджеты.
+
+         if Children (Widget_Instance) /= Null_List then
+            declare
+               Child : Node_Id := First (Children (Widget_Instance));
+
+            begin
+               while Child /= Null_Node loop
+                  Widget_Instance_To_XML (Child, Tag);
+
+                  Child := Next (Child);
+               end loop;
+            end;
          end if;
 
       end Widget_Instance_To_XML;
@@ -566,14 +579,22 @@ package body Model.Tools is
          --  Обработка дочерних тегов тега Widget_Instance.
 
          declare
-            Child : constant Element_Id := Elements.Child (Tag);
+            Child    : Element_Id := Elements.Child (Tag);
+            Children : constant List_Id := New_List;
 
          begin
+            Set_Children (Widget_Instance, Children);
+
             while Child /= Null_Element_Id loop
                if Elements.Name (Child) = Widget_Instance_Tag then
-                  Error_Message ("Unknown element name: "
-                    & XML_Tools.Names.Image (Elements.Name (Child)));
-                  raise Program_Error;
+                  declare
+                     Widget_Instance : constant Node_Id
+                       := Create_Widget_Instance;
+
+                  begin
+                     Append (Children, Widget_Instance);
+                     XML_To_Widget_Instance (Child, Widget_Instance);
+                  end;
 
                else
                   Error_Message ("Unknown element name: "
@@ -581,7 +602,7 @@ package body Model.Tools is
                   raise Program_Error;
                end if;
 
-               --  Child := Elements.Next (Child);
+               Child := Elements.Next (Child);
             end loop;
          end;
       end XML_To_Widget_Instance;
