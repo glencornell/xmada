@@ -46,13 +46,15 @@ package body Model.Queries is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Application_Class_Name
+   --!    <Unit> Application_Class_Name_Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Application_Class_Image (Node : in Node_Id) return Wide_String is
+   function Application_Class_Name_Image (Node : in Node_Id)
+     return Wide_String
+   is
    begin
       return Image (Application_Class_Name (Node));
-   end Application_Class_Image;
+   end Application_Class_Name_Image;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
