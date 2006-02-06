@@ -471,40 +471,19 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> Assert_Destroy_Widget
-      --!    <Purpose> Удаление не пустого виджета.
-      --!    <Exceptions>
-      ------------------------------------------------------------------------
-      procedure Assert_Destroy_Widget (Value : in Widget);
-
-      -------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> Assert_Destroy_Widget
-      --!    <ImplementationNotes>
-      ------------------------------------------------------------------------
-      procedure Assert_Destroy_Widget (Value : in Widget) is
-      begin
-         if Value /= Null_Widget then
-            Xt_Destroy_Widget (Value);
-         end if;
-      end Assert_Destroy_Widget;
-
    begin
       case Annotation_Table.Table (Node).Kind is
          when Annotation_Project | Annotation_Application =>
-             Assert_Destroy_Widget (Project_Tree_Icon (Node));
+            Xt_Unmanage_Child (Project_Tree_Icon (Node));
 
          when Annotation_Component_Class =>
-            Assert_Destroy_Widget (Project_Tree_Icon (Node));
-            Assert_Destroy_Widget (Component_Tree_Icon (Node));
-            Assert_Destroy_Widget (Component_Container (Node));
-            Assert_Destroy_Widget (Component_Tab (Node));
+            Xt_Unmanage_Child (Project_Tree_Icon (Node));
+            Xt_Unmanage_Child (Component_Tree_Icon (Node));
+            Xt_Unmanage_Child (Component_Container (Node));
+            Xt_Unmanage_Child (Component_Tab (Node));
 
          when Annotation_Widget_Instance =>
-            Assert_Destroy_Widget (Component_Tree_Icon (Node));
+            Xt_Unmanage_Child (Component_Tree_Icon (Node));
 
          when Annotation_Empty =>
             null;
@@ -694,6 +673,26 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Reinitialize is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Destroy_Widget
+      --!    <Purpose> Удаление не пустого виджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Destroy_Widget (Value : in Widget);
+
+      -------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Destroy_Widget
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Destroy_Widget (Value : in Widget) is
+      begin
+         if Value /= Null_Widget then
+            Xt_Destroy_Widget (Value);
+         end if;
+      end Destroy_Widget;
+
       Args : Xt_Arg_List (0 .. 0);
 
    begin
@@ -714,7 +713,22 @@ package body Designer.Tree_Editor is
       --  Удаление всех виджетов из таблицы.
 
       for J in Annotation_Table.First .. Annotation_Table.Last loop
-         Delete_Item (J);
+         case Annotation_Table.Table (J).Kind is
+            when Annotation_Project | Annotation_Application =>
+               Destroy_Widget (Project_Tree_Icon (J));
+
+            when Annotation_Component_Class =>
+               Destroy_Widget (Project_Tree_Icon (J));
+               Destroy_Widget (Component_Tree_Icon (J));
+               Destroy_Widget (Component_Container (J));
+               Destroy_Widget (Component_Tab (J));
+
+            when Annotation_Widget_Instance =>
+               Destroy_Widget (Component_Tree_Icon (J));
+
+            when Annotation_Empty =>
+               null;
+         end case;
       end loop;
 
       --  Очистка самой таблицы.
@@ -785,10 +799,9 @@ package body Designer.Tree_Editor is
 
    begin
       if Selected_Item /= Null_Node then
-         Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Xt_Arg_Val (0));
-
          --  Убираем веделение на странице дерева проекта.
 
+         Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Xt_Arg_Val (0));
          Xt_Set_Values (Project_Container, Args (0 .. 0));
 
          --  Убираем выделение на странице дерева класса компонента.
