@@ -153,14 +153,36 @@ package Model.Tree is
     (Type_Unspecified,
      --  Тип не определён. Используется только как начальное значение.
 
+     Type_Boolean,
+     --  Булевый тип.
+
+     Type_C_Short,
+     --  Тип short языка C.
+
+     Type_C_Int,
+     --  Тип int языка C.
+
      Type_Position,
      --  Тип Position - координата Xt.
 
      Type_Dimension,
      --  Тип Dimension - размер Xt.
 
-     Type_C_Int,
-     --  Тип int языка C.
+     Type_Pixel,
+     --  Тип Pixel - "цвет" пиксела.
+
+     Type_Pixmap,
+     --  Тип Pixmap - графическое изображение.
+
+     Type_Screen,
+     --  Тип Screen - ссылка на описание экрана.
+
+     Type_Colormap,
+     --  Тип Colormap - палитра цветов.
+
+     Type_Translation_Data,
+     --  Типы XtTranslations и XtAccelerators - список трансляции событий на
+     --  подпрограммы действий.
 
      Type_Widget_Reference);
      --  Ссылка на экземпляр виджета.
