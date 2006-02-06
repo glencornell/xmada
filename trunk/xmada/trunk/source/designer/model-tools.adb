@@ -51,6 +51,8 @@ with Model.Names;
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
 
+with Model.Xt_Motif;
+
 package body Model.Tools is
 
    use Model;
@@ -253,6 +255,13 @@ package body Model.Tools is
           (Tag,
            Name_Attr,
            Strings.Store (Model.Names.Image (Name (Widget_Instance))));
+
+         Error_Message (Node_Id'Wide_Image (Class (Widget_Instance)));
+
+         Attributes.Create_Attribute
+          (Tag,
+           Class_Name_Attr,
+           Strings.Store (Model.Names.Image (Name (Class (Widget_Instance)))));
 
          if Is_Managed (Widget_Instance) then
             Attributes.Create_Attribute (Tag, Is_Managed_Attr, Yes_Value);
@@ -472,6 +481,48 @@ package body Model.Tools is
       procedure XML_To_Widget_Instance (Tag             : in Element_Id;
                                         Widget_Instance : in Node_Id)
       is
+         function Find (Name : in XML_Tools.String_Id) return Node_Id;
+         function Get_Project_By_Node (N : in Node_Id) return Node_Id;
+
+         function Find (Name : in XML_Tools.String_Id) return Model.Node_Id is
+            Classname  : constant Model.Name_Id
+              := Model.Names.Enter (XML_Tools.Strings.Image (Name));
+            Project  : constant Node_Id
+              := Get_Project_By_Node (Widget_Instance);
+            Widget_Set : Node_Id
+              := First (Imported_Widget_Sets (Project));
+
+            Widget_Class : Node_Id := Null_Node;
+
+         begin
+            while Widget_Set /= Null_Node loop
+               Widget_Class := First (Widget_Classes (Widget_Set));
+
+               while Widget_Class /= Null_Node loop
+                  exit when Model.Tree.Name (Widget_Class) = Classname;
+
+                  Widget_Class := Next (Widget_Class);
+               end loop;
+
+               exit when Widget_Class /= Null_Node;
+
+               Widget_Set := Next (Widget_Set);
+            end loop;
+
+            return Widget_Class;
+         end Find;
+
+         function Get_Project_By_Node (N : in Node_Id) return Node_Id is
+            Res : Node_Id := N;
+
+         begin
+            while Node_Kind (Res) /= Node_Project loop
+               Res := Parent_Node (Res);
+            end loop;
+
+            return Res;
+         end Get_Project_By_Node;
+
       begin
          --  Обработка атрибутов тега Widget_Instance.
 
@@ -484,6 +535,9 @@ package body Model.Tools is
                   Set_Name (Widget_Instance,
                             Enter (XML_Tools.Strings.Image
                                     (Attributes.Value (A))));
+
+               elsif Attributes.Name (A) = Class_Name_Attr then
+                  Set_Class (Widget_Instance, Find (Attributes.Value (A)));
 
                elsif Attributes.Name (A) = Is_Managed_Attr then
                   if Attributes.Value (A) = No_Value then
@@ -542,6 +596,9 @@ package body Model.Tools is
       Set_Applications (Project, Applications);
       Set_Imported_Widget_Sets (Project, Imported_Widget_Sets);
 
+      Append (Imported_Widget_Sets, Model.Xt_Motif.Xt_Motif_Widget_Set);
+
+
       if Elements.Name (Root) /= Project_Tag then
          Error_Message ("The root tag must be <Project> instead "
            & XML_Tools.Names.Image (Elements.Name (Root)));
@@ -569,8 +626,6 @@ package body Model.Tools is
             A := Attributes.Next (A);
          end loop;
       end;
-
---    Append (Imported_Widget_Sets, Xt_Motif_Widget_Set);
 
       --  Обработка вложенных тегов тега Project.
 
