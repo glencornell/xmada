@@ -64,7 +64,11 @@ package body Model.Tools is
    Project_Tag         : XML_Tools.Name_Id;
    Widget_Instance_Tag : XML_Tools.Name_Id;
    Class_Name_Attr     : XML_Tools.Name_Id;
+   Is_Managed_Attr     : XML_Tools.Name_Id;
    Name_Attr           : XML_Tools.Name_Id;
+   No_Value            : XML_Tools.String_Id;
+   Yes_Value           : XML_Tools.String_Id;
+
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -109,7 +113,7 @@ package body Model.Tools is
    procedure Error_Message (Message : in Wide_String) is
    begin
       Ada.Wide_Text_IO.Put_Line (Ada.Wide_Text_IO.Standard_Error,
-                                 "ERROR: " & Message);
+                                 "*** ERROR: " & Message);
    end Error_Message;
 
    ---------------------------------------------------------------------------
@@ -127,7 +131,11 @@ package body Model.Tools is
       Widget_Instance_Tag := XML_Tools.Names.Store ("WidgetInstance");
 
       Class_Name_Attr     := XML_Tools.Names.Store ("classname");
+      Is_Managed_Attr     := XML_Tools.Names.Store ("ismanaged");
       Name_Attr           := XML_Tools.Names.Store ("name");
+
+      No_Value            := XML_Tools.Strings.Store ("no");
+      Yes_Value           := XML_Tools.Strings.Store ("yes");
    end Init_XML_Tools;
 
    ---------------------------------------------------------------------------
@@ -245,6 +253,13 @@ package body Model.Tools is
           (Tag,
            Name_Attr,
            Strings.Store (Model.Names.Image (Name (Widget_Instance))));
+
+         if Is_Managed (Widget_Instance) then
+            Attributes.Create_Attribute (Tag, Is_Managed_Attr, Yes_Value);
+
+         else
+            Attributes.Create_Attribute (Tag, Is_Managed_Attr, No_Value);
+         end if;
 
       end Widget_Instance_To_XML;
 
@@ -469,6 +484,20 @@ package body Model.Tools is
                   Set_Name (Widget_Instance,
                             Enter (XML_Tools.Strings.Image
                                     (Attributes.Value (A))));
+
+               elsif Attributes.Name (A) = Is_Managed_Attr then
+                  if Attributes.Value (A) = No_Value then
+                     Set_Is_Managed (Widget_Instance, False);
+
+                  elsif Attributes.Value (A) = Yes_Value then
+                     Set_Is_Managed (Widget_Instance, True);
+
+                  else
+                     Error_Message ("Invalid value of the "
+                       & "'ismanaged' attribute: "
+                       & XML_Tools.Strings.Image (Attributes.Value (A)));
+                     raise Program_Error;
+                  end if;
 
                else
                   Error_Message ("Unknown attribute name: "
