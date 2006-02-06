@@ -28,42 +28,44 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Model.Queries
---! <Purpose>
---!   Пакет содержит разнообразные вспомогательные подпрограммы для упрощения
---! извлечения данных модели.
---!
---! <Effects>
---! <Perfomance>
+--! <Unit> Designer.Operations.Debug
+--! <ImplementationNotes>
+--! <PortabilityIssues>
+--! <AnticipatedChanges>
 ------------------------------------------------------------------------------
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Wide_Text_IO;
 
-package Model.Queries is
+with Model.Debug;
 
-   function Name_Image (Node : in Node_Id) return Wide_String;
+package body Designer.Operations.Debug is
 
-   function Application_Class_Name_Image (Node : in Node_Id)
-     return Wide_String;
-
-   function Internal_Name_Image (Node : in Node_Id) return Wide_String;
-
-   function Resource_Name_Image (Node : in Node_Id) return Wide_String;
-
-   function Internal_Resource_Name_Image (Node : in Node_Id)
-     return Wide_String;
-
-   function Resource_Class_Name_Image (Node : in Node_Id) return Wide_String;
+   use Ada.Wide_Text_IO;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Enclosing_Component_Class
-   --!    <Purpose> Возвращает узел класса компонента, заключающего указанный
-   --! узел. Если узел находится вне класса компонента, то возвращает
-   --! Null_Node.
-   --!    <Exceptions>
+   --!    <Unit> Dump_Tree
+   --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Enclosing_Component_Class (Node : in Node_Id) return Node_Id;
+   procedure Dump_Tree is
+      File : File_Type;
 
-end Model.Queries;
+   begin
+      Create (File, Out_File, "project_tree_dump.txt");
+
+      Model.Debug.Print (File, Project);
+
+      Close (File);
+
+   exception
+      when others =>
+         if Is_Open (File) then
+            Close (File);
+         end if;
+
+         raise;
+   end Dump_Tree;
+
+end Designer.Operations.Debug;

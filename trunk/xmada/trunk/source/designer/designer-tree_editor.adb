@@ -433,7 +433,7 @@ package body Designer.Tree_Editor is
       --  У приложения нет своего имени, но есть имя класса приложения.
 
       if Node_Kind (Node) = Node_Application then
-         Str := Xm_String_Generate (Application_Class_Image (Node));
+         Str := Xm_String_Generate (Application_Class_Name_Image (Node));
 
       else
          Str := Xm_String_Generate (Name_Image (Node));
@@ -886,7 +886,7 @@ package body Designer.Tree_Editor is
       --  У приложения нет своего имени, но есть имя класса приложения.
 
       if Node_Kind (Node) = Node_Application then
-         Str := Xm_String_Generate (Application_Class_Image (Node));
+         Str := Xm_String_Generate (Application_Class_Name_Image (Node));
 
       else
          Str := Xm_String_Generate (Name_Image (Node));

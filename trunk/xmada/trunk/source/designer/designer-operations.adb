@@ -53,9 +53,6 @@ package body Designer.Operations is
    use Model.Tree.Lists;
    use Model.Xt_Motif;
 
-   Project : Node_Id := Null_Node;
-   --  Узел дерева модели текущего редактируемого проекта.
-
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize

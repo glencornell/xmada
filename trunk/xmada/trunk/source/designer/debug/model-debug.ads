@@ -1,8 +1,4 @@
 ------------------------------------------------------------------------------
---
---  XmAda Designer
---
-------------------------------------------------------------------------------
 --! <Copyright>
 --!  Copyright (C) 2006
 --!
@@ -28,42 +24,30 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Model.Queries
+--! <Unit> Model.Debug
 --! <Purpose>
---!   Пакет содержит разнообразные вспомогательные подпрограммы для упрощения
---! извлечения данных модели.
+--!   Вспомогательный пакет для отображения модели в текстовом виде, пригодном
+--! для анализа человеком.
 --!
 --! <Effects>
 --! <Perfomance>
 ------------------------------------------------------------------------------
---  $Revision$ $Author$
---  $Date$
+--  $Source$
+--  $Revision$ $Date$ $Author$
 ------------------------------------------------------------------------------
+with Ada.Wide_Text_IO;
 
-package Model.Queries is
-
-   function Name_Image (Node : in Node_Id) return Wide_String;
-
-   function Application_Class_Name_Image (Node : in Node_Id)
-     return Wide_String;
-
-   function Internal_Name_Image (Node : in Node_Id) return Wide_String;
-
-   function Resource_Name_Image (Node : in Node_Id) return Wide_String;
-
-   function Internal_Resource_Name_Image (Node : in Node_Id)
-     return Wide_String;
-
-   function Resource_Class_Name_Image (Node : in Node_Id) return Wide_String;
+package Model.Debug is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Enclosing_Component_Class
-   --!    <Purpose> Возвращает узел класса компонента, заключающего указанный
-   --! узел. Если узел находится вне класса компонента, то возвращает
-   --! Null_Node.
+   --!    <Unit> Print
+   --!    <Purpose> Производит вывод ветви дерева модели начиная с указанного
+   --! узла в файл.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Enclosing_Component_Class (Node : in Node_Id) return Node_Id;
+   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
+                    Node   : in Node_Id;
+                    Offset : in Ada.Wide_Text_IO.Count := 1);
 
-end Model.Queries;
+end Model.Debug;

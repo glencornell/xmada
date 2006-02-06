@@ -1,7 +1,7 @@
 
 ADAFLAGS = -gnatoa -gnatW8 -gnatwa -gnatyabcefhiknoprstx \
 	 -g3 -O0 -ggdb3 \
-	-I$(srcdir)
+	-I$(srcdir) -I$(srcdir)/debug
 
 DESIGNER_ADAFLAGS = $(ADAFLAGS) \
 	-I$(top_srcdir)/source/xlib \

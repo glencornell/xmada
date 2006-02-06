@@ -65,7 +65,7 @@ with Xm_Row_Column;
 with Xm_String_Defs;
 with Xm_Text;
 
-with Designer.Operations;
+with Designer.Operations.Debug;
 with Designer.Properties_Editor;
 with Designer.Tree_Editor;
 with Designer.Visual_Editor;
@@ -191,6 +191,18 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Dump_Tree
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! создания дампа дерева модели.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Dump_Tree (The_Widget : in Widget;
+                              Closure    : in Xt_Pointer;
+                              Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Dump_Tree);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Message_Hide_Show_Button
       --!    <Purpose> Подпрограмма обратного вызова
       --!    <Exceptions>
@@ -216,6 +228,29 @@ package body Designer.Main_Window is
    ---------------
 
    package body Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Dump_Tree
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Dump_Tree (The_Widget : in Widget;
+                              Closure    : in Xt_Pointer;
+                              Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
+
+      begin
+         Designer.Operations.Debug.Dump_Tree;
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback ("On_Dump_Tree", E);
+      end On_Dump_Tree;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -474,7 +509,7 @@ package body Designer.Main_Window is
       Show_Properties : Widget;
       Show_Tree       : Widget;
       Show_Messages   : Widget;
-      File_Pulldown   : Widget;
+      Submenu         : Widget;
       Element         : Widget;
 
    begin
@@ -520,42 +555,55 @@ package body Designer.Main_Window is
       --  Создание главного меню.
       --
 
-      Menu          := Xm_Create_Managed_Menu_Bar (Main_Window, "main_menu");
-      File_Pulldown := Xm_Create_Pulldown_Menu (Menu, "file_pulldown");
+      Menu    := Xm_Create_Managed_Menu_Bar (Main_Window, "main_menu");
+      Submenu := Xm_Create_Pulldown_Menu (Menu, "file_pulldown");
 
       Element :=
-        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "new");
+        Xm_Create_Managed_Push_Button_Gadget (Submenu, "new");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_New'Access);
 
       Element :=
-        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "open");
+        Xm_Create_Managed_Push_Button_Gadget (Submenu, "open");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Open'Access);
 
       Element :=
-        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "save");
+        Xm_Create_Managed_Push_Button_Gadget (Submenu, "save");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Save'Access);
 
       Element :=
-        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "save_as");
+        Xm_Create_Managed_Push_Button_Gadget (Submenu, "save_as");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Save_As'Access);
 
       Element :=
-        Xm_Create_Managed_Push_Button_Gadget (File_Pulldown, "quit");
+        Xm_Create_Managed_Push_Button_Gadget (Submenu, "quit");
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Exit'Access);
 
-      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, File_Pulldown);
+      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Submenu);
       Button :=
         Xm_Create_Managed_Cascade_Button_Gadget (Menu, "file", Args (0 .. 0));
+
+      --  Меню отладки.
+
+      Submenu := Xm_Create_Pulldown_Menu (Menu, "debug_menu");
+
+      Element := Xm_Create_Managed_Push_Button_Gadget (Submenu, "dump_tree");
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Dump_Tree'Access);
+
+      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Submenu);
+      Button :=
+        Xm_Create_Managed_Cascade_Button_Gadget (Menu, "debug", Args (0 .. 0));
 
       --
       --  Создание панели редактирования свойств.

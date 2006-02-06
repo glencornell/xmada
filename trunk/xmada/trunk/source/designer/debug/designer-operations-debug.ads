@@ -28,10 +28,9 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Model.Queries
+--! <Unit> Designer.Operations.Debug
 --! <Purpose>
---!   Пакет содержит разнообразные вспомогательные подпрограммы для упрощения
---! извлечения данных модели.
+--!   Вспомогательный пакет для вывода отладочной информации.
 --!
 --! <Effects>
 --! <Perfomance>
@@ -40,30 +39,15 @@
 --  $Date$
 ------------------------------------------------------------------------------
 
-package Model.Queries is
-
-   function Name_Image (Node : in Node_Id) return Wide_String;
-
-   function Application_Class_Name_Image (Node : in Node_Id)
-     return Wide_String;
-
-   function Internal_Name_Image (Node : in Node_Id) return Wide_String;
-
-   function Resource_Name_Image (Node : in Node_Id) return Wide_String;
-
-   function Internal_Resource_Name_Image (Node : in Node_Id)
-     return Wide_String;
-
-   function Resource_Class_Name_Image (Node : in Node_Id) return Wide_String;
+package Designer.Operations.Debug is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Enclosing_Component_Class
-   --!    <Purpose> Возвращает узел класса компонента, заключающего указанный
-   --! узел. Если узел находится вне класса компонента, то возвращает
-   --! Null_Node.
+   --!    <Unit> Dump_Tree
+   --!    <Purpose> Производит запись в файл текущего состояния дерева модели
+   --! в виде, пригодном для анализа человеком.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Enclosing_Component_Class (Node : in Node_Id) return Node_Id;
+   procedure Dump_Tree;
 
-end Model.Queries;
+end Designer.Operations.Debug;
