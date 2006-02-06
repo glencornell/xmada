@@ -160,6 +160,9 @@ package body Designer.Visual_Editor is
 
                            when Type_Widget_Reference =>
                               Value := Create_Widget_Reference_Resource_Value;
+
+                           when others =>
+                              raise Program_Error;
                         end case;
 
                      when Node_Enumerated_Resource_Type =>
@@ -204,6 +207,9 @@ package body Designer.Visual_Editor is
                               when Type_Widget_Reference =>
                                  Value :=
                                    Create_Widget_Reference_Resource_Value;
+
+                              when others =>
+                                 raise Program_Error;
                            end case;
 
                         when Node_Enumerated_Resource_Type =>
