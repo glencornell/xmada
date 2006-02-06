@@ -157,13 +157,15 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Add_Child
-   --!    <Purpose> Добавляет в дерево элемент потомок.
+   --!    <Unit> Create_Item_Icon
+   --!    <Purpose> Создаёт виджет, представляющий указанный элемент дерева
+   --! модели на странице редактора дерева.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Add_Child (Container : in Widget;
-                       Parent    : in Widget;
-                       Node      : in Node_Id) return Widget;
+   function Create_Item_Icon (Node      : in Node_Id;
+                              Container : in Widget;
+                              Parent    : in Widget := Null_Widget)
+     return Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -361,58 +363,6 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Add_Child
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Add_Child (Container : in Widget;
-                       Parent    : in Widget;
-                       Node      : in Node_Id)
-     return Widget
-   is
-      Str  : Xm_String;
-      Args : Xt_Arg_List (0 .. 3);
-      Icon : Widget;
-
-   begin
-      --  У приложения нет своего имени, но есть имя класса приложения.
-
-      if Node_Kind (Node) = Node_Application then
-         Str := Xm_String_Generate (Application_Class_Image (Node));
-
-      else
-         Str := Xm_String_Generate (Name_Image (Node));
-      end if;
-
-      Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
-      Xt_Set_Arg (Args (1), Xm_N_Outline_State, Xm_Expanded);
-      Xt_Set_Arg (Args (2), Xm_N_User_Data, Xt_Arg_Val (Node));
-
-      --  Если элемент находится в самом верху иерархии, то
-      --  его предка устанавливать не надо.
-
-      if Parent /= Null_Widget then
-         Xt_Set_Arg (Args (3), Xm_N_Entry_Parent, Parent);
-         Icon :=
-           Xm_Create_Managed_Icon_Gadget (Container, "item", Args (0 .. 3));
-
-      else
-         Icon :=
-           Xm_Create_Managed_Icon_Gadget (Container, "item", Args (0 .. 2));
-      end if;
-
-      --  Функция будет вызвана при уничтожении виджета и предназначена для
-      --  очиски элемента таблицы Annotation_Table.
-
-      Xt_Add_Callback
-        (Icon, Xm_N_Destroy_Callback, Callbacks.On_Destroy'Access);
-
-      Xm_String_Free (Str);
-
-      return Icon;
-   end Add_Child;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
    --!    <Unit> Component_Container
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -462,6 +412,58 @@ package body Designer.Tree_Editor is
 
       end case;
    end Component_Tree_Icon;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Item_Icon
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Item_Icon (Node      : in Node_Id;
+                              Container : in Widget;
+                              Parent    : in Widget := Null_Widget)
+     return Widget
+   is
+      Str  : Xm_String;
+      Args : Xt_Arg_List (0 .. 3);
+      Icon : Widget;
+
+   begin
+      --  У приложения нет своего имени, но есть имя класса приложения.
+
+      if Node_Kind (Node) = Node_Application then
+         Str := Xm_String_Generate (Application_Class_Image (Node));
+
+      else
+         Str := Xm_String_Generate (Name_Image (Node));
+      end if;
+
+      Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
+      Xt_Set_Arg (Args (1), Xm_N_Outline_State, Xm_Expanded);
+      Xt_Set_Arg (Args (2), Xm_N_User_Data, Xt_Arg_Val (Node));
+
+      --  Если элемент находится в самом верху иерархии, то
+      --  его предка устанавливать не надо.
+
+      if Parent /= Null_Widget then
+         Xt_Set_Arg (Args (3), Xm_N_Entry_Parent, Parent);
+         Icon :=
+           Xm_Create_Managed_Icon_Gadget (Container, "item", Args (0 .. 3));
+
+      else
+         Icon :=
+           Xm_Create_Managed_Icon_Gadget (Container, "item", Args (0 .. 2));
+      end if;
+
+      --  Функция будет вызвана при уничтожении виджета и предназначена для
+      --  очиски элемента таблицы Annotation_Table.
+
+      Xt_Add_Callback
+        (Icon, Xm_N_Destroy_Callback, Callbacks.On_Destroy'Access);
+
+      Xm_String_Free (Str);
+
+      return Icon;
+   end Create_Item_Icon;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -627,30 +629,30 @@ package body Designer.Tree_Editor is
             --  XXX Совершенно не корректно!!! Не известно, где фактически
             --  будут сохранены значения!!!
             Annotation_Table.Table (Node).CC_Project_Tree_Icon :=
-              Add_Child
-               (Project_Container,
-                Project_Tree_Icon (Parent_Node (Node)),
-                Node);
+              Create_Item_Icon
+               (Node,
+                Project_Container,
+                Project_Tree_Icon (Parent_Node (Node)));
             Annotation_Table.Table (Node).CC_Component_Tree_Icon :=
-              Add_Child (Component_Container (Node), Null_Widget, Node);
+              Create_Item_Icon (Node, Component_Container (Node));
 
          when Node_Widget_Instance =>
             Annotation_Table.Table (Node).WI_Component_Tree_Icon :=
-              Add_Child
-               (Component_Container (Enclosing_Component_Class (Node)),
-                Component_Tree_Icon (Parent_Node (Node)),
-                Node);
+              Create_Item_Icon
+               (Node,
+                Component_Container (Enclosing_Component_Class (Node)),
+                Component_Tree_Icon (Parent_Node (Node)));
 
          when Node_Application     =>
             Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
-              Add_Child
-               (Project_Container,
-                Project_Tree_Icon (Parent_Node (Node)),
-                Node);
+              Create_Item_Icon
+               (Node,
+                Project_Container,
+                Project_Tree_Icon (Parent_Node (Node)));
 
          when Node_Project          =>
             Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
-              Add_Child (Project_Container, Null_Widget, Node);
+              Create_Item_Icon (Node, Project_Container);
 
          when others                =>
             null;
