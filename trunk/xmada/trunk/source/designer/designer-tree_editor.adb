@@ -226,8 +226,8 @@ package body Designer.Tree_Editor is
    Project_Container : Widget;
    --  Контейнер, в котором содержится дерево проекта.
 
-   Selected_Item     : Widget;
-   --  Текущий выделенный элемент на акладке компонент.
+   Selected_Item     : Node_Id;
+   --  Текущий выделенный элемент модели.
 
    Is_Callback_Disabled : Boolean := False;
    --  Признак блокировки функции обратного вызова.
@@ -685,10 +685,14 @@ package body Designer.Tree_Editor is
       --  XXX Насколько это необходимо делать? Ведь далее производится удаление
       --  всей страницы.
 
-      if Selected_Item /= Null_Widget then
+      if Selected_Item /= Null_Node
+        and then (Node_Kind (Selected_Item) = Node_Component_Class
+                    or else Node_Kind (Selected_Item) = Node_Widget_Instance)
+      then
          Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Xt_Arg_Val (0));
-         Xt_Set_Values (Xt_Parent (Selected_Item), Args (0 .. 0));
-         Selected_Item := Null_Widget;
+         Xt_Set_Values
+          (Xt_Parent (Component_Tree_Icon (Selected_Item)), Args (0 .. 0));
+         Selected_Item := Null_Node;
       end if;
 
      --  Удаление всех виджетов из таблицы.
@@ -783,11 +787,9 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
-      Class   : constant Node_Id := Enclosing_Component_Class (Node);
-      Kind    : Node_Kinds;
-      Element : Widget;
-      List    : Xt_Widget_List (0 .. 1);
-      Args    : Xt_Arg_List (0 .. 2);
+      Component : constant Node_Id := Enclosing_Component_Class (Node);
+      List      : Xt_Widget_List (0 .. 0);
+      Args      : Xt_Arg_List (0 .. 1);
 
    begin
       Is_Callback_Disabled := True;
@@ -795,50 +797,73 @@ package body Designer.Tree_Editor is
       --  TODO возможны проблемы с рекурсивным вызовом данной функции,
       --  связанные с вызовом callback функции On_Select.
 
-      --  Убираем выделение с выбранного элемента на вкладке компонент.
-
-      if Selected_Item /= Null_Widget then
+      if Selected_Item /= Null_Node then
          Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Xt_Arg_Val (0));
-         Xt_Set_Values (Xt_Parent (Selected_Item), Args (0 .. 0));
-         Selected_Item := Null_Widget;
-      end if;
 
-      --  Если компонент не выбран, то убираем все выделение.
+         --  Убираем веделение на странице дерева проекта.
 
-      if Node = Null_Node then
-         Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Xt_Arg_Val (0));
          Xt_Set_Values (Project_Container, Args (0 .. 0));
 
-      else
-         Kind := Node_Kind (Node);
+         --  Убираем выделение на странице дерева класса компонента.
 
-         if Kind = Node_Component_Class or Kind = Node_Widget_Instance then
-            --  Выделяем элемент на вкладке компонент.
+         case Node_Kind (Selected_Item) is
+            when Node_Component_Class | Node_Widget_Instance =>
+               Xt_Set_Values
+                (Xt_Parent (Component_Tree_Icon (Selected_Item)),
+                 Args (0 .. 0));
 
-            Selected_Item := Component_Tree_Icon (Node);
-            List (0) := Selected_Item;
-            Xt_Set_Arg (Args (0), Xm_N_Selected_Objects, List'Address);
-            Xt_Set_Arg (Args (1), Xm_N_Selected_Object_Count, Xt_Arg_Val (1));
-            Xt_Set_Values (Component_Container (Class), Args (0 .. 1));
+            when Node_Project | Node_Application =>
+               null;
 
-            Xt_Manage_Child (Component_Tab (Class));
-            --  Передаем на управление motif вкладку.
-         end if;
+            when others =>
+               raise Program_Error;
+         end case;
 
-         --  Выделяем элемент, соответствующий классу виджета
-         --  на вкладке проекта.
+         Selected_Item := Null_Node;
+      end if;
 
-         if Kind = Node_Widget_Instance then
-            Element := Project_Tree_Icon (Class);
+      Selected_Item := Node;
 
-         else
-            Element := Project_Tree_Icon (Node);
-         end if;
+      --  Если компонент выбран, то формируем выделение на соответствующих
+      --  страницах.
 
-         List (0) := Element;
-         Xt_Set_Arg (Args (0), Xm_N_Selected_Objects, List'Address);
-         Xt_Set_Arg (Args (1), Xm_N_Selected_Object_Count, Xt_Arg_Val (1));
-         Xt_Set_Values (Project_Container, Args (0 .. 1));
+      if Selected_Item /= Null_Node then
+         --  Выделяем элемент на странице дерева класса компонента.
+
+         case Node_Kind (Selected_Item) is
+            when Node_Component_Class | Node_Widget_Instance =>
+               List (0) := Component_Tree_Icon (Selected_Item);
+               Xt_Set_Arg (Args (0), Xm_N_Selected_Objects, List'Address);
+               Xt_Set_Arg
+                (Args (1), Xm_N_Selected_Object_Count, Xt_Arg_Val (1));
+               Xt_Set_Values (Component_Container (Component), Args (0 .. 1));
+
+               Xt_Manage_Child (Component_Tab (Component));
+               --  Передаем закладку страницы на управление.
+
+            when Node_Project | Node_Application =>
+               null;
+
+            when others =>
+               raise Program_Error;
+         end case;
+
+         --  Выделяем элемент на странице дерева проекта.
+
+         case Node_Kind (Selected_Item) is
+            when Node_Project | Node_Application | Node_Component_Class =>
+               List (0) := Project_Tree_Icon (Selected_Item);
+               Xt_Set_Arg (Args (0), Xm_N_Selected_Objects, List'Address);
+               Xt_Set_Arg
+                (Args (1), Xm_N_Selected_Object_Count, Xt_Arg_Val (1));
+               Xt_Set_Values (Project_Container, Args (0 .. 1));
+
+            when Node_Widget_Instance =>
+               null;
+
+            when others =>
+               raise Program_Error;
+         end case;
       end if;
 
       Is_Callback_Disabled := False;
