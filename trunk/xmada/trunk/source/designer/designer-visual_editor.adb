@@ -37,12 +37,19 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
+with Interfaces.C.Strings;
 
+with GNAT.Table;
+
+with Xt.Ancillary_Types;
+with Xt.Composite_Management;
+with Xt.Resource_Management;
 with Xm.Representation_Type_Management;
 with Xm_Drawing_Area;
 with Xm_Scrolled_Window;
 
 with Designer.Main_Window;
+with Model.Allocations;
 with Model.Queries;
 with Model.Tree.Constructors;
 with Model.Tree.Designer;
@@ -60,6 +67,88 @@ package body Designer.Visual_Editor is
    use Xm_Drawing_Area;
    use Xm_Scrolled_Window;
    use Xt;
+   use Xt.Ancillary_Types;
+   use Xt.Composite_Management;
+   use Xt.Resource_Management;
+
+   type Resource_Value_Kinds is
+    (Value_Undefined,
+     Value_C_Unsigned_Char,
+     Value_C_Short,
+     Value_C_Int,
+     Value_Position,
+     Value_Dimension);
+
+   type Resource_Value (Kind : Resource_Value_Kinds := Value_Undefined) is
+   record
+      Name : Xt.Xt_Resource_Name_String;
+
+      case Kind is
+         when Value_Undefined =>
+            null;
+
+         when Value_C_Unsigned_Char =>
+            C_Unsigned_Char_Value : aliased Interfaces.C.unsigned_char;
+
+         when Value_C_Short =>
+            C_Short_Value : aliased Interfaces.C.short;
+
+         when Value_C_Int =>
+            C_Int_Value : aliased Interfaces.C.int;
+
+         when Value_Position =>
+            Position_Value : aliased Xt.Position;
+
+         when Value_Dimension =>
+            Dimension_Value : aliased Xt.Dimension;
+      end case;
+   end record;
+
+   type Resource_Value_Array is array (Natural range <>) of Resource_Value;
+
+   type Resource_Value_Set (Last : Natural) is record
+      Values : Resource_Value_Array (0 .. Last);
+      Args   : Xt_Arg_List (0 .. Last);
+   end record;
+
+   type Resource_Value_Set_Access is access all Resource_Value_Set;
+
+   type Annotation_Kinds is
+    (Annotation_Empty,
+     Annotation_Widget_Instance);
+
+   type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
+   record
+      case Kind is
+         when Annotation_Empty =>
+            null;
+
+         when Annotation_Widget_Instance =>
+            Widget      : Xt.Widget;
+            --  Виджет визуального редактора, представляющий узел.
+
+            Resources   : Resource_Value_Set_Access;
+            Constraints : Resource_Value_Set_Access;
+            --  Подготовленные массивы для установки/получения значений
+            --  ресурсов виджета.
+      end case;
+   end record;
+
+   package Annotation_Table is
+     new GNAT.Table
+          (Table_Component_Type => Annotation_Record,
+           Table_Index_Type     => Node_Id,
+           Table_Low_Bound      => Node_Id'First + 1,
+           Table_Initial        => Model.Allocations.Node_Table_Initial,
+           Table_Increment      => Model.Allocations.Node_Table_Increment);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Component_Class_Widgets
+   --!    <Purpose> Создаёт виджеты класса компонента.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Create_Component_Class_Widgets (Node : in Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -73,6 +162,131 @@ package body Designer.Visual_Editor is
    --  пакет, который будет производить всю начальную инициализацию и
    --  проверку соответствия загруженной модели реально поддерживаемым
    --  возможностям используемой библиотеки времени исполнения.
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Relocate_Annotation_Table
+   --!    <Purpose> Производит расширение таблицы для обеспечения возможности
+   --! её использования для указанного узла. Все добавленные элементы
+   --! инициализируются значениями по умолчанию.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table (Node : in Node_Id);
+
+   Drawing_Area     : Widget  := Null_Widget;
+   Edited_Component : Node_Id := Null_Node;
+   Selected_Item    : Node_Id := Null_Node;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Component_Class_Widgets
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Create_Component_Class_Widgets (Node : in Node_Id) is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Create_Widget
+      --!    <Purpose> Создание виджета на визуальном редакторе.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Create_Widget (Node : in Node_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Create_Widget
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Create_Widget (Node : in Node_Id) is
+         Aux     : Node_Id;
+         Current : Natural := 0;
+
+      begin
+         Relocate_Annotation_Table (Node);
+
+         Annotation_Table.Table (Node).Widget :=
+           Convenience_Create_Function (Class (Node))
+            (Drawing_Area, "form", Null_Xt_Arg_List);
+         Xt_Manage_Child (Annotation_Table.Table (Node).Widget);
+
+         if All_Resources (Node) /= Null_List then
+            Annotation_Table.Table (Node).Resources :=
+              new Resource_Value_Set (Length (All_Resources (Node)) - 1);
+
+            Aux := First (All_Resources (Node));
+
+            while Aux /= Null_Node loop
+               case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
+                  when Node_Predefined_Resource_Type =>
+                     case Type_Kind
+                           (Resource_Type (Resource_Specification (Aux)))
+                     is
+                        when Type_C_Short =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_C_Short,
+                               Interfaces.C.Strings.New_String
+                                (Ada.Characters.Handling.To_String
+                                  (Internal_Resource_Name_Image
+                                    (Resource_Specification (Aux)))),
+                               0);
+
+                        when Type_C_Int =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_C_Int,
+                               Interfaces.C.Strings.New_String
+                                (Ada.Characters.Handling.To_String
+                                  (Internal_Resource_Name_Image
+                                    (Resource_Specification (Aux)))),
+                               0);
+
+                        when Type_Dimension =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_Dimension,
+                               Interfaces.C.Strings.New_String
+                                (Ada.Characters.Handling.To_String
+                                  (Internal_Resource_Name_Image
+                                    (Resource_Specification (Aux)))),
+                               0);
+
+                        when Type_Position =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_Position,
+                               Interfaces.C.Strings.New_String
+                                (Ada.Characters.Handling.To_String
+                                  (Internal_Resource_Name_Image
+                                    (Resource_Specification (Aux)))),
+                               0);
+
+                        when others =>
+                           raise Program_Error;
+                     end case;
+
+                  when Node_Enumerated_Resource_Type =>
+                     null;
+
+                  when others =>
+                     raise Program_Error;
+               end case;
+
+               Aux := Next (Aux);
+               Current := Current + 1;
+            end loop;
+         end if;
+      end Create_Widget;
+
+   begin
+      if Root (Node) /= Null_Node then
+         Create_Widget (Root (Node));
+
+         --  XXX Временно!!!
+         Get_Properties (Root (Node));
+         --  XXX Временно!!!
+      end if;
+   end Create_Component_Class_Widgets;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -90,8 +304,127 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Get_Properties (Node : in Model.Node_Id) is
+      Current : Natural := 0;
+      Aux     : Node_Id;
+
    begin
-      null;
+      if All_Resources (Node) /= Null_List then
+         Aux := First (All_Resources (Node));
+
+         while Aux /= Null_Node loop
+            case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
+               when Node_Predefined_Resource_Type =>
+                  case Type_Kind
+                        (Resource_Type (Resource_Specification (Aux)))
+                  is
+                     when Type_C_Short =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).C_Short_Value'Address);
+
+                     when Type_C_Int =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).C_Int_Value'Address);
+
+                     when Type_Dimension =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Dimension_Value'Address);
+
+                     when Type_Position =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Position_Value'Address);
+
+                     when others =>
+                        raise Program_Error;
+                 end case;
+
+               when Node_Enumerated_Resource_Type =>
+                  null;
+
+               when others =>
+                  raise Program_Error;
+            end case;
+
+            Aux := Next (Aux);
+            Current := Current + 1;
+         end loop;
+
+         Xt_Get_Values (Annotation_Table.Table (Node).Widget,
+                        Annotation_Table.Table (Node).Resources.Args);
+
+         Aux := First (All_Resources (Node));
+         Current := 0;
+
+         while Aux /= Null_Node loop
+            case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
+               when Node_Predefined_Resource_Type =>
+                  case Type_Kind
+                        (Resource_Type (Resource_Specification (Aux)))
+                  is
+                     when Type_C_Short =>
+                        Set_Resource_Value
+                         (Aux,
+                          Integer
+                           (Annotation_Table.Table
+                             (Node).Resources.Values (Current).C_Short_Value));
+
+                     when Type_C_Int =>
+                        Set_Resource_Value
+                         (Aux,
+                          Integer
+                           (Annotation_Table.Table
+                             (Node).Resources.Values (Current).C_Int_Value));
+
+                     when Type_Dimension =>
+                        Set_Resource_Value
+                         (Aux,
+                          Integer
+                           (Annotation_Table.Table
+                             (Node).Resources.Values
+                               (Current).Dimension_Value));
+
+                     when Type_Position =>
+                        Set_Resource_Value
+                         (Aux,
+                          Integer
+                           (Annotation_Table.Table
+                             (Node).Resources.Values
+                               (Current).Position_Value));
+
+                     when others =>
+                        raise Program_Error;
+                 end case;
+
+               when Node_Enumerated_Resource_Type =>
+                  null;
+
+               when others =>
+                  raise Program_Error;
+            end case;
+
+            Aux := Next (Aux);
+            Current := Current + 1;
+         end loop;
+      end if;
    end Get_Properties;
 
    ---------------------------------------------------------------------------
@@ -101,11 +434,10 @@ package body Designer.Visual_Editor is
    ---------------------------------------------------------------------------
    procedure Initialize (Parent : in Xt.Widget) is
       Scroll : Widget;
-      Draw   : Widget;
 
    begin
-      Scroll := Xm_Create_Managed_Scrolled_Window (Parent, "scrolled");
-      Draw   := Xm_Create_Managed_Drawing_Area (Scroll, "drawing");
+      Scroll       := Xm_Create_Managed_Scrolled_Window (Parent, "scrolled");
+      Drawing_Area := Xm_Create_Managed_Drawing_Area (Scroll, "drawing");
    end Initialize;
 
    ---------------------------------------------------------------------------
@@ -248,12 +580,76 @@ package body Designer.Visual_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Relocate_Annotation_Table
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table (Node : in Node_Id) is
+      First : constant Node_Id := Annotation_Table.Last + 1;
+
+   begin
+      if Annotation_Table.Last >= Node then
+         --  Таблица уже имеет достаточный размер и не нуждается в расширении.
+
+         return;
+      end if;
+
+      Annotation_Table.Set_Last (Node);
+
+      for J in First .. Node loop
+         case Node_Kind (J) is
+            when Node_Widget_Instance =>
+               Annotation_Table.Table (J) :=
+                (Kind        => Annotation_Widget_Instance,
+                 Widget      => Null_Widget,
+                 Resources   => null,
+                 Constraints => null);
+
+            when others =>
+               Annotation_Table.Table (J) := (Kind => Annotation_Empty);
+         end case;
+      end loop;
+   end Relocate_Annotation_Table;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Select_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
    begin
-      null;
+      if Selected_Item /= Null_Node then
+         null;
+      end if;
+
+      Selected_Item := Node;
+
+      if Selected_Item /= Null_Node then
+         case Node_Kind (Selected_Item) is
+            when Node_Application =>
+               null;
+
+            when Node_Component_Class =>
+               if Edited_Component /= Selected_Item then
+                  Create_Component_Class_Widgets (Selected_Item);
+               end if;
+
+               Edited_Component := Selected_Item;
+
+            when Node_Project =>
+               null;
+
+            when Node_Widget_Instance =>
+               if Enclosing_Component_Class (Selected_Item)
+                    /= Edited_Component
+               then
+                  Create_Component_Class_Widgets
+                   (Enclosing_Component_Class (Selected_Item));
+               end if;
+
+            when others =>
+               raise Program_Error;
+         end case;
+      end if;
    end Select_Item;
 
    ---------------------------------------------------------------------------
