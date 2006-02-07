@@ -45,7 +45,11 @@
 *main_window.horizontal_paned.properties_form.width: 300
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
-*main_window.horizontal_paned.properties_form.notebook.row_column.orientation: VERTICAL
+*main_window.horizontal_paned.properties_form.notebook.scrolled.row_column.packing: PACK_COLUMN
+*main_window.horizontal_paned.properties_form.notebook.scrolled.row_column.orientation: VERTICAL
+*main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.use_in_program.labelString:
+*main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.hard_code.labelString:
+*main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.fallback.labelString:
 *main_window.horizontal_paned.properties_form.notebook.resources.labelString: Resources
 *main_window.horizontal_paned.properties_form.notebook.resources.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.notebook.constraints.labelString: Constraints

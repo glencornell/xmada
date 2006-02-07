@@ -101,13 +101,13 @@ package body Model.Tree.Lists is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Insert_Before
-   --!    <ImplementationNotes> 
+   --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Insert_Before (Before : in Node_Id; Node : in Node_Id) is
       pragma Assert (Before in Node_Table.First .. Node_Table.Last);
-   
+
       List : constant List_Id := Node_Table.Table (Before).List;
-   
+
    begin
       if Before = List_Table.Table (List).First then
          Node_Table.Table (List_Table.Table (List).First).Previous := Node;
@@ -125,6 +125,24 @@ package body Model.Tree.Lists is
          Node_Table.Table (Before).Previous := Node;
       end if;
    end Insert_Before;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Length
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Length (List : in List_Id) return Natural is
+      Current : Node_Id := First (List);
+      Count   : Natural := 0;
+
+   begin
+      while Current /= Null_Node loop
+         Current := Next (Current);
+         Count := Count + 1;
+      end loop;
+
+      return Count;
+   end Length;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
