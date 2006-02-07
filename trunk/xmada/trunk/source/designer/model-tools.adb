@@ -61,11 +61,12 @@ package body Model.Tools is
    use Model.Tree.Constructors;
    use Model.Tree.Lists;
 
-   Application_Tag     : XML_Tools.Name_Id;
-   Component_Class_Tag : XML_Tools.Name_Id;
-   Project_Tag         : XML_Tools.Name_Id;
-   Resource_Tag        : XML_Tools.Name_Id;
-   Widget_Instance_Tag : XML_Tools.Name_Id;
+   Application_Tag         : XML_Tools.Name_Id;
+   Component_Class_Tag     : XML_Tools.Name_Id;
+   Constraint_Resource_Tag : XML_Tools.Name_Id;
+   Project_Tag             : XML_Tools.Name_Id;
+   Resource_Tag            : XML_Tools.Name_Id;
+   Widget_Instance_Tag     : XML_Tools.Name_Id;
 
    Class_Name_Attr     : XML_Tools.Name_Id;
    Is_Managed_Attr     : XML_Tools.Name_Id;
@@ -134,19 +135,20 @@ package body Model.Tools is
    begin
       XML_Tools.Implementation.Initialize;
 
-      Application_Tag     := XML_Tools.Names.Store ("Application");
-      Component_Class_Tag := XML_Tools.Names.Store ("ComponentClass");
-      Project_Tag         := XML_Tools.Names.Store ("Project");
-      Resource_Tag        := XML_Tools.Names.Store ("Resource");
-      Widget_Instance_Tag := XML_Tools.Names.Store ("WidgetInstance");
+      Application_Tag         := XML_Tools.Names.Store ("Application");
+      Component_Class_Tag     := XML_Tools.Names.Store ("ComponentClass");
+      Constraint_Resource_Tag := XML_Tools.Names.Store ("ConstraintResource");
+      Project_Tag             := XML_Tools.Names.Store ("Project");
+      Resource_Tag            := XML_Tools.Names.Store ("Resource");
+      Widget_Instance_Tag     := XML_Tools.Names.Store ("WidgetInstance");
 
-      Class_Name_Attr     := XML_Tools.Names.Store ("classname");
-      Is_Managed_Attr     := XML_Tools.Names.Store ("ismanaged");
-      Name_Attr           := XML_Tools.Names.Store ("name");
-      Type_Attr           := XML_Tools.Names.Store ("type");
+      Class_Name_Attr         := XML_Tools.Names.Store ("classname");
+      Is_Managed_Attr         := XML_Tools.Names.Store ("ismanaged");
+      Name_Attr               := XML_Tools.Names.Store ("name");
+      Type_Attr               := XML_Tools.Names.Store ("type");
 
-      No_Value            := XML_Tools.Strings.Store ("no");
-      Yes_Value           := XML_Tools.Strings.Store ("yes");
+      No_Value                := XML_Tools.Strings.Store ("no");
+      Yes_Value               := XML_Tools.Strings.Store ("yes");
 
       Enumeration_Resource_Value_Value
         := XML_Tools.Strings.Store ("EnumerationResourceValue");
@@ -191,8 +193,9 @@ package body Model.Tools is
       --! XML-структуру и присоединяет созданный тег к тегу Parent.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure Resource_To_XML (Resource : in Node_Id;
-                                 Parent   : in Element_Id);
+      procedure Resource_To_XML (Resource      : in Node_Id;
+                                 Parent        : in Element_Id;
+                                 Is_Constraint : in Boolean);
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Widget_Instance_To_XML
@@ -269,14 +272,21 @@ package body Model.Tools is
       --!    <Unit> Resource_To_XML
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure Resource_To_XML (Resource : in Node_Id;
-                                 Parent   : in Element_Id)
+      procedure Resource_To_XML (Resource      : in Node_Id;
+                                 Parent        : in Element_Id;
+                                 Is_Constraint : in Boolean)
       is
-         Tag           : constant Element_Id
-           := Elements.Create_Tag (Parent, Resource_Tag);
+         Tag           : Element_Id;
          Resource_Type : String_Id;
 
       begin
+         if Is_Constraint then
+            Tag := Elements.Create_Tag (Parent, Constraint_Resource_Tag);
+
+         else
+            Tag := Elements.Create_Tag (Parent, Resource_Tag);
+         end if;
+
          case Node_Kind (Resource) is
             when Node_Enumeration_Resource_Value =>
                Resource_Type := Enumeration_Resource_Value_Value;
@@ -333,7 +343,23 @@ package body Model.Tools is
 
             begin
                while Resource /= Null_Node loop
-                  Resource_To_XML (Resource, Tag);
+                  Resource_To_XML (Resource, Tag, False);
+
+                  Resource := Next (Resource);
+               end loop;
+            end;
+         end if;
+
+         --  Создаем список constraint ресурсов виджета.
+
+         if Constraint_Resources (Widget_Instance) /= Null_List then
+            declare
+               Resource : Node_Id
+                 := First (Constraint_Resources (Widget_Instance));
+
+            begin
+               while Resource /= Null_Node loop
+                  Resource_To_XML (Resource, Tag, True);
 
                   Resource := Next (Resource);
                end loop;
@@ -693,12 +719,14 @@ package body Model.Tools is
          --  Обработка дочерних тегов тега Widget_Instance.
 
          declare
-            Child     : Element_Id := Elements.Child (Tag);
-            Children  : constant List_Id := New_List;
-            Resources : constant List_Id := New_List;
+            Child                : Element_Id := Elements.Child (Tag);
+            Children             : constant List_Id := New_List;
+            Constraint_Resources : constant List_Id := New_List;
+            Resources            : constant List_Id := New_List;
 
          begin
             Set_Children (Widget_Instance, Children);
+            Set_Constraint_Resources (Widget_Instance, Constraint_Resources);
             Set_Resources (Widget_Instance, Resources);
 
             while Child /= Null_Element_Id loop
@@ -712,6 +740,17 @@ package body Model.Tools is
                   begin
                      Append (Children, Widget_Instance);
                      XML_To_Widget_Instance (Child, Widget_Instance);
+                  end;
+
+               elsif Elements.Name (Child) = Constraint_Resource_Tag then
+                  --  ConstraintResource.
+
+                  declare
+                     Resource : constant Node_Id
+                       := Create_Resource (Elements.Attribute (Child));
+
+                  begin
+                     Append (Constraint_Resources, Resource);
                   end;
 
                elsif Elements.Name (Child) = Resource_Tag then
