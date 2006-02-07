@@ -37,7 +37,6 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with GNAT.Table;
-with Xm_Spin_Box; use Xm_Spin_Box;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
@@ -53,6 +52,7 @@ with Xm_String_Defs;
 with Xm_Toggle_Button_Gadget;
 with Xm_Row_Column;
 
+with Designer.Visual_Editor;
 with Model.Allocations;
 with Model.Queries;
 with Model.Tree.Designer;
@@ -353,6 +353,9 @@ package body Designer.Properties_Editor.Widget_Instance is
          Current := Next (Current);
       end loop;
 
+      Update_Item (Node);
+      --  Задаем значение ресурсов.
+
       Xt_Manage_Child (Result.Properties);
       return Node_Properties_Editor_Access (Result);
    end Create;
@@ -567,8 +570,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <Unit> Set_Properties
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Set_Properties
-    (Object : access Widget_Instance_Properties_Editor)
+   procedure Set_Properties (Node : in Node_Id)
    is
    begin
       null;
@@ -604,10 +606,140 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <Unit> Update_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Update_Item (Object : access Widget_Instance_Properties_Editor)
+   procedure Update_Item (Node : in Node_Id)
    is
+      All_Res  : List_Id;
+      Curr_Res : List_Id;
+      Res_Type : Node_Id;
+      Current  : Node_Id;
+      Args     : Xt_Arg_List (0 .. 0);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> In_Resources
+      --!    <Purpose> Определяет, находится ли ресурс Node в списке
+      --! ресурсов воджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      function In_Resources (Node : in Node_Id) return Boolean;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> function_name
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function In_Resources (Node : in Node_Id) return Boolean is
+         Current : Node_Id;
+
+      begin
+         if Curr_Res = Null_List then
+            return False;
+         end if;
+
+         Current := First (Curr_Res);
+
+         while Current /= Null_Node loop
+            if Resource_Specification (Current)
+              = Resource_Specification (Node)
+            then
+               return True;
+            end if;
+
+            Current := Next (Current);
+         end loop;
+
+         return False;
+      end In_Resources;
+
    begin
-      null;
+      case Node_Kind (Node) is
+         when Node_Widget_Instance =>
+            Visual_Editor.Get_Properties (Node);
+
+            All_Res  := All_Resources (Node);
+            Curr_Res := Resources (Node);
+            Current  := First (All_Res);
+
+            --  Если нет текущих ресурсов, то выходим.
+
+            if  All_Res = Null_List then
+               return;
+            end if;
+
+            --  Находим имеющиеся ресурсы и устанавливаем влажок
+            --  Use_In_Program.
+
+            while Current /= Null_Node loop
+               if In_Resources (Current) then
+                  Xt_Set_Arg (Args (0), Xm_N_Set, Xm_Set);
+                  Xt_Set_Values
+                   (Annotation_Table.Table (Current).Use_In_Program,
+                    Args (0 .. 0));
+               end if;
+
+               Res_Type := Resource_Type (Resource_Specification (Current));
+
+               --  Отображаем все остальные ресурсы.
+
+               case Node_Kind (Res_Type) is
+                  when Node_Enumerated_Resource_Type =>
+                     Xt_Set_Arg (Args (0),
+                                 Xm_N_Menu_History,
+                                 Annotation_Table.Table
+                                   (Resource_Value (Current)).Button);
+                     Xt_Set_Values
+                      (Annotation_Table.Table (Current).Value,
+                       Args (0 .. 0));
+
+                  when Node_Predefined_Resource_Type =>
+                     case Type_Kind (Res_Type) is
+                        when Type_C_Short  --  Числовые типы.
+                          | Type_C_Int
+                          | Type_Position
+                          | Type_Dimension
+                        =>
+                           Xt_Set_Arg (Args (0),
+                                       Xm_N_Position,
+                                       Xt_Arg_Val
+                                        (Integer'
+                                          (Resource_Value (Current))));
+                           Xt_Set_Values
+                            (Annotation_Table.Table (Current).Value,
+                             Args (0 .. 0));
+                        when Type_Pixel =>
+                           null; --  TODO реализовать.
+
+                        when Type_Pixmap =>
+                           null; --  TODO реализовать.
+
+                        when Type_Screen =>
+                           null; --  TODO реализовать.
+
+                        when Type_Colormap =>
+                           null; --  TODO реализовать.
+
+                        when Type_Translation_Data =>
+                           null; --  TODO реализовать.
+
+                        when Type_Widget_Reference =>
+                           null; --  TODO реализовать.
+
+                        when Type_Unspecified =>
+                           null; --  TODO реализовать.
+
+                        when Type_Boolean =>
+                           null; --  TODO реализовать.
+                     end case;
+                  when others =>
+                     raise Program_Error;
+               end case;
+
+               Current := Next (Current);
+            end loop;
+
+         when others =>
+            null;
+      end case;
    end Update_Item;
 
 end Designer.Properties_Editor.Widget_Instance;
