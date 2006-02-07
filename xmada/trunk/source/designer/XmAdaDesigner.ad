@@ -50,6 +50,9 @@
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.use_in_program.labelString:
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.hard_code.labelString:
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.fallback.labelString:
+*main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.resource_numeric.marginHeight:0
+*main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.resource_numeric.marginWidth:0
+*main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.resource_numeric.spinBoxChildType: NUMERIC
 *main_window.horizontal_paned.properties_form.notebook.resources.labelString: Resources
 *main_window.horizontal_paned.properties_form.notebook.resources.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.notebook.constraints.labelString: Constraints

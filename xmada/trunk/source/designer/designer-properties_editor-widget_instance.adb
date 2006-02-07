@@ -37,7 +37,7 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with GNAT.Table;
-
+with Xm_Spin_Box; use Xm_Spin_Box;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
@@ -48,6 +48,7 @@ with Xm_Form;
 with Xm_Label_Gadget;
 with Xm_Push_Button_Gadget;
 with Xm_Scrolled_Window;
+with Xm_Simple_Spin_Box;
 with Xm_String_Defs;
 with Xm_Toggle_Button_Gadget;
 with Xm_Row_Column;
@@ -71,6 +72,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Xm_Label_Gadget;
    use Xm_Push_Button_Gadget;
    use Xm_Scrolled_Window;
+   use Xm_Simple_Spin_Box;
    use Xm_String_Defs;
    use Xm_Toggle_Button_Gadget;
    use Xm_Row_Column;
@@ -155,11 +157,14 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure Add_Resource (Parent : in Widget; Node : in Node_Id) is
-         Form : Widget;
-         Name : Xm_String;
-         Args : Xt_Arg_List (0 .. 4);
+         Form     : Widget;
+         Name     : Xm_String;
+         Res_Type : Node_Id;
+         Args     : Xt_Arg_List (0 .. 5);
 
       begin
+         Res_Type := Resource_Type (Resource_Specification (Node));
+
          Relocate_Annotation_Table (Node);
 
          Form := Xm_Create_Managed_Form (Parent, "form");
@@ -167,10 +172,12 @@ package body Designer.Properties_Editor.Widget_Instance is
          --  Создание кнопки "Использовать в программе".
 
          Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
          Annotation_Table.Table (Node).Use_In_Program :=
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
                                                    "use_in_program",
-                                                   Args (0 .. 0));
+                                                   Args (0 .. 2));
 
          --  Создание кнопки "вшивать в код".
 
@@ -178,10 +185,12 @@ package body Designer.Properties_Editor.Widget_Instance is
          Xt_Set_Arg (Args (1),
                      Xm_N_Left_Widget,
                      Annotation_Table.Table (Node).Use_In_Program);
+         Xt_Set_Arg (Args (2), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
          Annotation_Table.Table (Node).Hard_Code      :=
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
                                                    "hard_code",
-                                                   Args (0 .. 1));
+                                                   Args (0 .. 3));
 
          --  Создание кнопки "ресурс отката".
 
@@ -189,10 +198,12 @@ package body Designer.Properties_Editor.Widget_Instance is
          Xt_Set_Arg (Args (1),
                      Xm_N_Left_Widget,
                      Annotation_Table.Table (Node).Hard_Code);
+         Xt_Set_Arg (Args (2), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
          Annotation_Table.Table (Node).Fallback       :=
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
                                                    "fallback",
-                                                   Args (0 .. 1));
+                                                   Args (0 .. 3));
 
          --  Создание поля "название ресурса".
 
@@ -204,21 +215,86 @@ package body Designer.Properties_Editor.Widget_Instance is
          Xt_Set_Arg (Args (2),
                      Xm_N_Left_Widget,
                      Annotation_Table.Table (Node).Fallback);
+         Xt_Set_Arg (Args (3), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
          Annotation_Table.Table (Node).Name           :=
            Xm_Create_Managed_Label_Gadget (Form,
                                            "resource_name",
-                                           Args (0 .. 2));
+                                           Args (0 .. 4));
 
          --  Создание поля "значение ресурса".
 
-         Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
-         Xt_Set_Arg (Args (1),
-                     Xm_N_Left_Widget,
-                     Annotation_Table.Table (Node).Name);
-         Annotation_Table.Table (Node).Value           :=
-           Xm_Create_Managed_Label_Gadget (Form,
-                                           "resource_value",
-                                           Args (0 .. 1));
+         case Node_Kind (Res_Type) is
+            when Node_Enumerated_Resource_Type =>
+               Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
+               Xt_Set_Arg (Args (1),
+                           Xm_N_Left_Widget,
+                           Annotation_Table.Table (Node).Name);
+               Xt_Set_Arg (Args (2),
+                           Xm_N_Sub_Menu_Id,
+                           Annotation_Table.Table (Res_Type).Menu);
+
+               Annotation_Table.Table (Node).Value :=
+                  Xm_Create_Managed_Option_Menu (Form,
+                                                 "resource_value",
+                                                 Args (0 .. 2));
+
+            when Node_Predefined_Resource_Type  =>
+               case Type_Kind (Res_Type) is
+                  when Type_C_Short  --  Числовые типы.
+                    | Type_C_Int
+                    | Type_Position
+                    | Type_Dimension
+                  =>
+                     Xt_Set_Arg (Args (0),
+                                 Xm_N_Left_Attachment,
+                                 Xm_Attach_Widget);
+                     Xt_Set_Arg (Args (1),
+                                 Xm_N_Left_Widget,
+                                 Annotation_Table.Table (Node).Name);
+                     Xt_Set_Arg (Args (2),
+                                 Xm_N_Right_Attachment,
+                                 Xm_Attach_Form);
+                     Xt_Set_Arg (Args (3),
+                                 Xm_N_Top_Attachment,
+                                 Xm_Attach_Form);
+                     Xt_Set_Arg (Args (4),
+                                 Xm_N_Bottom_Attachment,
+                                 Xm_Attach_Form);
+                     Annotation_Table.Table (Node).Value :=
+                       Xm_Create_Managed_Simple_Spin_Box (Form,
+                                                          "resource_numeric",
+                                                          Args (0 .. 4));
+
+                  when Type_Pixel =>
+                     null; --  TODO реализовать.
+
+                  when Type_Pixmap =>
+                     null; --  TODO реализовать.
+
+                  when Type_Screen =>
+                     null; --  TODO реализовать.
+
+                  when Type_Colormap =>
+                     null; --  TODO реализовать.
+
+                  when Type_Translation_Data =>
+                     null; --  TODO реализовать.
+
+                  when Type_Widget_Reference =>
+                     null; --  TODO реализовать.
+
+                  when Type_Unspecified =>
+                     null; --  TODO реализовать.
+
+                  when Type_Boolean =>
+                     null; --  TODO реализовать.
+               end case;
+            when others =>
+               null;
+         end case;
+
+
         Xm_String_Free (Name);
       end Add_Resource;
 
@@ -240,8 +316,8 @@ package body Designer.Properties_Editor.Widget_Instance is
         Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
 
       Result.Properties           :=
-        Xm_Create_Managed_Row_Column (Result.Properties_Container,
-                                      "row_column");
+        Xm_Create_Row_Column (Result.Properties_Container,
+                              "row_column");
       Result.Properties_Tab       :=
         Xm_Create_Managed_Push_Button_Gadget (Parent, "resources");
 
@@ -277,6 +353,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          Current := Next (Current);
       end loop;
 
+      Xt_Manage_Child (Result.Properties);
       return Node_Properties_Editor_Access (Result);
    end Create;
 
