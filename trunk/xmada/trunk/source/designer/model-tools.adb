@@ -64,13 +64,20 @@ package body Model.Tools is
    Application_Tag     : XML_Tools.Name_Id;
    Component_Class_Tag : XML_Tools.Name_Id;
    Project_Tag         : XML_Tools.Name_Id;
+   Resource_Tag        : XML_Tools.Name_Id;
    Widget_Instance_Tag : XML_Tools.Name_Id;
+
    Class_Name_Attr     : XML_Tools.Name_Id;
    Is_Managed_Attr     : XML_Tools.Name_Id;
    Name_Attr           : XML_Tools.Name_Id;
+   Type_Attr           : XML_Tools.Name_Id;
+
    No_Value            : XML_Tools.String_Id;
    Yes_Value           : XML_Tools.String_Id;
 
+   Enumeration_Resource_Value_Value      : XML_Tools.String_Id;
+   Integer_Resource_Value_Value          : XML_Tools.String_Id;
+   Widget_Reference_Resource_Value_Value : XML_Tools.String_Id;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -130,14 +137,23 @@ package body Model.Tools is
       Application_Tag     := XML_Tools.Names.Store ("Application");
       Component_Class_Tag := XML_Tools.Names.Store ("ComponentClass");
       Project_Tag         := XML_Tools.Names.Store ("Project");
+      Resource_Tag        := XML_Tools.Names.Store ("Resource");
       Widget_Instance_Tag := XML_Tools.Names.Store ("WidgetInstance");
 
       Class_Name_Attr     := XML_Tools.Names.Store ("classname");
       Is_Managed_Attr     := XML_Tools.Names.Store ("ismanaged");
       Name_Attr           := XML_Tools.Names.Store ("name");
+      Type_Attr           := XML_Tools.Names.Store ("type");
 
       No_Value            := XML_Tools.Strings.Store ("no");
       Yes_Value           := XML_Tools.Strings.Store ("yes");
+
+      Enumeration_Resource_Value_Value
+        := XML_Tools.Strings.Store ("EnumerationResourceValue");
+      Integer_Resource_Value_Value
+        := XML_Tools.Strings.Store ("IntegerResourceValue");
+      Widget_Reference_Resource_Value_Value
+        := XML_Tools.Strings.Store ("WidgetReferenceResourceValue");
    end Init_XML_Tools;
 
    ---------------------------------------------------------------------------
@@ -168,6 +184,15 @@ package body Model.Tools is
       procedure Component_Class_To_XML (Component_Class : in Node_Id;
                                         Parent          : in Element_Id);
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Resource_To_XML
+      --!    <Purpose> Преобразует узел Node_XXX_Resource_Value в
+      --! XML-структуру и присоединяет созданный тег к тегу Parent.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Resource_To_XML (Resource : in Node_Id;
+                                 Parent   : in Element_Id);
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Widget_Instance_To_XML
@@ -241,6 +266,38 @@ package body Model.Tools is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> Resource_To_XML
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Resource_To_XML (Resource : in Node_Id;
+                                 Parent   : in Element_Id)
+      is
+         Tag           : constant Element_Id
+           := Elements.Create_Tag (Parent, Resource_Tag);
+         Resource_Type : String_Id;
+
+      begin
+         case Node_Kind (Resource) is
+            when Node_Enumeration_Resource_Value =>
+               Resource_Type := Enumeration_Resource_Value_Value;
+
+            when Node_Integer_Resource_Value =>
+               Resource_Type := Integer_Resource_Value_Value;
+
+            when Node_Widget_Reference_Resource_Value =>
+               Resource_Type := Widget_Reference_Resource_Value_Value;
+
+            when others =>
+               Error_Message ("Unhandled resource type: "
+                 & Node_Kinds'Wide_Image (Node_Kind (Resource)));
+               raise Program_Error;
+         end case;
+
+         Attributes.Create_Attribute (Tag, Type_Attr, Resource_Type);
+      end Resource_To_XML;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> Widget_Instance_To_XML
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -276,8 +333,9 @@ package body Model.Tools is
 
             begin
                while Resource /= Null_Node loop
+                  Resource_To_XML (Resource, Tag);
+
                   Resource := Next (Resource);
-                  raise Program_Error;
                end loop;
             end;
          end if;
@@ -508,8 +566,50 @@ package body Model.Tools is
       procedure XML_To_Widget_Instance (Tag             : in Element_Id;
                                         Widget_Instance : in Node_Id)
       is
+         function Create_Resource (Attr : in Attribute_Id) return Node_Id;
          function Find (Name : in XML_Tools.String_Id) return Node_Id;
          function Get_Project_By_Node (N : in Node_Id) return Node_Id;
+
+         function Create_Resource (Attr : in Attribute_Id) return Node_Id is
+            A   : Attribute_Id := Attr;
+            Res : Node_Id := Null_Node;
+
+         begin
+            while A /= Null_Attribute_Id loop
+               if Attributes.Name (A) = Type_Attr then
+                  declare
+                     V : constant String_Id := Attributes.Value (A);
+
+                  begin
+                     if V = Widget_Reference_Resource_Value_Value then
+                        Res := Create_Widget_Reference_Resource_Value;
+
+                     elsif V = Integer_Resource_Value_Value then
+                        Res := Create_Integer_Resource_Value;
+
+                     elsif V = Enumeration_Resource_Value_Value then
+                        Res := Create_Enumeration_Resource_Value;
+
+                     else
+                        Error_Message ("Unknown resource type: "
+                          & XML_Tools.Strings.Image (V));
+                        raise Program_Error;
+
+                     end if;
+                  end;
+               end if;
+
+               A := Attributes.Next (A);
+            end loop;
+
+            if Res = Null_Node then
+               raise Program_Error;
+               --  Атрибут type не найден.
+
+            end if;
+
+            return Res;
+         end Create_Resource;
 
          function Find (Name : in XML_Tools.String_Id) return Model.Node_Id is
             Classname  : constant Model.Name_Id
@@ -593,14 +693,18 @@ package body Model.Tools is
          --  Обработка дочерних тегов тега Widget_Instance.
 
          declare
-            Child    : Element_Id := Elements.Child (Tag);
-            Children : constant List_Id := New_List;
+            Child     : Element_Id := Elements.Child (Tag);
+            Children  : constant List_Id := New_List;
+            Resources : constant List_Id := New_List;
 
          begin
             Set_Children (Widget_Instance, Children);
+            Set_Resources (Widget_Instance, Resources);
 
             while Child /= Null_Element_Id loop
                if Elements.Name (Child) = Widget_Instance_Tag then
+                  --  WidgetInstance.
+
                   declare
                      Widget_Instance : constant Node_Id
                        := Create_Widget_Instance;
@@ -608,6 +712,17 @@ package body Model.Tools is
                   begin
                      Append (Children, Widget_Instance);
                      XML_To_Widget_Instance (Child, Widget_Instance);
+                  end;
+
+               elsif Elements.Name (Child) = Resource_Tag then
+                  --  Resource.
+
+                  declare
+                     Resource : constant Node_Id
+                       := Create_Resource (Elements.Attribute (Child));
+
+                  begin
+                     Append (Resources, Resource);
                   end;
 
                else
