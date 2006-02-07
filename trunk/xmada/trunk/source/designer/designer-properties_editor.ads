@@ -138,24 +138,4 @@ private
    ---------------------------------------------------------------------------
    procedure Hide (Object : access Node_Properties_Editor) is abstract;
 
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Update_Item
-   --!    <Purpose> Производит перерисовку злементов редактора свойств.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Update_Item (Object : access Node_Properties_Editor) is abstract;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Set_Properties
-   --!    <Purpose> Производит установку новых значений свойств элемента.
-   --!   Вызывается визуальным редактором при изменении значений
-   --! геометрических свойств элемента.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Set_Properties (Object : access Node_Properties_Editor)
-     is abstract;
-
-
 end Designer.Properties_Editor;

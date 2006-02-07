@@ -128,7 +128,7 @@ private
    --!    <Purpose> Производит перерисовку злементов редактора свойств.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Update_Item (Object : access Widget_Instance_Properties_Editor);
+   procedure Update_Item (Node : in Model.Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -138,8 +138,7 @@ private
    --! геометрических свойств элемента.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Set_Properties
-    (Object : access Widget_Instance_Properties_Editor);
+   procedure Set_Properties (Node : in Model.Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

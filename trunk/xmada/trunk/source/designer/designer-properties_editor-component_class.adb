@@ -39,6 +39,7 @@
 
 package body Designer.Properties_Editor.Component_Class is
 
+   use Model;
    use Xt;
 
    ---------------------------------------------------------------------------
@@ -85,8 +86,7 @@ package body Designer.Properties_Editor.Component_Class is
    --!    <Unit> Set_Properties
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Set_Properties
-    (Object : access Component_Class_Properties_Editor)
+   procedure Set_Properties (Node : in Node_Id)
    is
    begin
       null;
@@ -107,7 +107,7 @@ package body Designer.Properties_Editor.Component_Class is
    --!    <Unit> Update_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Update_Item (Object : access Component_Class_Properties_Editor)
+   procedure Update_Item (Node : in Node_Id)
    is
    begin
       null;
