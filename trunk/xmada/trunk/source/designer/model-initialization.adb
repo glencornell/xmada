@@ -1970,12 +1970,12 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_Composite_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Composite_Widget_Class, Enter ("Composite"));
-      Set_Super_Class (Xt_Motif_Composite_Widget_Class,
-                       Xt_Motif_Core_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_Composite_Widget_Class, True);
+      begin
+         Xt_Motif_Composite_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Composite_Widget_Class, Enter ("Composite"));
+         Set_Super_Class (Xt_Motif_Composite_Widget_Class,
+                          Xt_Motif_Core_Widget_Class);
+         Set_Is_Meta_Class (Xt_Motif_Composite_Widget_Class, True);
 
          --  TODO XmNchildren
          --  TODO XmNinsertPosition
@@ -1990,9 +1990,9 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 --
 --         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+
+         Merge_Inherited_Resources (Xt_Motif_Composite_Widget_Class);
+      end;
 
       --  Constraint
 
@@ -3958,8 +3958,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Manager_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Manager_Widget_Class);
       end;
 
       --  XmBulletinBoard
@@ -4045,8 +4045,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Bulletin_Board_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Bulletin_Board_Widget_Class);
       end;
 
       --  XmForm
@@ -4214,8 +4214,8 @@ package body Model.Initialization is
 
          Set_Resources (Xt_Motif_Form_Widget_Class, Resources);
          Set_Constraint_Resources (Xt_Motif_Form_Widget_Class, Constraints);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Form_Widget_Class);
       end;
 
       --  XmMessageBox
