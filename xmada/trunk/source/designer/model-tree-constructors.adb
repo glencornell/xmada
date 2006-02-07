@@ -59,6 +59,46 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Boolean_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Boolean_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                        => Node_Boolean_Resource_Value,
+         Parent                      => Null_Node,
+         List                        => Null_List,
+         Previous                    => Null_Node,
+         Next                        => Null_Node,
+         BRV_Resource_Specification  => Null_Node,
+         BRV_Is_Resource_Class_Value => False,
+         BRV_Is_Hardcoded            => False));
+
+      return Node_Table.Last;
+   end Create_Boolean_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Colormap_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Colormap_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                        => Node_Colormap_Resource_Value,
+         Parent                      => Null_Node,
+         List                        => Null_List,
+         Previous                    => Null_Node,
+         Next                        => Null_Node,
+         CRV_Resource_Specification  => Null_Node,
+         CRV_Is_Resource_Class_Value => False,
+         CRV_Is_Hardcoded            => False));
+
+      return Node_Table.Last;
+   end Create_Colormap_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Component_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -160,6 +200,46 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Pixel_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Pixel_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                        => Node_Pixel_Resource_Value,
+         Parent                      => Null_Node,
+         List                        => Null_List,
+         Previous                    => Null_Node,
+         Next                        => Null_Node,
+         PRV_Resource_Specification  => Null_Node,
+         PRV_Is_Resource_Class_Value => False,
+         PRV_Is_Hardcoded            => False));
+
+      return Node_Table.Last;
+   end Create_Pixel_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Pixmap_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Pixmap_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                         => Node_Pixmap_Resource_Value,
+         Parent                       => Null_Node,
+         List                         => Null_List,
+         Previous                     => Null_Node,
+         Next                         => Null_Node,
+         PMRV_Resource_Specification  => Null_Node,
+         PMRV_Is_Resource_Class_Value => False,
+         PMRV_Is_Hardcoded            => False));
+
+      return Node_Table.Last;
+   end Create_Pixmap_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Predefined_Resource_Type
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -219,6 +299,46 @@ package body Model.Tree.Constructors is
 
       return Node_Table.Last;
    end Create_Resource_Specification;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Screen_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Screen_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                        => Node_Screen_Resource_Value,
+         Parent                      => Null_Node,
+         List                        => Null_List,
+         Previous                    => Null_Node,
+         Next                        => Null_Node,
+         SRV_Resource_Specification  => Null_Node,
+         SRV_Is_Resource_Class_Value => False,
+         SRV_Is_Hardcoded            => False));
+
+      return Node_Table.Last;
+   end Create_Screen_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Translation_Data_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Translation_Data_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                        => Node_Translation_Data_Resource_Value,
+         Parent                      => Null_Node,
+         List                        => Null_List,
+         Previous                    => Null_Node,
+         Next                        => Null_Node,
+         TRV_Resource_Specification  => Null_Node,
+         TRV_Is_Resource_Class_Value => False,
+         TRV_Is_Hardcoded            => False));
+
+      return Node_Table.Last;
+   end Create_Translation_Data_Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

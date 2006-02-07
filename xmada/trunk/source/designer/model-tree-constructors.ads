@@ -44,6 +44,10 @@ package Model.Tree.Constructors is
 
    function Create_Application return Node_Id;
 
+   function Create_Boolean_Resource_Value return Node_Id;
+
+   function Create_Colormap_Resource_Value return Node_Id;
+
    function Create_Component_Class return Node_Id;
 
    function Create_Enumerated_Resource_Type return Node_Id;
@@ -54,11 +58,19 @@ package Model.Tree.Constructors is
 
    function Create_Integer_Resource_Value return Node_Id;
 
+   function Create_Pixel_Resource_Value return Node_Id;
+
+   function Create_Pixmap_Resource_Value return Node_Id;
+
    function Create_Predefined_Resource_Type return Node_Id;
 
    function Create_Project return Node_Id;
 
    function Create_Resource_Specification return Node_Id;
+
+   function Create_Screen_Resource_Value return Node_Id;
+
+   function Create_Translation_Data_Resource_Value return Node_Id;
 
    function Create_Widget_Class return Node_Id;
 
