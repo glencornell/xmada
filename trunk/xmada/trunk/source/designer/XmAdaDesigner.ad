@@ -11,6 +11,9 @@
 *XmTextField.renderTable:
 *XmTextField.renderTable.fontType: FONT_IS_FONTSET
 *XmTextField.renderTable.fontName: -*-courier-medium-r-normal--12-*
+!!  Удаление тени вокруг XmSpinBox и XmSimpleSpinBox
+*XmSimpleSpinBox.shadowThickness: 0
+*XmSpinBox.shadowThickness: 0
 
 !!  Главное окно.
 
@@ -42,7 +45,7 @@
 
 !!  Окно редактора свойств
 
-*main_window.horizontal_paned.properties_form.width: 300
+*main_window.horizontal_paned.properties_form.width: 400
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
 *main_window.horizontal_paned.properties_form.notebook.scrolled.row_column.packing: PACK_COLUMN
