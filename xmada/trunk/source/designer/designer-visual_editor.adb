@@ -261,6 +261,55 @@ package body Designer.Visual_Editor is
                                     (Resource_Specification (Aux)))),
                                0);
 
+                        when Type_Boolean =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_C_Int,
+                               Interfaces.C.Strings.Null_Ptr,
+                               0);
+
+                        when Type_Translation_Data =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_C_Int,
+                               Interfaces.C.Strings.Null_Ptr,
+                               0);
+
+                        when Type_Pixel =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_C_Int,
+                               Interfaces.C.Strings.Null_Ptr,
+                               0);
+
+                        when Type_Pixmap =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_C_Int,
+                               Interfaces.C.Strings.Null_Ptr,
+                               0);
+
+                        when Type_Widget_Reference =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_C_Int,
+                               Interfaces.C.Strings.Null_Ptr,
+                               0);
+
+                        when Type_Colormap =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_C_Int,
+                               Interfaces.C.Strings.Null_Ptr,
+                               0);
+
+                        when Type_Screen =>
+                           Annotation_Table.Table (Node).Resources.Values
+                            (Current) :=
+                              (Value_C_Int,
+                               Interfaces.C.Strings.Null_Ptr,
+                               0);
+
                         when others =>
                            raise Program_Error;
                      end case;
@@ -353,6 +402,62 @@ package body Designer.Visual_Editor is
                           Annotation_Table.Table (Node).Resources.Values
                            (Current).Position_Value'Address);
 
+                     when Type_Translation_Data =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Xt_Arg_Val (0));
+
+                     when Type_Boolean =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Xt_Arg_Val (0));
+
+                     when Type_Colormap =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Xt_Arg_Val (0));
+
+                     when Type_Screen =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Xt_Arg_Val (0));
+
+                     when Type_Pixel =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Xt_Arg_Val (0));
+
+                     when Type_Pixmap =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Xt_Arg_Val (0));
+
+                     when Type_Widget_Reference =>
+                        Xt_Set_Arg
+                         (Annotation_Table.Table (Node).Resources.Args
+                           (Current),
+                          Annotation_Table.Table (Node).Resources.Values
+                           (Current).Name,
+                          Xt_Arg_Val (0));
+
                      when others =>
                         raise Program_Error;
                  end case;
@@ -409,6 +514,27 @@ package body Designer.Visual_Editor is
                            (Annotation_Table.Table
                              (Node).Resources.Values
                                (Current).Position_Value));
+
+                     when Type_Translation_Data =>
+                        null;
+
+                     when Type_Boolean =>
+                        null;
+
+                     when Type_Colormap =>
+                        null;
+
+                     when Type_Screen =>
+                        null;
+
+                     when Type_Pixel =>
+                        null;
+
+                     when Type_Pixmap =>
+                        null;
+
+                     when Type_Widget_Reference =>
+                        null;
 
                      when others =>
                         raise Program_Error;
@@ -492,6 +618,24 @@ package body Designer.Visual_Editor is
 
                            when Type_Widget_Reference =>
                               Value := Create_Widget_Reference_Resource_Value;
+
+                           when Type_Pixel =>
+                              Value := Create_Pixel_Resource_Value;
+
+                           when Type_Pixmap =>
+                              Value := Create_Pixmap_Resource_Value;
+
+                           when Type_Colormap =>
+                              Value := Create_Colormap_Resource_Value;
+
+                           when Type_Screen =>
+                              Value := Create_Screen_Resource_Value;
+
+                           when Type_Translation_Data =>
+                              Value := Create_Translation_Data_Resource_Value;
+
+                           when Type_Boolean =>
+                              Value := Create_Boolean_Resource_Value;
 
                            when others =>
                               raise Program_Error;
