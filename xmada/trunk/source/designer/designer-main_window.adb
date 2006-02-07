@@ -41,6 +41,8 @@ with Ada.Characters.Wide_Latin_1;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Unchecked_Conversion;
 
+with GNAT.Traceback.Symbolic;
+
 with Xt.Ancillary_Types;
 with Xt.Callbacks;
 with Xt.Composite_Management;
@@ -786,6 +788,9 @@ package body Designer.Main_Window is
       Put_Line
        (Ada.Characters.Handling.To_Wide_String
          (Ada.Exceptions.Exception_Information (Occurrence)));
+      Put_Line
+       (Ada.Characters.Handling.To_Wide_String
+         (GNAT.Traceback.Symbolic.Symbolic_Traceback (Occurrence)));
    end Put_Exception_In_Callback;
 
    ---------------------------------------------------------------------------
