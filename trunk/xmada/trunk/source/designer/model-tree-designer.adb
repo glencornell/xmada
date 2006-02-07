@@ -44,6 +44,7 @@ package body Model.Tree.Designer is
 
    type Annotation_Kinds is
     (Annotation_Empty,
+     Annotation_Widget_Class,
      Annotation_Widget_Instance);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
@@ -51,6 +52,9 @@ package body Model.Tree.Designer is
       case Kind is
          when Annotation_Empty =>
             null;
+
+         when Annotation_Widget_Class =>
+            Convenience_Create_Function : Convenience_Create;
 
          when Annotation_Widget_Instance =>
             All_Resources            : List_Id;
@@ -110,6 +114,23 @@ package body Model.Tree.Designer is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Convenience_Create_Function
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Convenience_Create_Function (Node : in Node_Id)
+     return Convenience_Create
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Convenience_Create_Function;
+   end Convenience_Create_Function;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -122,6 +143,11 @@ package body Model.Tree.Designer is
 
          for J in First .. Annotation_Table.Last loop
             case Node_Kind (J) is
+               when Node_Widget_Class =>
+                  Annotation_Table.Table (J) :=
+                   (Kind                        => Annotation_Widget_Class,
+                    Convenience_Create_Function => null);
+
                when Node_Widget_Instance =>
                   Annotation_Table.Table (J) :=
                    (Kind                     => Annotation_Widget_Instance,
@@ -166,5 +192,22 @@ package body Model.Tree.Designer is
 
       Annotation_Table.Table (Node).All_Resources := Value;
    end Set_All_Resources;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Convenience_Create_Function
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Convenience_Create_Function (Node  : in Node_Id;
+                                              Value : in Convenience_Create)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Convenience_Create_Function := Value;
+   end Set_Convenience_Create_Function;
 
 end Model.Tree.Designer;
