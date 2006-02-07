@@ -167,11 +167,12 @@ package body Designer.Visual_Editor is
 
                      when Node_Enumerated_Resource_Type =>
                         Value := Create_Enumeration_Resource_Value;
-                        Set_Resource_Specification (Value, Aux);
 
                      when others =>
                         raise Program_Error;
                   end case;
+
+                  Set_Resource_Specification (Value, Aux);
 
                   Append (List, Value);
 
