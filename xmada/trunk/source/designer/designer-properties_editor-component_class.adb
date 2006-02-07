@@ -82,6 +82,18 @@ package body Designer.Properties_Editor.Component_Class is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Properties
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Properties
+    (Object : access Component_Class_Properties_Editor)
+   is
+   begin
+      null;
+   end Set_Properties;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Show
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -89,5 +101,16 @@ package body Designer.Properties_Editor.Component_Class is
    begin
       null;
    end Show;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Update_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Update_Item (Object : access Component_Class_Properties_Editor)
+   is
+   begin
+      null;
+   end Update_Item;
 
 end Designer.Properties_Editor.Component_Class;

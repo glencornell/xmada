@@ -57,4 +57,6 @@ package Model.Tree.Lists is
 
    procedure Set_Parent_Node (List : in List_Id; Value : in Node_Id);
 
+   function Length (List : in List_Id) return Natural;
+
 end Model.Tree.Lists;

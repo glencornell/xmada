@@ -57,6 +57,24 @@ private package Designer.Properties_Editor.Widget_Instance is
                     Node   : in Model.Node_Id)
      return Node_Properties_Editor_Access;
 
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Insert_Item
+   --!    <Purpose> Обработка добавления нового элемента.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Insert_Item (Node : in Model.Node_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Reinitialize
+   --!    <Purpose> Производит освобождение всех использующихся ресурсов и
+   --! повторную инициализацию внутренних структур.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Reinitialize;
+
 private
 
    type Widget_Instance_Properties_Editor is
@@ -103,6 +121,25 @@ private
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Hide (Object : access Widget_Instance_Properties_Editor);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Update_Item
+   --!    <Purpose> Производит перерисовку злементов редактора свойств.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Update_Item (Object : access Widget_Instance_Properties_Editor);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Properties
+   --!    <Purpose> Производит установку новых значений свойств элемента.
+   --!   Вызывается визуальным редактором при изменении значений
+   --! геометрических свойств элемента.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Properties
+    (Object : access Widget_Instance_Properties_Editor);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

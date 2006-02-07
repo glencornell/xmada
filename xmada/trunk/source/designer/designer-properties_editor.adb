@@ -40,37 +40,21 @@ with Ada.Unchecked_Deallocation;
 with GNAT.Table;
 
 with Xt.Ancillary_Types;
-with Xt.Instance_Management;
-with Xm.Resource_Management;
-with Xm.Strings;
 with Xm_Notebook;
-with Xm_Push_Button_Gadget;
-with Xm_Row_Column;
-with Xm_String_Defs;
 
 with Designer.Properties_Editor.Component_Class;
 with Designer.Properties_Editor.Widget_Instance;
 with Model.Allocations;
-with Model.Queries;
 with Model.Tree;
-with Model.Tree.Lists;
+
 
 package body Designer.Properties_Editor is
 
    use Model;
-   use Model.Queries;
    use Model.Tree;
-   use Model.Tree.Lists;
-   use Xm;
-   use Xm.Resource_Management;
-   use Xm.Strings;
    use Xm_Notebook;
-   use Xm_Push_Button_Gadget;
-   use Xm_Row_Column;
-   use Xm_String_Defs;
    use Xt;
    use Xt.Ancillary_Types;
-   use Xt.Instance_Management;
 
    procedure Free is
      new Ada.Unchecked_Deallocation (Node_Properties_Editor'Class,
@@ -83,9 +67,7 @@ package body Designer.Properties_Editor is
    type Annotation_Kinds is
     (Annotation_Empty,
      Annotation_Component_Class,
-     Annotation_Widget_Instance,
-     Annotation_Enumerated_Resource_Type,
-     Annotation_Enumeration_Value_Specification);
+     Annotation_Widget_Instance);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
@@ -95,15 +77,6 @@ package body Designer.Properties_Editor is
          =>
             Properties_Editor : Node_Properties_Editor_Access;
             --  Соответствующий редактор свойств элемента модели.
-
-         when Annotation_Enumerated_Resource_Type =>
-            Menu              : Widget;
-            --  Выпадающее меню, используемое в меню опций значения ресурса.
-
-         when Annotation_Enumeration_Value_Specification =>
-            Button            : Widget;
-            --  Кнопка выпадающего меню, используемого в меню опций значения
-            --  ресурса.
 
          when Annotation_Empty =>
             null;
@@ -131,8 +104,6 @@ package body Designer.Properties_Editor is
    Selected_Item : Node_Id := Null_Node;
    --  Элемент модели, выбранный пользователем в настоящий момент и для
    --  отображены страницы редактора свойств.
-
-   Notebook : Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -164,65 +135,11 @@ package body Designer.Properties_Editor is
    procedure Insert_Item (Node : in Model.Node_Id) is
    begin
       Relocate_Annotation_Table (Node);
+      Widget_Instance.Insert_Item (Node);
 
       case Node_Kind (Node) is
          when Node_Project =>
-            --  Построение меню для элементов перечислимых типов.
-
-            declare
-               Current_Set   : Node_Id;
-               Current_Type  : Node_Id;
-               Current_Value : Node_Id;
-               Argl          : Xt_Arg_List (0 .. 0);
-               Str           : Xm_String;
-
-            begin
-               Current_Set := First (Imported_Widget_Sets (Node));
-
-               while Current_Set /= Null_Node loop
-                  --  Построение меню для каждого элемента типа ресурсов.
-
-                  Current_Type := First (Resource_Types (Current_Set));
-
-                  while Current_Type /= Null_Node loop
-                     if Node_Kind (Current_Type)
-                          = Node_Enumerated_Resource_Type
-                     then
-                        Relocate_Annotation_Table (Current_Type);
-
-                        Annotation_Table.Table (Current_Type).Menu :=
-                          Xm_Create_Pulldown_Menu
-                           (Notebook, "resourcetype__menu");
-
-                        --  Задание списков возможных значений для каждого меню
-                        --  элемента типа ресурсов.
-
-                        Current_Value :=
-                          First (Value_Specifications (Current_Type));
-
-                        while Current_Value /= Null_Node loop
-                           Relocate_Annotation_Table (Current_Value);
-
-                           Str :=
-                             Xm_String_Generate (Name_Image (Current_Value));
-                           Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
-                           Annotation_Table.Table (Current_Value).Button :=
-                             Xm_Create_Managed_Push_Button_Gadget
-                              (Annotation_Table.Table (Current_Type).Menu,
-                               "value",
-                               Argl (0 .. 0));
-                           Xm_String_Free (Str);
-
-                           Current_Value := Next (Current_Value);
-                        end loop;
-                     end if;
-
-                     Current_Type := Next (Current_Type);
-                  end loop;
-
-                  Current_Set := Next (Current_Set);
-               end loop;
-            end;
+            null;
 
          when Node_Application =>
             null;
@@ -245,6 +162,8 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Reinitialize is
    begin
+      Widget_Instance.Reinitialize;
+
       for J in Annotation_Table.First .. Annotation_Table.Last loop
          case Annotation_Table.Table (J).Kind is
             when Annotation_Component_Class
@@ -252,16 +171,6 @@ package body Designer.Properties_Editor is
             =>
                if Annotation_Table.Table (J).Properties_Editor /= null then
                   Free (Annotation_Table.Table (J).Properties_Editor);
-               end if;
-
-            when Annotation_Enumerated_Resource_Type         =>
-               if Annotation_Table.Table (J).Menu /= Null_Widget then
-                  Xt_Destroy_Widget (Annotation_Table.Table (J).Menu);
-               end if;
-
-            when Annotation_Enumeration_Value_Specification  =>
-               if Annotation_Table.Table (J).Button /= Null_Widget then
-                  Xt_Destroy_Widget (Annotation_Table.Table (J).Button);
                end if;
 
             when Annotation_Empty                            =>
@@ -299,16 +208,6 @@ package body Designer.Properties_Editor is
                Annotation_Table.Table (J) :=
                 (Kind              => Annotation_Component_Class,
                  Properties_Editor => null);
-
-            when Node_Enumerated_Resource_Type =>
-               Annotation_Table.Table (J) :=
-                (Kind => Annotation_Enumerated_Resource_Type,
-                 Menu => Null_Widget);
-
-            when Node_Enumeration_Value_Specification =>
-               Annotation_Table.Table (J) :=
-                (Kind   => Annotation_Enumeration_Value_Specification,
-                 Button => Null_Widget);
 
             when others =>
                Annotation_Table.Table (J) := (Kind => Annotation_Empty);
