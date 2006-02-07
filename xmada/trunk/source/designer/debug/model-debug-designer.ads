@@ -28,48 +28,20 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Designer.Operations.Debug
---! <ImplementationNotes>
---! <PortabilityIssues>
---! <AnticipatedChanges>
+--! <Unit> Model.Debug.Designer
+--! <Purpose>
+--!   Вспомогательный пакет для вывода дополнительной отладочной информации,
+--! специфической для дизайнера.
+--!
+--! <Effects>
+--! <Perfomance>
 ------------------------------------------------------------------------------
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Wide_Text_IO;
 
-with Model.Debug;
-with Model.Debug.Designer;
-pragma Warnings (Off, Model.Debug.Designer);
---  Используется только для включения дополнительных подпрограмм вывода
---  отладочной информации, специфической для дизайнера.
+package Model.Debug.Designer is
 
-package body Designer.Operations.Debug is
+   pragma Elaborate_Body;
 
-   use Ada.Wide_Text_IO;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Dump_Tree
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   procedure Dump_Tree is
-      File : File_Type;
-
-   begin
-      Create (File, Out_File, "project_tree_dump.txt");
-
-      Model.Debug.Print (File, Project);
-
-      Close (File);
-
-   exception
-      when others =>
-         if Is_Open (File) then
-            Close (File);
-         end if;
-
-         raise;
-   end Dump_Tree;
-
-end Designer.Operations.Debug;
+end Model.Debug.Designer;

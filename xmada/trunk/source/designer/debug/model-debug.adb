@@ -42,12 +42,6 @@ package body Model.Debug is
    use Model.Tree;
    use Model.Tree.Lists;
 
-   Indent : constant := 2;
-
-   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
-                    List   : in List_Id;
-                    Offset : in Ada.Wide_Text_IO.Count);
-
    procedure Print_Project (File   : in Ada.Wide_Text_IO.File_Type;
                             Node   : in Node_Id;
                             Offset : in Ada.Wide_Text_IO.Count);
@@ -71,6 +65,11 @@ package body Model.Debug is
      Offset : in Ada.Wide_Text_IO.Count);
 
    procedure Print_Enumeration_Value_Specification
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Integer_Resource_Value
     (File   : in Ada.Wide_Text_IO.File_Type;
      Node   : in Node_Id;
      Offset : in Ada.Wide_Text_IO.Count);
@@ -149,6 +148,9 @@ package body Model.Debug is
             Print_Enumeration_Value_Specification
              (File, Node, Offset + Indent);
 
+         when Node_Integer_Resource_Value =>
+            Print_Integer_Resource_Value (File, Node, Offset + Indent);
+
          when Node_Predefined_Resource_Type =>
             Print_Predefined_Resource_Type (File, Node, Offset + Indent);
 
@@ -170,6 +172,10 @@ package body Model.Debug is
          when others =>
             raise Program_Error;
       end case;
+
+      if Designer_Hook /= null then
+         Designer_Hook (File, Node, Offset);
+      end if;
    end Print;
 
    ---------------------------------------------------------------------------
@@ -243,6 +249,31 @@ package body Model.Debug is
       Put (File,
            ' ' & Name_Image (Node) & " (" & Internal_Name_Image (Node) & ')');
    end Print_Enumeration_Value_Specification;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Integer_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Integer_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      Put (File, " :=" & Integer'Wide_Image (Resource_Value (Node)));
+   end Print_Integer_Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

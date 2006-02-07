@@ -1,4 +1,8 @@
 ------------------------------------------------------------------------------
+--
+--  XmAda Designer
+--
+------------------------------------------------------------------------------
 --! <Copyright>
 --!  Copyright (C) 2006
 --!
@@ -24,52 +28,75 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Model.Debug
---! <Purpose>
---!   Вспомогательный пакет для отображения модели в текстовом виде, пригодном
---! для анализа человеком.
---!
---! <Effects>
---! <Perfomance>
+--! <Unit> Model.Debug.Designer
+--! <ImplementationNotes>
+--! <PortabilityIssues>
+--! <AnticipatedChanges>
 ------------------------------------------------------------------------------
---  $Source$
---  $Revision$ $Date$ $Author$
+--  $Revision$ $Author$
+--  $Date$
 ------------------------------------------------------------------------------
-with Ada.Wide_Text_IO;
+with Model.Tree.Designer;
 
-package Model.Debug is
+package body Model.Debug.Designer is
+
+   use Ada.Wide_Text_IO;
+   use Model.Tree;
+   use Model.Tree.Designer;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Print
-   --!    <Purpose> Производит вывод ветви дерева модели начиная с указанного
-   --! узла в файл.
+   --!    <Purpose> Выводит дополнительную информацию об узле дерева,
+   --! специфическую для дизайнера.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
-                    Node   : in Node_Id;
-                    Offset : in Ada.Wide_Text_IO.Count := 1);
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Print
-   --!    <Purpose> Производит вывод ветвей дерева модели начиная с узлов,
-   --! содержащихся в указанном список.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
-                    List   : in List_Id;
+                    Node   : in Model.Node_Id;
                     Offset : in Ada.Wide_Text_IO.Count);
 
-private
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
+                    Node   : in Model.Node_Id;
+                    Offset : in Ada.Wide_Text_IO.Count)
+   is
+   begin
+      case Node_Kind (Node) is
+         when Node_Application
+           | Node_Component_Class
+           | Node_Enumerated_Resource_Type
+           | Node_Enumeration_Value_Specification
+           | Node_Integer_Resource_Value
+           | Node_Predefined_Resource_Type
+           | Node_Project
+           | Node_Resource_Specification
+           | Node_Widget_Class
+           | Node_Widget_Set
+         =>
+            null;
 
-   type Print_Hook is
-     access procedure (File   : in Ada.Wide_Text_IO.File_Type;
-                       Node   : in Node_Id;
-                       Offset : in Ada.Wide_Text_IO.Count);
+         when Node_Widget_Instance =>
+            if All_Resources (Node) /= Null_List then
+               Set_Col (File, Offset);
+               Put (File, "All resources:");
+               Print (File, All_Resources (Node), Offset + Indent);
+            end if;
 
-   Designer_Hook : Print_Hook := null;
+            if All_Constraint_Resources (Node) /= Null_List then
+               Set_Col (File, Offset);
+               Put (File, "All constraint resources:");
+               Print (File, All_Constraint_Resources (Node), Offset + Indent);
+            end if;
 
-   Indent : constant := 2;
+         when others =>
+            raise Program_Error;
+      end case;
+   end Print;
 
-end Model.Debug;
+begin
+   Designer_Hook := Print'Access;
+end Model.Debug.Designer;
