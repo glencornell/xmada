@@ -39,8 +39,15 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt.Ancillary_Types;
 
 package Model.Tree.Designer is
+
+   type Convenience_Create is
+     access function (Parent   : in Xt.Widget;
+                      Name     : in String;
+                      Arg_List : in Xt.Ancillary_Types.Xt_Arg_List)
+                        return Xt.Widget;
 
    function All_Resources (Node : in Node_Id) return List_Id;
    procedure Set_All_Resources (Node : in Node_Id; Value : in List_Id);
@@ -48,4 +55,10 @@ package Model.Tree.Designer is
    function All_Constraint_Resources (Node : in Node_Id) return List_Id;
    procedure Set_All_Constraint_Resources (Node  : in Node_Id;
                                            Value : in List_Id);
+
+   function Convenience_Create_Function (Node : in Node_Id)
+     return Convenience_Create;
+   procedure Set_Convenience_Create_Function (Node  : in Node_Id;
+                                              Value : in Convenience_Create);
+
 end Model.Tree.Designer;

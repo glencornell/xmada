@@ -174,7 +174,7 @@ package body Model.Debug is
       end case;
 
       if Designer_Hook /= null then
-         Designer_Hook (File, Node, Offset);
+         Designer_Hook (File, Node, Offset + Indent);
       end if;
    end Print;
 

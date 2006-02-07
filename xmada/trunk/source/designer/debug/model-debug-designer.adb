@@ -74,10 +74,15 @@ package body Model.Debug.Designer is
            | Node_Predefined_Resource_Type
            | Node_Project
            | Node_Resource_Specification
-           | Node_Widget_Class
            | Node_Widget_Set
          =>
             null;
+
+         when Node_Widget_Class =>
+            if Convenience_Create_Function (Node) /= null then
+               Set_Col (File, Offset);
+               Put (File, "Has convenience create function");
+            end if;
 
          when Node_Widget_Instance =>
             if All_Resources (Node) /= Null_List then
