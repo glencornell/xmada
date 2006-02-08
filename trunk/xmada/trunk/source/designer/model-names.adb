@@ -36,32 +36,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with GNAT.Table;
-
-with Model.Allocations;
 
 package body Model.Names is
-
-   package Name_Character_Table is
-     new GNAT.Table
-          (Table_Component_Type => Wide_Character,
-           Table_Index_Type     => Natural,
-           Table_Low_Bound      => Natural'First + 1,
-           Table_Initial        => Allocations.Name_Character_Table_Initial,
-           Table_Increment      => Allocations.Name_Character_Table_Increment);
-
-   type Name_Record is record
-      First : Positive;
-      Last  : Natural;
-   end record;
-
-   package Name_Table is
-     new GNAT.Table
-          (Table_Component_Type => Name_Record,
-           Table_Index_Type     => Name_Id,
-           Table_Low_Bound      => Name_Id'First + 1,
-           Table_Initial        => Allocations.Name_Table_Initial,
-           Table_Increment      => Allocations.Name_Table_Increment);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

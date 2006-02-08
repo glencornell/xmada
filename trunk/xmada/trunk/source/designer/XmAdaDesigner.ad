@@ -41,6 +41,7 @@
 *main_window.main_menu*file_pulldown*quit.mnemonic: x
 *main_window.main_menu*debug.labelString: Debug
 *main_window.main_menu*debug_menu*dump_tree.labelString: Dump project model tree
+*main_window.main_menu*debug_menu*tables_statistics.labelString: Internal tables statistics
 *main_window.horizontal_paned.orientation: HORIZONTAL
 
 !!  Окно редактора свойств
