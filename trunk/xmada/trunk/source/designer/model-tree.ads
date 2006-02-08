@@ -304,6 +304,16 @@ package Model.Tree is
    function Is_Managed (Node : in Node_Id) return Boolean;
    procedure Set_Is_Managed (Node : in Node_Id; Value : in Boolean);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <Purpose> Производит начальную инициализацию внутренних структур.
+   --! При повторном вызове осуществляет освобождение используемых ресурсов
+   --! и повторную начальную инициализацию внутренних структур.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Initialize;
+
 private
 
    type Node_Record (Kind : Node_Kinds := Node_Empty) is record

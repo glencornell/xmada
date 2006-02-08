@@ -131,6 +131,16 @@ package body Model.Tree.Designer is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Initialize is
+   begin
+      Annotation_Table.Init;
+   end Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------

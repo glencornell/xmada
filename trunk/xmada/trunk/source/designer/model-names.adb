@@ -124,4 +124,15 @@ package body Model.Names is
            (Name_Table.Table (Name).First .. Name_Table.Table (Name).Last));
    end Image;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Initialize is
+   begin
+      Name_Character_Table.Init;
+      Name_Table.Init;
+   end Initialize;
+
 end Model.Names;

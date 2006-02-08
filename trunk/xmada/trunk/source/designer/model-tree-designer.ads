@@ -61,4 +61,14 @@ package Model.Tree.Designer is
    procedure Set_Convenience_Create_Function (Node  : in Node_Id;
                                               Value : in Convenience_Create);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <Purpose> Производит начальную инициализацию внутренних структур.
+   --! При повторном вызове осуществляет освобождение используемых ресурсов
+   --! и повторную начальную инициализацию внутренних структур.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Initialize;
+
 end Model.Tree.Designer;
