@@ -47,6 +47,15 @@ package body Model.Tree.Designer is
 
    type Annotation_Kinds is
     (Annotation_Empty,
+     Annotation_Boolean_Resource_Value,
+     Annotation_Colormap_Resource_Value,
+     Annotation_Enumeration_Resource_Value,
+     Annotation_Integer_Resource_Value,
+     Annotation_Pixel_Resource_Value,
+     Annotation_Pixmap_Resource_Value,
+     Annotation_Screen_Resource_Value,
+     Annotation_Translation_Data_Resource_Value,
+     Annotation_Widget_Reference_Resource_Value,
      Annotation_Widget_Class,
      Annotation_Widget_Instance);
 
@@ -55,6 +64,19 @@ package body Model.Tree.Designer is
       case Kind is
          when Annotation_Empty =>
             null;
+
+         when Annotation_Boolean_Resource_Value
+           | Annotation_Colormap_Resource_Value
+           | Annotation_Enumeration_Resource_Value
+           | Annotation_Integer_Resource_Value
+           | Annotation_Pixel_Resource_Value
+           | Annotation_Pixmap_Resource_Value
+           | Annotation_Screen_Resource_Value
+           | Annotation_Translation_Data_Resource_Value
+           | Annotation_Widget_Reference_Resource_Value
+         =>
+            Is_Changed : Boolean;
+
 
          when Annotation_Widget_Class =>
             Convenience_Create_Function : Convenience_Create;
@@ -144,6 +166,30 @@ package body Model.Tree.Designer is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Is_Changed
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Changed (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Boolean_Resource_Value
+          or else Node_Kind (Node) = Node_Colormap_Resource_Value
+          or else Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Pixel_Resource_Value
+          or else Node_Kind (Node) = Node_Pixmap_Resource_Value
+          or else Node_Kind (Node) = Node_Screen_Resource_Value
+          or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Is_Changed;
+   end Is_Changed;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -166,6 +212,51 @@ package body Model.Tree.Designer is
                    (Kind                     => Annotation_Widget_Instance,
                     All_Resources            => Null_List,
                     All_Constraint_Resources => Null_List);
+
+               when Node_Boolean_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Boolean_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_Colormap_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Colormap_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_Enumeration_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Enumeration_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_Integer_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Integer_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_Pixel_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Pixel_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_Pixmap_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Pixmap_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_Screen_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Screen_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_Translation_Data_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Translation_Data_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_Widget_Reference_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Widget_Reference_Resource_Value,
+                    Is_Changed => False);
 
                when others =>
                   Annotation_Table.Table (J) := (Kind => Annotation_Empty);
@@ -224,5 +315,29 @@ package body Model.Tree.Designer is
 
       Annotation_Table.Table (Node).Convenience_Create_Function := Value;
    end Set_Convenience_Create_Function;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Is_Changed
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Is_Changed (Node : in Node_Id; Value : in Boolean) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Boolean_Resource_Value
+          or else Node_Kind (Node) = Node_Colormap_Resource_Value
+          or else Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Pixel_Resource_Value
+          or else Node_Kind (Node) = Node_Pixmap_Resource_Value
+          or else Node_Kind (Node) = Node_Screen_Resource_Value
+          or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Is_Changed := Value;
+   end Set_Is_Changed;
 
 end Model.Tree.Designer;

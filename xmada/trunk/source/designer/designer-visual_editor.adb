@@ -642,6 +642,8 @@ package body Designer.Visual_Editor is
                   raise Program_Error;
             end case;
 
+            Set_Is_Changed (Aux, True);
+
             Aux := Next (Aux);
             Current := Current + 1;
          end loop;

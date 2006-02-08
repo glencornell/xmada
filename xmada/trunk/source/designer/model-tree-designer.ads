@@ -61,6 +61,9 @@ package Model.Tree.Designer is
    procedure Set_Convenience_Create_Function (Node  : in Node_Id;
                                               Value : in Convenience_Create);
 
+   function Is_Changed (Node : in Node_Id) return Boolean;
+   procedure Set_Is_Changed (Node : in Node_Id; Value : in Boolean);
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
