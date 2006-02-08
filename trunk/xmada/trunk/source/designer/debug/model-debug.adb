@@ -657,16 +657,19 @@ package body Model.Debug is
       Put (File, ' ' & Name_Image (Node) & " : " & Name_Image (Class (Node)));
 
       if Resources (Node) /= Null_List then
+         Set_Col (File, Offset);
          Put (File, "Resources:");
          Print (File, Resources (Node), Offset + Indent);
       end if;
 
       if Constraint_Resources (Node) /= Null_List then
+         Set_Col (File, Offset);
          Put (File, "Constraint resources:");
          Print (File, Constraint_Resources (Node), Offset + Indent);
       end if;
 
       if Children (Node) /= Null_List then
+         Set_Col (File, Offset);
          Put (File, "Children:");
          Print (File, Children (Node), Offset + Indent);
       end if;
