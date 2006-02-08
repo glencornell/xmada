@@ -50,6 +50,16 @@ package body Model.Debug is
                                 Node   : in Node_Id;
                                 Offset : in Ada.Wide_Text_IO.Count);
 
+   procedure Print_Boolean_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Colormap_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
    procedure Print_Component_Class (File   : in Ada.Wide_Text_IO.File_Type;
                                     Node   : in Node_Id;
                                     Offset : in Ada.Wide_Text_IO.Count);
@@ -69,7 +79,32 @@ package body Model.Debug is
      Node   : in Node_Id;
      Offset : in Ada.Wide_Text_IO.Count);
 
+   procedure Print_Enumeration_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
    procedure Print_Integer_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Pixel_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Pixmap_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Screen_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Translation_Data_Resource_Value
     (File   : in Ada.Wide_Text_IO.File_Type;
      Node   : in Node_Id;
      Offset : in Ada.Wide_Text_IO.Count);
@@ -86,6 +121,16 @@ package body Model.Debug is
    procedure Print_Widget_Instance (File   : in Ada.Wide_Text_IO.File_Type;
                                     Node   : in Node_Id;
                                     Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Widget_Reference_Resource_Type
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Widget_Reference_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
 
    procedure Print_Widget_Set (File   : in Ada.Wide_Text_IO.File_Type;
                                Node   : in Node_Id;
@@ -138,11 +183,20 @@ package body Model.Debug is
          when Node_Application =>
             Print_Application (File, Node, Offset + Indent);
 
+         when Node_Boolean_Resource_Value =>
+            Print_Boolean_Resource_Value (File, Node, Offset + Indent);
+
+         when Node_Colormap_Resource_Value =>
+            Print_Colormap_Resource_Value (File, Node, Offset + Indent);
+
          when Node_Component_Class =>
             Print_Component_Class (File, Node, Offset + Indent);
 
          when Node_Enumerated_Resource_Type =>
             Print_Enumerated_Resource_Type (File, Node, Offset + Indent);
+
+         when Node_Enumeration_Resource_Value =>
+            Print_Enumeration_Resource_Value (File, Node, Offset + Indent);
 
          when Node_Enumeration_Value_Specification =>
             Print_Enumeration_Value_Specification
@@ -150,6 +204,12 @@ package body Model.Debug is
 
          when Node_Integer_Resource_Value =>
             Print_Integer_Resource_Value (File, Node, Offset + Indent);
+
+         when Node_Pixel_Resource_Value =>
+            Print_Pixel_Resource_Value (File, Node, Offset + Indent);
+
+         when Node_Pixmap_Resource_Value =>
+            Print_Pixmap_Resource_Value (File, Node, Offset + Indent);
 
          when Node_Predefined_Resource_Type =>
             Print_Predefined_Resource_Type (File, Node, Offset + Indent);
@@ -160,11 +220,25 @@ package body Model.Debug is
          when Node_Resource_Specification =>
             Print_Resource_Specification (File, Node, Offset + Indent);
 
+         when Node_Screen_Resource_Value =>
+            Print_Screen_Resource_Value (File, Node, Offset + Indent);
+
+         when Node_Translation_Data_Resource_Value =>
+            Print_Translation_Data_Resource_Value
+             (File, Node, Offset + Indent);
+
          when Node_Widget_Class =>
             Print_Widget_Class (File, Node, Offset + Indent);
 
          when Node_Widget_Instance =>
             Print_Widget_Instance (File, Node, Offset + Indent);
+
+         when Node_Widget_Reference_Resource_Type =>
+            Print_Widget_Reference_Resource_Type (File, Node, Offset + Indent);
+
+         when Node_Widget_Reference_Resource_Value =>
+            Print_Widget_Reference_Resource_Value
+             (File, Node, Offset + Indent);
 
          when Node_Widget_Set =>
             Print_Widget_Set (File, Node, Offset + Indent);
@@ -196,6 +270,60 @@ package body Model.Debug is
          Print (File, Component_Classes (Node), Offset + Indent);
       end if;
    end Print_Application;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Boolean_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Boolean_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      --  TODO Вывод значения.
+   end Print_Boolean_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Colormap_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Colormap_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      --  TODO Вывод значения.
+   end Print_Colormap_Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -235,6 +363,33 @@ package body Model.Debug is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Print_Enumeration_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Enumeration_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      --  TODO Вывод значения.
+   end Print_Enumeration_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Print_Enumeration_Value_Specification
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -260,6 +415,8 @@ package body Model.Debug is
      Node   : in Node_Id;
      Offset : in Ada.Wide_Text_IO.Count)
    is
+      pragma Unreferenced (Offset);
+
    begin
       if Is_Resource_Class_Value (Node) then
          Put (File,
@@ -274,6 +431,60 @@ package body Model.Debug is
 
       Put (File, " :=" & Integer'Wide_Image (Resource_Value (Node)));
    end Print_Integer_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Pixel_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Pixel_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      --  TODO Вывод значения.
+   end Print_Pixel_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Pixmap_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Pixmap_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      --  TODO Вывод значения.
+   end Print_Pixmap_Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -343,6 +554,60 @@ package body Model.Debug is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Print_Screen_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Screen_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      --  TODO Вывод значения.
+   end Print_Screen_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Translation_Data_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Translation_Data_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      --  TODO Вывод значения.
+   end Print_Translation_Data_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Print_Widget_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -401,6 +666,53 @@ package body Model.Debug is
          Print (File, Children (Node), Offset + Indent);
       end if;
    end Print_Widget_Instance;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Widget_Reference_Resource_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Widget_Reference_Resource_Type
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Name (Node) /= Null_Name then
+         Put (File, " '" & Name_Image (Node) & ''');
+      end if;
+
+      Put (File, " (" & Internal_Name_Image (Node) & ')');
+   end Print_Widget_Reference_Resource_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Widget_Reference_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Widget_Reference_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      --  TODO Вывод значения.
+   end Print_Widget_Reference_Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

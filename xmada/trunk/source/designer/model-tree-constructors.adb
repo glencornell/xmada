@@ -395,6 +395,25 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Widget_Reference_Resource_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Widget_Reference_Resource_Type return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind               => Node_Widget_Reference_Resource_Type,
+         Parent             => Null_Node,
+         List               => Null_List,
+         Previous           => Null_Node,
+         Next               => Null_Node,
+         WRRT_Name          => Null_Name,
+         WRRT_Internal_Name => Null_Name));
+
+      return Node_Table.Last;
+   end Create_Widget_Reference_Resource_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Widget_Reference_Resource_Value
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -409,7 +428,8 @@ package body Model.Tree.Constructors is
          WRRV_Resource_Specification  => Null_Node,
          WRRV_Resource_Value          => Null_Node,
          WRRV_Is_Resource_Class_Value => False,
-         WRRV_Is_Hardcoded            => False));
+         WRRV_Is_Hardcoded            => False,
+         WRRV_Is_Fallback             => False));
 
       return Node_Table.Last;
    end Create_Widget_Reference_Resource_Value;

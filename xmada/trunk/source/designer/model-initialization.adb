@@ -1624,12 +1624,10 @@ package body Model.Initialization is
       --  Widget reference
 
       Xt_Motif_Widget_Reference_Resource_Type :=
-        Create_Predefined_Resource_Type;
+        Create_Widget_Reference_Resource_Type;
       Set_Name (Xt_Motif_Widget_Reference_Resource_Type, Enter ("XmRWidget"));
       Set_Internal_Name
        (Xt_Motif_Widget_Reference_Resource_Type, Enter ("Widget"));
-      Set_Type_Kind
-       (Xt_Motif_Widget_Reference_Resource_Type, Type_Widget_Reference);
 
 --      Xt_Motif__Resource_Type := Create_Predefined_Resource_Type;
 --      Set_Name (Xt_Motif__Resource_Type, Enter ("XtR"));
@@ -1694,13 +1692,11 @@ package body Model.Initialization is
       --  Menu Widget reference
 
       Xt_Motif_Menu_Widget_Reference_Resource_Type :=
-        Create_Predefined_Resource_Type;
+        Create_Widget_Reference_Resource_Type;
       Set_Name
        (Xt_Motif_Menu_Widget_Reference_Resource_Type, Enter ("XmRMenuWidget"));
       Set_Internal_Name
        (Xt_Motif_Menu_Widget_Reference_Resource_Type, Enter ("MenuWidget"));
-      Set_Type_Kind
-       (Xt_Motif_Menu_Widget_Reference_Resource_Type, Type_Widget_Reference);
 
       --  Формирование списка предопределенных типов ресурсов.
 

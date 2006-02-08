@@ -81,7 +81,13 @@ exception
       --  При обнаружении любых необработанных исключений производим попытку
       --  сохранения текущей модели в специальном файле.
 
-      Designer.Operations.Save_Project ("autosave.xmada");
+      begin
+         Designer.Operations.Save_Project ("autosave.xmada");
+
+      exception
+         when others =>
+            null;
+      end;
 
       raise;
 end Designer.Driver;

@@ -165,19 +165,23 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Enumeration_Value_Specification
-          or else Node_Kind (Node) = Node_Enumerated_Resource_Type
-          or else Node_Kind (Node) = Node_Predefined_Resource_Type);
+       (Node_Kind (Node) = Node_Enumerated_Resource_Type
+          or else Node_Kind (Node) = Node_Enumeration_Value_Specification
+          or else Node_Kind (Node) = Node_Predefined_Resource_Type
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
 
       case Node_Kind (Node) is
+         when Node_Enumerated_Resource_Type =>
+            return Node_Table.Table (Node).ERT_Internal_Name;
+
          when Node_Enumeration_Value_Specification =>
             return Node_Table.Table (Node).EVS_Internal_Name;
 
          when Node_Predefined_Resource_Type =>
             return Node_Table.Table (Node).PRT_Internal_Name;
 
-         when Node_Enumerated_Resource_Type =>
-            return Node_Table.Table (Node).ERT_Internal_Name;
+         when Node_Widget_Reference_Resource_Type =>
+            return Node_Table.Table (Node).WRRT_Internal_Name;
 
          when others =>
             raise Program_Error;
@@ -273,16 +277,40 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+       (Node_Kind (Node) = Node_Boolean_Resource_Value
+          or else Node_Kind (Node) = Node_Colormap_Resource_Value
+          or else Node_Kind (Node) = Node_Enumeration_Resource_Value
           or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Pixel_Resource_Value
+          or else Node_Kind (Node) = Node_Pixmap_Resource_Value
+          or else Node_Kind (Node) = Node_Screen_Resource_Value
+          or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
 
       case Node_Kind (Node) is
+         when Node_Boolean_Resource_Value =>
+            return Node_Table.Table (Node).BRV_Is_Resource_Class_Value;
+
+         when Node_Colormap_Resource_Value =>
+            return Node_Table.Table (Node).CRV_Is_Resource_Class_Value;
+
          when Node_Enumeration_Resource_Value =>
             return Node_Table.Table (Node).ERV_Is_Resource_Class_Value;
 
          when Node_Integer_Resource_Value =>
             return Node_Table.Table (Node).IRV_Is_Resource_Class_Value;
+
+         when Node_Pixel_Resource_Value =>
+            return Node_Table.Table (Node).PRV_Is_Resource_Class_Value;
+
+         when Node_Pixmap_Resource_Value =>
+            return Node_Table.Table (Node).PMRV_Is_Resource_Class_Value;
+
+         when Node_Screen_Resource_Value =>
+            return Node_Table.Table (Node).SRV_Is_Resource_Class_Value;
+
+         when Node_Translation_Data_Resource_Value =>
+            return Node_Table.Table (Node).TRV_Is_Resource_Class_Value;
 
          when Node_Widget_Reference_Resource_Value =>
             return Node_Table.Table (Node).WRRV_Is_Resource_Class_Value;
@@ -307,7 +335,8 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Project
           or else Node_Kind (Node) = Node_Widget_Class
           or else Node_Kind (Node) = Node_Widget_Instance
-          or else Node_Kind (Node) = Node_Predefined_Resource_Type);
+          or else Node_Kind (Node) = Node_Predefined_Resource_Type
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
 
       case Node_Kind (Node) is
          when Node_Component_Class =>
@@ -330,6 +359,9 @@ package body Model.Tree is
 
          when Node_Widget_Instance =>
             return Node_Table.Table (Node).WI_Name;
+
+         when Node_Widget_Reference_Resource_Type =>
+            return Node_Table.Table (Node).WRRT_Name;
 
          when others =>
             raise Program_Error;
@@ -679,7 +711,8 @@ package body Model.Tree is
       pragma Assert
        (Node_Kind (Node) = Node_Enumeration_Value_Specification
           or else Node_Kind (Node) = Node_Predefined_Resource_Type
-          or else Node_Kind (Node) = Node_Enumerated_Resource_Type);
+          or else Node_Kind (Node) = Node_Enumerated_Resource_Type
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
 
       case Node_Kind (Node) is
          when Node_Enumeration_Value_Specification =>
@@ -690,6 +723,9 @@ package body Model.Tree is
 
          when Node_Enumerated_Resource_Type =>
             Node_Table.Table (Node).ERT_Internal_Name := Value;
+
+         when Node_Widget_Reference_Resource_Type =>
+            Node_Table.Table (Node).WRRT_Internal_Name := Value;
 
          when others =>
             raise Program_Error;
@@ -825,7 +861,8 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Project
           or else Node_Kind (Node) = Node_Component_Class
           or else Node_Kind (Node) = Node_Widget_Class
-          or else Node_Kind (Node) = Node_Widget_Instance);
+          or else Node_Kind (Node) = Node_Widget_Instance
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
 
       case Node_Kind (Node) is
          when Node_Enumeration_Value_Specification =>
@@ -848,6 +885,9 @@ package body Model.Tree is
 
          when Node_Widget_Instance =>
             Node_Table.Table (Node).WI_Name := Value;
+
+         when Node_Widget_Reference_Resource_Type =>
+            Node_Table.Table (Node).WRRT_Name := Value;
 
          when others =>
             raise Program_Error;

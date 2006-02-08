@@ -289,13 +289,6 @@ package body Designer.Visual_Editor is
                                Interfaces.C.Strings.Null_Ptr,
                                0);
 
-                        when Type_Widget_Reference =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_C_Int,
-                               Interfaces.C.Strings.Null_Ptr,
-                               0);
-
                         when Type_Colormap =>
                            Annotation_Table.Table (Node).Resources.Values
                             (Current) :=
@@ -315,7 +308,18 @@ package body Designer.Visual_Editor is
                      end case;
 
                   when Node_Enumerated_Resource_Type =>
-                     null;
+                     Annotation_Table.Table (Node).Resources.Values
+                      (Current) :=
+                        (Value_C_Int,
+                         Interfaces.C.Strings.Null_Ptr,
+                         0);
+
+                  when Node_Widget_Reference_Resource_Type =>
+                     Annotation_Table.Table (Node).Resources.Values
+                      (Current) :=
+                        (Value_C_Int,
+                         Interfaces.C.Strings.Null_Ptr,
+                         0);
 
                   when others =>
                      raise Program_Error;
@@ -343,6 +347,8 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
+      pragma Unreferenced (Node);
+
    begin
       null;
    end Delete_Item;
@@ -450,20 +456,19 @@ package body Designer.Visual_Editor is
                            (Current).Name,
                           Xt_Arg_Val (0));
 
-                     when Type_Widget_Reference =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Xt_Arg_Val (0));
-
                      when others =>
                         raise Program_Error;
                  end case;
 
                when Node_Enumerated_Resource_Type =>
                   null;
+
+               when Node_Widget_Reference_Resource_Type =>
+                  Xt_Set_Arg
+                   (Annotation_Table.Table (Node).Resources.Args (Current),
+                    Annotation_Table.Table (Node).Resources.Values
+                     (Current).Name,
+                    Xt_Arg_Val (0));
 
                when others =>
                   raise Program_Error;
@@ -533,14 +538,14 @@ package body Designer.Visual_Editor is
                      when Type_Pixmap =>
                         null;
 
-                     when Type_Widget_Reference =>
-                        null;
-
                      when others =>
                         raise Program_Error;
                  end case;
 
                when Node_Enumerated_Resource_Type =>
+                  null;
+
+               when Node_Widget_Reference_Resource_Type =>
                   null;
 
                when others =>
@@ -616,9 +621,6 @@ package body Designer.Visual_Editor is
                            when Type_Position | Type_Dimension | Type_C_Int =>
                               Value := Create_Integer_Resource_Value;
 
-                           when Type_Widget_Reference =>
-                              Value := Create_Widget_Reference_Resource_Value;
-
                            when Type_Pixel =>
                               Value := Create_Pixel_Resource_Value;
 
@@ -643,6 +645,9 @@ package body Designer.Visual_Editor is
 
                      when Node_Enumerated_Resource_Type =>
                         Value := Create_Enumeration_Resource_Value;
+
+                     when Node_Widget_Reference_Resource_Type =>
+                        Value := Create_Widget_Reference_Resource_Value;
 
                      when others =>
                         raise Program_Error;
@@ -681,16 +686,15 @@ package body Designer.Visual_Editor is
                               =>
                                  Value := Create_Integer_Resource_Value;
 
-                              when Type_Widget_Reference =>
-                                 Value :=
-                                   Create_Widget_Reference_Resource_Value;
-
                               when others =>
                                  raise Program_Error;
                            end case;
 
                         when Node_Enumerated_Resource_Type =>
                            Value := Create_Enumeration_Resource_Value;
+
+                        when Node_Widget_Reference_Resource_Type =>
+                           Value := Create_Widget_Reference_Resource_Value;
 
                         when others =>
                            raise Program_Error;

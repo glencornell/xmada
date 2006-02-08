@@ -67,13 +67,22 @@ package body Model.Debug.Designer is
    begin
       case Node_Kind (Node) is
          when Node_Application
+           | Node_Boolean_Resource_Value
+           | Node_Colormap_Resource_Value
            | Node_Component_Class
            | Node_Enumerated_Resource_Type
+           | Node_Enumeration_Resource_Value
            | Node_Enumeration_Value_Specification
            | Node_Integer_Resource_Value
+           | Node_Pixel_Resource_Value
+           | Node_Pixmap_Resource_Value
            | Node_Predefined_Resource_Type
            | Node_Project
            | Node_Resource_Specification
+           | Node_Screen_Resource_Value
+           | Node_Translation_Data_Resource_Value
+           | Node_Widget_Reference_Resource_Type
+           | Node_Widget_Reference_Resource_Value
            | Node_Widget_Set
          =>
             null;
