@@ -712,18 +712,24 @@ package body Designer.Visual_Editor is
                   --  список ресурсов извлекается у класса родительского
                   --  виджета.
 
-                  List := New_List;
-                  Aux :=
-                    First (Constraint_Resources (Class (Parent_Node (Node))));
-                  --  XXX  Простейший случай - нет автоматически создаваемого
-                  --  родительского виджета.
+                  if Constraint_Resources (Class (Parent_Node (Node)))
+                       /= Null_List
+                  then
+                     List := New_List;
+                     Aux :=
+                       First
+                        (Constraint_Resources (Class (Parent_Node (Node))));
+                     --  XXX  Простейший случай - нет автоматически
+                     --  создаваемого родительского виджета.
 
-                  while Aux /= Null_Node loop
-                     Append (List, Create_Corresponding_Resource_Value (Aux));
-                     Aux := Next (Aux);
-                  end loop;
+                     while Aux /= Null_Node loop
+                        Append
+                         (List, Create_Corresponding_Resource_Value (Aux));
+                        Aux := Next (Aux);
+                     end loop;
 
-                  Set_All_Constraint_Resources (Node, List);
+                     Set_All_Constraint_Resources (Node, List);
+                  end if;
                end if;
             end;
 
