@@ -50,6 +50,7 @@ with XML_Tools.Strings;
 with Model.Names;
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
+with Model.Utilities;
 
 with Model.Xt_Motif;
 
@@ -60,6 +61,7 @@ package body Model.Tools is
    use Model.Tree;
    use Model.Tree.Constructors;
    use Model.Tree.Lists;
+   use Model.Utilities;
 
    Application_Tag         : XML_Tools.Name_Id;
    Component_Class_Tag     : XML_Tools.Name_Id;
@@ -69,16 +71,13 @@ package body Model.Tools is
    Widget_Instance_Tag     : XML_Tools.Name_Id;
 
    Class_Name_Attr     : XML_Tools.Name_Id;
+   Is_Class_Attr       : XML_Tools.Name_Id;
+   Is_Hardcoded_Attr   : XML_Tools.Name_Id;
    Is_Managed_Attr     : XML_Tools.Name_Id;
    Name_Attr           : XML_Tools.Name_Id;
-   Type_Attr           : XML_Tools.Name_Id;
 
    No_Value            : XML_Tools.String_Id;
    Yes_Value           : XML_Tools.String_Id;
-
-   Enumeration_Resource_Value_Value      : XML_Tools.String_Id;
-   Integer_Resource_Value_Value          : XML_Tools.String_Id;
-   Widget_Reference_Resource_Value_Value : XML_Tools.String_Id;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -143,19 +142,13 @@ package body Model.Tools is
       Widget_Instance_Tag     := XML_Tools.Names.Store ("WidgetInstance");
 
       Class_Name_Attr         := XML_Tools.Names.Store ("classname");
+      Is_Class_Attr           := XML_Tools.Names.Store ("isclass");
+      Is_Hardcoded_Attr       := XML_Tools.Names.Store ("ishardcoded");
       Is_Managed_Attr         := XML_Tools.Names.Store ("ismanaged");
       Name_Attr               := XML_Tools.Names.Store ("name");
-      Type_Attr               := XML_Tools.Names.Store ("type");
 
       No_Value                := XML_Tools.Strings.Store ("no");
       Yes_Value               := XML_Tools.Strings.Store ("yes");
-
-      Enumeration_Resource_Value_Value
-        := XML_Tools.Strings.Store ("EnumerationResourceValue");
-      Integer_Resource_Value_Value
-        := XML_Tools.Strings.Store ("IntegerResourceValue");
-      Widget_Reference_Resource_Value_Value
-        := XML_Tools.Strings.Store ("WidgetReferenceResourceValue");
    end Init_XML_Tools;
 
    ---------------------------------------------------------------------------
@@ -276,10 +269,13 @@ package body Model.Tools is
                                  Parent        : in Element_Id;
                                  Is_Constraint : in Boolean)
       is
-         Tag           : Element_Id;
-         Resource_Type : String_Id;
+         Tag                : Element_Id;
+         Specification_Name : constant Name_Id
+           := Internal_Resource_Name (Resource_Specification (Resource));
 
       begin
+         --  Error_Message (Node_Kinds'Wide_Image (Node_Kind (Resource)));
+
          if Is_Constraint then
             Tag := Elements.Create_Tag (Parent, Constraint_Resource_Tag);
 
@@ -287,23 +283,26 @@ package body Model.Tools is
             Tag := Elements.Create_Tag (Parent, Resource_Tag);
          end if;
 
-         case Node_Kind (Resource) is
-            when Node_Enumeration_Resource_Value =>
-               Resource_Type := Enumeration_Resource_Value_Value;
+         Attributes.Create_Attribute
+          (Tag,
+           Name_Attr,
+           XML_Tools.Strings.Store
+            (Model.Names.Image (Specification_Name)));
 
-            when Node_Integer_Resource_Value =>
-               Resource_Type := Integer_Resource_Value_Value;
+         if Is_Resource_Class_Value (Resource) then
+            Attributes.Create_Attribute (Tag, Is_Class_Attr, Yes_Value);
 
-            when Node_Widget_Reference_Resource_Value =>
-               Resource_Type := Widget_Reference_Resource_Value_Value;
+         else
+            Attributes.Create_Attribute (Tag, Is_Class_Attr, No_Value);
+         end if;
 
-            when others =>
-               Error_Message ("Unhandled resource type: "
-                 & Node_Kinds'Wide_Image (Node_Kind (Resource)));
-               raise Program_Error;
-         end case;
+         if Is_Hardcoded (Resource) then
+            Attributes.Create_Attribute (Tag, Is_Hardcoded_Attr, Yes_Value);
 
-         Attributes.Create_Attribute (Tag, Type_Attr, Resource_Type);
+         else
+            Attributes.Create_Attribute (Tag, Is_Hardcoded_Attr, No_Value);
+         end if;
+
       end Resource_To_XML;
 
       ------------------------------------------------------------------------
@@ -592,50 +591,96 @@ package body Model.Tools is
       procedure XML_To_Widget_Instance (Tag             : in Element_Id;
                                         Widget_Instance : in Node_Id)
       is
-         function Create_Resource (Attr : in Attribute_Id) return Node_Id;
          function Find (Name : in XML_Tools.String_Id) return Node_Id;
+         function Find_Specification (Attr : in Attribute_Id) return Node_Id;
          function Get_Project_By_Node (N : in Node_Id) return Node_Id;
 
-         function Create_Resource (Attr : in Attribute_Id) return Node_Id is
+         function Find_Specification (Attr : in Attribute_Id)
+           return Node_Id
+         is
             A   : Attribute_Id := Attr;
             Res : Node_Id := Null_Node;
 
          begin
+            --  Поиск атрибута name.
+
             while A /= Null_Attribute_Id loop
-               if Attributes.Name (A) = Type_Attr then
-                  declare
-                     V : constant String_Id := Attributes.Value (A);
-
-                  begin
-                     if V = Widget_Reference_Resource_Value_Value then
-                        Res := Create_Widget_Reference_Resource_Value;
-
-                     elsif V = Integer_Resource_Value_Value then
-                        Res := Create_Integer_Resource_Value;
-
-                     elsif V = Enumeration_Resource_Value_Value then
-                        Res := Create_Enumeration_Resource_Value;
-
-                     else
-                        Error_Message ("Unknown resource type: "
-                          & XML_Tools.Strings.Image (V));
-                        raise Program_Error;
-
-                     end if;
-                  end;
-               end if;
+               exit when Attributes.Name (A) = Name_Attr;
 
                A := Attributes.Next (A);
             end loop;
 
+            if A = Null_Attribute_Id then
+               raise Program_Error;
+               --  Атрибут name не найден.
+
+            end if;
+
+            --  Поиск соответствующей спецификации ресурса.
+
+            declare
+               Name         : constant Name_Id
+                 := Model.Names.Enter
+                     (XML_Tools.Strings.Image (Attributes.Value (A)));
+               Project      : constant Node_Id
+                 := Get_Project_By_Node (Widget_Instance);
+               Widget_Set   : Node_Id;
+               Widget_Class : Node_Id := Null_Node;
+
+            begin
+               pragma Assert (Imported_Widget_Sets (Project) /= Null_List);
+               Widget_Set := First (Imported_Widget_Sets (Project));
+
+               while Widget_Set /= Null_Node loop
+                  pragma Assert (Widget_Classes (Widget_Set) /= Null_List);
+                  Widget_Class := First (Widget_Classes (Widget_Set));
+
+                  while Widget_Class /= Null_Node loop
+                     --  Поиск в ресурсах.
+
+                     if Resources (Widget_Class) /= Null_List then
+                        Res := First (Resources (Widget_Class));
+
+                        while Res /= Null_Node loop
+                           exit when Internal_Resource_Name (Res) = Name;
+
+                           Res := Next (Res);
+                        end loop;
+
+                        exit when Res /= Null_Node;
+                     end if;
+
+                     --  Поиск в ограничениях.
+
+                     if Constraint_Resources (Widget_Class) /= Null_List then
+                        Res := First (Constraint_Resources (Widget_Class));
+
+                        while Res /= Null_Node loop
+                           exit when Internal_Resource_Name (Res) = Name;
+
+                           Res := Next (Res);
+                        end loop;
+
+                        exit when Res /= Null_Node;
+                     end if;
+
+                     Widget_Class := Next (Widget_Class);
+                  end loop;
+
+                  exit when Res /= Null_Node;
+
+                  Widget_Set := Next (Widget_Set);
+               end loop;
+            end;
+
             if Res = Null_Node then
                raise Program_Error;
-               --  Атрибут type не найден.
+               --  Спецификация ресурса не найдена.
 
             end if;
 
             return Res;
-         end Create_Resource;
+         end Find_Specification;
 
          function Find (Name : in XML_Tools.String_Id) return Model.Node_Id is
             Classname  : constant Model.Name_Id
@@ -745,20 +790,24 @@ package body Model.Tools is
                elsif Elements.Name (Child) = Constraint_Resource_Tag then
                   --  ConstraintResource.
 
-                  declare
-                     Resource : constant Node_Id
-                       := Create_Resource (Elements.Attribute (Child));
+                  null;
+--                declare
+--                   Resource : constant Node_Id
+--                     := Create_Resource (Elements.Attribute (Child));
 
-                  begin
-                     Append (Constraint_Resources, Resource);
-                  end;
+--                begin
+--                   Append (Constraint_Resources, Resource);
+--                end;
 
                elsif Elements.Name (Child) = Resource_Tag then
                   --  Resource.
 
                   declare
-                     Resource : constant Node_Id
-                       := Create_Resource (Elements.Attribute (Child));
+                     Specification : constant Node_Id
+                       := Find_Specification (Elements.Attribute (Child));
+                     Resource      : constant Node_Id
+                       := Create_Corresponding_Resource_Value
+                           (Specification);
 
                   begin
                      Append (Resources, Resource);
