@@ -787,6 +787,7 @@ package body Model.Tree is
       pragma Assert
        (Node_Kind (Node) = Node_Enumeration_Resource_Value
           or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
 
       case Node_Kind (Node) is
@@ -795,6 +796,9 @@ package body Model.Tree is
 
          when Node_Integer_Resource_Value =>
             Node_Table.Table (Node).IRV_Is_Hardcoded := Value;
+
+         when Node_Translation_Data_Resource_Value =>
+            Node_Table.Table (Node).TRV_Is_Hardcoded := Value;
 
          when Node_Widget_Reference_Resource_Value =>
             Node_Table.Table (Node).WRRV_Is_Hardcoded := Value;
@@ -843,6 +847,7 @@ package body Model.Tree is
       pragma Assert
        (Node_Kind (Node) = Node_Enumeration_Resource_Value
           or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
 
       case Node_Kind (Node) is
@@ -851,6 +856,9 @@ package body Model.Tree is
 
          when Node_Integer_Resource_Value =>
             Node_Table.Table (Node).IRV_Is_Resource_Class_Value := Value;
+
+         when Node_Translation_Data_Resource_Value =>
+            Node_Table.Table (Node).TRV_Is_Resource_Class_Value := Value;
 
          when Node_Widget_Reference_Resource_Value =>
             Node_Table.Table (Node).WRRV_Is_Resource_Class_Value := Value;
