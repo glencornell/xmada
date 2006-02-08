@@ -39,8 +39,11 @@
 with GNAT.Table;
 
 with Model.Allocations;
+with Model.Tree.Lists;
 
 package body Model.Tree.Designer is
+
+   use Model.Tree.Lists;
 
    type Annotation_Kinds is
     (Annotation_Empty,
@@ -186,6 +189,7 @@ package body Model.Tree.Designer is
       Relocate_Annotation_Table;
 
       Annotation_Table.Table (Node).All_Constraint_Resources := Value;
+      Set_Parent_Node (Value, Node);
    end Set_All_Constraint_Resources;
 
    ---------------------------------------------------------------------------
@@ -201,6 +205,7 @@ package body Model.Tree.Designer is
       Relocate_Annotation_Table;
 
       Annotation_Table.Table (Node).All_Resources := Value;
+      Set_Parent_Node (Value, Node);
    end Set_All_Resources;
 
    ---------------------------------------------------------------------------
