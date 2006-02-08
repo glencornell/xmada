@@ -200,17 +200,6 @@ package body Designer.Tree_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Destroy
-      --!    <Purpose> Подпрограмма обратного вызова,
-      --!    <Exceptions>
-      ------------------------------------------------------------------------
-      procedure On_Destroy (The_Widget : in Widget;
-                            Closure    : in Xt_Pointer;
-                            Call_Data  : in Xt_Pointer);
-      pragma Convention (C, On_Destroy);
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
       --!    <Unit> On_Select
       --!    <Purpose> Подпрограмма обратного вызова при выделении виджета.
       --!    <Exceptions>
@@ -291,34 +280,6 @@ package body Designer.Tree_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Destroy
-      --!    <ImplementationNotes>
-      ------------------------------------------------------------------------
-      procedure On_Destroy (The_Widget : in Widget;
-                            Closure    : in Xt_Pointer;
-                            Call_Data  : in Xt_Pointer)
-      is
-         pragma Unreferenced (Closure);
-         pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
-
-         Node : Xt_Arg_Val;
-         Args : Xt_Arg_List (0 .. 1);
-
-      begin
-         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
-         Xt_Get_Values (The_Widget, Args);
-
-         Annotation_Table.Table (Node_Id (Node)) :=
-          (Kind => Annotation_Empty);
-
-      exception
-         when E : others =>
-            Designer.Main_Window.Put_Exception_In_Callback ("On_Destroy", E);
-      end On_Destroy;
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
       --!    <Unit> On_Select
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -347,7 +308,6 @@ package body Designer.Tree_Editor is
                if Selected'Length = 1 then
                   Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
                   Xt_Get_Values (Selected (Selected'First), Args (0 .. 0));
-
                   Main_Window.Select_Item (Node_Id (Node));
 
                else
@@ -458,9 +418,6 @@ package body Designer.Tree_Editor is
 
       --  Функция будет вызвана при уничтожении виджета и предназначена для
       --  очиски элемента таблицы Annotation_Table.
-
-      Xt_Add_Callback
-        (Icon, Xm_N_Destroy_Callback, Callbacks.On_Destroy'Access);
 
       Xm_String_Free (Str);
 
@@ -599,7 +556,6 @@ package body Designer.Tree_Editor is
 
    begin
       Relocate_Annotation_Table (Node);
-
       --  Увеличение размеров таблицы (при необходимости).
 
       case Node_Kind (Node) is
