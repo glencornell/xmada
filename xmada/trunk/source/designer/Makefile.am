@@ -17,7 +17,7 @@ LIBS = -L/usr/X11R6/lib \
 	-L$(top_builddir)/source/xlib/.libs \
 	-L$(top_builddir)/source/xt/.libs \
 	-L$(top_builddir)/source/xm/.libs \
-	-lXm -lXt -lXi -lxmadaxlib -lxmadaxt -lxmadaxm
+	-lXm -lXt -lXi -lxmadaxlib -lxmadaxt -lxmadaxm -lgmem
 
 ADABFLAGS = -E
 ADALFLAGS = $(LIBS)
