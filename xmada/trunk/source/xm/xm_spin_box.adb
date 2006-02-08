@@ -86,5 +86,29 @@ package body Xm_Spin_Box is
                               Arg_List'Length);
    end Xm_Create_Spin_Box;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xm_Spin_Box_Validate_Position
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Xm_Spin_Box_Validate_Position
+    (Text_Field : in     Xt.Widget;
+     Position   : in out Xm.Xm_Spin_Box_Position;
+     Status     :    out Xm.Xm_Spin_Box_Validation_Status)
+   is
+      function XmSpinBoxValidatePosition
+       (Text_Field : in     Xt.Widget;
+        Position   : access Xm.Xm_Spin_Box_Position)
+          return Xm.Xm_Spin_Box_Validation_Status;
+      pragma Import
+              (C, XmSpinBoxValidatePosition, "XmSpinBoxValidatePosition");
+
+      Aux : aliased Xm.Xm_Spin_Box_Position := Position;
+
+   begin
+      Status :=
+        XmSpinBoxValidatePosition (Text_Field, Aux'Access);
+      Position := Aux;
+   end Xm_Spin_Box_Validate_Position;
 
 end Xm_Spin_Box;

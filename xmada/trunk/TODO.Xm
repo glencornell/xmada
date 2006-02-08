@@ -367,7 +367,7 @@ Xm Functions
    Xm_Simple_Spin_Box_Add_Item
    Xm_Simple_Spin_Box_Delete_Pos
    Xm_Simple_Spin_Box_Set_Item
-   Xm_Spin_Box_Validate_Position
+ + Xm_Spin_Box_Validate_Position                 Xm_Spin_Box
  + Xm_String_Baseline                            Xm.Strings
  + Xm_String_Byte_Compare                        Xm.Strings
    Xm_String_Byte_Stream_Length

@@ -678,6 +678,13 @@ package Xm is
       Minor_Tab_Widget   : Xt.Widget;
    end record;
 
+   type Xm_Spin_Box_Validation_Status is (Xm_Valid_Value,
+                                          Xm_Current_Value,
+                                          Xm_Maximum_Value,
+                                          Xm_Minimum_Value,
+                                          Xm_Increment_Value);
+
+   subtype Xm_Spin_Box_Position is Interfaces.C.int;
 
    type Xm_List_Position_Count is
      new Interfaces.C.int range 0 .. Interfaces.C.int'Last;
@@ -1664,6 +1671,9 @@ private
    for Xm_Spin_Box_Child_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Spin_Box_Child_Type use (Xm_String_Child  => 2,
                                    Xm_Numeric       => 3);
+
+   pragma Convention (C, Xm_Spin_Box_Validation_Status);
+   for Xm_Spin_Box_Validation_Status'Size use Interfaces.C.int'Size;
 
    pragma Convention (C, Xm_String_Component_Type);
    for Xm_String_Component_Type'Size use Interfaces.C.unsigned_char'Size;

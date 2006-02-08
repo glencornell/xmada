@@ -38,6 +38,7 @@
 ------------------------------------------------------------------------------
 with Xt.Ancillary_Types;
 
+with Xm;
 with Xm_Manager;
 
 package Xm_Spin_Box is
@@ -64,6 +65,12 @@ package Xm_Spin_Box is
        := Xt.Ancillary_Types.Null_Xt_Arg_List)
        return Xm_Spin_Box_Widget;
 
+   --
+
+   procedure Xm_Spin_Box_Validate_Position
+    (Text_Field : in     Xt.Widget;
+     Position   : in out Xm.Xm_Spin_Box_Position;
+     Status     :    out Xm.Xm_Spin_Box_Validation_Status);
 
 private
 
