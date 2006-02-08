@@ -37,6 +37,7 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
+with Ada.Unchecked_Deallocation;
 with Interfaces.C.Strings;
 
 with GNAT.Table;
@@ -722,8 +723,40 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Reinitialize is
+
+      procedure Free is
+        new Ada.Unchecked_Deallocation
+             (Resource_Value_Set, Resource_Value_Set_Access);
+
    begin
-      null;
+      for J in Annotation_Table.First .. Annotation_Table.Last loop
+         case Annotation_Table.Table (J).Kind is
+            when Annotation_Empty =>
+               null;
+
+            when Annotation_Widget_Instance =>
+               if Annotation_Table.Table (J).Resources /= null then
+                  for K in Annotation_Table.Table (J).Resources.Values'Range
+                  loop
+                     Interfaces.C.Strings.Free
+                      (Annotation_Table.Table (J).Resources.Values (K).Name);
+                  end loop;
+               end if;
+
+               if Annotation_Table.Table (J).Constraints /= null then
+                  for K in Annotation_Table.Table (J).Constraints.Values'Range
+                  loop
+                     Interfaces.C.Strings.Free
+                      (Annotation_Table.Table (J).Constraints.Values (K).Name);
+                  end loop;
+               end if;
+
+               Free (Annotation_Table.Table (J).Resources);
+               Free (Annotation_Table.Table (J).Constraints);
+         end case;
+      end loop;
+
+      Annotation_Table.Init;
    end Reinitialize;
 
    ---------------------------------------------------------------------------
