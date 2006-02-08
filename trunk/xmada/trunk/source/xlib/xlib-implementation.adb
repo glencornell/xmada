@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rost.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rost.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -70,6 +70,19 @@ package body Xlib.Implementation is
       end if;
    end Check;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Check
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Check (The_String : in X_String_Pointer) is
+      use type X_String_Pointer;
+
+   begin
+      if The_String = Null_X_String_Pointer then
+         raise Dereference_Error;
+      end if;
+   end Check;
 
    function Generic_Terminated_To_Element_List (Pointer : in Element_Pointer)
      return Element_List

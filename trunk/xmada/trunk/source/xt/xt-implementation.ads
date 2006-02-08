@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rost.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rost.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -54,6 +54,9 @@ package Xt.Implementation is
 
 
    procedure Check (The_GC : in Xlib.Graphic_Context)
+     renames Xlib.Implementation.Check;
+
+   procedure Check (The_String : in Xt_String)
      renames Xlib.Implementation.Check;
 
 

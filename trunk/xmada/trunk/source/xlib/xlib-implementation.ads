@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rost.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rost.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -46,6 +46,7 @@ package Xlib.Implementation is
 
    procedure Check (The_GC : in Graphic_Context);
 
+   procedure Check (The_String : in X_String_Pointer);
 
    generic
       type Element         is private;

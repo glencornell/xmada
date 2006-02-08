@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rost.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rost.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -38,6 +38,7 @@
 ------------------------------------------------------------------------------
 with System;
 
+with Xlib.Resource_Manager;
 with Xt.Ancillary_Types;
 
 package Xt.Resource_Management is
@@ -140,6 +141,21 @@ package Xt.Resource_Management is
      From_Value  : in String;
      To_Type     : in Xt_Resource_Type_String);
 
+   function Xt_Convert_And_Store
+    (The_Widget : in Widget;
+     From_Type  : in Xt_Resource_Type_String;
+     From       : in Xlib.Resource_Manager.Xrm_Value;
+     To_Type    : in Xt_Resource_Type_String;
+     To         : in Xlib.Resource_Manager.Xrm_Value)
+       return Boolean;
+
+   function Xt_Convert_And_Store
+    (The_Widget : in Widget;
+     From_Type  : in String;
+     From       : in Xlib.Resource_Manager.Xrm_Value;
+     To_Type    : in String;
+     To         : in Xlib.Resource_Manager.Xrm_Value)
+       return Boolean;
 
    --  additional functional form
    function Xt_Get_Resource_List (The_Widget_Class : in Widget_Class)
