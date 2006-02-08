@@ -203,10 +203,14 @@ package body Designer.Properties_Editor is
 
       for J in First .. Node loop
          case Node_Kind (J) is
-            when Node_Component_Class
-              | Node_Widget_Instance =>
+            when Node_Component_Class =>
                Annotation_Table.Table (J) :=
                 (Kind              => Annotation_Component_Class,
+                 Properties_Editor => null);
+
+            when Node_Widget_Instance =>
+               Annotation_Table.Table (J) :=
+                (Kind              => Annotation_Widget_Instance,
                  Properties_Editor => null);
 
             when others =>

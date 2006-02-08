@@ -38,6 +38,7 @@
 ------------------------------------------------------------------------------
 with GNAT.Table;
 with Xt.Ancillary_Types;
+with Xt.Callbacks;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
@@ -52,6 +53,7 @@ with Xm_String_Defs;
 with Xm_Toggle_Button_Gadget;
 with Xm_Row_Column;
 
+with Designer.Main_Window;
 with Designer.Visual_Editor;
 with Model.Allocations;
 with Model.Queries;
@@ -62,6 +64,7 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    use Xt;
    use Xt.Ancillary_Types;
+   use Xt.Callbacks;
    use Xt.Composite_Management;
    use Xt.Instance_Management;
    use Xt.Resource_Management;
@@ -136,6 +139,55 @@ package body Designer.Properties_Editor.Widget_Instance is
            Table_Low_Bound      => Node_Id'First + 1,
            Table_Initial        => Model.Allocations.Node_Table_Initial,
            Table_Increment      => Model.Allocations.Node_Table_Increment);
+
+   package Callbacks is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Numeric_Resource_Value_Changed
+      --!    <Purpose> Подпрограмма обратного вызова при изменении значения
+      --! spinBox-а.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Numeric_Resource_Value_Changed
+                 (The_Widget : in Widget;
+                  Closure    : in Xt_Pointer;
+                  Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Numeric_Resource_Value_Changed);
+
+   end Callbacks;
+
+   package body Callbacks is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Numeric_Resource_Value_Changed
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Numeric_Resource_Value_Changed
+                 (The_Widget : in Widget;
+                  Closure    : in Xt_Pointer;
+                  Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Node : Xt_Arg_Val;
+         Args : Xt_Arg_List (0 .. 5);
+         Data : constant Xm_Simple_Spin_Box_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         Set_Resource_Value (Node_Id (Node), Integer (Data.Position));
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Numeric_Resource_Value_Changed", E);
+      end On_Numeric_Resource_Value_Changed;
+
+   end Callbacks;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -284,10 +336,10 @@ package body Designer.Properties_Editor.Widget_Instance is
                        Xm_Create_Managed_Simple_Spin_Box (Form,
                                                           "resource_numeric",
                                                           Args (0 .. 5));
---                     Xt_Add_Callback
---                      (Annotation_Table.Table (Node).Value,
---                       Xm_N_Value_Changed,
---                       On_Numeric_Resource_Value_Changed'Access);
+                     Xt_Add_Callback
+                      (Annotation_Table.Table (Node).Value,
+                       Xm_N_Modify_Verify_Callback,
+                       Callbacks.On_Numeric_Resource_Value_Changed'Access);
 
                   when Type_Pixel =>
                      null; --  TODO реализовать.
@@ -342,6 +394,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       Result.Properties           :=
         Xm_Create_Row_Column (Result.Properties_Container,
                               "row_column");
+
       Result.Properties_Tab       :=
         Xm_Create_Managed_Push_Button_Gadget (Parent, "resources");
 
@@ -419,9 +472,9 @@ package body Designer.Properties_Editor.Widget_Instance is
       Xt_Unmanage_Child (Object.Constraints_Tab);
       Xt_Unmanage_Child (Object.Callbacks_Tab);
 
-      Xt_Unmanage_Child (Object.Properties_Container);
-      Xt_Unmanage_Child (Object.Constraints_Container);
-      Xt_Unmanage_Child (Object.Callbacks_Container);
+      Xt_Unmanage_Child (Object.Properties);
+      Xt_Unmanage_Child (Object.Constraints);
+      Xt_Unmanage_Child (Object.Callbacks);
    end Hide;
 
    ---------------------------------------------------------------------------
@@ -668,9 +721,9 @@ package body Designer.Properties_Editor.Widget_Instance is
       Xt_Manage_Child (Object.Constraints_Tab);
       Xt_Manage_Child (Object.Callbacks_Tab);
 
-      Xt_Manage_Child (Object.Properties_Container);
-      Xt_Manage_Child (Object.Constraints_Container);
-      Xt_Manage_Child (Object.Callbacks_Container);
+      Xt_Manage_Child (Object.Properties);
+      Xt_Manage_Child (Object.Constraints);
+      Xt_Manage_Child (Object.Callbacks);
 
       Xt_Set_Arg (Args (0), Xm_N_Page_Number, Page'Address);
       Xt_Get_Values (Object.Properties_Tab, Args (0 .. 0));
