@@ -205,14 +205,24 @@ package body Designer.Visual_Editor is
       procedure Create_Widget (Node : in Node_Id) is
          Aux     : Node_Id;
          Current : Natural := 0;
+         Parent  : Widget;
 
       begin
          Relocate_Annotation_Table (Node);
 
+         if Node_Kind (Parent_Node (Node)) = Node_Component_Class then
+            Parent := Drawing_Area;
+
+         else
+            Parent := Annotation_Table.Table (Parent_Node (Node)).Widget;
+         end if;
+
+         --  TODO Необходимо подготовить соответствующий список значений
+         --  ресурсов на основании атрибутов Resources и Constraints.
+
          Annotation_Table.Table (Node).Widget :=
            Convenience_Create_Function (Class (Node))
-            (Drawing_Area, "form", Null_Xt_Arg_List);
-         Xt_Manage_Child (Annotation_Table.Table (Node).Widget);
+            (Parent, "form", Null_Xt_Arg_List);
 
          if All_Resources (Node) /= Null_List then
             Annotation_Table.Table (Node).Resources :=
@@ -337,15 +347,22 @@ package body Designer.Visual_Editor is
                Current := Current + 1;
             end loop;
          end if;
+
+         if Children (Node) /= Null_List then
+            Aux := First (Children (Node));
+
+            while Aux /= Null_Node loop
+               Create_Widget (Aux);
+               Aux := Next (Aux);
+            end loop;
+         end if;
+
+         Xt_Manage_Child (Annotation_Table.Table (Node).Widget);
       end Create_Widget;
 
    begin
       if Root (Node) /= Null_Node then
          Create_Widget (Root (Node));
-
-         --  XXX Временно!!!
-         Get_Properties (Root (Node));
-         --  XXX Временно!!!
       end if;
    end Create_Component_Class_Widgets;
 
