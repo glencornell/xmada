@@ -68,6 +68,7 @@ with Xm_String_Defs;
 with Xm_Text;
 
 with Designer.Operations.Debug;
+with Designer.Palette;
 with Designer.Properties_Editor;
 with Designer.Tree_Editor;
 with Designer.Visual_Editor;
@@ -485,6 +486,7 @@ package body Designer.Main_Window is
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
    begin
+      Designer.Palette.Delete_Item (Node);
       Designer.Tree_Editor.Delete_Item (Node);
       Designer.Visual_Editor.Delete_Item (Node);
       Designer.Properties_Editor.Delete_Item (Node);
@@ -552,6 +554,8 @@ package body Designer.Main_Window is
 
       Button      := Xt_Name_To_Widget (Palette, "PageScroller");
       Xt_Unmanage_Child (Button);
+
+      Designer.Palette.Initialize (Palette);
 
       --
       --  Создание главного меню.
@@ -769,6 +773,7 @@ package body Designer.Main_Window is
    ---------------------------------------------------------------------------
    procedure Insert_Item (Node : in Model.Node_Id) is
    begin
+      Designer.Palette.Insert_Item (Node);
       Designer.Tree_Editor.Insert_Item (Node);
       Designer.Visual_Editor.Insert_Item (Node);
       Designer.Properties_Editor.Insert_Item (Node);
@@ -822,6 +827,7 @@ package body Designer.Main_Window is
    ---------------------------------------------------------------------------
    procedure Reinitialize is
    begin
+      Designer.Palette.Reinitialize;
       Designer.Tree_Editor.Reinitialize;
       Designer.Visual_Editor.Reinitialize;
       Designer.Properties_Editor.Reinitialize;
@@ -834,6 +840,7 @@ package body Designer.Main_Window is
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
    begin
+      Designer.Palette.Select_Item (Node);
       Designer.Tree_Editor.Select_Item (Node);
       Designer.Visual_Editor.Select_Item (Node);
       Designer.Properties_Editor.Select_Item (Node);
@@ -846,6 +853,7 @@ package body Designer.Main_Window is
    ---------------------------------------------------------------------------
    procedure Update_Item (Node : in Model.Node_Id) is
    begin
+      Designer.Palette.Update_Item (Node);
       Designer.Tree_Editor.Update_Item (Node);
       Designer.Visual_Editor.Update_Item (Node);
       Designer.Properties_Editor.Update_Item (Node);
