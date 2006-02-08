@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rost.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rost.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -132,6 +132,70 @@ package body Xt.Resource_Management is
       end if;
    end Xt_App_Set_Type_Converter;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xt_Convert_And_Store
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Xt_Convert_And_Store
+    (The_Widget : in Widget;
+     From_Type  : in Xt_Resource_Type_String;
+     From       : in Xlib.Resource_Manager.Xrm_Value;
+     To_Type    : in Xt_Resource_Type_String;
+     To         : in Xlib.Resource_Manager.Xrm_Value)
+       return Boolean
+   is
+      function XtConvertAndStore
+       (The_Widget : in Widget;
+        From_Type  : in Xt_Resource_Type_String;
+        From       : in Xlib.Resource_Manager.Xrm_Value;
+        To_Type    : in Xt_Resource_Type_String;
+        To         : in Xlib.Resource_Manager.Xrm_Value)
+          return Xt_Boolean;
+      pragma Import (C, XtConvertAndStore, "XtConvertAndStore");
+
+   begin
+      Check (The_Widget);
+      Check (From_Type);
+      Check (To_Type);
+
+      return
+        To_Boolean
+         (XtConvertAndStore (The_Widget, From_Type, From, To_Type, To));
+   end Xt_Convert_And_Store;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xt_Convert_And_Store
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Xt_Convert_And_Store
+    (The_Widget : in Widget;
+     From_Type  : in String;
+     From       : in Xlib.Resource_Manager.Xrm_Value;
+     To_Type    : in String;
+     To         : in Xlib.Resource_Manager.Xrm_Value)
+       return Boolean
+   is
+      function XtConvertAndStore
+       (The_Widget : in Widget;
+        From_Type  : in Interfaces.C.char_array;
+        From       : in Xlib.Resource_Manager.Xrm_Value;
+        To_Type    : in Interfaces.C.char_array;
+        To         : in Xlib.Resource_Manager.Xrm_Value)
+          return Xt_Boolean;
+      pragma Import (C, XtConvertAndStore, "XtConvertAndStore");
+
+      C_From_Type : constant char_array := To_C (From_Type);
+      C_To_Type   : constant char_array := To_C (To_Type);
+
+   begin
+      Check (The_Widget);
+
+      return
+        To_Boolean
+         (XtConvertAndStore (The_Widget, C_From_Type, From, C_To_Type, To));
+   end Xt_Convert_And_Store;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

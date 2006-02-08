@@ -241,7 +241,7 @@ Xt Functions
    Xt_App_Release_Cache_Refs
    Xt_Callback_Release_Cache_Ref
    Xt_Callback_Release_Cache_Ref_List
-   Xt_Convert_And_Store
+ + Xt_Convert_And_Store                  Xt.Resource_Management
  + Xt_Get_Values                         Xt.Resource_Management
    Xt_Va_Get_Values
    Xt_Get_Subvalues
