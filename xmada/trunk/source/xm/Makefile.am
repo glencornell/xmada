@@ -973,9 +973,14 @@ xm_separator_gadget.lo: \
 	$(top_srcdir)/source/xt/xt_object.ads \
 	$(top_srcdir)/source/xt/xt_rect_obj.ads
 xm_simple_spin_box.lo: \
+	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
+	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
+	$(srcdir)/i-cwistr.ads \
+	$(srcdir)/xm.ads \
 	$(srcdir)/xm_manager.ads \
 	$(srcdir)/xm_simple_spin_box.adb \
 	$(srcdir)/xm_simple_spin_box.ads \
@@ -987,9 +992,14 @@ xm_simple_spin_box.lo: \
 	$(top_srcdir)/source/xt/xt_constraint.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_spin_box.lo: \
+	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
+	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
+	$(srcdir)/i-cwistr.ads \
+	$(srcdir)/xm.ads \
 	$(srcdir)/xm_manager.ads \
 	$(srcdir)/xm_spin_box.adb \
 	$(srcdir)/xm_spin_box.ads \
