@@ -82,19 +82,32 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Model.Tree.Designer;
    use Model.Tree.Lists;
 
-   type Annotation_Kinds is (Annotation_Integer_Resource,
-                             Annotation_Widget_Reference,
-                             Annotation_Enumerated_Resource,
-                             Annotation_Enumerated_Resource_Type,
-                             Annotation_Enumeration_Value_Specification,
-                             Annotation_Empty);
+   type Annotation_Kinds is
+    (Annotation_Empty,
+     Annotation_Boolean_Resource_Value,
+     Annotation_Colormap_Resource_Value,
+     Annotation_Enumeration_Resource_Value,
+     Annotation_Enumeration_Resource_Type,
+     Annotation_Enumeration_Value_Specification,
+     Annotation_Integer_Resource_Value,
+     Annotation_Pixel_Resource_Value,
+     Annotation_Pixmap_Resource_Value,
+     Annotation_Screen_Resource_Value,
+     Annotation_Translation_Data_Resource_Value,
+     Annotation_Widget_Reference_Resource_Value);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
       case Kind is
-         when Annotation_Widget_Reference
-           | Annotation_Integer_Resource
-           | Annotation_Enumerated_Resource
+         when Annotation_Boolean_Resource_Value
+           | Annotation_Colormap_Resource_Value
+           | Annotation_Enumeration_Resource_Value
+           | Annotation_Integer_Resource_Value
+           | Annotation_Pixel_Resource_Value
+           | Annotation_Pixmap_Resource_Value
+           | Annotation_Screen_Resource_Value
+           | Annotation_Translation_Data_Resource_Value
+           | Annotation_Widget_Reference_Resource_Value
           =>
             Use_In_Program : Widget;
             Hard_Code      : Widget;
@@ -102,7 +115,7 @@ package body Designer.Properties_Editor.Widget_Instance is
             Name           : Widget;
             Value          : Widget;
 
-         when Annotation_Enumerated_Resource_Type          =>
+         when Annotation_Enumeration_Resource_Type          =>
             Menu : Widget;
             --  Выпадающее меню, используемое в меню опций значения ресурса.
 
@@ -281,15 +294,16 @@ package body Designer.Properties_Editor.Widget_Instance is
                   when Type_Translation_Data =>
                      null; --  TODO реализовать.
 
-                  when Type_Widget_Reference =>
-                     null; --  TODO реализовать.
-
                   when Type_Unspecified =>
                      null; --  TODO реализовать.
 
                   when Type_Boolean =>
                      null; --  TODO реализовать.
                end case;
+
+            when Node_Widget_Reference_Resource_Type =>
+               null; --  TODO реализовать.
+
             when others =>
                null;
          end case;
@@ -484,7 +498,7 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       for J in Annotation_Table.First .. Annotation_Table.Last loop
          case Annotation_Table.Table (J).Kind is
-            when Annotation_Enumerated_Resource_Type         =>
+            when Annotation_Enumeration_Resource_Type         =>
                if Annotation_Table.Table (J).Menu /= Null_Widget then
                   Xt_Destroy_Widget (Annotation_Table.Table (J).Menu);
                end if;
@@ -522,27 +536,18 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       for J in First .. Node loop
          case Node_Kind (J) is
-            when Node_Widget_Reference_Resource_Value =>
+            when Node_Boolean_Resource_Value =>
                Annotation_Table.Table (J) :=
-                (Kind           => Annotation_Widget_Reference,
+                (Kind           => Annotation_Boolean_Resource_Value,
                  Use_In_Program => Null_Widget,
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
                  Value          => Null_Widget);
 
-            when Node_Integer_Resource_Value               =>
+            when Node_Colormap_Resource_Value =>
                Annotation_Table.Table (J) :=
-                (Kind           => Annotation_Integer_Resource,
-                 Use_In_Program => Null_Widget,
-                 Hard_Code      => Null_Widget,
-                 Fallback       => Null_Widget,
-                 Name           => Null_Widget,
-                 Value          => Null_Widget);
-
-            when Node_Enumeration_Resource_Value           =>
-               Annotation_Table.Table (J) :=
-                (Kind           => Annotation_Enumerated_Resource,
+                (Kind           => Annotation_Colormap_Resource_Value,
                  Use_In_Program => Null_Widget,
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
@@ -551,15 +556,78 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             when Node_Enumerated_Resource_Type =>
                Annotation_Table.Table (J) :=
-                (Kind => Annotation_Enumerated_Resource_Type,
+                (Kind => Annotation_Enumeration_Resource_Type,
                  Menu => Null_Widget);
+
+            when Node_Enumeration_Resource_Value =>
+               Annotation_Table.Table (J) :=
+                (Kind           => Annotation_Enumeration_Resource_Value,
+                 Use_In_Program => Null_Widget,
+                 Hard_Code      => Null_Widget,
+                 Fallback       => Null_Widget,
+                 Name           => Null_Widget,
+                 Value          => Null_Widget);
 
             when Node_Enumeration_Value_Specification =>
                Annotation_Table.Table (J) :=
                 (Kind   => Annotation_Enumeration_Value_Specification,
                  Button => Null_Widget);
 
-            when others               =>
+            when Node_Integer_Resource_Value =>
+               Annotation_Table.Table (J) :=
+                (Kind           => Annotation_Integer_Resource_Value,
+                 Use_In_Program => Null_Widget,
+                 Hard_Code      => Null_Widget,
+                 Fallback       => Null_Widget,
+                 Name           => Null_Widget,
+                 Value          => Null_Widget);
+
+            when Node_Pixel_Resource_Value =>
+               Annotation_Table.Table (J) :=
+                (Kind           => Annotation_Pixel_Resource_Value,
+                 Use_In_Program => Null_Widget,
+                 Hard_Code      => Null_Widget,
+                 Fallback       => Null_Widget,
+                 Name           => Null_Widget,
+                 Value          => Null_Widget);
+
+            when Node_Pixmap_Resource_Value =>
+               Annotation_Table.Table (J) :=
+                (Kind           => Annotation_Pixmap_Resource_Value,
+                 Use_In_Program => Null_Widget,
+                 Hard_Code      => Null_Widget,
+                 Fallback       => Null_Widget,
+                 Name           => Null_Widget,
+                 Value          => Null_Widget);
+
+            when Node_Screen_Resource_Value =>
+               Annotation_Table.Table (J) :=
+                (Kind           => Annotation_Screen_Resource_Value,
+                 Use_In_Program => Null_Widget,
+                 Hard_Code      => Null_Widget,
+                 Fallback       => Null_Widget,
+                 Name           => Null_Widget,
+                 Value          => Null_Widget);
+
+            when Node_Translation_Data_Resource_Value =>
+               Annotation_Table.Table (J) :=
+                (Kind           => Annotation_Translation_Data_Resource_Value,
+                 Use_In_Program => Null_Widget,
+                 Hard_Code      => Null_Widget,
+                 Fallback       => Null_Widget,
+                 Name           => Null_Widget,
+                 Value          => Null_Widget);
+
+            when Node_Widget_Reference_Resource_Value =>
+               Annotation_Table.Table (J) :=
+                (Kind           => Annotation_Widget_Reference_Resource_Value,
+                 Use_In_Program => Null_Widget,
+                 Hard_Code      => Null_Widget,
+                 Fallback       => Null_Widget,
+                 Name           => Null_Widget,
+                 Value          => Null_Widget);
+
+            when others =>
                Annotation_Table.Table (J) := (Kind => Annotation_Empty);
          end case;
       end loop;
@@ -721,15 +789,16 @@ package body Designer.Properties_Editor.Widget_Instance is
                         when Type_Translation_Data =>
                            null; --  TODO реализовать.
 
-                        when Type_Widget_Reference =>
-                           null; --  TODO реализовать.
-
                         when Type_Unspecified =>
                            null; --  TODO реализовать.
 
                         when Type_Boolean =>
                            null; --  TODO реализовать.
                      end case;
+
+                  when Node_Widget_Reference_Resource_Type =>
+                     null; --  TODO реализовать.
+
                   when others =>
                      raise Program_Error;
                end case;

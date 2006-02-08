@@ -105,6 +105,9 @@ package Model.Tree is
      Node_Integer_Resource_Value,
      --  Значение ресурса, содержащего любую целочисленную величину.
 
+     Node_Widget_Reference_Resource_Type,
+     --  Тип ресурсов, представляющий ссылку на экземпляр виджета.
+
      Node_Widget_Reference_Resource_Value,
      --  Значение ресурса, содержащего ссылку на экземпляр виджета.
 
@@ -198,11 +201,11 @@ package Model.Tree is
      Type_Colormap,
      --  Тип Colormap - палитра цветов.
 
-     Type_Translation_Data,
+     Type_Translation_Data);
      --  Типы XtTranslations и XtAccelerators - список трансляции событий на
      --  подпрограммы действий.
 
-     Type_Widget_Reference);
+--     Type_Widget_Reference);
      --  Ссылка на экземпляр виджета.
 
    function Node_Kind (Node : in Node_Id) return Node_Kinds;
@@ -358,19 +361,6 @@ private
             Type_Kind         : Predefined_Resource_Type_Kind;
             --  Вид предопределённого типа ресурсов.
 
-         when Node_Enumerated_Resource_Type =>
-            --  Data_Type_Name (Name)  -- ??? Связка?
-
-            ERT_Name             : Name_Id;
-            --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
-
-            ERT_Internal_Name    : Name_Id;
-            --  Внутреннее имя типа ресурса, используемое Xt для преобразований
-            --  типов ресурсов.
-
-            Value_Specifications : List_Id;
-            --  Список возможных значений.
-
          when Node_Enumeration_Value_Specification =>
             EVS_Name          : Name_Id;
             --  Имя значения перечислимого типа.
@@ -469,18 +459,31 @@ private
 
             --  TODO Список обратных связей (кто зависит от этого виджета).
 
-          when Node_Widget_Reference_Resource_Value =>
-             WRRV_Resource_Specification  : Node_Id;
+         when Node_Enumerated_Resource_Type =>
+            --  Data_Type_Name (Name)  -- ??? Связка?
+
+            ERT_Name             : Name_Id;
+            --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
+
+            ERT_Internal_Name    : Name_Id;
+            --  Внутреннее имя типа ресурса, используемое Xt для преобразований
+            --  типов ресурсов.
+
+            Value_Specifications : List_Id;
+            --  Список возможных значений.
+
+          when Node_Enumeration_Resource_Value =>
+             ERV_Resource_Specification  : Node_Id;
              --  Ссылка на спецификацию ресурса.
 
-             WRRV_Is_Resource_Class_Value : Boolean;
+             ERV_Is_Resource_Class_Value : Boolean;
              --  Признак значения класса ресурса (а не ресурса).
 
-             WRRV_Resource_Value          : Node_Id;
-             --  Ссылка на экземпляр виджета, используемого в качестве
-             --  значения ресурса.
+             ERV_Resource_Value          : Node_Id;
+             --  Ссылка на спецификацию значения перечислимого типа,
+             --  используемого в качестве значения ресурса.
 
-             WRRV_Is_Hardcoded            : Boolean;
+             ERV_Is_Hardcoded            : Boolean;
              --  Признак необходимости жесткой фиксации значения ресурса
              --  в генерируемом коде программы. В противном случае значение
              --  ресурса по возможности будет сохраняться в файле ресурсов.
@@ -496,22 +499,6 @@ private
              --  Целочисленное значение ресурса.
 
              IRV_Is_Hardcoded            : Boolean;
-             --  Признак необходимости жесткой фиксации значения ресурса
-             --  в генерируемом коде программы. В противном случае значение
-             --  ресурса по возможности будет сохраняться в файле ресурсов.
-
-          when Node_Enumeration_Resource_Value =>
-             ERV_Resource_Specification  : Node_Id;
-             --  Ссылка на спецификацию ресурса.
-
-             ERV_Is_Resource_Class_Value : Boolean;
-             --  Признак значения класса ресурса (а не ресурса).
-
-             ERV_Resource_Value          : Node_Id;
-             --  Ссылка на спецификацию значения перечислимого типа,
-             --  используемого в качестве значения ресурса.
-
-             ERV_Is_Hardcoded            : Boolean;
              --  Признак необходимости жесткой фиксации значения ресурса
              --  в генерируемом коде программы. В противном случае значение
              --  ресурса по возможности будет сохраняться в файле ресурсов.
@@ -597,20 +584,47 @@ private
              --  ресурса по возможности будет сохраняться в файле ресурсов.
 
          when Node_Boolean_Resource_Value =>
-             BRV_Resource_Specification  : Node_Id;
-             --  Ссылка на спецификацию ресурса.
+            BRV_Resource_Specification  : Node_Id;
+            --  Ссылка на спецификацию ресурса.
 
-             BRV_Is_Resource_Class_Value : Boolean;
-             --  Признак значения класса ресурса (а не ресурса).
+            BRV_Is_Resource_Class_Value : Boolean;
+            --  Признак значения класса ресурса (а не ресурса).
 
 --             BRV_Resource_Value          : ;
-             --  Ссылка на спецификацию значения перечислимого типа,
-             --  используемого в качестве значения ресурса.
+            --  Ссылка на спецификацию значения перечислимого типа,
+            --  используемого в качестве значения ресурса.
 
-             BRV_Is_Hardcoded            : Boolean;
-             --  Признак необходимости жесткой фиксации значения ресурса
-             --  в генерируемом коде программы. В противном случае значение
-             --  ресурса по возможности будет сохраняться в файле ресурсов.
+            BRV_Is_Hardcoded            : Boolean;
+            --  Признак необходимости жесткой фиксации значения ресурса
+            --  в генерируемом коде программы. В противном случае значение
+            --  ресурса по возможности будет сохраняться в файле ресурсов.
+
+         when Node_Widget_Reference_Resource_Type =>
+            WRRT_Name          : Name_Id;
+            --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
+
+            WRRT_Internal_Name : Name_Id;
+            --  Внутреннее имя типа ресурса, используемое Xt для преобразований
+            --  типов ресурсов.
+
+          when Node_Widget_Reference_Resource_Value =>
+            WRRV_Resource_Specification  : Node_Id;
+            --  Ссылка на спецификацию ресурса.
+
+            WRRV_Is_Resource_Class_Value : Boolean;
+            --  Признак значения класса ресурса (а не ресурса).
+
+            WRRV_Resource_Value          : Node_Id;
+            --  Ссылка на экземпляр виджета, используемого в качестве
+            --  значения ресурса.
+
+            WRRV_Is_Hardcoded            : Boolean;
+            --  Признак необходимости жесткой фиксации значения ресурса
+            --  в генерируемом коде программы. В противном случае значение
+            --  ресурса по возможности будет сохраняться в файле ресурсов.
+
+            WRRV_Is_Fallback             : Boolean;
+            --  Признак включения значения ресурса в ресурсы отката приложения.
       end case;
    end record;
 
