@@ -454,6 +454,16 @@ package body Model.Tools is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> XML_To_Resource
+      --!    <Purpose> Преобразует XML-структуру в узел XXX_Resource_Value.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure XML_To_Resource (Tag           : in Element_Id;
+                                 Resource      : in Node_Id;
+                                 Is_Constraint : in Boolean);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> XML_To_Widget_Instance
       --!    <Purpose> Преобразует XML-структуру в узел Node_Widget_Instance.
       --!    <Exceptions>
@@ -582,6 +592,64 @@ package body Model.Tools is
             end loop;
          end;
       end XML_To_Component_Class;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> XML_To_Widget_Instance
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure XML_To_Resource (Tag           : in Element_Id;
+                                 Resource      : in Node_Id;
+                                 Is_Constraint : in Boolean)
+      is
+      begin
+         --  Обработка атрибутов тега Resource.
+
+         declare
+            A : Attribute_Id := Elements.Attribute (Tag);
+
+         begin
+            while A /= Null_Attribute_Id loop
+               if Attributes.Name (A) = Name_Attr then
+                  null;
+                  --  Пропускаем, потому что атрибут уже обработан.
+
+               elsif Attributes.Name (A) = Is_Class_Attr then
+                  if Attributes.Value (A) = Yes_Value then
+                     Set_Is_Resource_Class_Value (Resource, True);
+
+                  elsif Attributes.Value (A) = No_Value then
+                     Set_Is_Resource_Class_Value (Resource, False);
+
+                  else
+                     Error_Message ("Unknown value of the 'isclass' attr: "
+                       & XML_Tools.Strings.Image (Attributes.Value (A)));
+                     raise Program_Error;
+                  end if;
+
+               elsif Attributes.Name (A) = Is_Hardcoded_Attr then
+                  if Attributes.Value (A) = Yes_Value then
+                     Set_Is_Hardcoded (Resource, True);
+
+                  elsif Attributes.Value (A) = No_Value then
+                     Set_Is_Hardcoded (Resource, False);
+
+                  else
+                     Error_Message ("Unknown value of the 'ishardcoded' attr: "
+                       & XML_Tools.Strings.Image (Attributes.Value (A)));
+                     raise Program_Error;
+                  end if;
+
+               else
+                  Error_Message ("Unknown attribute name: "
+                    & XML_Tools.Names.Image (Attributes.Name (A)));
+                  raise Program_Error;
+               end if;
+
+               A := Attributes.Next (A);
+            end loop;
+         end;
+      end XML_To_Resource;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -811,6 +879,7 @@ package body Model.Tools is
 
                   begin
                      Append (Resources, Resource);
+                     XML_To_Resource (Child, Resource, False);
                   end;
 
                else
