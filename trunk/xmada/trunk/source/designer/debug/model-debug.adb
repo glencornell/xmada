@@ -385,8 +385,12 @@ package body Model.Debug is
       Put (File,
            " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
 
-      Put (File,
-           " := " & Name_Image (Resource_Value (Node)));
+      if Resource_Value (Node) = Null_Node then
+         Put (File, " := (UNDEFINED)");
+
+      else
+         Put (File, " := " & Name_Image (Resource_Value (Node)));
+      end if;
    end Print_Enumeration_Resource_Value;
 
    ---------------------------------------------------------------------------
