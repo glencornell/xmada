@@ -52,18 +52,18 @@ with Xm_Scrolled_Window;
 with Designer.Main_Window;
 with Model.Allocations;
 with Model.Queries;
-with Model.Tree.Constructors;
 with Model.Tree.Designer;
 with Model.Tree.Lists;
+with Model.Utilities;
 
 package body Designer.Visual_Editor is
 
    use Model;
    use Model.Queries;
    use Model.Tree;
-   use Model.Tree.Constructors;
    use Model.Tree.Designer;
    use Model.Tree.Lists;
+   use Model.Utilities;
    use Xm.Representation_Type_Management;
    use Xm_Drawing_Area;
    use Xm_Scrolled_Window;
@@ -607,57 +607,12 @@ package body Designer.Visual_Editor is
             declare
                Aux   : Node_Id := First (Resources (Class (Node)));
                List  : List_Id := New_List;
-               Value : Node_Id;
 
             begin
                --  Формирование списков значений ресурсов.
 
                while Aux /= Null_Node loop
-                  case Node_Kind (Resource_Type (Aux)) is
-                     when Node_Predefined_Resource_Type =>
-                        case Type_Kind (Resource_Type (Aux)) is
-                           when Type_Unspecified =>
-                              raise Program_Error;
-
-                           when Type_Position | Type_Dimension | Type_C_Int =>
-                              Value := Create_Integer_Resource_Value;
-
-                           when Type_Pixel =>
-                              Value := Create_Pixel_Resource_Value;
-
-                           when Type_Pixmap =>
-                              Value := Create_Pixmap_Resource_Value;
-
-                           when Type_Colormap =>
-                              Value := Create_Colormap_Resource_Value;
-
-                           when Type_Screen =>
-                              Value := Create_Screen_Resource_Value;
-
-                           when Type_Translation_Data =>
-                              Value := Create_Translation_Data_Resource_Value;
-
-                           when Type_Boolean =>
-                              Value := Create_Boolean_Resource_Value;
-
-                           when others =>
-                              raise Program_Error;
-                        end case;
-
-                     when Node_Enumerated_Resource_Type =>
-                        Value := Create_Enumeration_Resource_Value;
-
-                     when Node_Widget_Reference_Resource_Type =>
-                        Value := Create_Widget_Reference_Resource_Value;
-
-                     when others =>
-                        raise Program_Error;
-                  end case;
-
-                  Set_Resource_Specification (Value, Aux);
-
-                  Append (List, Value);
-
+                  Append (List, Create_Corresponding_Resource_Value (Aux));
                   Aux := Next (Aux);
                end loop;
 
@@ -675,36 +630,7 @@ package body Designer.Visual_Editor is
                   --  родительского виджета.
 
                   while Aux /= Null_Node loop
-                     case Node_Kind (Resource_Type (Aux)) is
-                        when Node_Predefined_Resource_Type =>
-                           case Type_Kind (Resource_Type (Aux)) is
-                              when Type_Unspecified =>
-                                 raise Program_Error;
-
-                              when Type_Position
-                                | Type_Dimension
-                                | Type_C_Int
-                              =>
-                                 Value := Create_Integer_Resource_Value;
-
-                              when others =>
-                                 raise Program_Error;
-                           end case;
-
-                        when Node_Enumerated_Resource_Type =>
-                           Value := Create_Enumeration_Resource_Value;
-
-                        when Node_Widget_Reference_Resource_Type =>
-                           Value := Create_Widget_Reference_Resource_Value;
-
-                        when others =>
-                           raise Program_Error;
-                     end case;
-
-                     Set_Resource_Specification (Value, Aux);
-
-                     Append (List, Value);
-
+                     Append (List, Create_Corresponding_Resource_Value (Aux));
                      Aux := Next (Aux);
                   end loop;
 
