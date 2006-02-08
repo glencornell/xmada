@@ -98,7 +98,6 @@ package body Designer.Operations is
    procedure New_Project is
       Application : Node_Id;
       Component   : Node_Id;
-      Widget      : Node_Id;
       List        : List_Id;
 
    begin
@@ -132,16 +131,6 @@ package body Designer.Operations is
       List := New_List;
       Append (List, Component);
       Set_Component_Classes (Application, List);
-
-      --  XXX  Временно с целью отладки - до завершения работ по чтению из XML.
-
-      Widget := Create_Widget_Instance;
-      Set_Name (Widget, Enter ("Form1"));
-      Set_Class (Widget, Model.Xt_Motif.Xt_Motif_Form_Widget_Class);
-
-      Set_Root (Component, Widget);
-
-      --  XXX  Временно с целью отладки - до завершения работ по чтению из XML.
 
       Notify_Designer_Components (Project);
    end New_Project;

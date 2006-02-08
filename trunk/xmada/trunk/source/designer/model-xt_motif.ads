@@ -53,6 +53,4 @@ package Model.Xt_Motif is
 
    --  Классы виджетов, используемые различными компонентами.
 
-   Xt_Motif_Form_Widget_Class : Node_Id;
-
 end Model.Xt_Motif;
