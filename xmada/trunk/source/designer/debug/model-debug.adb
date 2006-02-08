@@ -385,7 +385,8 @@ package body Model.Debug is
       Put (File,
            " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
 
-      --  TODO Вывод значения.
+      Put (File,
+           " := " & Name_Image (Resource_Value (Node)));
    end Print_Enumeration_Resource_Value;
 
    ---------------------------------------------------------------------------

@@ -761,10 +761,10 @@ package body Designer.Properties_Editor.Widget_Instance is
 
                case Node_Kind (Res_Type) is
                   when Node_Enumerated_Resource_Type =>
---  XXX временно.   Xt_Set_Arg (Args (0),
---  XXX временно.               Xm_N_Menu_History,
---  XXX временно.               Annotation_Table.Table
---  XXX временно.               (Resource_Value (Current)).Button);
+                     Xt_Set_Arg (Args (0),
+                                 Xm_N_Menu_History,
+                                 Annotation_Table.Table
+                                  (Resource_Value (Current)).Button);
                      Xt_Set_Values
                       (Annotation_Table.Table (Current).Value,
                        Args (0 .. 0));

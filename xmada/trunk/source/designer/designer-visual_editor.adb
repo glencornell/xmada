@@ -39,9 +39,11 @@
 with Ada.Characters.Handling;
 with Ada.Unchecked_Deallocation;
 with Interfaces.C.Strings;
+with System;
 
 with GNAT.Table;
 
+with Xlib.Resource_Manager;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
 with Xt.Resource_Management;
@@ -51,6 +53,7 @@ with Xm_Scrolled_Window;
 
 with Designer.Main_Window;
 with Model.Allocations;
+with Model.Names;
 with Model.Queries;
 with Model.Tree.Designer;
 with Model.Tree.Lists;
@@ -59,6 +62,7 @@ with Model.Utilities;
 package body Designer.Visual_Editor is
 
    use Model;
+   use Model.Names;
    use Model.Queries;
    use Model.Tree;
    use Model.Tree.Designer;
@@ -311,8 +315,11 @@ package body Designer.Visual_Editor is
                   when Node_Enumerated_Resource_Type =>
                      Annotation_Table.Table (Node).Resources.Values
                       (Current) :=
-                        (Value_C_Int,
-                         Interfaces.C.Strings.Null_Ptr,
+                        (Value_C_Unsigned_Char,
+                         Interfaces.C.Strings.New_String
+                          (Ada.Characters.Handling.To_String
+                            (Internal_Resource_Name_Image
+                              (Resource_Specification (Aux)))),
                          0);
 
                   when Node_Widget_Reference_Resource_Type =>
@@ -462,7 +469,13 @@ package body Designer.Visual_Editor is
                  end case;
 
                when Node_Enumerated_Resource_Type =>
-                  null;
+                  Xt_Set_Arg
+                   (Annotation_Table.Table (Node).Resources.Args
+                     (Current),
+                    Annotation_Table.Table (Node).Resources.Values
+                     (Current).Name,
+                    Annotation_Table.Table (Node).Resources.Values
+                     (Current).C_Unsigned_Char_Value'Address);
 
                when Node_Widget_Reference_Resource_Type =>
                   Xt_Set_Arg
@@ -544,7 +557,66 @@ package body Designer.Visual_Editor is
                  end case;
 
                when Node_Enumerated_Resource_Type =>
-                  null;
+                  declare
+                     use Interfaces.C.Strings;
+                     use Interfaces.C;
+                     use Xlib.Resource_Manager;
+
+                     C_Image : chars_ptr;
+
+                     From    : constant Xrm_Value
+                       := (Interfaces.C.unsigned_char'Size
+                             / System.Storage_Unit,
+                           Xlib.X_Pointer
+                            (Annotation_Table.Table
+                              (Node).Resources.Values
+                                (Current).C_Unsigned_Char_Value'Address));
+                     To      : constant Xrm_Value
+                       := (C_Image'Size / System.Storage_Unit,
+                           Xlib.X_Pointer (C_Image'Address));
+
+                  begin
+                     if not Xt_Convert_And_Store
+                             (Drawing_Area,
+                              Ada.Characters.Handling.To_String
+                               (Internal_Name_Image
+                                 (Resource_Type
+                                   (Resource_Specification (Aux)))),
+                              From,
+                              "String",
+                              To)
+                     then
+                        raise Program_Error;
+                     end if;
+
+                     declare
+                        Image : constant Name_Id
+                          := Find
+                              (Ada.Characters.Handling.To_Wide_String
+                                (Ada.Characters.Handling.To_Upper
+                                  (Value (C_Image))));
+                        Val   : Node_Id
+                          := First
+                              (Value_Specifications
+                                (Resource_Type
+                                  (Resource_Specification (Aux))));
+
+                     begin
+                        while Val /= Null_Node loop
+                           if Internal_Name (Val) = Image then
+                              exit;
+                           end if;
+
+                           Val := Next (Val);
+                        end loop;
+
+                        if Val = Null_Node then
+                           raise Program_Error;
+                        end if;
+
+                        Set_Resource_Value (Aux, Val);
+                     end;
+                  end;
 
                when Node_Widget_Reference_Resource_Type =>
                   null;
