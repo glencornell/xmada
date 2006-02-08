@@ -206,6 +206,18 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Tables_Statistics
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! вывода статистики использования таблиц.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Tables_Statistics (The_Widget : in Widget;
+                                      Closure    : in Xt_Pointer;
+                                      Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Tables_Statistics);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Message_Hide_Show_Button
       --!    <Purpose> Подпрограмма обратного вызова
       --!    <Exceptions>
@@ -477,6 +489,29 @@ package body Designer.Main_Window is
              ("On_Save_File_As_Dialog_Ok_Or_Cancel", E);
       end On_Save_File_As_Dialog_Ok_Or_Cancel;
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Tables_Statistics
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Tables_Statistics (The_Widget : in Widget;
+                                      Closure    : in Xt_Pointer;
+                                      Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
+
+      begin
+         Designer.Operations.Debug.Tables_Statistics;
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback ("On_Tables_Statistics", E);
+      end On_Tables_Statistics;
+
    end Callbacks;
 
    ---------------------------------------------------------------------------
@@ -606,6 +641,12 @@ package body Designer.Main_Window is
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Dump_Tree'Access);
+
+      Element :=
+        Xm_Create_Managed_Push_Button_Gadget (Submenu, "tables_statistics");
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Tables_Statistics'Access);
 
       Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Submenu);
       Button :=

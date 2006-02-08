@@ -28,35 +28,42 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Designer.Operations.Debug
---! <Purpose>
---!   Вспомогательный пакет для вывода отладочной информации.
---!
---! <Effects>
---! <Perfomance>
+--! <Unit> Model.Names.Debug
+--! <ImplementationNotes>
+--! <PortabilityIssues>
+--! <AnticipatedChanges>
 ------------------------------------------------------------------------------
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Integer_Wide_Text_IO;
 
-package Designer.Operations.Debug is
+package body Model.Names.Debug is
 
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Dump_Tree
-   --!    <Purpose> Производит запись в файл текущего состояния дерева модели
-   --! в виде, пригодном для анализа человеком.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Dump_Tree;
+   use Ada.Integer_Wide_Text_IO;
+   use Ada.Wide_Text_IO;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Tables_Statistics
-   --!    <Purpose> Произвожит запись в файл статистики размеров таблиц
-   --! внутренних структур данных.
-   --!    <Exceptions>
+   --!    <Unit> Print_Statistics
+   --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Tables_Statistics;
+   procedure Print_Statistics (File         : in Ada.Wide_Text_IO.File_Type;
+                               Title_Offset : in Ada.Wide_Text_IO.Count;
+                               Data_Offset  : in Ada.Wide_Text_IO.Count)
+   is
+   begin
+      Set_Col (File, Title_Offset);
+      Put (File, "Names characters table");
+      Set_Col (File, Data_Offset);
+      Put (File, Integer (Name_Character_Table.Last));
+      New_Line (File);
 
-end Designer.Operations.Debug;
+      Set_Col (File, Title_Offset);
+      Put (File, "Names table");
+      Set_Col (File, Data_Offset);
+      Put (File, Integer (Name_Table.Last));
+      New_Line (File);
+   end Print_Statistics;
+
+end Model.Names.Debug;

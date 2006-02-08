@@ -44,6 +44,9 @@ pragma Warnings (Off, Model.Debug.Designer);
 --  Используется только для включения дополнительных подпрограмм вывода
 --  отладочной информации, специфической для дизайнера.
 
+with Model.Names.Debug;
+with Model.Tree.Debug;
+
 package body Designer.Operations.Debug is
 
    use Ada.Wide_Text_IO;
@@ -71,5 +74,33 @@ package body Designer.Operations.Debug is
 
          raise;
    end Dump_Tree;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Tables_Statistics
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Tables_Statistics is
+      File : File_Type;
+
+   begin
+      Create (File, Out_File, "tables_statistics.txt");
+
+      Put_Line (File, "Internal tables statistics");
+      Put_Line (File, "--------------------------");
+      New_Line (File);
+      Model.Names.Debug.Print_Statistics (File, 3, 30);
+      Model.Tree.Debug.Print_Statistics (File, 3, 30);
+
+      Close (File);
+
+   exception
+      when others =>
+         if Is_Open (File) then
+            Close (File);
+         end if;
+
+         raise;
+   end Tables_Statistics;
 
 end Designer.Operations.Debug;

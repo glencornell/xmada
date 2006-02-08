@@ -28,9 +28,9 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Designer.Operations.Debug
+--! <Unit> Model.Tree.Debug
 --! <Purpose>
---!   Вспомогательный пакет для вывода отладочной информации.
+--!   Пакет содержит подпрограммы вывода отладочной информации.
 --!
 --! <Effects>
 --! <Perfomance>
@@ -38,25 +38,19 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Wide_Text_IO;
 
-package Designer.Operations.Debug is
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Dump_Tree
-   --!    <Purpose> Производит запись в файл текущего состояния дерева модели
-   --! в виде, пригодном для анализа человеком.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Dump_Tree;
+package Model.Tree.Debug is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Tables_Statistics
-   --!    <Purpose> Произвожит запись в файл статистики размеров таблиц
-   --! внутренних структур данных.
+   --!    <Unit> Print_Statistics
+   --!    <Purpose> Выводит статистические данные по таблицам узлов дерева
+   --! модели.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Tables_Statistics;
+   procedure Print_Statistics (File         : in Ada.Wide_Text_IO.File_Type;
+                               Title_Offset : in Ada.Wide_Text_IO.Count;
+                               Data_Offset  : in Ada.Wide_Text_IO.Count);
 
-end Designer.Operations.Debug;
+end Model.Tree.Debug;
