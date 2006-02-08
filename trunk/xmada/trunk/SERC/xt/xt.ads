@@ -1503,13 +1503,13 @@ package Xt is
 		      From : in Xrm_Value;
 		      To_Return : out Xrm_Value);
 
-	-- XtConverterAndStore
-	function Xt_Convert_And_Store (Object : in Widget;
-				       From_Type : in String;
-				       From : in Xrm_Value;
-				       To_Type : in String;
-				       To_In_Out : in Xrm_Value) return Boolean;
-
+--	-- XtConverterAndStore
+--	function Xt_Convert_And_Store (Object : in Widget;
+--				       From_Type : in String;
+--				       From : in Xrm_Value;
+--				       To_Type : in String;
+--				       To_In_Out : in Xrm_Value) return Boolean;
+--
 --	-- XtGetValues
 --	procedure Xt_Get_Values (W : in Widget; Args : in out Xt_Arg_List);
 
