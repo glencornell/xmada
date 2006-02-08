@@ -246,11 +246,14 @@ package body Designer.Properties_Editor.Widget_Instance is
                Xt_Set_Arg (Args (2),
                            Xm_N_Sub_Menu_Id,
                            Annotation_Table.Table (Res_Type).Menu);
-
+               Xt_Set_Arg (Args (3),
+                           Xm_N_User_Data,
+                           Xt_Arg_Val (Node));
                Annotation_Table.Table (Node).Value :=
                   Xm_Create_Managed_Option_Menu (Form,
                                                  "resource_value",
-                                                 Args (0 .. 2));
+                                                 Args (0 .. 3));
+--               Xt_Add_Callback (Annotation_Table.Table (Node).Value,
 
             when Node_Predefined_Resource_Type  =>
                case Type_Kind (Res_Type) is
@@ -274,10 +277,17 @@ package body Designer.Properties_Editor.Widget_Instance is
                      Xt_Set_Arg (Args (4),
                                  Xm_N_Bottom_Attachment,
                                  Xm_Attach_Form);
+                     Xt_Set_Arg (Args (5),
+                                 Xm_N_User_Data,
+                                 Xt_Arg_Val (Node));
                      Annotation_Table.Table (Node).Value :=
                        Xm_Create_Managed_Simple_Spin_Box (Form,
                                                           "resource_numeric",
-                                                          Args (0 .. 4));
+                                                          Args (0 .. 5));
+--                     Xt_Add_Callback
+--                      (Annotation_Table.Table (Node).Value,
+--                       Xm_N_Value_Changed,
+--                       On_Numeric_Resource_Value_Changed'Access);
 
                   when Type_Pixel =>
                      null; --  TODO реализовать.
@@ -751,10 +761,10 @@ package body Designer.Properties_Editor.Widget_Instance is
 
                case Node_Kind (Res_Type) is
                   when Node_Enumerated_Resource_Type =>
-                     Xt_Set_Arg (Args (0),
-                                 Xm_N_Menu_History,
-                                 Annotation_Table.Table
-                                   (Resource_Value (Current)).Button);
+--  XXX временно.   Xt_Set_Arg (Args (0),
+--  XXX временно.               Xm_N_Menu_History,
+--  XXX временно.               Annotation_Table.Table
+--  XXX временно.               (Resource_Value (Current)).Button);
                      Xt_Set_Values
                       (Annotation_Table.Table (Current).Value,
                        Args (0 .. 0));
