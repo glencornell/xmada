@@ -158,6 +158,16 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Initialize is
+   begin
+      Node_Table.Init;
+   end Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Internal_Name
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------

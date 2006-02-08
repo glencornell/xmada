@@ -88,6 +88,8 @@ package body Model.Initialization.Designer is
    ---------------------------------------------------------------------------
    procedure Initialize is
    begin
+      Model.Tree.Designer.Initialize;
+
       Set_Convenience_Create_Function
        (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
         Xm_Arrow_Button_Gadget.Xm_Create_Arrow_Button_Gadget'Access);

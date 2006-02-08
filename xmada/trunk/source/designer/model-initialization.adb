@@ -5945,6 +5945,9 @@ package body Model.Initialization is
    ---------------------------------------------------------------------------
    procedure Initialize is
    begin
+      Model.Names.Initialize;
+      Model.Tree.Initialize;
+
       Types := New_List;
       Classes := New_List;
 
