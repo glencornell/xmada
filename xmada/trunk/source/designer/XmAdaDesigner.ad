@@ -44,9 +44,20 @@
 *main_window.main_menu*debug_menu*tables_statistics.labelString: Internal tables statistics
 *main_window.horizontal_paned.orientation: HORIZONTAL
 
+!!  Окно команд - палитра классов виджетов.
+
+*main_window.widget_sets.palette_page.adjustLast: FALSE
+*main_window.widget_sets.palette_page.entryAlignment: ALIGNMENT_CENTER
+*main_window.widget_sets.palette_page.isAligned: TRUE
+*main_window.widget_sets.palette_page.entryVerticalAlignment: ALIGNMENT_CENTER
+*main_window.widget_sets.palette_page.packing: PACK_COLUMN
+*main_window.widget_sets.palette_page.orientation: HORIZONTAL
+*main_window.widget_sets.palette_page.numColumns: 6
+
 !!  Окно редактора свойств
 
 *main_window.horizontal_paned.properties_form.width: 400
+*main_window.horizontal_paned.properties_form.height: 600
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
 *main_window.horizontal_paned.properties_form.notebook.scrolled.row_column.packing: PACK_COLUMN
