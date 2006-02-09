@@ -286,16 +286,19 @@ package body Model.Tree.Constructors is
    function Create_Resource_Specification return Node_Id is
    begin
       Node_Table.Append
-       ((Kind                         => Node_Resource_Specification,
-         Parent                       => Null_Node,
-         List                         => Null_List,
-         Previous                     => Null_Node,
-         Next                         => Null_Node,
-         Resource_Name                => Null_Name,
-         Internal_Resource_Name       => Null_Name,
-         Resource_Class_Name          => Null_Name,
-         Internal_Resource_Class_Name => Null_Name,
-         Resource_Type                => Null_Node));
+       ((Kind                           => Node_Resource_Specification,
+         Parent                         => Null_Node,
+         List                           => Null_List,
+         Previous                       => Null_Node,
+         Next                           => Null_Node,
+         Resource_Name                  => Null_Name,
+         Internal_Resource_Name         => Null_Name,
+         Resource_Class_Name            => Null_Name,
+         Internal_Resource_Class_Name   => Null_Name,
+         Resource_Type                  => Null_Node,
+         Can_Be_Set_At_Creation_Time    => False,
+         Can_Be_Set_By_Set_Values       => False,
+         Can_Be_Retrieved_By_Get_Values => False));
 
       return Node_Table.Last;
    end Create_Resource_Specification;
