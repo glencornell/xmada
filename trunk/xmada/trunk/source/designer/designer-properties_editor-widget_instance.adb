@@ -544,10 +544,10 @@ package body Designer.Properties_Editor.Widget_Instance is
          Xm_String_Free (Name);
       end Add_Resource;
 
-      Result    : constant Widget_Instance_Properties_Editor_Access
+      Result : constant Widget_Instance_Properties_Editor_Access
         := new Widget_Instance_Properties_Editor (Node);
-      Args      : Xt_Arg_List (0 .. 5);
-      Current   : Node_Id;
+      Args   : Xt_Arg_List (0 .. 5);
+      Aux    : Node_Id;
 
    begin
       Result.Notebook := Parent;
@@ -588,14 +588,58 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       --  Заполнение редактора свойств значениями ресурсов.
 
-      Current := First (All_Resources (Node));
+      Aux := First (All_Resources (Node));
 
-      while Current /= Null_Node loop
-         Add_Resource (Result.Properties, Current);
+      while Aux /= Null_Node loop
+         Add_Resource (Result.Properties, Aux);
          --  Создание свойств ресурса.
 
-         Current := Next (Current);
+         Aux := Next (Aux);
       end loop;
+
+      --  Выравнивание полей ввода значений по вертикали. Выравнивание
+      --  осуществляется с помощью вычисления значения ресурса XmNleftOffset
+      --  виджета ввода данных на основании значения ширины виджета максимально
+      --  широкого имени ресурса и ширины виджета текущего имени ресурса.
+
+      declare
+         Max_Width : Dimension := 0;
+         Value     : Dimension;
+         SArgs     : Xt_Arg_List (0 .. 0);
+
+      begin
+         Xt_Set_Arg (Args (0), Xm_N_Width, Value'Address);
+
+         Aux := First (All_Resources (Node));
+
+         while Aux /= Null_Node loop
+            Xt_Get_Values (Annotation_Table.Table (Aux).Name, Args (0 .. 0));
+
+            if Value > Max_Width then
+               Max_Width := Value;
+            end if;
+
+            Aux := Next (Aux);
+         end loop;
+
+         Aux := First (All_Resources (Node));
+
+         while Aux /= Null_Node loop
+            if Annotation_Table.Table (Aux).Value /= Null_Widget then
+               Xt_Get_Values
+                (Annotation_Table.Table (Aux).Name, Args (0 .. 0));
+
+               Xt_Set_Arg
+                (SArgs (0),
+                 Xm_N_Left_Offset,
+                 Xt_Arg_Val (Max_Width - Value));
+               Xt_Set_Values
+                (Annotation_Table.Table (Aux).Value, SArgs (0 .. 0));
+            end if;
+
+            Aux := Next (Aux);
+         end loop;
+      end;
 
       Update_Item (Node);
       --  Задаем значение ресурсов.
