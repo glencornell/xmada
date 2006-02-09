@@ -585,7 +585,7 @@ package body Designer.Main_Window is
         Xm_Create_Managed_Paned_Window (Main_Window, "horizontal_paned");
       Status_Bar  :=
         Xm_Create_Managed_Label_Gadget (Main_Window, "status_bar");
-      Palette     := Xm_Create_Managed_Notebook (Main_Window, "widget_set");
+      Palette     := Xm_Create_Managed_Notebook (Main_Window, "widget_sets");
 
       Button      := Xt_Name_To_Widget (Palette, "PageScroller");
       Xt_Unmanage_Child (Button);
