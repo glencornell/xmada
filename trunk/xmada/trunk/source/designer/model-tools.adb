@@ -459,8 +459,7 @@ package body Model.Tools is
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure XML_To_Resource (Tag           : in Element_Id;
-                                 Resource      : in Node_Id;
-                                 Is_Constraint : in Boolean);
+                                 Resource      : in Node_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -599,8 +598,7 @@ package body Model.Tools is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure XML_To_Resource (Tag           : in Element_Id;
-                                 Resource      : in Node_Id;
-                                 Is_Constraint : in Boolean)
+                                 Resource      : in Node_Id)
       is
       begin
          --  Обработка атрибутов тега Resource.
@@ -660,95 +658,10 @@ package body Model.Tools is
                                         Widget_Instance : in Node_Id)
       is
          function Find (Name : in XML_Tools.String_Id) return Node_Id;
-         function Find_Specification (Attr : in Attribute_Id) return Node_Id;
+         function Find_Specification (Attr          : in Attribute_Id;
+                                      Is_Constraint : in Boolean)
+           return Node_Id;
          function Get_Project_By_Node (N : in Node_Id) return Node_Id;
-
-         function Find_Specification (Attr : in Attribute_Id)
-           return Node_Id
-         is
-            A   : Attribute_Id := Attr;
-            Res : Node_Id := Null_Node;
-
-         begin
-            --  Поиск атрибута name.
-
-            while A /= Null_Attribute_Id loop
-               exit when Attributes.Name (A) = Name_Attr;
-
-               A := Attributes.Next (A);
-            end loop;
-
-            if A = Null_Attribute_Id then
-               raise Program_Error;
-               --  Атрибут name не найден.
-
-            end if;
-
-            --  Поиск соответствующей спецификации ресурса.
-
-            declare
-               Name         : constant Name_Id
-                 := Model.Names.Enter
-                     (XML_Tools.Strings.Image (Attributes.Value (A)));
-               Project      : constant Node_Id
-                 := Get_Project_By_Node (Widget_Instance);
-               Widget_Set   : Node_Id;
-               Widget_Class : Node_Id := Null_Node;
-
-            begin
-               pragma Assert (Imported_Widget_Sets (Project) /= Null_List);
-               Widget_Set := First (Imported_Widget_Sets (Project));
-
-               while Widget_Set /= Null_Node loop
-                  pragma Assert (Widget_Classes (Widget_Set) /= Null_List);
-                  Widget_Class := First (Widget_Classes (Widget_Set));
-
-                  while Widget_Class /= Null_Node loop
-                     --  Поиск в ресурсах.
-
-                     if Resources (Widget_Class) /= Null_List then
-                        Res := First (Resources (Widget_Class));
-
-                        while Res /= Null_Node loop
-                           exit when Internal_Resource_Name (Res) = Name;
-
-                           Res := Next (Res);
-                        end loop;
-
-                        exit when Res /= Null_Node;
-                     end if;
-
-                     --  Поиск в ограничениях.
-
-                     if Constraint_Resources (Widget_Class) /= Null_List then
-                        Res := First (Constraint_Resources (Widget_Class));
-
-                        while Res /= Null_Node loop
-                           exit when Internal_Resource_Name (Res) = Name;
-
-                           Res := Next (Res);
-                        end loop;
-
-                        exit when Res /= Null_Node;
-                     end if;
-
-                     Widget_Class := Next (Widget_Class);
-                  end loop;
-
-                  exit when Res /= Null_Node;
-
-                  Widget_Set := Next (Widget_Set);
-               end loop;
-            end;
-
-            if Res = Null_Node then
-               raise Program_Error;
-               --  Спецификация ресурса не найдена.
-
-            end if;
-
-            return Res;
-         end Find_Specification;
 
          function Find (Name : in XML_Tools.String_Id) return Model.Node_Id is
             Classname  : constant Model.Name_Id
@@ -775,8 +688,102 @@ package body Model.Tools is
                Widget_Set := Next (Widget_Set);
             end loop;
 
+            if Widget_Set = Null_Node then
+               Error_Message (XML_Tools.Strings.Image (Name)
+                 & " not found.");
+               raise Program_Error;
+               --  Указанный класс виджета не найден.
+
+            end if;
+
             return Widget_Class;
          end Find;
+
+         function Find_Specification (Attr          : in Attribute_Id;
+                                      Is_Constraint : in Boolean)
+           return Node_Id
+         is
+            A            : Attribute_Id := Attr;
+            Res          : Node_Id := Null_Node;
+
+            Widget_Class : Node_Id := Null_Node;
+
+         begin
+            --  Поиск атрибута name.
+
+            while A /= Null_Attribute_Id loop
+               exit when Attributes.Name (A) = Name_Attr;
+
+               A := Attributes.Next (A);
+            end loop;
+
+            if A = Null_Attribute_Id then
+               raise Program_Error;
+               --  Атрибут name не найден.
+
+            end if;
+
+            --  Поиск соответствующей спецификации ресурса.
+
+            declare
+               Name         : constant Name_Id
+                 := Model.Names.Enter
+                     (XML_Tools.Strings.Image (Attributes.Value (A)));
+
+            begin
+               if Is_Constraint then
+                  --  Поиск в ограничениях.
+
+                  Widget_Class := Class (Parent_Node (Widget_Instance));
+
+                  if Constraint_Resources (Widget_Class) /= Null_List then
+                     Res := First (Constraint_Resources (Widget_Class));
+
+                     while Res /= Null_Node loop
+                        exit when Internal_Resource_Name (Res) = Name;
+
+                        Res := Next (Res);
+                     end loop;
+                  end if;
+
+               else
+                  --  Поиск в ресурсах.
+
+                  Widget_Class := Class (Widget_Instance);
+
+                  if Resources (Widget_Class) /= Null_List then
+                     Res := First (Resources (Widget_Class));
+
+                     while Res /= Null_Node loop
+                        exit when Internal_Resource_Name (Res) = Name;
+
+                        Res := Next (Res);
+                     end loop;
+                  end if;
+               end if;
+            end;
+
+            if Res = Null_Node then
+               if Is_Constraint then
+                  Error_Message ("Can't find specification for the "
+                    & "constraint resource: "
+                    & Model.Names.Image (Name (Widget_Class))
+                    & "/"
+                    & XML_Tools.Strings.Image (Attributes.Value (A)));
+
+               else
+                  Error_Message ("Can't find specification for the resource: "
+                    & Model.Names.Image (Name (Widget_Class))
+                    & "/"
+                    & XML_Tools.Strings.Image (Attributes.Value (A)));
+               end if;
+               raise Program_Error;
+               --  Спецификация ресурса не найдена.
+
+            end if;
+
+            return Res;
+         end Find_Specification;
 
          function Get_Project_By_Node (N : in Node_Id) return Node_Id is
             Res : Node_Id := N;
@@ -858,28 +865,33 @@ package body Model.Tools is
                elsif Elements.Name (Child) = Constraint_Resource_Tag then
                   --  ConstraintResource.
 
-                  null;
---                declare
---                   Resource : constant Node_Id
---                     := Create_Resource (Elements.Attribute (Child));
+                  declare
+                     Specification : constant Node_Id
+                       := Find_Specification
+                           (Elements.Attribute (Child), True);
+                     Resource      : constant Node_Id
+                       := Create_Corresponding_Resource_Value
+                           (Specification);
 
---                begin
---                   Append (Constraint_Resources, Resource);
---                end;
+                  begin
+                     Append (Constraint_Resources, Resource);
+                     XML_To_Resource (Child, Resource);
+                  end;
 
                elsif Elements.Name (Child) = Resource_Tag then
                   --  Resource.
 
                   declare
                      Specification : constant Node_Id
-                       := Find_Specification (Elements.Attribute (Child));
+                       := Find_Specification
+                           (Elements.Attribute (Child), False);
                      Resource      : constant Node_Id
                        := Create_Corresponding_Resource_Value
                            (Specification);
 
                   begin
                      Append (Resources, Resource);
-                     XML_To_Resource (Child, Resource, False);
+                     XML_To_Resource (Child, Resource);
                   end;
 
                else
