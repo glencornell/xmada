@@ -1753,7 +1753,6 @@ package body Model.Initialization is
       Xt_Motif_Object_Widget_Class            : Node_Id;
       Xt_Motif_Override_Shell_Widget_Class    : Node_Id;
       Xt_Motif_Rect_Obj_Widget_Class          : Node_Id;
-      Xt_Motif_Shell_Widget_Class             : Node_Id;
       Xt_Motif_Session_Shell_Widget_Class     : Node_Id;
       Xt_Motif_Top_Level_Shell_Widget_Class   : Node_Id;
       Xt_Motif_Transient_Shell_Widget_Class   : Node_Id;
@@ -1768,11 +1767,8 @@ package body Model.Initialization is
 --   Xt_Motif_File_Selection_Dialog_Widget_Class : Node_Id;
 --  in Xt      Xt_Motif_Form_Widget_Class                  : Node_Id;
 --   Xt_Motif_Form_Dialog_Widget_Class           : Node_Id;
-      Xt_Motif_Gadget_Widget_Class                : Node_Id;
 --   Xt_Motif_Information_Dialog_Widget_Class    : Node_Id;
-      Xt_Motif_Manager_Widget_Class               : Node_Id;
 --   Xt_Motif_Message_Dialog_Widget_Class        : Node_Id;
-      Xt_Motif_Primitive_Widget_Class             : Node_Id;
 --   Xt_Motif_Question_Dialog_Widget_Class       : Node_Id;
 --   Xt_Motif_Scrolled_List_Widget_Class         : Node_Id;
 --   Xt_Motif_Scrolled_Text_Widget_Class         : Node_Id;

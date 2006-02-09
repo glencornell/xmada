@@ -49,8 +49,14 @@ package Model.Xt_Motif is
 
    --  Набор компонентов графического интерфейса пользователя Xt/Motif.
 
-   Xt_Motif_Widget_Set : Node_Id;
+   Xt_Motif_Widget_Set             : Node_Id;
 
    --  Классы виджетов, используемые различными компонентами.
+
+   Xt_Motif_Shell_Widget_Class     : Node_Id;
+
+   Xt_Motif_Gadget_Widget_Class    : Node_Id;
+   Xt_Motif_Manager_Widget_Class   : Node_Id;
+   Xt_Motif_Primitive_Widget_Class : Node_Id;
 
 end Model.Xt_Motif;
