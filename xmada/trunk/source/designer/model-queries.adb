@@ -38,11 +38,13 @@
 ------------------------------------------------------------------------------
 with Model.Names;
 with Model.Tree;
+with Model.Xt_Motif;
 
 package body Model.Queries is
 
    use Model.Names;
    use Model.Tree;
+   use Model.Xt_Motif;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -97,6 +99,86 @@ package body Model.Queries is
    begin
       return Image (Internal_Resource_Name (Node));
    end Internal_Resource_Name_Image;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Is_Gadget
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Gadget (Node : in Node_Id) return Boolean is
+      Aux : Node_Id := Node;
+
+   begin
+      while Aux /= Null_Node loop
+         if Aux = Xt_Motif_Gadget_Widget_Class then
+            return True;
+         end if;
+
+         Aux := Super_Class (Aux);
+      end loop;
+
+      return False;
+   end Is_Gadget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Is_Manager
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Manager (Node : in Node_Id) return Boolean is
+      Aux : Node_Id := Node;
+
+   begin
+      while Aux /= Null_Node loop
+         if Aux = Xt_Motif_Manager_Widget_Class then
+            return True;
+         end if;
+
+         Aux := Super_Class (Aux);
+      end loop;
+
+      return False;
+   end Is_Manager;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Is_Primitive
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Primitive (Node : in Node_Id) return Boolean is
+      Aux : Node_Id := Node;
+
+   begin
+      while Aux /= Null_Node loop
+         if Aux = Xt_Motif_Primitive_Widget_Class then
+            return True;
+         end if;
+
+         Aux := Super_Class (Aux);
+      end loop;
+
+      return False;
+   end Is_Primitive;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Is_Shell
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Shell (Node : in Node_Id) return Boolean is
+      Aux : Node_Id := Node;
+
+   begin
+      while Aux /= Null_Node loop
+         if Aux = Xt_Motif_Shell_Widget_Class then
+            return True;
+         end if;
+
+         Aux := Super_Class (Aux);
+      end loop;
+
+      return False;
+   end Is_Shell;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

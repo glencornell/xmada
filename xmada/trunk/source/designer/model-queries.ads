@@ -66,4 +66,40 @@ package Model.Queries is
    ---------------------------------------------------------------------------
    function Enclosing_Component_Class (Node : in Node_Id) return Node_Id;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Is_Primitive
+   --!    <Purpose> Возвращает True если указанный класс виджета является
+   --! подклассом от XmPrimitive.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Is_Primitive (Node : in Node_Id) return Boolean;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Is_Gadget
+   --!    <Purpose> Возвращает True если указанный класс виджета является
+   --! подклассом от XmGadget.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Is_Gadget (Node : in Node_Id) return Boolean;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Is_Manager
+   --!    <Purpose> Возвращает True если указанный класс виджета является
+   --! подклассом от XmManager.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Is_Manager (Node : in Node_Id) return Boolean;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Is_Shell
+   --!    <Purpose> Возвращает True если указанный класс виджета является
+   --! подклассом от Shell.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Is_Shell (Node : in Node_Id) return Boolean;
+
 end Model.Queries;
