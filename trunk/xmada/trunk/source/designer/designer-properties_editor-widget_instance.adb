@@ -45,6 +45,7 @@ with Xt.Callbacks;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
+with Xm.Menu_Management;
 with Xm.Resource_Management;
 with Xm.Strings;
 with Xm_Form;
@@ -76,6 +77,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Model.Tree.Lists;
    use Xlib.Events;
    use Xm;
+   use Xm.Menu_Management;
    use Xm.Resource_Management;
    use Xm.Strings;
    use Xm_Form;
@@ -154,6 +156,17 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Menu_Entry
+      --!    <Purpose> Подпрограмма обратного вызова
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Menu_Entry (The_Widget : in Widget;
+                               Closure    : in Xt_Pointer;
+                               Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Menu_Entry);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Numeric_Resource_Activate
       --!    <Purpose> Подпрограмма обратного вызова при потере фокуса или
       --! нажатии клавиши Enter на SpinBox-е.
@@ -197,6 +210,49 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Menu_Entry
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Menu_Entry (The_Widget : in Widget;
+                               Closure    : in Xt_Pointer;
+                               Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Args : Xt_Arg_List (0 .. 0);
+         Menu : Xt_Arg_Val;
+         Node : Xt_Arg_Val;
+         Data : constant Xm_Row_Column_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+         --  Получаем выбранный элемент меню.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Menu'Address);
+         Xt_Get_Values (Data.Widget, Args (0 .. 0));
+
+         --  Получаем ресурс, содрержащий меню.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (Xm_Get_Posted_From_Widget (The_Widget),
+                        Args (0 .. 0));
+
+         --  Задаем значения ресурса и обновляем Visual_Editor.
+
+         Set_Resource_Value (Node_Id (Node), Node_Id (Menu));
+         Visual_Editor.Set_Properties (Parent_Node (Node_Id (Node)));
+         Update_Item (Parent_Node (Node_Id (Node)));
+         --  XXX Это не правильно.
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Menu_Entry", E);
+      end On_Menu_Entry;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Numeric_Resource_Modify_Verify
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -226,6 +282,8 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             Set_Resource_Value (Node_Id (Node), Integer (Pos));
             Visual_Editor.Set_Properties (Parent_Node (Node_Id (Node)));
+            Update_Item (Parent_Node (Node_Id (Node)));
+            --  XXX Это не правильно.
          end if;
 
       exception
@@ -457,10 +515,12 @@ package body Designer.Properties_Editor.Widget_Instance is
                            Xm_N_User_Data,
                            Xt_Arg_Val (Node));
                Annotation_Table.Table (Node).Value :=
-                  Xm_Create_Managed_Option_Menu (Form,
-                                                 "resource_value",
-                                                 Args (0 .. 3));
---               Xt_Add_Callback (Annotation_Table.Table (Node).Value,
+                 Xm_Create_Managed_Option_Menu (Form,
+                                                "resource_value",
+                                                Args (0 .. 3));
+               Xt_Add_Callback (Annotation_Table.Table (Res_Type).Menu,
+                                Xm_N_Entry_Callback,
+                                Callbacks.On_Menu_Entry'Access);
 
             when Node_Predefined_Resource_Type  =>
                case Type_Kind (Res_Type) is
@@ -705,7 +765,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                Current_Set   : Node_Id;
                Current_Type  : Node_Id;
                Current_Value : Node_Id;
-               Argl          : Xt_Arg_List (0 .. 0);
+               Argl          : Xt_Arg_List (0 .. 1);
                Str           : Xm_String;
 
             begin
@@ -738,11 +798,14 @@ package body Designer.Properties_Editor.Widget_Instance is
                            Str :=
                              Xm_String_Generate (Name_Image (Current_Value));
                            Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
+                           Xt_Set_Arg (Argl (1),
+                                       Xm_N_User_Data,
+                                       Xt_Arg_Val (Current_Value));
                            Annotation_Table.Table (Current_Value).Button :=
                              Xm_Create_Managed_Push_Button_Gadget
                               (Annotation_Table.Table (Current_Type).Menu,
                                "value",
-                               Argl (0 .. 0));
+                               Argl (0 .. 1));
                            Xm_String_Free (Str);
 
                            Current_Value := Next (Current_Value);
