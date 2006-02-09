@@ -36,6 +36,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with GNAT.Table;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
 with Xm.Resource_Management;
@@ -44,6 +45,7 @@ with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
 with Xm_String_Defs;
 
+with Model.Allocations;
 with Model.Queries;
 with Model.Tree.Lists;
 
@@ -64,6 +66,44 @@ package body Designer.Palette is
    use Xt.Composite_Management;
 
    Palette_Notebook : Xt.Widget;
+
+   type Annotation_Kinds is
+    (Annotation_Empty,
+     Annotation_Project,
+     Annotation_Widget_Class);
+
+   type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
+   record
+      case Kind is
+         when Annotation_Project      =>
+            Row_Column : Widget;
+
+         when Annotation_Widget_Class =>
+            Button : Widget;
+
+         when Annotation_Empty        =>
+            null;
+
+      end case;
+   end record;
+
+   package Annotation_Table is
+     new GNAT.Table
+         (Table_Component_Type => Annotation_Record,
+          Table_Index_Type     => Node_Id,
+          Table_Low_Bound      => Node_Id'First + 1,
+          Table_Initial        => Model.Allocations.Node_Table_Initial,
+          Table_Increment      => Model.Allocations.Node_Table_Increment);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Relocate_Annotation_Table
+   --!    <Purpose> Производит расширение таблицы для обеспечения возможности
+   --! её использования для указанного узла. Все добавленные элементы
+   --! инициализируются значениями по умолчанию.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table (Node : in Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -97,13 +137,13 @@ package body Designer.Palette is
             declare
                Current_Widget_Set   : Node_Id;
                Current_Widget_Class : Node_Id;
-               Pallete_Row_Column   : Widget;
-               Button               : Widget;
                Args                 : Xt_Arg_List (0 .. 0);
                Str                  : Xm_String;
 
             begin
-               Pallete_Row_Column :=
+               Relocate_Annotation_Table (Node);
+
+               Annotation_Table.Table (Node).Row_Column :=
                  Xm_Create_Managed_Row_Column
                   (Palette_Notebook, "palette_page");
 
@@ -118,14 +158,19 @@ package body Designer.Palette is
                   while Current_Widget_Class /= Null_Node loop
 
                      if not Is_Meta_Class (Current_Widget_Class) then
+                        Relocate_Annotation_Table (Current_Widget_Class);
+
                         Str :=
                           Xm_String_Generate
                            (Name_Image (Current_Widget_Class));
 
                         Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
-                        Button :=
+                        Annotation_Table.Table (Current_Widget_Class).Button :=
                           Xm_Create_Managed_Push_Button_Gadget
-                           (Pallete_Row_Column, "callbacks", Args (0 .. 0));
+                           (Annotation_Table.Table (Node).Row_Column,
+                            "callbacks",
+                            Args (0 .. 0));
+
                         Xm_String_Free (Str);
                      end if;
 
@@ -163,6 +208,40 @@ package body Designer.Palette is
       null;
    end Reinitialize;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Relocate_Annotation_Table
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table (Node : in Node_Id) is
+      First : constant Node_Id := Annotation_Table.Last + 1;
+
+   begin
+      if Annotation_Table.Last >= Node then
+      --  Таблица уже имеет достаточный размер и не нуждается в расширении.
+
+         return;
+      end if;
+
+      Annotation_Table.Set_Last (Node);
+
+      for J in First .. Node loop
+         case Node_Kind (J) is
+            when Node_Project =>
+                Annotation_Table.Table (J) :=
+                 (Kind => Annotation_Project,
+                  Row_Column => Null_Widget);
+
+            when Node_Widget_Class =>
+                Annotation_Table.Table (J) :=
+                 (Kind => Annotation_Widget_Class,
+                  Button => Null_Widget);
+
+            when others =>
+               Annotation_Table.Table (J) := (Kind => Annotation_Empty);
+         end case;
+      end loop;
+   end Relocate_Annotation_Table;
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Select_Item
