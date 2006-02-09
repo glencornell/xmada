@@ -46,6 +46,7 @@ with GNAT.Table;
 with Xlib.Resource_Manager;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
+with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xm.Representation_Type_Management;
 with Xm_Drawing_Area;
@@ -74,6 +75,7 @@ package body Designer.Visual_Editor is
    use Xt;
    use Xt.Ancillary_Types;
    use Xt.Composite_Management;
+   use Xt.Instance_Management;
    use Xt.Resource_Management;
 
    type Resource_Value_Kinds is
@@ -758,6 +760,10 @@ package body Designer.Visual_Editor is
                null;
 
             when Annotation_Widget_Instance =>
+               if Annotation_Table.Table (J).Widget /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Widget);
+               end if;
+
                if Annotation_Table.Table (J).Resources /= null then
                   for K in Annotation_Table.Table (J).Resources.Values'Range
                   loop
@@ -780,6 +786,8 @@ package body Designer.Visual_Editor is
       end loop;
 
       Annotation_Table.Init;
+
+      Edited_Component := Null_Node;
    end Reinitialize;
 
    ---------------------------------------------------------------------------
