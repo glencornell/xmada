@@ -195,6 +195,17 @@ package body Designer.Visual_Editor is
      Value                     : in Interfaces.C.unsigned_char)
        return Node_Id;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Corresponding_Value
+   --!    <Purpose> Возвращает внутреннее значение перечислимого типа для
+   --! указанной спецификации значения перечислимого типа.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Corresponding_Value
+    (Enumeration_Resource_Value_Specification : in Node_Id)
+       return Interfaces.C.unsigned_char;
+
    Drawing_Area     : Widget  := Null_Widget;
    Edited_Component : Node_Id := Null_Node;
    Selected_Item    : Node_Id := Null_Node;
@@ -209,17 +220,15 @@ package body Designer.Visual_Editor is
      Value                     : in Interfaces.C.unsigned_char)
        return Node_Id
    is
-      use Interfaces.C;
-      use Interfaces.C.Strings;
-      use Xlib.Resource_Manager;
+      use type Interfaces.C.unsigned;
 
-      C_Image : chars_ptr;
+      C_Image : Interfaces.C.Strings.chars_ptr;
       C_Value : constant Interfaces.C.unsigned_char := Value;
 
-      From    : constant Xrm_Value
+      From    : constant Xlib.Resource_Manager.Xrm_Value
         := (Interfaces.C.unsigned_char'Size / System.Storage_Unit,
             Xlib.X_Pointer (C_Value'Address));
-      To      : constant Xrm_Value
+      To      : constant Xlib.Resource_Manager.Xrm_Value
         := (C_Image'Size / System.Storage_Unit,
             Xlib.X_Pointer (C_Image'Address));
 
@@ -260,6 +269,46 @@ package body Designer.Visual_Editor is
          return Aux;
       end;
    end Corresponding_Enumeration_Resource_Value_Specification;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Corresponding_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Corresponding_Value
+    (Enumeration_Resource_Value_Specification : in Node_Id)
+       return Interfaces.C.unsigned_char
+   is
+      use type Interfaces.C.unsigned;
+
+      C_Image : constant Xlib.X_String
+        := Interfaces.C.To_C
+            (Ada.Characters.Handling.To_String
+              (Internal_Name_Image
+                (Enumeration_Resource_Value_Specification)));
+      C_Value : Interfaces.C.unsigned_char;
+      From    : constant Xlib.Resource_Manager.Xrm_Value
+        := (Xlib.X_String_Pointer'Size / System.Storage_Unit,
+            Xlib.X_Pointer (C_Image'Address));
+      To      : constant Xlib.Resource_Manager.Xrm_Value
+        := (Interfaces.C.unsigned_char'Size / System.Storage_Unit,
+            Xlib.X_Pointer (C_Value'Address));
+
+   begin
+      if not Xt_Convert_And_Store
+              (Drawing_Area,
+               "String",
+               From,
+               Ada.Characters.Handling.To_String
+                (Internal_Name_Image
+                  (Parent_Node (Enumeration_Resource_Value_Specification))),
+               To)
+      then
+         raise Program_Error;
+      end if;
+
+      return C_Value;
+   end Corresponding_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -1013,17 +1062,14 @@ package body Designer.Visual_Editor is
                     end case;
 
                   when Node_Enumerated_Resource_Type =>
-                     null;
---                  Xt_Set_Arg
---                   (Annotation_Table.Table (Node).Resources.Args
---                     (Current),
---                    Interfaces.C.Strings.Null_Ptr,
-----                    Annotation_Table.Table (Node).Resources.Values
-----                     (Current).Name,
---                    Annotation_Table.Table (Node).Resources.Values
---                     (Current).C_Unsigned_Char_Value'Address);
---
---                  Current := Current + 1;
+                     Xt_Set_Arg
+                      (Args (Next_Arg),
+                       Annotation_Table.Table (Node).Resources.Values
+                        (Current).Name,
+                       Xt_Arg_Val
+                        (Corresponding_Value (Resource_Value (Aux))));
+
+                     Next_Arg := Next_Arg + 1;
 
                   when Node_Widget_Reference_Resource_Type =>
                      null;
