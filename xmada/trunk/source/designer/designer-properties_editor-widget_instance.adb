@@ -541,20 +541,16 @@ package body Designer.Properties_Editor.Widget_Instance is
                null;
          end case;
 
-
-        Xm_String_Free (Name);
+         Xm_String_Free (Name);
       end Add_Resource;
 
       Result    : constant Widget_Instance_Properties_Editor_Access
         := new Widget_Instance_Properties_Editor (Node);
       Args      : Xt_Arg_List (0 .. 5);
-      All_Res   : List_Id;
       Current   : Node_Id;
 
    begin
       Result.Notebook := Parent;
-      All_Res := All_Resources (Node);
-      --  Получение всех доступных ресурсов для виджета.
 
       --  Создаем вкладку "Свойства".
 
@@ -592,7 +588,7 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       --  Заполнение редактора свойств значениями ресурсов.
 
-      Current := First (All_Res);
+      Current := First (All_Resources (Node));
 
       while Current /= Null_Node loop
          Add_Resource (Result.Properties, Current);
