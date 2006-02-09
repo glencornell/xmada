@@ -182,9 +182,84 @@ package body Designer.Visual_Editor is
    ---------------------------------------------------------------------------
    procedure Relocate_Annotation_Table (Node : in Node_Id);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Corresponding_Enumeration_Resource_Value_Specification
+   --!    <Purpose> Возвращает узел спецификации значения указанного
+   --! перечислимого типа для указанного внутреннего значения перечислимого
+   --! типа Xt/Motif.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Corresponding_Enumeration_Resource_Value_Specification
+    (Enumeration_Resource_Type : in Node_Id;
+     Value                     : in Interfaces.C.unsigned_char)
+       return Node_Id;
+
    Drawing_Area     : Widget  := Null_Widget;
    Edited_Component : Node_Id := Null_Node;
    Selected_Item    : Node_Id := Null_Node;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Corresponding_Enumeration_Resource_Value_Specification
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Corresponding_Enumeration_Resource_Value_Specification
+    (Enumeration_Resource_Type : in Node_Id;
+     Value                     : in Interfaces.C.unsigned_char)
+       return Node_Id
+   is
+      use Interfaces.C;
+      use Interfaces.C.Strings;
+      use Xlib.Resource_Manager;
+
+      C_Image : chars_ptr;
+      C_Value : constant Interfaces.C.unsigned_char := Value;
+
+      From    : constant Xrm_Value
+        := (Interfaces.C.unsigned_char'Size / System.Storage_Unit,
+            Xlib.X_Pointer (C_Value'Address));
+      To      : constant Xrm_Value
+        := (C_Image'Size / System.Storage_Unit,
+            Xlib.X_Pointer (C_Image'Address));
+
+   begin
+      if not Xt_Convert_And_Store
+              (Drawing_Area,
+               Ada.Characters.Handling.To_String
+                (Internal_Name_Image (Enumeration_Resource_Type)),
+               From,
+               "String",
+               To)
+      then
+         raise Program_Error;
+      end if;
+
+      declare
+         Image : constant Name_Id
+           := Find
+               (Ada.Characters.Handling.To_Wide_String
+                 (Ada.Characters.Handling.To_Upper
+                   (Interfaces.C.Strings.Value (C_Image))));
+         Aux   : Node_Id
+           := First (Value_Specifications (Enumeration_Resource_Type));
+
+      begin
+         while Aux /= Null_Node loop
+            if Internal_Name (Aux) = Image then
+               exit;
+            end if;
+
+            Aux := Next (Aux);
+         end loop;
+
+         if Aux = Null_Node then
+            raise Program_Error;
+         end if;
+
+         return Aux;
+      end;
+   end Corresponding_Enumeration_Resource_Value_Specification;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -578,66 +653,13 @@ package body Designer.Visual_Editor is
                  end case;
 
                when Node_Enumerated_Resource_Type =>
-                  declare
-                     use Interfaces.C.Strings;
-                     use Interfaces.C;
-                     use Xlib.Resource_Manager;
-
-                     C_Image : chars_ptr;
-
-                     From    : constant Xrm_Value
-                       := (Interfaces.C.unsigned_char'Size
-                             / System.Storage_Unit,
-                           Xlib.X_Pointer
-                            (Annotation_Table.Table
-                              (Node).Resources.Values
-                                (Current).C_Unsigned_Char_Value'Address));
-                     To      : constant Xrm_Value
-                       := (C_Image'Size / System.Storage_Unit,
-                           Xlib.X_Pointer (C_Image'Address));
-
-                  begin
-                     if not Xt_Convert_And_Store
-                             (Drawing_Area,
-                              Ada.Characters.Handling.To_String
-                               (Internal_Name_Image
-                                 (Resource_Type
-                                   (Resource_Specification (Aux)))),
-                              From,
-                              "String",
-                              To)
-                     then
-                        raise Program_Error;
-                     end if;
-
-                     declare
-                        Image : constant Name_Id
-                          := Find
-                              (Ada.Characters.Handling.To_Wide_String
-                                (Ada.Characters.Handling.To_Upper
-                                  (Value (C_Image))));
-                        Val   : Node_Id
-                          := First
-                              (Value_Specifications
-                                (Resource_Type
-                                  (Resource_Specification (Aux))));
-
-                     begin
-                        while Val /= Null_Node loop
-                           if Internal_Name (Val) = Image then
-                              exit;
-                           end if;
-
-                           Val := Next (Val);
-                        end loop;
-
-                        if Val = Null_Node then
-                           raise Program_Error;
-                        end if;
-
-                        Set_Resource_Value (Aux, Val);
-                     end;
-                  end;
+                  Set_Resource_Value
+                   (Aux,
+                    Corresponding_Enumeration_Resource_Value_Specification
+                     (Resource_Type (Resource_Specification (Aux)),
+                      Annotation_Table.Table
+                        (Node).Resources.Values
+                          (Current).C_Unsigned_Char_Value));
 
                when Node_Widget_Reference_Resource_Type =>
                   null;
