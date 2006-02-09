@@ -36,8 +36,34 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xt.Ancillary_Types;
+with Xt.Composite_Management;
+with Xm.Resource_Management;
+with Xm.Strings;
+with Xm_Push_Button_Gadget;
+with Xm_Row_Column;
+with Xm_String_Defs;
+
+with Model.Queries;
+with Model.Tree.Lists;
 
 package body Designer.Palette is
+
+   use Model;
+   use Model.Tree;
+   use Model.Tree.Lists;
+   use Model.Queries;
+   use Xm;
+   use Xm.Resource_Management;
+   use Xm_String_Defs;
+   use Xm.Strings;
+   use Xm_Row_Column;
+   use Xm_Push_Button_Gadget;
+   use Xt;
+   use Xt.Ancillary_Types;
+   use Xt.Composite_Management;
+
+   Palette_Notebook : Xt.Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -56,7 +82,7 @@ package body Designer.Palette is
    ---------------------------------------------------------------------------
    procedure Initialize (Parent : in Xt.Widget) is
    begin
-      null;
+      Palette_Notebook := Parent;
    end Initialize;
 
    ---------------------------------------------------------------------------
@@ -66,7 +92,65 @@ package body Designer.Palette is
    ---------------------------------------------------------------------------
    procedure Insert_Item (Node : in Model.Node_Id) is
    begin
-      null;
+      case Node_Kind (Node) is
+         when Node_Project =>
+            declare
+               Current_Widget_Set   : Node_Id;
+               Current_Widget_Class : Node_Id;
+               Pallete_Row_Column   : Widget;
+               Button               : Widget;
+               Args                 : Xt_Arg_List (0 .. 0);
+               Str                  : Xm_String;
+
+            begin
+               Pallete_Row_Column :=
+                 Xm_Create_Managed_Row_Column
+                  (Palette_Notebook, "palette_page");
+
+               Current_Widget_Set := First (Imported_Widget_Sets (Node));
+
+               while Current_Widget_Set /= Null_Node loop
+                  --  Построение кнопки для каждого класса виджета.
+
+                  Current_Widget_Class :=
+                    First (Widget_Classes (Current_Widget_Set));
+
+                  while Current_Widget_Class /= Null_Node loop
+
+                     if not Is_Meta_Class (Current_Widget_Class) then
+                        Str :=
+                          Xm_String_Generate
+                           (Name_Image (Current_Widget_Class));
+
+                        Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
+                        Button :=
+                          Xm_Create_Managed_Push_Button_Gadget
+                           (Pallete_Row_Column, "callbacks", Args (0 .. 0));
+                        Xm_String_Free (Str);
+                     end if;
+
+                     Current_Widget_Class := Next (Current_Widget_Class);
+                  end loop;
+
+                  Current_Widget_Set := Next (Current_Widget_Set);
+               end loop;
+            end;
+
+            Xt_Unmanage_Child (Palette_Notebook);
+            Xt_Manage_Child (Palette_Notebook);
+
+         when Node_Application =>
+            null;
+
+         when Node_Component_Class =>
+            null;
+
+         when Node_Widget_Instance =>
+            null;
+
+         when others =>
+            raise Program_Error;
+      end case;
    end Insert_Item;
 
    ---------------------------------------------------------------------------
