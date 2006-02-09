@@ -45,9 +45,13 @@ package Model.Tree.Lists is
 
    function New_List return List_Id;
 
+   function Length (List : in List_Id) return Natural;
+
    procedure Append (List : in List_Id; Node : in Node_Id);
 
    procedure Insert_Before (Before : in Node_Id; Node : in Node_Id);
+
+   procedure Remove (Node : in Node_Id);
 
    function First (List : in List_Id) return Node_Id;
 
@@ -56,7 +60,5 @@ package Model.Tree.Lists is
    function Parent_Node (List : in List_Id) return Node_Id;
 
    procedure Set_Parent_Node (List : in List_Id; Value : in Node_Id);
-
-   function Length (List : in List_Id) return Natural;
 
 end Model.Tree.Lists;
