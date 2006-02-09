@@ -182,6 +182,40 @@ package body Model.Tree.Lists is
       return List_Table.Table (List).Parent;
    end Parent_Node;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Remove
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Remove (Node : in Node_Id) is
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Table.Table (Node).List
+                       in List_Table.First .. List_Table.Last);
+
+      List : constant List_Id := Node_Table.Table (Node).List;
+
+   begin
+      if Node_Table.Table (Node).Previous = Null_Node then
+         List_Table.Table (List).First := Node_Table.Table (Node).Next;
+
+      else
+         Node_Table.Table (Node_Table.Table (Node).Previous).Next :=
+           Node_Table.Table (Node).Next;
+      end if;
+
+      if Node_Table.Table (Node).Next = Null_Node then
+         List_Table.Table (List).Last := Node_Table.Table (Node).Previous;
+
+      else
+         Node_Table.Table (Node_Table.Table (Node).Next).Previous :=
+           Node_Table.Table (Node).Previous;
+      end if;
+
+      Node_Table.Table (Node).List     := Null_List;
+      Node_Table.Table (Node).Previous := Null_Node;
+      Node_Table.Table (Node).Next     := Null_Node;
+   end Remove;
+
    --------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Parent_Node
