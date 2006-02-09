@@ -1245,6 +1245,22 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Widget_Reference_Constraints
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Widget_Reference_Constraints
+    (Node  : in Node_Id;
+     Value : in Widget_Reference_Constraint)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Node_Table.Table (Node).Widget_Reference_Constraints := Value;
+   end Set_Widget_Reference_Constraints;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Super_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -1296,5 +1312,22 @@ package body Model.Tree is
 
       return Node_Table.Table (Node).Widget_Classes;
    end Widget_Classes;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Widget_Reference_Constraints
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Widget_Reference_Constraints (Node : in Node_Id)
+     return Widget_Reference_Constraint
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+      pragma Assert (Node_Kind (Resource_Type (Node))
+                       = Node_Widget_Reference_Resource_Type);
+
+      return Node_Table.Table (Node).Widget_Reference_Constraints;
+   end Widget_Reference_Constraints;
 
 end Model.Tree;

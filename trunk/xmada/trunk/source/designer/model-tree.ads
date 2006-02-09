@@ -208,6 +208,16 @@ package Model.Tree is
 --     Type_Widget_Reference);
      --  Ссылка на экземпляр виджета.
 
+   type Widget_Reference_Constraint is
+    (Unspecified,
+     --  Не определено.
+
+     Child,
+     --  Дочерний виджет.
+
+     Parents_Child);
+     --  Дочерний виджет родительского виджета.
+
    function Node_Kind (Node : in Node_Id) return Node_Kinds;
    function Parent_Node (Node : in Node_Id) return Node_Id;
 
@@ -315,6 +325,12 @@ package Model.Tree is
    function Can_Be_Retrieved_By_Get_Values (Node : in Node_Id) return Boolean;
    procedure Set_Can_Be_Retrieved_By_Get_Values (Node  : in Node_Id;
                                                  Value : in Boolean);
+
+   function Widget_Reference_Constraints (Node : in Node_Id)
+     return Widget_Reference_Constraint;
+   procedure Set_Widget_Reference_Constraints
+    (Node  : in Node_Id;
+     Value : in Widget_Reference_Constraint);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -456,6 +472,11 @@ private
             Can_Be_Retrieved_By_Get_Values : Boolean;
             --  Значение ресурса может быть извлечено с использованием
             --  XtGetValues.
+
+            Widget_Reference_Constraints   : Widget_Reference_Constraint;
+            --  Ограничения на используемый в качестве значения экземпляр
+            --  виджета. Действителен только если Node_Kind (Resource_Type)
+            --  равен Node_Widget_Reference_Resource_Type.
 
             --  Related (Node)
             --  Default
