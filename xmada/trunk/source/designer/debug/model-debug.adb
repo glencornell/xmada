@@ -588,6 +588,23 @@ package body Model.Debug is
              & Resource_Class_Name_Image (Node)
              & " : "
              & Name_Image (Resource_Type (Node)));
+
+      if Node_Kind (Resource_Type (Node))
+           = Node_Widget_Reference_Resource_Type
+      then
+         case Widget_Reference_Constraints (Node) is
+            when Unspecified =>
+               null;
+
+            when Child =>
+               Set_Col (File, Offset);
+               Put (File, "Any widget's child");
+
+            when Parents_Child =>
+               Set_Col (File, Offset);
+               Put (File, "Any parent's widget child");
+         end case;
+      end if;
    end Print_Resource_Specification;
 
    ---------------------------------------------------------------------------

@@ -298,7 +298,8 @@ package body Model.Tree.Constructors is
          Resource_Type                  => Null_Node,
          Can_Be_Set_At_Creation_Time    => False,
          Can_Be_Set_By_Set_Values       => False,
-         Can_Be_Retrieved_By_Get_Values => False));
+         Can_Be_Retrieved_By_Get_Values => False,
+         Widget_Reference_Constraints   => Unspecified));
 
       return Node_Table.Last;
    end Create_Resource_Specification;
