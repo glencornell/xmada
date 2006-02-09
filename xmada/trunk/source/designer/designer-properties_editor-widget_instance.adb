@@ -69,13 +69,12 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    use Interfaces.C;
    use Interfaces.C.Wide_Strings;
+   use Model;
+   use Model.Queries;
+   use Model.Tree;
+   use Model.Tree.Designer;
+   use Model.Tree.Lists;
    use Xlib.Events;
-   use Xt;
-   use Xt.Ancillary_Types;
-   use Xt.Callbacks;
-   use Xt.Composite_Management;
-   use Xt.Instance_Management;
-   use Xt.Resource_Management;
    use Xm;
    use Xm.Resource_Management;
    use Xm.Strings;
@@ -89,11 +88,12 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Xm_Text_Field;
    use Xm_Toggle_Button_Gadget;
    use Xm_Row_Column;
-   use Model;
-   use Model.Queries;
-   use Model.Tree;
-   use Model.Tree.Designer;
-   use Model.Tree.Lists;
+   use Xt;
+   use Xt.Ancillary_Types;
+   use Xt.Callbacks;
+   use Xt.Composite_Management;
+   use Xt.Instance_Management;
+   use Xt.Resource_Management;
 
    type Annotation_Kinds is
     (Annotation_Empty,
@@ -194,6 +194,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    end Callbacks;
 
    package body Callbacks is
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Numeric_Resource_Modify_Verify
@@ -341,6 +342,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       end On_Numeric_Resource_Value_Changed;
 
    end Callbacks;
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
