@@ -577,6 +577,8 @@ package body Model.Debug is
          else
             Put (File, ' ');
          end if;
+
+         Put (File, ']');
       end if;
 
       Put (File,
