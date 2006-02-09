@@ -304,6 +304,18 @@ package Model.Tree is
    function Is_Managed (Node : in Node_Id) return Boolean;
    procedure Set_Is_Managed (Node : in Node_Id; Value : in Boolean);
 
+   function Can_Be_Set_At_Creation_Time (Node : in Node_Id) return Boolean;
+   procedure Set_Can_Be_Set_At_Creation_Time (Node  : in Node_Id;
+                                              Value : in Boolean);
+
+   function Can_Be_Set_By_Set_Values (Node : in Node_Id) return Boolean;
+   procedure Set_Can_Be_Set_By_Set_Values (Node  : in Node_Id;
+                                           Value : in Boolean);
+
+   function Can_Be_Retrieved_By_Get_Values (Node : in Node_Id) return Boolean;
+   procedure Set_Can_Be_Retrieved_By_Get_Values (Node  : in Node_Id;
+                                                 Value : in Boolean);
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
@@ -419,20 +431,31 @@ private
             --  --  Значения ресурсов, определяющих данный класс.
 
          when Node_Resource_Specification =>
-            Resource_Name                : Name_Id;
+            Resource_Name                  : Name_Id;
             --  Имя ресурса.
 
-            Internal_Resource_Name       : Name_Id;
+            Internal_Resource_Name         : Name_Id;
             --  Внутреннее имя ресурса, используемое Xt.
 
-            Resource_Class_Name          : Name_Id;
+            Resource_Class_Name            : Name_Id;
             --  Имя класса ресурсов.
 
-            Internal_Resource_Class_Name : Name_Id;
+            Internal_Resource_Class_Name   : Name_Id;
             --  Внутреннее имя класса ресурсов, используемое Xt.
 
-            Resource_Type                : Node_Id;
+            Resource_Type                  : Node_Id;
             --  Тип значения ресурса.
+
+            Can_Be_Set_At_Creation_Time    : Boolean;
+            --  Значение ресурса может быть задано при создании виджета.
+
+            Can_Be_Set_By_Set_Values       : Boolean;
+            --  Значение ресурса может быть изменено с использованием
+            --  XtSetValues.
+
+            Can_Be_Retrieved_By_Get_Values : Boolean;
+            --  Значение ресурса может быть извлечено с использованием
+            --  XtGetValues.
 
             --  Related (Node)
             --  Default

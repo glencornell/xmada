@@ -548,6 +548,37 @@ package body Model.Debug is
       pragma Unreferenced (Offset);
 
    begin
+      if not Can_Be_Set_At_Creation_Time (Node)
+        and then not Can_Be_Set_By_Set_Values (Node)
+        and then not Can_Be_Retrieved_By_Get_Values (Node)
+      then
+         Put (File, " [N/A]");
+
+      else
+         Put (File, " [");
+
+         if Can_Be_Set_At_Creation_Time (Node) then
+            Put (File, 'C');
+
+         else
+            Put (File, ' ');
+         end if;
+
+         if Can_Be_Set_By_Set_Values (Node) then
+            Put (File, 'S');
+
+         else
+            Put (File, ' ');
+         end if;
+
+         if Can_Be_Retrieved_By_Get_Values (Node) then
+            Put (File, 'G');
+
+         else
+            Put (File, ' ');
+         end if;
+      end if;
+
       Put (File,
            ' '
              & Resource_Name_Image (Node)
