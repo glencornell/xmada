@@ -2254,6 +2254,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XtCTransientFor"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("TransientFor"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+--         Set_Widget_Reference_Constraints (Resource, );
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -2742,6 +2743,7 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("MenuWidget"));
          Set_Resource_Type
           (Resource, Xt_Motif_Menu_Widget_Reference_Resource_Type);
+--         Set_Widget_Reference_Constraints (Resource, );
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -3971,6 +3973,7 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("MenuWidget"));
          Set_Resource_Type
           (Resource, Xt_Motif_Menu_Widget_Reference_Resource_Type);
+--         Set_Widget_Reference_Constraints (Resource, );
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4279,6 +4282,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCInitialFocus"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("InitialFocus"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4409,6 +4413,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCWidget"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Widget"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
          Append (Resources, Resource);
@@ -4419,6 +4424,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCWidget"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Widget"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
          Append (Resources, Resource);
@@ -4573,6 +4579,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCWidget"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Widget"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Parents_Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4606,6 +4613,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCWidget"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Widget"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Parents_Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4639,6 +4647,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCWidget"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Widget"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Parents_Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4672,6 +4681,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCWidget"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Widget"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Parents_Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -5254,6 +5264,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCWidget"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Widget"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Parents_Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -5953,6 +5964,7 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("MenuWidget"));
          Set_Resource_Type
           (Resource, Xt_Motif_Menu_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -6232,6 +6244,7 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name
           (Resource, Enter ("HorizontalScrollBar"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -6286,6 +6299,7 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name
           (Resource, Enter ("VerticalScrollBar"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -6297,6 +6311,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCWorkWindow"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("WorkWindow"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -6352,6 +6367,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCCommandWindow"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("CommandWindow"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -6407,6 +6423,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCMenuBar"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("MenuBar"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -6418,6 +6435,7 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCMessageWindow"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("MessageWindow"));
          Set_Resource_Type (Resource, Xt_Motif_Widget_Reference_Resource_Type);
+         Set_Widget_Reference_Constraints (Resource, Child);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
