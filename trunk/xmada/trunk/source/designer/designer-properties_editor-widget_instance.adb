@@ -36,7 +36,10 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Interfaces.C.Wide_Strings;
 with GNAT.Table;
+
+with Xlib.Events;
 with Xt.Ancillary_Types;
 with Xt.Callbacks;
 with Xt.Composite_Management;
@@ -49,7 +52,9 @@ with Xm_Label_Gadget;
 with Xm_Push_Button_Gadget;
 with Xm_Scrolled_Window;
 with Xm_Simple_Spin_Box;
+with Xm_Spin_Box;
 with Xm_String_Defs;
+with Xm_Text_Field;
 with Xm_Toggle_Button_Gadget;
 with Xm_Row_Column;
 
@@ -62,6 +67,9 @@ with Model.Tree.Lists;
 
 package body Designer.Properties_Editor.Widget_Instance is
 
+   use Interfaces.C;
+   use Interfaces.C.Wide_Strings;
+   use Xlib.Events;
    use Xt;
    use Xt.Ancillary_Types;
    use Xt.Callbacks;
@@ -76,7 +84,9 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Xm_Push_Button_Gadget;
    use Xm_Scrolled_Window;
    use Xm_Simple_Spin_Box;
+   use Xm_Spin_Box;
    use Xm_String_Defs;
+   use Xm_Text_Field;
    use Xm_Toggle_Button_Gadget;
    use Xm_Row_Column;
    use Model;
@@ -122,12 +132,12 @@ package body Designer.Properties_Editor.Widget_Instance is
             Menu : Widget;
             --  Выпадающее меню, используемое в меню опций значения ресурса.
 
-         when Annotation_Enumeration_Value_Specification   =>
+         when Annotation_Enumeration_Value_Specification    =>
             Button : Widget;
             --  Кнопка выпадающего меню, используемого в меню опций значения
             --  ресурса.
 
-         when Annotation_Empty                             =>
+         when Annotation_Empty                              =>
             null;
       end case;
    end record;
@@ -141,11 +151,25 @@ package body Designer.Properties_Editor.Widget_Instance is
            Table_Increment      => Model.Allocations.Node_Table_Increment);
 
    package Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Numeric_Resource_Activate
+      --!    <Purpose> Подпрограмма обратного вызова при потере фокуса или
+      --! нажатии клавиши Enter на SpinBox-е.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Numeric_Resource_Activate
+                 (The_Widget : in Widget;
+                  Closure    : in Xt_Pointer;
+                  Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Numeric_Resource_Activate);
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Numeric_Resource_Value_Changed
-      --!    <Purpose> Подпрограмма обратного вызова при изменении значения
-      --! spinBox-а.
+      --!    <Purpose> Подпрограмма обратного вызова при изменении
+      --! значения поля.
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure On_Numeric_Resource_Value_Changed
@@ -154,9 +178,111 @@ package body Designer.Properties_Editor.Widget_Instance is
                   Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Numeric_Resource_Value_Changed);
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Numeric_Resource_Modify_Verify
+      --!    <Purpose> Подпрограмма обратного вызова при изменении значения
+      --! spinBox-а.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Numeric_Resource_Modify_Verify
+                 (The_Widget : in Widget;
+                  Closure    : in Xt_Pointer;
+                  Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Numeric_Resource_Modify_Verify);
+
    end Callbacks;
 
    package body Callbacks is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Numeric_Resource_Modify_Verify
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Numeric_Resource_Activate
+                 (The_Widget : in Widget;
+                  Closure    : in Xt_Pointer;
+                  Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Node   : Xt_Arg_Val;
+         Args   : Xt_Arg_List (0 .. 5);
+         Pos    : Xm_Spin_Box_Position;
+         Status : Xm_Spin_Box_Validation_Status;
+
+      begin
+         Xm_Spin_Box_Validate_Position (The_Widget, Pos, Status);
+
+         if Status = Xm_Valid_Value then
+            Xt_Set_Arg (Args (0), Xm_N_Position, Xt_Arg_Val (Pos));
+            Xt_Set_Values (Xt_Parent (The_Widget), Args (0 .. 0));
+
+            Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+            Xt_Get_Values (Xt_Parent (The_Widget), Args (0 .. 0));
+
+            Set_Resource_Value (Node_Id (Node), Integer (Pos));
+            Visual_Editor.Set_Properties (Parent_Node (Node_Id (Node)));
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Numeric_Resource_Activate", E);
+      end On_Numeric_Resource_Activate;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Numeric_Resource_Modify_Verify
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Numeric_Resource_Modify_Verify
+                 (The_Widget : in Widget;
+                  Closure    : in Xt_Pointer;
+                  Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (The_Widget);
+         --  Данные переменные не используются.
+
+         Data : constant Xm_Text_Verify_Callback_Struct_Wcs_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+         if Data.Event = null or Data.Text.Length = 0 then
+            return;
+         end if;
+
+         --  Проверяем, что введенное значение является числом (может быть
+         --  отрицательным).
+
+         declare
+            Image : constant Wide_String := Value (Data.Text.Pointer);
+
+         begin
+            for J in Image'Range loop
+               if Image (J) not in '0' .. '9' then
+                  if not (Image (J) = '-'
+                          and J = Image'First
+                          and Data.Start_Pos = 0)
+                  then
+                     Data.Do_It := Xt_False;
+                     --  Если значение не является числом, то запрещаем
+                     --  его добавление.
+
+                  end if;
+               end if;
+            end loop;
+         end;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Numeric_Resource_Modify_Verify", E);
+      end On_Numeric_Resource_Modify_Verify;
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Numeric_Resource_Value_Changed
@@ -170,16 +296,43 @@ package body Designer.Properties_Editor.Widget_Instance is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
-         Node : Xt_Arg_Val;
-         Args : Xt_Arg_List (0 .. 5);
-         Data : constant Xm_Simple_Spin_Box_Callback_Struct_Access
+         Pos    : Xm_Spin_Box_Position;
+         Status : Xm_Spin_Box_Validation_Status;
+         Data   : constant Xm_Text_Verify_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
 
       begin
-         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
-         Xt_Get_Values (The_Widget, Args (0 .. 0));
+         if Data.Event = null then
+            return;
+         end if;
 
-         Set_Resource_Value (Node_Id (Node), Integer (Data.Position));
+         Xm_Spin_Box_Validate_Position (The_Widget, Pos, Status);
+
+         --  Проверка выхода значения за верхний и нижний пределы.
+         --  Если произошел выход, то устанавливаем максимальное или
+         --  минимальное значение.
+
+         if Status = Xm_Minimum_Value or Status = Xm_Maximum_Value then
+            declare
+               Image : constant Wide_String
+                 := Xm_Spin_Box_Position'Wide_Image (Pos);
+
+            begin
+               --  Если число не отрицательное, то первый пробел
+               --  необходимо игнорировать.
+
+               if Pos < 0 then
+                  Xm_Text_Field_Set_String_Wcs (The_Widget, Image);
+
+               else
+                  Xm_Text_Field_Set_String_Wcs (The_Widget,
+                                                Image (2 .. Image'Last));
+               end if;
+            end;
+
+            Xm_Text_Field_Set_Insertion_Position (The_Widget, Data.End_Pos);
+            --  Устанавливаем курсор в последнюю позицию
+         end if;
 
       exception
          when E : others =>
@@ -188,7 +341,6 @@ package body Designer.Properties_Editor.Widget_Instance is
       end On_Numeric_Resource_Value_Changed;
 
    end Callbacks;
-
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
@@ -224,6 +376,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       procedure Add_Resource (Parent : in Widget; Node : in Node_Id) is
          Form     : Widget;
          Name     : Xm_String;
+         Text     : Widget;
          Res_Type : Node_Id;
          Args     : Xt_Arg_List (0 .. 5);
 
@@ -336,10 +489,26 @@ package body Designer.Properties_Editor.Widget_Instance is
                        Xm_Create_Managed_Simple_Spin_Box (Form,
                                                           "resource_numeric",
                                                           Args (0 .. 5));
+
+                     Xt_Set_Arg (Args (0), Xm_N_Text_Field, Text'Address);
+                     Xt_Get_Values (Annotation_Table.Table (Node).Value,
+                                    Args (0 .. 0));
                      Xt_Add_Callback
-                      (Annotation_Table.Table (Node).Value,
-                       Xm_N_Modify_Verify_Callback,
+                      (Text,
+                       Xm_N_Modify_Verify_Callback_Wcs,
+                       Callbacks.On_Numeric_Resource_Modify_Verify'Access);
+                     Xt_Add_Callback
+                      (Text,
+                       Xm_N_Value_Changed_Callback,
                        Callbacks.On_Numeric_Resource_Value_Changed'Access);
+                     Xt_Add_Callback
+                      (Text,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Numeric_Resource_Activate'Access);
+                     Xt_Add_Callback
+                      (Text,
+                       Xm_N_Losing_Focus_Callback,
+                       Callbacks.On_Numeric_Resource_Activate'Access);
 
                   when Type_Pixel =>
                      null; --  TODO реализовать.
