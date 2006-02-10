@@ -38,8 +38,10 @@
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
 with Ada.Command_Line;
+with Ada.Wide_Text_IO;
 
 with Generator.Application_Resources;
+with Generator.Prototype.Component_Class;
 with Model.Tools;
 with Model.Tree.Lists;
 with Model.Initialization;
@@ -51,22 +53,61 @@ procedure Compiler.Driver is
    use Model.Tree;
    use Model.Tree.Lists;
 
-   Project     : Node_Id;
-   Application : Node_Id;
+   procedure Usage;
+
+   procedure Usage is
+   begin
+      Ada.Wide_Text_IO.Put_Line ("compiler <mode> <file>");
+      Ada.Wide_Text_IO.Put_Line
+       ("   --application-resources   Generate application resources files");
+      Ada.Wide_Text_IO.Put_Line
+       ("   --code                    Generate Ada source code");
+   end Usage;
+
+   Project         : Node_Id;
+   Application     : Node_Id;
+   Component_Class : Node_Id;
 
 begin
    Model.Initialization.Initialize;
 
-   if Argument_Count = 1 then
-      Project :=
-        Model.Tools.XML_To_Project
-         (Ada.Characters.Handling.To_Wide_String (Argument (1)));
+   if Argument_Count = 2 then
+      if Argument (1) = "--application-resources" then
+         Project :=
+           Model.Tools.XML_To_Project
+            (Ada.Characters.Handling.To_Wide_String (Argument (2)));
 
-      Application := First (Applications (Project));
+         Application := First (Applications (Project));
 
-      while Application /= Null_Node loop
-         Generator.Application_Resources.Generate (Application);
-         Application := Next (Application);
-      end loop;
+         while Application /= Null_Node loop
+            Generator.Application_Resources.Generate (Application);
+            Application := Next (Application);
+         end loop;
+
+      elsif Argument (1) = "--code" then
+         Project :=
+           Model.Tools.XML_To_Project
+            (Ada.Characters.Handling.To_Wide_String (Argument (2)));
+
+         Application := First (Applications (Project));
+
+         while Application /= Null_Node loop
+            Component_Class := First (Component_Classes (Application));
+
+            while Component_Class /= Null_Node loop
+               Generator.Prototype.Component_Class.Generate (Component_Class);
+
+               Component_Class := Next (Component_Class);
+            end loop;
+
+            Application := Next (Application);
+         end loop;
+
+      else
+         Usage;
+      end if;
+
+   else
+      Usage;
    end if;
 end Compiler.Driver;
