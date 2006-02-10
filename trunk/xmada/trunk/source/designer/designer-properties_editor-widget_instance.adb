@@ -56,10 +56,12 @@ with Xm_Simple_Spin_Box;
 with Xm_Spin_Box;
 with Xm_String_Defs;
 with Xm_Text_Field;
+with Xm_Toggle_Button;
 with Xm_Toggle_Button_Gadget;
 with Xm_Row_Column;
 
 with Designer.Main_Window;
+with Designer.Model_Utilities;
 with Designer.Visual_Editor;
 with Model.Allocations;
 with Model.Queries;
@@ -68,6 +70,7 @@ with Model.Tree.Lists;
 
 package body Designer.Properties_Editor.Widget_Instance is
 
+   use Designer.Model_Utilities;
    use Interfaces.C;
    use Interfaces.C.Wide_Strings;
    use Model;
@@ -88,6 +91,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Xm_Spin_Box;
    use Xm_String_Defs;
    use Xm_Text_Field;
+   use Xm_Toggle_Button;
    use Xm_Toggle_Button_Gadget;
    use Xm_Row_Column;
    use Xt;
@@ -204,6 +208,18 @@ package body Designer.Properties_Editor.Widget_Instance is
                   Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Numeric_Resource_Modify_Verify);
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Use_In_Program_Changed
+      --!    <Purpose> Подпрограмма обратного вызова при изменении состояния
+      --! кнопки "Использовать в программе".
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Use_In_Program_Changed
+                 (The_Widget : in Widget;
+                  Closure    : in Xt_Pointer;
+                  Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Use_In_Program_Changed);
    end Callbacks;
 
    package body Callbacks is
@@ -241,9 +257,44 @@ package body Designer.Properties_Editor.Widget_Instance is
          --  Задаем значения ресурса и обновляем Visual_Editor.
 
          Set_Resource_Value (Node_Id (Node), Node_Id (Menu));
+         Set_Is_Changed (Node_Id (Node), True);
+
          Visual_Editor.Set_Properties (Parent_Node (Node_Id (Node)));
          Update_Item (Parent_Node (Node_Id (Node)));
-         --  XXX Это не правильно.
+
+         if Resource_Value (Node_Id (Node)) /= Node_Id (Menu) then
+               return;
+         end if;
+
+         --  Если значение не изменилось, то обновляем список ресурсов
+
+         declare
+            Res_List : constant List_Id
+              := Resources (Parent_Node (Node_Id (Node)));
+            Res_Node : Node_Id;
+
+         begin
+            if Xm_Toggle_Button_Get_State
+             (Annotation_Table.Table (Node_Id (Node)).Use_In_Program)
+            then
+               --  Если кнопка Use_In_Program  была нажата,
+               --  то обновляем значение ресурса.
+
+               Res_Node := Find_Resource_Value
+                            (Res_List,
+                             Resource_Specification (Node_Id (Node)));
+               Set_Resource_Value (Res_Node, Node_Id (Menu));
+
+            else
+               --  Если кнопка Use_In_Program  не была нажата,
+               --  то нажимаем ее (значение зобавится в callback-е).
+
+               Xm_Toggle_Button_Set_State
+                (Annotation_Table.Table (Node_Id (Node)).Use_In_Program,
+                 True,
+                 True);
+            end if;
+         end;
 
       exception
          when E : others =>
@@ -281,11 +332,46 @@ package body Designer.Properties_Editor.Widget_Instance is
             Xt_Get_Values (Xt_Parent (The_Widget), Args (0 .. 0));
 
             Set_Resource_Value (Node_Id (Node), Integer (Pos));
+            Set_Is_Changed (Node_Id (Node), True);
+
             Visual_Editor.Set_Properties (Parent_Node (Node_Id (Node)));
             Update_Item (Parent_Node (Node_Id (Node)));
-            --  XXX Это не правильно.
-         end if;
 
+
+            if Resource_Value (Node_Id (Node)) /= Integer (Pos) then
+               return;
+            end if;
+
+            --  Если значение не изменилось, то обновляем список ресурсов
+
+            declare
+               Res_List : constant List_Id
+                 := Resources (Parent_Node (Node_Id (Node)));
+               Res_Node : Node_Id;
+
+            begin
+               if Xm_Toggle_Button_Get_State
+                 (Annotation_Table.Table (Node_Id (Node)).Use_In_Program)
+               then
+                  --  Если кнопка Use_In_Program  была нажата,
+                  --  то обновляем значение ресурса.
+
+                  Res_Node := Find_Resource_Value
+                               (Res_List,
+                                Resource_Specification (Node_Id (Node)));
+                  Set_Resource_Value (Res_Node, Integer (Pos));
+
+               else
+                  --  Если кнопка Use_In_Program  не была нажата,
+                  --  то нажимаем ее (значение зобавится в callback-е).
+
+                  Xm_Toggle_Button_Set_State
+                   (Annotation_Table.Table (Node_Id (Node)).Use_In_Program,
+                    True,
+                    True);
+               end if;
+            end;
+         end if;
       exception
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback
@@ -399,6 +485,73 @@ package body Designer.Properties_Editor.Widget_Instance is
              ("On_Numeric_Resource_Value_Changed", E);
       end On_Numeric_Resource_Value_Changed;
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Use_In_Program_Changed
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Use_In_Program_Changed
+                 (The_Widget : in Widget;
+                  Closure    : in Xt_Pointer;
+                  Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Xm_C_Unset : constant := 0;
+         Xm_C_Set   : constant := 1;
+         Data       : constant Xm_Toggle_Button_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+         Node       : Xt_Arg_Val;
+         Args       : Xt_Arg_List (0 .. 0);
+         Res_List   : List_Id;
+         Res_Node   : Node_Id;
+
+      begin
+         --  Получаем узел ресурса, который поменял значение.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         Res_List := Resources (Parent_Node (Node_Id (Node)));
+         --  Получаем список ресурсов виджета.
+
+         --  Если у виджета еще нет списка ресурсов,
+         --  то его необходимо создать.
+
+         if Res_List = Null_List then
+            Res_List := New_List;
+            Set_Resources (Parent_Node (Node_Id (Node)), Res_List);
+         end if;
+
+         Res_Node := Find_Resource_Value
+                      (Res_List,
+                       Resource_Specification (Node_Id (Node)));
+
+         if Data.Set = Xm_C_Unset and Res_Node /= Null_Node then
+            --  Если кнопка отжата, то удаляем ресурс из списка
+            --  (если он там есть).
+
+            Remove (Res_Node);
+
+         elsif Data.Set = Xm_C_Set and Res_Node = Null_Node then
+            --  Если кнопка нажата, то ресурс необходимо добавить
+            --  (если его там нет).
+
+            Res_Node := Create_Resource_Value_Copy (Node_Id (Node));
+            Append (Res_List, Res_Node);
+
+         else
+            raise Program_Error;
+            --  Других состояний быть не должно.
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Use_In_Program_Changed", E);
+      end On_Use_In_Program_Changed;
+
    end Callbacks;
 
    ---------------------------------------------------------------------------
@@ -452,10 +605,14 @@ package body Designer.Properties_Editor.Widget_Instance is
          Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Form);
          Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
          Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
          Annotation_Table.Table (Node).Use_In_Program :=
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
                                                    "use_in_program",
-                                                   Args (0 .. 2));
+                                                   Args (0 .. 3));
+        Xt_Add_Callback (Annotation_Table.Table (Node).Use_In_Program,
+                         Xm_N_Value_Changed_Callback,
+                         Callbacks.On_Use_In_Program_Changed'Access);
 
          --  Создание кнопки "вшивать в код".
 
@@ -465,10 +622,11 @@ package body Designer.Properties_Editor.Widget_Instance is
                      Annotation_Table.Table (Node).Use_In_Program);
          Xt_Set_Arg (Args (2), Xm_N_Top_Attachment, Xm_Attach_Form);
          Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (4), Xm_N_User_Data, Xt_Arg_Val (Node));
          Annotation_Table.Table (Node).Hard_Code      :=
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
                                                    "hard_code",
-                                                   Args (0 .. 3));
+                                                   Args (0 .. 4));
 
          --  Создание кнопки "ресурс отката".
 
@@ -478,10 +636,11 @@ package body Designer.Properties_Editor.Widget_Instance is
                      Annotation_Table.Table (Node).Hard_Code);
          Xt_Set_Arg (Args (2), Xm_N_Top_Attachment, Xm_Attach_Form);
          Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (4), Xm_N_User_Data, Xt_Arg_Val (Node));
          Annotation_Table.Table (Node).Fallback       :=
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
                                                    "fallback",
-                                                   Args (0 .. 3));
+                                                   Args (0 .. 4));
 
          --  Создание поля "название ресурса".
 
@@ -1086,59 +1245,61 @@ package body Designer.Properties_Editor.Widget_Instance is
 
                --  Отображаем все остальные ресурсы.
 
-               case Node_Kind (Res_Type) is
-                  when Node_Enumerated_Resource_Type =>
-                     Xt_Set_Arg (Args (0),
-                                 Xm_N_Menu_History,
-                                 Annotation_Table.Table
-                                  (Resource_Value (Current)).Button);
-                     Xt_Set_Values
-                      (Annotation_Table.Table (Current).Value,
-                       Args (0 .. 0));
+               if Is_Changed (Current) then
+                  case Node_Kind (Res_Type) is
+                     when Node_Enumerated_Resource_Type =>
+                        Xt_Set_Arg (Args (0),
+                                    Xm_N_Menu_History,
+                                    Annotation_Table.Table
+                                     (Resource_Value (Current)).Button);
+                        Xt_Set_Values
+                         (Annotation_Table.Table (Current).Value,
+                          Args (0 .. 0));
 
-                  when Node_Predefined_Resource_Type =>
-                     case Type_Kind (Res_Type) is
-                        when Type_C_Short  --  Числовые типы.
-                          | Type_C_Int
-                          | Type_Position
-                          | Type_Dimension
-                        =>
-                           Xt_Set_Arg (Args (0),
-                                       Xm_N_Position,
-                                       Xt_Arg_Val
-                                        (Integer'
-                                          (Resource_Value (Current))));
-                           Xt_Set_Values
-                            (Annotation_Table.Table (Current).Value,
-                             Args (0 .. 0));
-                        when Type_Pixel =>
-                           null; --  TODO реализовать.
+                     when Node_Predefined_Resource_Type =>
+                        case Type_Kind (Res_Type) is
+                           when Type_C_Short  --  Числовые типы.
+                             | Type_C_Int
+                             | Type_Position
+                             | Type_Dimension
+                           =>
+                              Xt_Set_Arg (Args (0),
+                                          Xm_N_Position,
+                                          Xt_Arg_Val
+                                           (Integer'
+                                             (Resource_Value (Current))));
+                              Xt_Set_Values
+                               (Annotation_Table.Table (Current).Value,
+                                Args (0 .. 0));
+                           when Type_Pixel =>
+                              null; --  TODO реализовать.
 
-                        when Type_Pixmap =>
-                           null; --  TODO реализовать.
+                           when Type_Pixmap =>
+                              null; --  TODO реализовать.
 
-                        when Type_Screen =>
-                           null; --  TODO реализовать.
+                           when Type_Screen =>
+                              null; --  TODO реализовать.
 
-                        when Type_Colormap =>
-                           null; --  TODO реализовать.
+                           when Type_Colormap =>
+                              null; --  TODO реализовать.
 
-                        when Type_Translation_Data =>
-                           null; --  TODO реализовать.
+                           when Type_Translation_Data =>
+                              null; --  TODO реализовать.
 
-                        when Type_Unspecified =>
-                           null; --  TODO реализовать.
+                           when Type_Unspecified =>
+                              null; --  TODO реализовать.
 
-                        when Type_Boolean =>
-                           null; --  TODO реализовать.
-                     end case;
+                           when Type_Boolean =>
+                              null; --  TODO реализовать.
+                        end case;
 
-                  when Node_Widget_Reference_Resource_Type =>
-                     null; --  TODO реализовать.
+                     when Node_Widget_Reference_Resource_Type =>
+                        null; --  TODO реализовать.
 
-                  when others =>
-                     raise Program_Error;
-               end case;
+                     when others =>
+                        raise Program_Error;
+                  end case;
+               end if;
 
                Current := Next (Current);
             end loop;
