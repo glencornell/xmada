@@ -37,6 +37,7 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
+with Ada.Strings.Wide_Unbounded;
 with Ada.Wide_Text_IO;
 
 with XML_Tools.Attributes;
@@ -50,6 +51,7 @@ with XML_Tools.Strings;
 with Model.Names;
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
+with Model.Queries;
 with Model.Utilities;
 
 with Model.Xt_Motif;
@@ -75,6 +77,7 @@ package body Model.Tools is
    Is_Hardcoded_Attr   : XML_Tools.Name_Id;
    Is_Managed_Attr     : XML_Tools.Name_Id;
    Name_Attr           : XML_Tools.Name_Id;
+   Value_Attr          : XML_Tools.Name_Id;
 
    No_Value            : XML_Tools.String_Id;
    Yes_Value           : XML_Tools.String_Id;
@@ -146,6 +149,7 @@ package body Model.Tools is
       Is_Hardcoded_Attr       := XML_Tools.Names.Store ("ishardcoded");
       Is_Managed_Attr         := XML_Tools.Names.Store ("ismanaged");
       Name_Attr               := XML_Tools.Names.Store ("name");
+      Value_Attr              := XML_Tools.Names.Store ("value");
 
       No_Value                := XML_Tools.Strings.Store ("no");
       Yes_Value               := XML_Tools.Strings.Store ("yes");
@@ -269,6 +273,35 @@ package body Model.Tools is
                                  Parent        : in Element_Id;
                                  Is_Constraint : in Boolean)
       is
+         function Create_Full_Node_Name (N : in Node_Id) return Wide_String;
+
+         function Create_Full_Node_Name (N : in Node_Id) return Wide_String is
+            Res : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+            Aux : Node_Id := N;
+
+         begin
+            loop
+               if Aux = Null_Node then
+                  raise Program_Error;
+               end if;
+
+               exit when Node_Kind (Aux) = Node_Component_Class;
+
+               if Ada.Strings.Wide_Unbounded.Length (Res) > 0 then
+                  Ada.Strings.Wide_Unbounded.Insert (Res, 1, ".");
+               end if;
+
+               Ada.Strings.Wide_Unbounded.Insert
+                (Res,
+                 1,
+                 Model.Names.Image (Name (Aux)));
+
+               Aux := Model.Tree.Parent_Node (Aux);
+            end loop;
+
+            return Ada.Strings.Wide_Unbounded.To_Wide_String (Res);
+         end Create_Full_Node_Name;
+
          Tag                : Element_Id;
          Specification_Name : constant Name_Id
            := Internal_Resource_Name (Resource_Specification (Resource));
@@ -302,6 +335,28 @@ package body Model.Tools is
          else
             Attributes.Create_Attribute (Tag, Is_Hardcoded_Attr, No_Value);
          end if;
+
+         --  Обработка значения ресурса.
+
+         declare
+            N : Node_Id;
+
+         begin
+            N := Resource_Value (Resource);
+
+            if N /= Null_Node then
+               Attributes.Create_Attribute
+                (Tag,
+                 Value_Attr,
+                 XML_Tools.Strings.Store (Create_Full_Node_Name (N)));
+            end if;
+
+         exception
+            when others =>
+               Error_Message ("Exception appeared while processing "
+                 & "resource value: "
+                 & Node_Kinds'Wide_Image (Node_Kind (Resource)));
+         end;
 
       end Resource_To_XML;
 
@@ -800,6 +855,80 @@ package body Model.Tools is
       procedure XML_To_Resource (Tag           : in Element_Id;
                                  Resource      : in Node_Id)
       is
+         function Get_Widget_Instance_By_Name (Name : in Wide_String)
+           return Node_Id;
+
+         function Get_Widget_Instance_By_Name (Name : in Wide_String)
+           return Node_Id
+         is
+            Component : constant Node_Id
+              := Model.Queries.Enclosing_Component_Class (Resource);
+            Res       : Node_Id := Root (Component);
+            First     : Natural := Name'First;
+            Finish    : Natural := Name'First - 1;
+            Pos       : Natural := Name'First;
+
+         begin
+            --  Разбиваем полное имя узла на токены.
+            --  В качестве разделителя используется символ точка ('.').
+
+            while Pos < Name'Last loop
+               if Pos /= Name'Last and then Name (Pos) /= '.' then
+                  Pos := Pos + 1;
+
+               else
+                  --  Ищем узел, имя которого совпадает
+                  --  с текущим токеном.
+
+                  if Pos = Name'Last then
+                     Finish := Pos;
+
+                  else
+                     Finish := Pos - 1;
+                  end if;
+
+                  declare
+                     Id     : constant Name_Id
+                       := Model.Names.Enter (Name (First .. Finish));
+
+                  begin
+                     while Res /= Null_Node loop
+                        exit when Model.Tree.Name (Res) = Id;
+
+                        if Res = Root (Component) then
+                           --  Если дошли до этого места, то это означает,
+                           --  что первый токен содержит ошибку.
+
+                           Res := Null_Node;
+                           exit;
+                        end if;
+
+                        Res := Next (Res);
+                     end loop;
+
+                     if Res = Null_Node then
+                        Error_Message ("Can't find widget instance: "
+                          & Name (Name'First .. Finish) & " in " & Name);
+                        raise Program_Error;
+                     end if;
+                  end;
+
+                  if Pos /= Name'Last then
+                     Res := Model.Tree.Lists.First (Children (Res));
+                  end if;
+
+                  Pos := Pos + 1;
+                  First := Pos;
+               end if;
+            end loop;
+
+            if Res = Null_Node then
+               raise Program_Error;
+            end if;
+
+            return Res;
+         end Get_Widget_Instance_By_Name;
+
       begin
          --  Обработка атрибутов тега Resource.
 
@@ -838,6 +967,16 @@ package body Model.Tools is
                      raise Program_Error;
                   end if;
 
+               elsif Attributes.Name (A) = Value_Attr then
+                  declare
+                     N : constant Node_Id
+                       := Get_Widget_Instance_By_Name
+                           (XML_Tools.Strings.Image (Attributes.Value (A)));
+
+                  begin
+                     Set_Resource_Value (Resource, N);
+                  end;
+
                else
                   Error_Message ("Unknown attribute name: "
                     & XML_Tools.Names.Image (Attributes.Name (A)));
@@ -858,13 +997,12 @@ package body Model.Tools is
                                         Widget_Instance : in Node_Id)
       is
          function Find (Name : in XML_Tools.String_Id) return Node_Id;
-         function Get_Project_By_Node (N : in Node_Id) return Node_Id;
 
          function Find (Name : in XML_Tools.String_Id) return Model.Node_Id is
             Classname  : constant Model.Name_Id
               := Model.Names.Enter (XML_Tools.Strings.Image (Name));
             Project  : constant Node_Id
-              := Get_Project_By_Node (Widget_Instance);
+              := Model.Queries.Enclosing_Project (Widget_Instance);
             Widget_Set : Node_Id
               := First (Imported_Widget_Sets (Project));
 
@@ -895,17 +1033,6 @@ package body Model.Tools is
 
             return Widget_Class;
          end Find;
-
-         function Get_Project_By_Node (N : in Node_Id) return Node_Id is
-            Res : Node_Id := N;
-
-         begin
-            while Node_Kind (Res) /= Node_Project loop
-               Res := Parent_Node (Res);
-            end loop;
-
-            return Res;
-         end Get_Project_By_Node;
 
       begin
          --  Обработка атрибутов тега Widget_Instance.
