@@ -37,7 +37,6 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
-with Ada.Unchecked_Deallocation;
 with Interfaces.C.Strings;
 with System;
 
@@ -78,6 +77,11 @@ package body Designer.Visual_Editor is
    use Xt.Instance_Management;
    use Xt.Resource_Management;
 
+   type Annotation_Kinds is
+    (Annotation_Empty,
+     Annotation_Resource_Value,
+     Annotation_Widget_Instance);
+
    type Resource_Value_Kinds is
     (Value_Undefined,
      Value_C_Unsigned_Char,
@@ -86,47 +90,10 @@ package body Designer.Visual_Editor is
      Value_Position,
      Value_Dimension);
 
-   type Resource_Value_Record
-         (Kind : Resource_Value_Kinds := Value_Undefined)
-   is record
-      Name : Xt.Xt_Resource_Name_String;
-
-      case Kind is
-         when Value_Undefined =>
-            null;
-
-         when Value_C_Unsigned_Char =>
-            C_Unsigned_Char_Value : aliased Interfaces.C.unsigned_char;
-
-         when Value_C_Short =>
-            C_Short_Value : aliased Interfaces.C.short;
-
-         when Value_C_Int =>
-            C_Int_Value : aliased Interfaces.C.int;
-
-         when Value_Position =>
-            Position_Value : aliased Xt.Position;
-
-         when Value_Dimension =>
-            Dimension_Value : aliased Xt.Dimension;
-      end case;
-   end record;
-
-   type Resource_Value_Array is
-     array (Natural range <>) of Resource_Value_Record;
-
-   type Resource_Value_Set (Last : Natural) is record
-      Values : Resource_Value_Array (0 .. Last);
-      Args   : Xt_Arg_List (0 .. Last);
-   end record;
-
-   type Resource_Value_Set_Access is access all Resource_Value_Set;
-
-   type Annotation_Kinds is
-    (Annotation_Empty,
-     Annotation_Widget_Instance);
-
-   type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
+   type Annotation_Record (Kind       : Annotation_Kinds := Annotation_Empty;
+                           Value_Kind : Resource_Value_Kinds
+                             := Value_Undefined)
+   is
    record
       case Kind is
          when Annotation_Empty =>
@@ -136,10 +103,28 @@ package body Designer.Visual_Editor is
             Widget      : Xt.Widget;
             --  Виджет визуального редактора, представляющий узел.
 
-            Resources   : Resource_Value_Set_Access;
-            Constraints : Resource_Value_Set_Access;
-            --  Подготовленные массивы для установки/получения значений
-            --  ресурсов виджета.
+         when Annotation_Resource_Value =>
+            Name :  Xt.Xt_Resource_Name_String;
+
+            case Value_Kind is
+               when Value_Undefined =>
+                  null;
+
+               when Value_C_Unsigned_Char =>
+                  C_Unsigned_Char_Value : aliased Interfaces.C.unsigned_char;
+
+               when Value_C_Short =>
+                  C_Short_Value : aliased Interfaces.C.short;
+
+               when Value_C_Int =>
+                  C_Int_Value : aliased Interfaces.C.int;
+
+               when Value_Position =>
+                  Position_Value : aliased Xt.Position;
+
+               when Value_Dimension =>
+                  Dimension_Value : aliased Xt.Dimension;
+            end case;
       end case;
    end record;
 
@@ -331,8 +316,6 @@ package body Designer.Visual_Editor is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure Create_Widget (Node : in Node_Id) is
-         Aux     : Node_Id;
-         Current : Natural := 0;
          Parent  : Widget;
 
       begin
@@ -352,137 +335,16 @@ package body Designer.Visual_Editor is
            Convenience_Create_Function (Class (Node))
             (Parent, "form", Null_Xt_Arg_List);
 
-         if All_Resources (Node) /= Null_List then
-            Annotation_Table.Table (Node).Resources :=
-              new Resource_Value_Set (Length (All_Resources (Node)) - 1);
-
-            Aux := First (All_Resources (Node));
-
-            while Aux /= Null_Node loop
-               case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
-                  when Node_Predefined_Resource_Type =>
-                     case Type_Kind
-                           (Resource_Type (Resource_Specification (Aux)))
-                     is
-                        when Type_C_Short =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_C_Short,
-                               Interfaces.C.Strings.New_String
-                                (Ada.Characters.Handling.To_String
-                                  (Internal_Resource_Name_Image
-                                    (Resource_Specification (Aux)))),
-                               0);
-
-                        when Type_C_Int =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_C_Int,
-                               Interfaces.C.Strings.New_String
-                                (Ada.Characters.Handling.To_String
-                                  (Internal_Resource_Name_Image
-                                    (Resource_Specification (Aux)))),
-                               0);
-
-                        when Type_Dimension =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_Dimension,
-                               Interfaces.C.Strings.New_String
-                                (Ada.Characters.Handling.To_String
-                                  (Internal_Resource_Name_Image
-                                    (Resource_Specification (Aux)))),
-                               0);
-
-                        when Type_Position =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_Position,
-                               Interfaces.C.Strings.New_String
-                                (Ada.Characters.Handling.To_String
-                                  (Internal_Resource_Name_Image
-                                    (Resource_Specification (Aux)))),
-                               0);
-
-                        when Type_Boolean =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_C_Int,
-                               Interfaces.C.Strings.Null_Ptr,
-                               0);
-
-                        when Type_Translation_Data =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_C_Int,
-                               Interfaces.C.Strings.Null_Ptr,
-                               0);
-
-                        when Type_Pixel =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_C_Int,
-                               Interfaces.C.Strings.Null_Ptr,
-                               0);
-
-                        when Type_Pixmap =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_C_Int,
-                               Interfaces.C.Strings.Null_Ptr,
-                               0);
-
-                        when Type_Colormap =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_C_Int,
-                               Interfaces.C.Strings.Null_Ptr,
-                               0);
-
-                        when Type_Screen =>
-                           Annotation_Table.Table (Node).Resources.Values
-                            (Current) :=
-                              (Value_C_Int,
-                               Interfaces.C.Strings.Null_Ptr,
-                               0);
-
-                        when others =>
-                           raise Program_Error;
-                     end case;
-
-                  when Node_Enumerated_Resource_Type =>
-                     Annotation_Table.Table (Node).Resources.Values
-                      (Current) :=
-                        (Value_C_Unsigned_Char,
-                         Interfaces.C.Strings.New_String
-                          (Ada.Characters.Handling.To_String
-                            (Internal_Resource_Name_Image
-                              (Resource_Specification (Aux)))),
-                         0);
-
-                  when Node_Widget_Reference_Resource_Type =>
-                     Annotation_Table.Table (Node).Resources.Values
-                      (Current) :=
-                        (Value_C_Int,
-                         Interfaces.C.Strings.Null_Ptr,
-                         0);
-
-                  when others =>
-                     raise Program_Error;
-               end case;
-
-               Aux := Next (Aux);
-               Current := Current + 1;
-            end loop;
-         end if;
-
          if Children (Node) /= Null_List then
-            Aux := First (Children (Node));
+            declare
+               Aux : Node_Id := First (Children (Node));
 
-            while Aux /= Null_Node loop
-               Create_Widget (Aux);
-               Aux := Next (Aux);
-            end loop;
+            begin
+               while Aux /= Null_Node loop
+                  Create_Widget (Aux);
+                  Aux := Next (Aux);
+               end loop;
+            end;
          end if;
 
          Xt_Manage_Child (Annotation_Table.Table (Node).Widget);
@@ -512,216 +374,170 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Get_Properties (Node : in Model.Node_Id) is
-      Current : Natural := 0;
-      Aux     : Node_Id;
-
    begin
       if All_Resources (Node) /= Null_List then
-         Aux := First (All_Resources (Node));
+         declare
+            Aux      : Node_Id := First (All_Resources (Node));
+            Args     : Xt_Arg_List (0 .. Length (All_Resources (Node)) - 1);
+            Next_Arg : Natural := 0;
 
-         while Aux /= Null_Node loop
-            case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
-               when Node_Predefined_Resource_Type =>
-                  case Type_Kind
-                        (Resource_Type (Resource_Specification (Aux)))
-                  is
-                     when Type_C_Short =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).C_Short_Value'Address);
+         begin
+            while Aux /= Null_Node loop
+               Relocate_Annotation_Table (Aux);
 
-                     when Type_C_Int =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).C_Int_Value'Address);
+               case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
+                  when Node_Predefined_Resource_Type =>
+                     case Type_Kind
+                           (Resource_Type (Resource_Specification (Aux)))
+                     is
+                        when Type_C_Short =>
+                           Xt_Set_Arg
+                            (Args (Next_Arg),
+                             Annotation_Table.Table (Aux).Name,
+                             Annotation_Table.Table
+                              (Aux).C_Short_Value'Address);
+                           Next_Arg := Next_Arg + 1;
 
-                     when Type_Dimension =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Dimension_Value'Address);
+                        when Type_C_Int =>
+                           Xt_Set_Arg
+                            (Args (Next_Arg),
+                             Annotation_Table.Table (Aux).Name,
+                             Annotation_Table.Table
+                              (Aux).C_Int_Value'Address);
+                           Next_Arg := Next_Arg + 1;
 
-                     when Type_Position =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Position_Value'Address);
+                        when Type_Dimension =>
+                           Xt_Set_Arg
+                            (Args (Next_Arg),
+                             Annotation_Table.Table (Aux).Name,
+                             Annotation_Table.Table
+                              (Aux).Dimension_Value'Address);
+                           Next_Arg := Next_Arg + 1;
 
-                     when Type_Translation_Data =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Xt_Arg_Val (0));
+                        when Type_Position =>
+                           Xt_Set_Arg
+                            (Args (Next_Arg),
+                             Annotation_Table.Table (Aux).Name,
+                             Annotation_Table.Table
+                              (Aux).Position_Value'Address);
+                           Next_Arg := Next_Arg + 1;
 
-                     when Type_Boolean =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Xt_Arg_Val (0));
+                        when Type_Translation_Data =>
+                           null;
 
-                     when Type_Colormap =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Xt_Arg_Val (0));
+                        when Type_Boolean =>
+                           null;
 
-                     when Type_Screen =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Xt_Arg_Val (0));
+                        when Type_Colormap =>
+                           null;
 
-                     when Type_Pixel =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Xt_Arg_Val (0));
+                        when Type_Screen =>
+                           null;
 
-                     when Type_Pixmap =>
-                        Xt_Set_Arg
-                         (Annotation_Table.Table (Node).Resources.Args
-                           (Current),
-                          Annotation_Table.Table (Node).Resources.Values
-                           (Current).Name,
-                          Xt_Arg_Val (0));
+                        when Type_Pixel =>
+                           null;
 
-                     when others =>
-                        raise Program_Error;
-                 end case;
+                        when Type_Pixmap =>
+                           null;
 
-               when Node_Enumerated_Resource_Type =>
-                  Xt_Set_Arg
-                   (Annotation_Table.Table (Node).Resources.Args
-                     (Current),
-                    Annotation_Table.Table (Node).Resources.Values
-                     (Current).Name,
-                    Annotation_Table.Table (Node).Resources.Values
-                     (Current).C_Unsigned_Char_Value'Address);
+                        when others =>
+                           raise Program_Error;
+                     end case;
 
-               when Node_Widget_Reference_Resource_Type =>
-                  Xt_Set_Arg
-                   (Annotation_Table.Table (Node).Resources.Args (Current),
-                    Annotation_Table.Table (Node).Resources.Values
-                     (Current).Name,
-                    Xt_Arg_Val (0));
+                  when Node_Enumerated_Resource_Type =>
+                     Xt_Set_Arg
+                      (Args (Next_Arg),
+                       Annotation_Table.Table (Aux).Name,
+                       Annotation_Table.Table
+                        (Aux).C_Unsigned_Char_Value'Address);
+                     Next_Arg := Next_Arg + 1;
 
-               when others =>
-                  raise Program_Error;
-            end case;
+                  when Node_Widget_Reference_Resource_Type =>
+                     null;
 
-            Aux := Next (Aux);
-            Current := Current + 1;
-         end loop;
+                  when others =>
+                     raise Program_Error;
+               end case;
 
-         Xt_Get_Values (Annotation_Table.Table (Node).Widget,
-                        Annotation_Table.Table (Node).Resources.Args);
+               Aux := Next (Aux);
+            end loop;
 
-         Aux := First (All_Resources (Node));
-         Current := 0;
+            Xt_Get_Values (Annotation_Table.Table (Node).Widget,
+                           Args (0 .. Next_Arg - 1));
 
-         while Aux /= Null_Node loop
-            case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
-               when Node_Predefined_Resource_Type =>
-                  case Type_Kind
-                        (Resource_Type (Resource_Specification (Aux)))
-                  is
-                     when Type_C_Short =>
-                        Set_Resource_Value
-                         (Aux,
-                          Integer
-                           (Annotation_Table.Table
-                             (Node).Resources.Values (Current).C_Short_Value));
+            Aux := First (All_Resources (Node));
 
-                     when Type_C_Int =>
-                        Set_Resource_Value
-                         (Aux,
-                          Integer
-                           (Annotation_Table.Table
-                             (Node).Resources.Values (Current).C_Int_Value));
+            while Aux /= Null_Node loop
+               case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
+                  when Node_Predefined_Resource_Type =>
+                     case Type_Kind
+                           (Resource_Type (Resource_Specification (Aux)))
+                     is
+                        when Type_C_Short =>
+                           Set_Resource_Value
+                            (Aux,
+                             Integer
+                              (Annotation_Table.Table (Aux).C_Short_Value));
 
-                     when Type_Dimension =>
-                        Set_Resource_Value
-                         (Aux,
-                          Integer
-                           (Annotation_Table.Table
-                             (Node).Resources.Values
-                               (Current).Dimension_Value));
+                        when Type_C_Int =>
+                           Set_Resource_Value
+                            (Aux,
+                             Integer
+                              (Annotation_Table.Table (Aux).C_Int_Value));
 
-                     when Type_Position =>
-                        Set_Resource_Value
-                         (Aux,
-                          Integer
-                           (Annotation_Table.Table
-                             (Node).Resources.Values
-                               (Current).Position_Value));
+                        when Type_Dimension =>
+                           Set_Resource_Value
+                            (Aux,
+                             Integer
+                              (Annotation_Table.Table (Aux).Dimension_Value));
 
-                     when Type_Translation_Data =>
-                        null;
+                        when Type_Position =>
+                           Set_Resource_Value
+                            (Aux,
+                             Integer
+                              (Annotation_Table.Table (Aux).Position_Value));
 
-                     when Type_Boolean =>
-                        null;
+                        when Type_Translation_Data =>
+                           null;
 
-                     when Type_Colormap =>
-                        null;
+                        when Type_Boolean =>
+                           null;
 
-                     when Type_Screen =>
-                        null;
+                        when Type_Colormap =>
+                           null;
 
-                     when Type_Pixel =>
-                        null;
+                        when Type_Screen =>
+                           null;
 
-                     when Type_Pixmap =>
-                        null;
+                        when Type_Pixel =>
+                           null;
 
-                     when others =>
-                        raise Program_Error;
-                 end case;
+                        when Type_Pixmap =>
+                           null;
 
-               when Node_Enumerated_Resource_Type =>
-                  Set_Resource_Value
-                   (Aux,
-                    Corresponding_Enumeration_Resource_Value_Specification
-                     (Resource_Type (Resource_Specification (Aux)),
-                      Annotation_Table.Table
-                        (Node).Resources.Values
-                          (Current).C_Unsigned_Char_Value));
+                        when others =>
+                           raise Program_Error;
+                    end case;
 
-               when Node_Widget_Reference_Resource_Type =>
-                  null;
+                  when Node_Enumerated_Resource_Type =>
+                     Set_Resource_Value
+                      (Aux,
+                       Corresponding_Enumeration_Resource_Value_Specification
+                        (Resource_Type (Resource_Specification (Aux)),
+                      Annotation_Table.Table (Aux).C_Unsigned_Char_Value));
 
-               when others =>
-                  raise Program_Error;
-            end case;
+                  when Node_Widget_Reference_Resource_Type =>
+                     null;
 
-            Set_Is_Changed (Aux, True);
+                  when others =>
+                     raise Program_Error;
+               end case;
 
-            Aux := Next (Aux);
-            Current := Current + 1;
-         end loop;
+               Set_Is_Changed (Aux, True);
+
+               Aux := Next (Aux);
+            end loop;
+         end;
       end if;
    end Get_Properties;
 
@@ -822,9 +638,9 @@ package body Designer.Visual_Editor is
    ---------------------------------------------------------------------------
    procedure Reinitialize is
 
-      procedure Free is
-        new Ada.Unchecked_Deallocation
-             (Resource_Value_Set, Resource_Value_Set_Access);
+--      procedure Free is
+--        new Ada.Unchecked_Deallocation
+--             (Resource_Value_Set, Resource_Value_Set_Access);
 
    begin
       for J in Annotation_Table.First .. Annotation_Table.Last loop
@@ -837,24 +653,8 @@ package body Designer.Visual_Editor is
                   Xt_Destroy_Widget (Annotation_Table.Table (J).Widget);
                end if;
 
-               if Annotation_Table.Table (J).Resources /= null then
-                  for K in Annotation_Table.Table (J).Resources.Values'Range
-                  loop
-                     Interfaces.C.Strings.Free
-                      (Annotation_Table.Table (J).Resources.Values (K).Name);
-                  end loop;
-               end if;
-
-               if Annotation_Table.Table (J).Constraints /= null then
-                  for K in Annotation_Table.Table (J).Constraints.Values'Range
-                  loop
-                     Interfaces.C.Strings.Free
-                      (Annotation_Table.Table (J).Constraints.Values (K).Name);
-                  end loop;
-               end if;
-
-               Free (Annotation_Table.Table (J).Resources);
-               Free (Annotation_Table.Table (J).Constraints);
+            when Annotation_Resource_Value =>
+               Interfaces.C.Strings.Free (Annotation_Table.Table (J).Name);
          end case;
       end loop;
 
@@ -885,12 +685,111 @@ package body Designer.Visual_Editor is
             when Node_Widget_Instance =>
                Annotation_Table.Table (J) :=
                 (Kind        => Annotation_Widget_Instance,
-                 Widget      => Null_Widget,
-                 Resources   => null,
-                 Constraints => null);
+                 Value_Kind  => Value_Undefined,
+                 Widget      => Null_Widget);
+
+            when Node_Integer_Resource_Value
+              | Node_Widget_Reference_Resource_Value
+              | Node_Pixel_Resource_Value
+              | Node_Pixmap_Resource_Value
+              | Node_Colormap_Resource_Value
+              | Node_Screen_Resource_Value
+              | Node_Translation_Data_Resource_Value
+              | Node_Boolean_Resource_Value
+              | Node_Enumeration_Resource_Value
+            =>
+               case Node_Kind (Resource_Type (Resource_Specification (J))) is
+                  when Node_Predefined_Resource_Type =>
+                     case Type_Kind
+                           (Resource_Type (Resource_Specification (J)))
+                     is
+                        when Type_C_Short =>
+                           Annotation_Table.Table (J) :=
+                            (Kind          => Annotation_Resource_Value,
+                             Value_Kind    => Value_C_Short,
+                             Name          =>
+                               Interfaces.C.Strings.New_String
+                                (Ada.Characters.Handling.To_String
+                                  (Internal_Resource_Name_Image
+                                    (Resource_Specification (J)))),
+                             C_Short_Value => 0);
+
+                         when Type_C_Int =>
+                           Annotation_Table.Table (J) :=
+                            (Kind        => Annotation_Resource_Value,
+                             Value_Kind  => Value_C_Int,
+                             Name        =>
+                               Interfaces.C.Strings.New_String
+                                (Ada.Characters.Handling.To_String
+                                  (Internal_Resource_Name_Image
+                                    (Resource_Specification (J)))),
+                             C_Int_Value => 0);
+
+                         when Type_Dimension =>
+                           Annotation_Table.Table (J) :=
+                            (Kind            => Annotation_Resource_Value,
+                             Value_Kind      => Value_Dimension,
+                             Name            =>
+                               Interfaces.C.Strings.New_String
+                                (Ada.Characters.Handling.To_String
+                                  (Internal_Resource_Name_Image
+                                    (Resource_Specification (J)))),
+                             Dimension_Value => 0);
+
+                         when Type_Position =>
+                           Annotation_Table.Table (J) :=
+                            (Kind           => Annotation_Resource_Value,
+                             Value_Kind     => Value_Position,
+                             Name           =>
+                               Interfaces.C.Strings.New_String
+                                (Ada.Characters.Handling.To_String
+                                  (Internal_Resource_Name_Image
+                                    (Resource_Specification (J)))),
+                             Position_Value => 0);
+
+                         when Type_Translation_Data =>
+                            null;
+
+                         when Type_Boolean =>
+                            null;
+
+                         when Type_Colormap =>
+                            null;
+
+                         when Type_Screen =>
+                            null;
+
+                         when Type_Pixel =>
+                            null;
+
+                         when Type_Pixmap =>
+                            null;
+
+                         when others =>
+                            raise Program_Error;
+                     end case;
+
+                  when Node_Enumerated_Resource_Type =>
+                     Annotation_Table.Table (J) :=
+                      (Kind                  => Annotation_Resource_Value,
+                       Value_Kind            => Value_C_Unsigned_Char,
+                       Name                  =>
+                         Interfaces.C.Strings.New_String
+                          (Ada.Characters.Handling.To_String
+                            (Internal_Resource_Name_Image
+                              (Resource_Specification (J)))),
+                       C_Unsigned_Char_Value => 0);
+
+                  when Node_Widget_Reference_Resource_Type =>
+                     null;
+
+                  when others =>
+                     raise Program_Error;
+               end case;
 
             when others =>
-               Annotation_Table.Table (J) := (Kind => Annotation_Empty);
+               Annotation_Table.Table (J) := (Kind        => Annotation_Empty,
+                                              Value_Kind  => Value_Undefined);
          end case;
       end loop;
    end Relocate_Annotation_Table;
@@ -943,19 +842,18 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Set_Properties (Node : in Model.Node_Id) is
-      Current  : Natural := 0;
-      Next_Arg : Natural := 0;
-      Aux      : Node_Id;
 
    begin
       if All_Resources (Node) /= Null_List then
          declare
-            Args : Xt_Arg_List (0 .. Length (All_Resources (Node)));
+            Aux      : Node_Id := First (All_Resources (Node));
+            Args     : Xt_Arg_List (0 .. Length (All_Resources (Node)));
+            Next_Arg : Natural := 0;
 
          begin
-            Aux := First (All_Resources (Node));
-
             while Aux /= Null_Node loop
+               Relocate_Annotation_Table (Aux);
+
                case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
                   when Node_Predefined_Resource_Type =>
                      case Type_Kind
@@ -964,8 +862,7 @@ package body Designer.Visual_Editor is
                         when Type_C_Short =>
                            Xt_Set_Arg
                             (Args (Next_Arg),
-                             Annotation_Table.Table (Node).Resources.Values
-                              (Current).Name,
+                             Annotation_Table.Table (Aux).Name,
                              Xt_Arg_Val (Integer'(Resource_Value (Aux))));
 
                            Next_Arg := Next_Arg + 1;
@@ -973,8 +870,7 @@ package body Designer.Visual_Editor is
                         when Type_C_Int =>
                            Xt_Set_Arg
                             (Args (Next_Arg),
-                             Annotation_Table.Table (Node).Resources.Values
-                              (Current).Name,
+                             Annotation_Table.Table (Aux).Name,
                              Xt_Arg_Val (Integer'(Resource_Value (Aux))));
 
                            Next_Arg := Next_Arg + 1;
@@ -982,8 +878,7 @@ package body Designer.Visual_Editor is
                         when Type_Dimension =>
                            Xt_Set_Arg
                             (Args (Next_Arg),
-                             Annotation_Table.Table (Node).Resources.Values
-                              (Current).Name,
+                             Annotation_Table.Table (Aux).Name,
                              Xt_Arg_Val (Integer'(Resource_Value (Aux))));
 
                            Next_Arg := Next_Arg + 1;
@@ -991,71 +886,28 @@ package body Designer.Visual_Editor is
                         when Type_Position =>
                            Xt_Set_Arg
                             (Args (Next_Arg),
-                             Annotation_Table.Table (Node).Resources.Values
-                              (Current).Name,
+                             Annotation_Table.Table (Aux).Name,
                              Xt_Arg_Val (Integer'(Resource_Value (Aux))));
 
                            Next_Arg := Next_Arg + 1;
 
                         when Type_Translation_Data =>
                            null;
---                        Xt_Set_Arg
---                         (Annotation_Table.Table (Node).Resources.Args
---                           (Current),
---                          Interfaces.C.Strings.Null_Ptr,
-----                          Annotation_Table.Table (Node).Resources.Values
-----                           (Current).Name,
---                          Xt_Arg_Val (0));
 
                         when Type_Boolean =>
                            null;
---                        Xt_Set_Arg
---                         (Annotation_Table.Table (Node).Resources.Args
---                           (Current),
---                          Interfaces.C.Strings.Null_Ptr,
-----                          Annotation_Table.Table (Node).Resources.Values
-----                           (Current).Name,
---                          Xt_Arg_Val (0));
 
                         when Type_Colormap =>
                            null;
---                        Xt_Set_Arg
---                         (Annotation_Table.Table (Node).Resources.Args
---                           (Current),
---                          Interfaces.C.Strings.Null_Ptr,
-----                          Annotation_Table.Table (Node).Resources.Values
-----                           (Current).Name,
---                          Xt_Arg_Val (0));
 
                         when Type_Screen =>
                            null;
---                        Xt_Set_Arg
---                         (Annotation_Table.Table (Node).Resources.Args
---                           (Current),
---                          Interfaces.C.Strings.Null_Ptr,
-----                          Annotation_Table.Table (Node).Resources.Values
-----                           (Current).Name,
---                          Xt_Arg_Val (0));
 
                         when Type_Pixel =>
                            null;
---                        Xt_Set_Arg
---                         (Annotation_Table.Table (Node).Resources.Args
---                           (Current),
---                          Interfaces.C.Strings.Null_Ptr,
-----                          Annotation_Table.Table (Node).Resources.Values
-----                           (Current).Name,
---                          Xt_Arg_Val (0));
 
                         when Type_Pixmap =>
                            null;
---                        Xt_Set_Arg
---                         (Annotation_Table.Table (Node).Resources.Args
---                           (Current),
---                          Interfaces.C.Strings.Null_Ptr,
-----                          Annotation_Table.Table (Node).Resources.Values
-----                           (Current).Name,
---                          Xt_Arg_Val (0));
 
                         when others =>
                            raise Program_Error;
@@ -1064,8 +916,7 @@ package body Designer.Visual_Editor is
                   when Node_Enumerated_Resource_Type =>
                      Xt_Set_Arg
                       (Args (Next_Arg),
-                       Annotation_Table.Table (Node).Resources.Values
-                        (Current).Name,
+                       Annotation_Table.Table (Aux).Name,
                        Xt_Arg_Val
                         (Corresponding_Value (Resource_Value (Aux))));
 
@@ -1073,19 +924,12 @@ package body Designer.Visual_Editor is
 
                   when Node_Widget_Reference_Resource_Type =>
                      null;
---                  Xt_Set_Arg
---                   (Annotation_Table.Table (Node).Resources.Args (Current),
---                    Interfaces.C.Strings.Null_Ptr,
-----                    Annotation_Table.Table (Node).Resources.Values
-----                     (Current).Name,
---                    Xt_Arg_Val (0));
 
                   when others =>
                      raise Program_Error;
                end case;
 
                Aux := Next (Aux);
-               Current := Current + 1;
             end loop;
 
             Xt_Set_Values (Annotation_Table.Table (Node).Widget,
