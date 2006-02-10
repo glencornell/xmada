@@ -80,6 +80,26 @@ package body Model.Queries is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Enclosing_Project
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Enclosing_Project (Node : in Node_Id) return Node_Id is
+      Aux : Node_Id := Node;
+
+   begin
+      while Aux /= Null_Node loop
+         if Node_Kind (Aux) = Node_Project then
+            return Aux;
+         end if;
+
+         Aux := Parent_Node (Aux);
+      end loop;
+
+      return Null_Node;
+   end Enclosing_Project;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Internal_Name_Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
