@@ -52,11 +52,15 @@
 *main_window.widget_sets.palette_page.entryVerticalAlignment: ALIGNMENT_CENTER
 *main_window.widget_sets.palette_page.packing: PACK_COLUMN
 *main_window.widget_sets.palette_page.orientation: HORIZONTAL
-*main_window.widget_sets.palette_page.numColumns: 6
+*main_window.widget_sets.palette_page.numColumns: 2
 *main_window.widget_sets.primitives.labelString: Primitives
+*main_window.widget_sets.primitives.notebookChildType: MINOR_TAB
 *main_window.widget_sets.managers.labelString: Managers
+*main_window.widget_sets.managers.notebookChildType: MINOR_TAB
 *main_window.widget_sets.gadgets.labelString: Gadgets
+*main_window.widget_sets.gadgets.notebookChildType: MINOR_TAB
 *main_window.widget_sets.shells.labelString: Shells
+*main_window.widget_sets.shells.notebookChildType: MINOR_TAB
 
 !!  Окно редактора свойств
 
