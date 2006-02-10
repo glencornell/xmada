@@ -37,8 +37,10 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with GNAT.Table;
+
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
+with Xt.Instance_Management;
 with Xm_Container;
 with Xm.Resource_Management;
 with Xm.Strings;
@@ -68,6 +70,7 @@ package body Designer.Palette is
    use Xt;
    use Xt.Ancillary_Types;
    use Xt.Composite_Management;
+   use Xt.Instance_Management;
 
    Palette_Notebook : Xt.Widget;
 
@@ -271,7 +274,55 @@ package body Designer.Palette is
    ---------------------------------------------------------------------------
    procedure Reinitialize is
    begin
-      null;
+      for J in Annotation_Table.First .. Annotation_Table.Last loop
+         case Annotation_Table.Table (J).Kind is
+            when Annotation_Project                                         =>
+               if Annotation_Table.Table (J).Primitives_Page /= Null_Widget then
+                  Xt_Destroy_Widget
+                    (Annotation_Table.Table (J).Primitives_Page);
+               end if;
+
+               if Annotation_Table.Table (J).Primitives_Tab /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Primitives_Tab);
+               end if;
+
+               if Annotation_Table.Table (J).Managers_Page /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Managers_Page);
+               end if;
+
+               if Annotation_Table.Table (J).Managers_Tab /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Managers_Tab);
+               end if;
+
+               if Annotation_Table.Table (J).Gadgets_Page /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Gadgets_Page);
+               end if;
+
+               if Annotation_Table.Table (J).Gadgets_Tab /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Gadgets_Tab);
+               end if;
+
+               if Annotation_Table.Table (J).Shells_Page /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Shells_Page);
+               end if;
+
+               if Annotation_Table.Table (J).Shells_Tab /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Shells_Tab);
+               end if;
+
+            when Annotation_Widget_Class                                    =>
+               if Annotation_Table.Table (J).Button /= Null_Widget then
+                  Xt_Destroy_Widget (Annotation_Table.Table (J).Button);
+               end if;
+
+            when Annotation_Empty                                           =>
+               null;
+         end case;
+      end loop;
+
+      Annotation_Table.Free;
+      Annotation_Table.Init;
+
    end Reinitialize;
 
    ---------------------------------------------------------------------------
