@@ -74,8 +74,10 @@
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.use_in_program.labelString:
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.use_in_program.spacing: 0
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.hard_code.labelString:
+*main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.hard_code.sensitive: FALSE
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.hard_code.spacing: 0
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.fallback.labelString:
+*main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.fallback.sensitive: FALSE
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.fallback.spacing: 0
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.resource_numeric.minimumValue: -1000000
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.resource_numeric.maximumValue: 1000000
