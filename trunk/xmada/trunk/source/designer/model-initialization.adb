@@ -2076,12 +2076,12 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_Shell_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Shell_Widget_Class, Enter ("Shell"));
-      Set_Super_Class (Xt_Motif_Shell_Widget_Class,
-                       Xt_Motif_Composite_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_Shell_Widget_Class, True);
+      begin
+         Xt_Motif_Shell_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Shell_Widget_Class, Enter ("Shell"));
+         Set_Super_Class (Xt_Motif_Shell_Widget_Class,
+                          Xt_Motif_Composite_Widget_Class);
+         Set_Is_Meta_Class (Xt_Motif_Shell_Widget_Class, True);
 
          --  TODO XmNallowShellResize
          --  TODO XmNcreatePopupChildProc
@@ -2103,10 +2103,10 @@ package body Model.Initialization is
 --         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --         Append (Resources, Resource);
 --
---         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+--         Set_Resources (Xt_Motif_Shell_Widget_Class, Resources);
+
+         Merge_Inherited_Resources (Xt_Motif_Shell_Widget_Class);
+      end;
 
       --  OverrideShell
 
@@ -2114,11 +2114,12 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_Override_Shell_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Override_Shell_Widget_Class, Enter ("OverrideShell"));
-      Set_Super_Class (Xt_Motif_Override_Shell_Widget_Class,
-                       Xt_Motif_Shell_Widget_Class);
+      begin
+         Xt_Motif_Override_Shell_Widget_Class := Create_Widget_Class;
+         Set_Name
+          (Xt_Motif_Override_Shell_Widget_Class, Enter ("OverrideShell"));
+         Set_Super_Class (Xt_Motif_Override_Shell_Widget_Class,
+                          Xt_Motif_Shell_Widget_Class);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2132,9 +2133,9 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 --
 --         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+
+         Merge_Inherited_Resources (Xt_Motif_Override_Shell_Widget_Class);
+      end;
 
       --  WMShell
 
@@ -2142,12 +2143,12 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_WM_Shell_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_WM_Shell_Widget_Class, Enter ("WMShell"));
-      Set_Super_Class (Xt_Motif_WM_Shell_Widget_Class,
-                       Xt_Motif_Shell_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_WM_Shell_Widget_Class, True);
+      begin
+         Xt_Motif_WM_Shell_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_WM_Shell_Widget_Class, Enter ("WMShell"));
+         Set_Super_Class (Xt_Motif_WM_Shell_Widget_Class,
+                          Xt_Motif_Shell_Widget_Class);
+         Set_Is_Meta_Class (Xt_Motif_WM_Shell_Widget_Class, True);
 
          --  TODO XmNbaseHeight
          --  TODO XmNbaseWidth
@@ -2187,10 +2188,10 @@ package body Model.Initialization is
 --         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --         Append (Resources, Resource);
 --
---         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+--         Set_Resources (Xt_Motif_WM_Shell_Widget_Class, Resources);
+
+         Merge_Inherited_Resources (Xt_Motif_WM_Shell_Widget_Class);
+      end;
 
       --  VendorShell
 
@@ -2198,12 +2199,12 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_Vendor_Shell_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Vendor_Shell_Widget_Class, Enter ("VendorShell"));
-      Set_Super_Class (Xt_Motif_Vendor_Shell_Widget_Class,
-                       Xt_Motif_WM_Shell_Widget_Class);
-      Set_Is_Meta_Class (Xt_Motif_Vendor_Shell_Widget_Class, True);
+      begin
+         Xt_Motif_Vendor_Shell_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Vendor_Shell_Widget_Class, Enter ("VendorShell"));
+         Set_Super_Class (Xt_Motif_Vendor_Shell_Widget_Class,
+                          Xt_Motif_WM_Shell_Widget_Class);
+         Set_Is_Meta_Class (Xt_Motif_Vendor_Shell_Widget_Class, True);
 
          --  TODO XmNaudibleWarning
          --  TODO XmNbuttonFontList
@@ -2239,10 +2240,10 @@ package body Model.Initialization is
 --         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --         Append (Resources, Resource);
 --
---         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+--         Set_Resources (Xt_Motif_Vendor_Shell_Widget_Class, Resources);
+
+         Merge_Inherited_Resources (Xt_Motif_Vendor_Shell_Widget_Class);
+      end;
 
       --  TransientShell
 
@@ -2281,12 +2282,12 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_Top_Level_Shell_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Top_Level_Shell_Widget_Class,
-                Enter ("TopLevelShell"));
-      Set_Super_Class (Xt_Motif_Top_Level_Shell_Widget_Class,
-                       Xt_Motif_Vendor_Shell_Widget_Class);
+      begin
+         Xt_Motif_Top_Level_Shell_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Top_Level_Shell_Widget_Class,
+                   Enter ("TopLevelShell"));
+         Set_Super_Class (Xt_Motif_Top_Level_Shell_Widget_Class,
+                          Xt_Motif_Vendor_Shell_Widget_Class);
 
          --  TODO XmNiconic
          --  TODO XmNiconName
@@ -2304,9 +2305,9 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 --
 --         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+
+         Merge_Inherited_Resources (Xt_Motif_Top_Level_Shell_Widget_Class);
+      end;
 
       --  ApplicationShell
 
@@ -2314,12 +2315,12 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_Application_Shell_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Application_Shell_Widget_Class,
-                Enter ("ApplicationShell"));
-      Set_Super_Class (Xt_Motif_Application_Shell_Widget_Class,
-                       Xt_Motif_Top_Level_Shell_Widget_Class);
+      begin
+         Xt_Motif_Application_Shell_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Application_Shell_Widget_Class,
+                   Enter ("ApplicationShell"));
+         Set_Super_Class (Xt_Motif_Application_Shell_Widget_Class,
+                          Xt_Motif_Top_Level_Shell_Widget_Class);
 
          --  TODO XmNargc
          --  TODO XmNargv
@@ -2335,10 +2336,10 @@ package body Model.Initialization is
 --         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --         Append (Resources, Resource);
 --
---         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+--         Set_Resources (Xt_Motif_Application_Shell_Widget_Class, Resources);
+
+         Merge_Inherited_Resources (Xt_Motif_Application_Shell_Widget_Class);
+      end;
 
       --  SessionShell
 
@@ -2346,12 +2347,12 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_Session_Shell_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Session_Shell_Widget_Class,
-                Enter ("SessionShell"));
-      Set_Super_Class (Xt_Motif_Session_Shell_Widget_Class,
-                       Xt_Motif_Application_Shell_Widget_Class);
+      begin
+         Xt_Motif_Session_Shell_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Session_Shell_Widget_Class,
+                   Enter ("SessionShell"));
+         Set_Super_Class (Xt_Motif_Session_Shell_Widget_Class,
+                          Xt_Motif_Application_Shell_Widget_Class);
 
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
@@ -2365,9 +2366,9 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 --
 --         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+
+         Merge_Inherited_Resources (Xt_Motif_Session_Shell_Widget_Class);
+      end;
 
       ------------------------------------------------------------------------
       --  Motif Primitives Widget Classes
@@ -2589,8 +2590,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Primitive_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Primitive_Widget_Class);
       end;
 
       --  XmArrowButton
@@ -2781,8 +2782,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Label_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Label_Widget_Class);
       end;
 
       --  XmCascadeButton
@@ -2898,7 +2899,7 @@ package body Model.Initialization is
 
          Set_Resources (Xt_Motif_Drawn_Button_Widget_Class, Resources);
 
---          Merge_Inherited_Resources ();
+         Merge_Inherited_Resources (Xt_Motif_Drawn_Button_Widget_Class);
       end;
 
       --  XmPushButton
@@ -2961,8 +2962,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Push_Button_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Push_Button_Widget_Class);
       end;
 
       --  XmToggleButton
@@ -3076,8 +3077,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Toggle_Button_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Toggle_Button_Widget_Class);
       end;
 
       --  XmList
@@ -3190,8 +3191,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_List_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_List_Widget_Class);
       end;
 
       --  XmScrollBar
@@ -3336,7 +3337,7 @@ package body Model.Initialization is
 
          Set_Resources (Xt_Motif_Scroll_Bar_Widget_Class, Resources);
 
---         Merge_Inherited_Resources ();
+         Merge_Inherited_Resources (Xt_Motif_Scroll_Bar_Widget_Class);
       end;
 
       --  XmSeparator
@@ -3388,8 +3389,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Separator_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Separator_Widget_Class);
       end;
 
       --  XmText
@@ -3496,8 +3497,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Text_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Text_Widget_Class);
       end;
 
       --  XmTextField
@@ -3583,8 +3584,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Text_Field_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Text_Field_Widget_Class);
       end;
 
       ------------------------------------------------------------------------
@@ -3729,8 +3730,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Gadget_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Gadget_Widget_Class);
       end;
 
       --  XmArrowButtonGadget
@@ -3875,8 +3876,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Icon_Gadget_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Icon_Gadget_Widget_Class);
       end;
 
       --  XmLabelGadget
@@ -4010,8 +4011,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Label_Gadget_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Label_Gadget_Widget_Class);
       end;
 
       --  XmCascadeButtonGadget
@@ -4131,8 +4132,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Push_Button_Gadget_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Push_Button_Gadget_Widget_Class);
       end;
 
       --  XmToggleButtonGadget
@@ -4235,8 +4236,9 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Toggle_Button_Gadget_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources
+          (Xt_Motif_Toggle_Button_Gadget_Widget_Class);
       end;
 
       --  XmSeparatorGadget
@@ -4289,8 +4291,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Separator_Gadget_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Separator_Gadget_Widget_Class);
       end;
 
       ------------------------------------------------------------------------
@@ -4937,8 +4939,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Message_Box_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Message_Box_Widget_Class);
       end;
 
       --  XmSelectionBox
@@ -4999,7 +5001,7 @@ package body Model.Initialization is
 
          Set_Resources (Xt_Motif_Selection_Box_Widget_Class, Resources);
 
---         Merge_Inherited_Resources ();
+         Merge_Inherited_Resources (Xt_Motif_Selection_Box_Widget_Class);
       end;
 
       --  XmCommand
@@ -5008,11 +5010,11 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_Command_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Command_Widget_Class, Enter ("XmCommand"));
-      Set_Super_Class (Xt_Motif_Command_Widget_Class,
-                       Xt_Motif_Selection_Box_Widget_Class);
+      begin
+         Xt_Motif_Command_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_Command_Widget_Class, Enter ("XmCommand"));
+         Set_Super_Class (Xt_Motif_Command_Widget_Class,
+                          Xt_Motif_Selection_Box_Widget_Class);
 
          --  TODO XmNcommand
          --  TODO XmNhistoryItems
@@ -5035,10 +5037,10 @@ package body Model.Initialization is
 --         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --         Append (Resources, Resource);
 --
---         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+--         Set_Resources (Xt_Motif_Command_Widget_Class, Resources);
+
+         Merge_Inherited_Resources (Xt_Motif_Command_Widget_Class);
+      end;
 
       --  XmFileSelectionBox
 
@@ -5046,12 +5048,12 @@ package body Model.Initialization is
 --         Resources : constant List_Id := New_List;
 --         Resource  : Node_Id;
 --
---      begin
-      Xt_Motif_File_Selection_Box_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_File_Selection_Box_Widget_Class,
-                Enter ("XmFileSelectionBox"));
-      Set_Super_Class (Xt_Motif_File_Selection_Box_Widget_Class,
-                       Xt_Motif_Selection_Box_Widget_Class);
+      begin
+         Xt_Motif_File_Selection_Box_Widget_Class := Create_Widget_Class;
+         Set_Name (Xt_Motif_File_Selection_Box_Widget_Class,
+                   Enter ("XmFileSelectionBox"));
+         Set_Super_Class (Xt_Motif_File_Selection_Box_Widget_Class,
+                          Xt_Motif_Selection_Box_Widget_Class);
 
          --  TODO XmNdirectory
          --  TODO XmNdirectoryValid
@@ -5087,9 +5089,9 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 --
 --         Set_Resources (, Resources);
---
---         Merge_Inherited_Resources ();
---      end;
+
+         Merge_Inherited_Resources (Xt_Motif_File_Selection_Box_Widget_Class);
+      end;
 
       --  XmComboBox
 
@@ -5220,8 +5222,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Combo_Box_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Combo_Box_Widget_Class);
       end;
 
       --  XmContainer
@@ -5459,8 +5461,8 @@ package body Model.Initialization is
          Set_Resources (Xt_Motif_Container_Widget_Class, Resources);
          Set_Constraint_Resources
           (Xt_Motif_Container_Widget_Class, Constraints);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Container_Widget_Class);
       end;
 
       --  XmDrawingArea
@@ -5520,8 +5522,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Drawing_Area_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Drawing_Area_Widget_Class);
       end;
 
       --  XmFrame
@@ -5635,8 +5637,8 @@ package body Model.Initialization is
 
          Set_Resources (Xt_Motif_Frame_Widget_Class, Resources);
          Set_Constraint_Resources (Xt_Motif_Frame_Widget_Class, Constraints);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Frame_Widget_Class);
       end;
 
       --  XmNotebook
@@ -5857,8 +5859,8 @@ package body Model.Initialization is
          Set_Resources (Xt_Motif_Notebook_Widget_Class, Resources);
          Set_Constraint_Resources
           (Xt_Motif_Notebook_Widget_Class, Constraints);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Notebook_Widget_Class);
       end;
 
       --  XmPanedWindow
@@ -6027,8 +6029,8 @@ package body Model.Initialization is
          Set_Resources (Xt_Motif_Paned_Window_Widget_Class, Resources);
          Set_Constraint_Resources
           (Xt_Motif_Paned_Window_Widget_Class, Constraints);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Paned_Window_Widget_Class);
       end;
 
       --  XmRowColumn
@@ -6217,8 +6219,8 @@ package body Model.Initialization is
          Set_Resources (Xt_Motif_Row_Column_Widget_Class, Resources);
          Set_Constraint_Resources
           (Xt_Motif_Row_Column_Widget_Class, Constraints);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Row_Column_Widget_Class);
       end;
 
       --  XmScale
@@ -6354,8 +6356,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Scale_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Scale_Widget_Class);
       end;
 
       --  XmScrolledWindow
@@ -6506,8 +6508,8 @@ package body Model.Initialization is
          Set_Resources (Xt_Motif_Scrolled_Window_Widget_Class, Resources);
          Set_Constraint_Resources
           (Xt_Motif_Scrolled_Window_Widget_Class, Constraints);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Scrolled_Window_Widget_Class);
       end;
 
       --  XmMainWindow
@@ -6617,8 +6619,8 @@ package body Model.Initialization is
 --         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Main_Window_Widget_Class, Resources);
---
---         Merge_Inherited_Resources ();
+
+         Merge_Inherited_Resources (Xt_Motif_Main_Window_Widget_Class);
       end;
 
       --  XmSimpleSpinBox
@@ -6669,7 +6671,7 @@ package body Model.Initialization is
 
          Set_Resources (Xt_Motif_Simple_Spin_Box_Widget_Class, Resources);
 
---         Merge_Inherited_Resources ();
+         Merge_Inherited_Resources (Xt_Motif_Simple_Spin_Box_Widget_Class);
       end;
 
       --  XmSpinBox
@@ -6890,7 +6892,7 @@ package body Model.Initialization is
          Set_Constraint_Resources
           (Xt_Motif_Spin_Box_Widget_Class, Constraints);
 
---         Merge_Inherited_Resources ();
+         Merge_Inherited_Resources (Xt_Motif_Spin_Box_Widget_Class);
       end;
 
       ------------------------------------------------------------------------
