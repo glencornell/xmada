@@ -127,6 +127,7 @@ package body Model.Initialization is
    Xt_Motif_Horizontal_Dimension_Resource_Type       : Node_Id;
    Xt_Motif_Horizontal_Position_Resource_Type        : Node_Id;
    Xt_Motif_Menu_Widget_Reference_Resource_Type      : Node_Id;
+   Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type  : Node_Id;
    Xt_Motif_Pixel_Resource_Type                      : Node_Id;
    Xt_Motif_Pixmap_Resource_Type                     : Node_Id;
    Xt_Motif_Position_Resource_Type                   : Node_Id;
@@ -1699,6 +1700,19 @@ package body Model.Initialization is
        (Xt_Motif_Dynamic_Pixmap_Resource_Type, Enter ("DynamicPixmap"));
       Set_Type_Kind (Xt_Motif_Dynamic_Pixmap_Resource_Type, Type_Pixmap);
 
+      --  No Scaling Dynamic Pixmap
+
+      Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type :=
+        Create_Predefined_Resource_Type;
+      Set_Name
+       (Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type,
+        Enter ("XmRNoScalingDynamicPixmap"));
+      Set_Internal_Name
+       (Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type,
+        Enter ("NoScalingDynamicPixmap"));
+      Set_Type_Kind
+       (Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type, Type_Pixmap);
+
       --  Menu Widget reference
 
       Xt_Motif_Menu_Widget_Reference_Resource_Type :=
@@ -1719,6 +1733,7 @@ package body Model.Initialization is
       Append (Types, Xt_Motif_Horizontal_Position_Resource_Type);
       Append (Types, Xt_Motif_C_Int_Resource_Type);
       Append (Types, Xt_Motif_Menu_Widget_Reference_Resource_Type);
+      Append (Types, Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type);
       Append (Types, Xt_Motif_Pixel_Resource_Type);
       Append (Types, Xt_Motif_Pixmap_Resource_Type);
       Append (Types, Xt_Motif_Position_Resource_Type);
@@ -1898,12 +1913,11 @@ package body Model.Initialization is
          Set_Is_Meta_Class (Xt_Motif_Core_Widget_Class, True);
 
          --  XmNinitialResourcesPersistent - уже нет в lib/Xt/Core.c
-         --  TODO XmNtranslations
 
          Resource := Create_Resource_Specification;
-         Set_Resource_Name (Resource, Enter ("XmNaccelerators"));
+         Set_Resource_Name (Resource, Enter ("XtNaccelerators"));
          Set_Internal_Resource_Name (Resource, Enter ("accelerators"));
-         Set_Resource_Class_Name (Resource, Enter ("XmCAccelerators"));
+         Set_Resource_Class_Name (Resource, Enter ("XtCAccelerators"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Accelerators"));
          Set_Resource_Type (Resource, Xt_Motif_Accelerators_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
@@ -1912,9 +1926,9 @@ package body Model.Initialization is
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
-         Set_Resource_Name (Resource, Enter ("XmNbackground"));
+         Set_Resource_Name (Resource, Enter ("XtNbackground"));
          Set_Internal_Resource_Name (Resource, Enter ("background"));
-         Set_Resource_Class_Name (Resource, Enter ("XmCBackground"));
+         Set_Resource_Class_Name (Resource, Enter ("XtCBackground"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Background"));
          Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
@@ -1923,9 +1937,9 @@ package body Model.Initialization is
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
-         Set_Resource_Name (Resource, Enter ("XmNbackgroundPixmap"));
+         Set_Resource_Name (Resource, Enter ("XtNbackgroundPixmap"));
          Set_Internal_Resource_Name (Resource, Enter ("backgroundPixmap"));
-         Set_Resource_Class_Name (Resource, Enter ("XmCPixmap"));
+         Set_Resource_Class_Name (Resource, Enter ("XtCPixmap"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Pixmap"));
          Set_Resource_Type (Resource, Xt_Motif_Pixmap_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
@@ -2372,15 +2386,8 @@ package body Model.Initialization is
                           Xt_Motif_Core_Widget_Class);
          Set_Is_Meta_Class (Xt_Motif_Primitive_Widget_Class, True);
 
-         --  TODO XmNbottomShadowColor
-         --  TODO XmNbottomShadowPixmap
-         --  TODO XmNforeground
-         --  TODO XmNhighlightColor
          --  TODO XmNhighlightOnEnter
-         --  TODO XmNhighlightPixmap
          --  TODO XmNlayoutDirection
-         --  TODO XmNtopShadowColor
-         --  TODO XmNtopShadowPixmap
          --  TODO XmNtraversalOn
          --  TODO XmNunitType
          --  TODO XmNuserData
@@ -2402,12 +2409,72 @@ package body Model.Initialization is
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNbottomShadowColor"));
+         Set_Internal_Resource_Name (Resource, Enter ("bottomShadowColor"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCBottomShadowColor"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("BottomShadowColor"));
+         Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNbottomShadowPixmap"));
+         Set_Internal_Resource_Name (Resource, Enter ("bottomShadowPixmap"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCBottomShadowPixmap"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("BottomShadowPixmap"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNforeground"));
+         Set_Internal_Resource_Name (Resource, Enter ("foreground"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCForeground"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Foreground"));
+         Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNheight"));
          Set_Internal_Resource_Name (Resource, Enter ("height"));
          Set_Resource_Class_Name (Resource, Enter ("XmCDimension"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
          Set_Resource_Type
           (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNhighlightColor"));
+         Set_Internal_Resource_Name (Resource, Enter ("highlightColor"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCHighlightColor"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("HighlightColor"));
+         Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNhighlightPixmap"));
+         Set_Internal_Resource_Name (Resource, Enter ("highlightPixmap"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCHighlightPixmap"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("HighlightPixmap"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -2445,6 +2512,30 @@ package body Model.Initialization is
           (Resource, Enter ("ShadowThickness"));
          Set_Resource_Type
           (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNtopShadowColor"));
+         Set_Internal_Resource_Name (Resource, Enter ("topShadowColor"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCTopShadowColor"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("TopShadowColor"));
+         Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNtopShadowPixmap"));
+         Set_Internal_Resource_Name (Resource, Enter ("topShadowPixmap"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCTopShadowPixmap"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("TopShadowPixmap"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -3513,18 +3604,18 @@ package body Model.Initialization is
                           Xt_Motif_Rect_Obj_Widget_Class);
          Set_Is_Meta_Class (Xt_Motif_Gadget_Widget_Class, True);
 
-         --  TODO XmNbackground
-         --  TODO XmNbackgroundPixmap
-         --  TODO XmNbottomShadowColor
-         --  TODO XmNbottomShadowPixmap
+         --  TODO XmNbackground          --  Отсутствует в реализации.
+         --  TODO XmNbackgroundPixmap    --  Отсутствует в реализации.
+         --  TODO XmNbottomShadowColor   --  Отсутствует в реализации. ?
+         --  TODO XmNbottomShadowPixmap  --  Отсутствует в реализации.
          --  TODO XmNhelpCallback
-         --  TODO XmNforeground
-         --  TODO XmNhighlightColor
+         --  TODO XmNforeground          --  Отсутствует в реализации.
+         --  TODO XmNhighlightColor      --  Отсутствует в реализации. ?
          --  TODO XmNhighlightOnEnter
-         --  TODO XmNhighlightPixmap
+         --  TODO XmNhighlightPixmap     --  Отсутствует в реализации.
          --  TODO XmNlayoutDirection
-         --  TODO XmNtopShadowColor
-         --  TODO XmNtopShadowPixmap
+         --  TODO XmNtopShadowColor      --  Отсутствует в реализации. ?
+         --  TODO XmNtopShadowPixmap     --  Отсутствует в реализации.
          --  TODO XmNtraversalOn
          --  TODO XmNunitType
          --  TODO XmNuserData
@@ -4232,15 +4323,8 @@ package body Model.Initialization is
                           Xt_Motif_Constraint_Widget_Class);
          Set_Is_Meta_Class (Xt_Motif_Manager_Widget_Class, True);
 
-         --  TODO XmNbottomShadowColor
-         --  TODO XmNbottomShadowPixmap
-         --  TODO XmNforeground
-         --  TODO XmNhighlightColor
-         --  TODO XmNhighlightPixmap
          --  TODO XmNlayoutDirection
          --  TODO XmNstringDirection
-         --  TODO XmNtopShadowColor
-         --  TODO XmNtopShadowPixmap
          --  TODO XmNtraversalOn
          --  TODO XmNunitType
          --  TODO XmNuserData
@@ -4261,12 +4345,72 @@ package body Model.Initialization is
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNbottomShadowColor"));
+         Set_Internal_Resource_Name (Resource, Enter ("bottomShadowColor"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCBottomShadowColor"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("BottomShadowColor"));
+         Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNbottomShadowPixmap"));
+         Set_Internal_Resource_Name (Resource, Enter ("bottomShadowPixmap"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCBottomShadowPixmap"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("BottomShadowPixmap"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNforeground"));
+         Set_Internal_Resource_Name (Resource, Enter ("foreground"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCForeground"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Foreground"));
+         Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNheight"));
          Set_Internal_Resource_Name (Resource, Enter ("height"));
          Set_Resource_Class_Name (Resource, Enter ("XmCDimension"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Dimension"));
          Set_Resource_Type
           (Resource, Xt_Motif_Vertical_Dimension_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNhighlightColor"));
+         Set_Internal_Resource_Name (Resource, Enter ("highlightColor"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCHighlightColor"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("HighlightColor"));
+         Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNhighlightPixmap"));
+         Set_Internal_Resource_Name (Resource, Enter ("highlightPixmap"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCHighlightPixmap"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("HighlightPixmap"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4303,6 +4447,30 @@ package body Model.Initialization is
           (Resource, Enter ("ShadowThickness"));
          Set_Resource_Type
           (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNtopShadowColor"));
+         Set_Internal_Resource_Name (Resource, Enter ("topShadowColor"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCTopShadowColor"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("TopShadowColor"));
+         Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNtopShadowPixmap"));
+         Set_Internal_Resource_Name (Resource, Enter ("topShadowPixmap"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCTopShadowPixmap"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("TopShadowPixmap"));
+         Set_Resource_Type
+          (Resource, Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
