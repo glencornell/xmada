@@ -94,7 +94,6 @@ package body Designer.Palette is
 
          when Annotation_Empty        =>
             null;
-
       end case;
    end record;
 
@@ -177,7 +176,7 @@ package body Designer.Palette is
                  Xm_Create_Managed_Row_Column
                   (Palette_Notebook, "palette_page");
 
-                 Annotation_Table.Table (Node).Gadgets_Tab :=
+               Annotation_Table.Table (Node).Gadgets_Tab :=
                  Xm_Create_Managed_Push_Button_Gadget
                   (Palette_Notebook, "gadgets");
 
@@ -196,9 +195,8 @@ package body Designer.Palette is
                     First (Widget_Classes (Current_Widget_Set));
 
                   while Current_Widget_Class /= Null_Node loop
-
                      if not Is_Meta_Class (Current_Widget_Class) then
-                       Relocate_Annotation_Table (Current_Widget_Class);
+                        Relocate_Annotation_Table (Current_Widget_Class);
 
                         Str :=
                           Xm_String_Generate
@@ -237,7 +235,6 @@ package body Designer.Palette is
                                (Annotation_Table.Table (Node).Shells_Page,
                                 "callbacks",
                                 Args (0 .. 0));
-
                         end if;
 
                         Xm_String_Free (Str);
