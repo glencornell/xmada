@@ -44,22 +44,40 @@ package Model.Allocations is
 
    --  Таблица простых списков узлов дерева (пакет Model.Tree.Lists).
 
-   List_Table_Initial             : constant := 100;
-   List_Table_Increment           : constant := 100;
+   List_Table_Initial                     : constant := 100;
+   List_Table_Increment                   : constant := 100;
 
    --  Таблица символов имён (пакет Model.Names).
 
-   Name_Character_Table_Initial   : constant := 100;
-   Name_Character_Table_Increment : constant := 100;
+   Name_Character_Table_Initial           : constant := 100;
+   Name_Character_Table_Increment         : constant := 100;
 
    --  Таблица имён (пакет Model.Names).
 
-   Name_Table_Initial             : constant := 100;
-   Name_Table_Increment           : constant := 100;
+   Name_Table_Initial                     : constant := 100;
+   Name_Table_Increment                   : constant := 100;
 
    --  Таблица узлов дерева модели (пакет Model.Tree).
 
-   Node_Table_Initial             : constant := 100;
-   Node_Table_Increment           : constant := 100;
+   Node_Table_Initial                     : constant := 100;
+   Node_Table_Increment                   : constant := 100;
+
+   --  Таблица отсортированных в порядке очередности создания экземпляров
+   --  виджетов.
+
+   Widget_Instances_Order_Table_Initial   : constant := 100;
+   Widget_Instances_Order_Table_Increment : constant := 100;
+
+   Loop_In_Graph_Table_Initial            : constant := 100;
+   Loop_In_Graph_Table_Increment          : constant := 100;
+
+   Widget_Instances_Table_Initial         : constant := 100;
+   Widget_Instances_Table_Increment       : constant := 100;
+
+   Links_Table_Initial                    : constant := 100;
+   Links_Table_Increment                  : constant := 100;
+
+   Widget_Node_Table_Initial              : constant := 100;
+   Widget_Node_Table_Increment            : constant := 100;
 
 end Model.Allocations;
