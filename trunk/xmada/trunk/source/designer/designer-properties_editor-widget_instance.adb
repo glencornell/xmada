@@ -45,6 +45,7 @@ with Xt.Callbacks;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
+with Xt.Utilities;
 with Xm.Menu_Management;
 with Xm.Resource_Management;
 with Xm.Strings;
@@ -56,7 +57,6 @@ with Xm_Simple_Spin_Box;
 with Xm_Spin_Box;
 with Xm_String_Defs;
 with Xm_Text_Field;
-with Xm_Toggle_Button;
 with Xm_Toggle_Button_Gadget;
 with Xm_Row_Column;
 
@@ -91,7 +91,6 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Xm_Spin_Box;
    use Xm_String_Defs;
    use Xm_Text_Field;
-   use Xm_Toggle_Button;
    use Xm_Toggle_Button_Gadget;
    use Xm_Row_Column;
    use Xt;
@@ -100,6 +99,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Xt.Composite_Management;
    use Xt.Instance_Management;
    use Xt.Resource_Management;
+   use Xt.Utilities;
 
    type Annotation_Kinds is
     (Annotation_Empty,
@@ -156,7 +156,34 @@ package body Designer.Properties_Editor.Widget_Instance is
            Table_Initial        => Model.Allocations.Node_Table_Initial,
            Table_Increment      => Model.Allocations.Node_Table_Increment);
 
+   Xm_C_Unset : constant := 0;
+   Xm_C_Set   : constant := 1;
+
    package Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Fallback_Changed
+      --!    <Purpose> Подпрограмма обратного вызова при нажатии кнопки
+      --! "ресурс отката".
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Fallback_Changed (The_Widget : in Widget;
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Fallback_Changed);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Hardcode_Changed
+      --!    <Purpose> Подпрограмма обратного при нажатии кнопки
+      --! "вшивать в код".
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Hardcode_Changed (The_Widget : in Widget;
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Hardcode_Changed);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -226,6 +253,88 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Fallback_Cahnged
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Fallback_Changed (The_Widget : in Widget;
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         null; --  XXX  Fallbacks пока не реализованы.
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Fallback_Changed", E);
+      end On_Fallback_Changed;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Hardcode_Changed
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Hardcode_Changed (The_Widget : in Widget;
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Data     : constant Xm_Toggle_Button_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+         Args     : Xt_Arg_List (0 .. 0);
+         Node     : Xt_Arg_Val;
+         Res_List : List_Id;
+         Res_Node : Node_Id;
+
+      begin
+         --  Извлекаем узел ресурса.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         --  Получаем узел значения ресурса.
+
+         Res_List := Resources (Parent_Node (Node_Id (Node)));
+         Res_Node := Find_Resource_Value
+                      (Res_List,
+                       Resource_Specification (Node_Id (Node)));
+
+         if Data.Set = Xm_C_Set then
+            Set_Is_Hardcoded (Res_Node, True);
+
+            --  Если кнопка отжата, то убираем чувствительность
+            --  с ресурсов отката.
+
+            Xm_Toggle_Button_Gadget_Set_State
+             (Annotation_Table.Table (Node_Id (Node)).Fallback, False, True);
+
+            Xt_Set_Sensitive
+             (Annotation_Table.Table (Node_Id (Node)).Fallback, False);
+
+         elsif Data.Set = Xm_C_Unset then
+            Set_Is_Hardcoded (Res_Node, False);
+
+            --  Если кнопка нажата, то задаем чувствительность
+            --  для ресурсов отката.
+
+            Xt_Set_Sensitive
+             (Annotation_Table.Table (Node_Id (Node)).Fallback, True);
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Hradcode_Changed", E);
+      end On_Hardcode_Changed;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Menu_Entry
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -263,7 +372,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          Update_Item (Parent_Node (Node_Id (Node)));
 
          if Resource_Value (Node_Id (Node)) /= Node_Id (Menu) then
-               return;
+            return;
          end if;
 
          --  Если значение не изменилось, то обновляем список ресурсов
@@ -274,8 +383,8 @@ package body Designer.Properties_Editor.Widget_Instance is
             Res_Node : Node_Id;
 
          begin
-            if Xm_Toggle_Button_Get_State
-             (Annotation_Table.Table (Node_Id (Node)).Use_In_Program)
+            if Xm_Toggle_Button_Gadget_Get_State
+                (Annotation_Table.Table (Node_Id (Node)).Use_In_Program)
             then
                --  Если кнопка Use_In_Program  была нажата,
                --  то обновляем значение ресурса.
@@ -289,7 +398,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                --  Если кнопка Use_In_Program  не была нажата,
                --  то нажимаем ее (значение зобавится в callback-е).
 
-               Xm_Toggle_Button_Set_State
+               Xm_Toggle_Button_Gadget_Set_State
                 (Annotation_Table.Table (Node_Id (Node)).Use_In_Program,
                  True,
                  True);
@@ -318,7 +427,7 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          Node   : Xt_Arg_Val;
          Args   : Xt_Arg_List (0 .. 5);
-         Pos    : Xm_Spin_Box_Position;
+         Pos    : Xm_Spin_Box_Position := 0;
          Status : Xm_Spin_Box_Validation_Status;
 
       begin
@@ -350,7 +459,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                Res_Node : Node_Id;
 
             begin
-               if Xm_Toggle_Button_Get_State
+               if Xm_Toggle_Button_Gadget_Get_State
                  (Annotation_Table.Table (Node_Id (Node)).Use_In_Program)
                then
                   --  Если кнопка Use_In_Program  была нажата,
@@ -365,7 +474,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                   --  Если кнопка Use_In_Program  не была нажата,
                   --  то нажимаем ее (значение зобавится в callback-е).
 
-                  Xm_Toggle_Button_Set_State
+                  Xm_Toggle_Button_Gadget_Set_State
                    (Annotation_Table.Table (Node_Id (Node)).Use_In_Program,
                     True,
                     True);
@@ -441,7 +550,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
-         Pos    : Xm_Spin_Box_Position;
+         Pos    : Xm_Spin_Box_Position := 0;
          Status : Xm_Spin_Box_Validation_Status;
          Data   : constant Xm_Text_Verify_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
@@ -498,14 +607,12 @@ package body Designer.Properties_Editor.Widget_Instance is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
-         Xm_C_Unset : constant := 0;
-         Xm_C_Set   : constant := 1;
-         Data       : constant Xm_Toggle_Button_Callback_Struct_Access
+         Data     : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
-         Node       : Xt_Arg_Val;
-         Args       : Xt_Arg_List (0 .. 0);
-         Res_List   : List_Id;
-         Res_Node   : Node_Id;
+         Node     : Xt_Arg_Val;
+         Args     : Xt_Arg_List (0 .. 0);
+         Res_List : List_Id;
+         Res_Node : Node_Id;
 
       begin
          --  Получаем узел ресурса, который поменял значение.
@@ -532,6 +639,22 @@ package body Designer.Properties_Editor.Widget_Instance is
             --  Если кнопка отжата, то удаляем ресурс из списка
             --  (если он там есть).
 
+            --  Отжимаем остальные кнопки.
+
+            Xm_Toggle_Button_Gadget_Set_State
+             (Annotation_Table.Table (Node_Id (Node)).Hard_Code, False, True);
+            Xm_Toggle_Button_Gadget_Set_State
+             (Annotation_Table.Table (Node_Id (Node)).Fallback, False, True);
+
+            --  И убираем с них чувствительность.
+
+            Xt_Set_Sensitive
+             (Annotation_Table.Table (Node_Id (Node)).Hard_Code,
+              False);
+            Xt_Set_Sensitive
+             (Annotation_Table.Table (Node_Id (Node)).Fallback,
+              False);
+
             Remove (Res_Node);
 
          elsif Data.Set = Xm_C_Set and Res_Node = Null_Node then
@@ -540,6 +663,23 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             Res_Node := Create_Resource_Value_Copy (Node_Id (Node));
             Append (Res_List, Res_Node);
+
+            --  Устанавливаем чувствительность остальных кнопок.
+
+            Xt_Set_Sensitive
+             (Annotation_Table.Table (Node_Id (Node)).Hard_Code,
+              True);
+
+            if not Xm_Toggle_Button_Gadget_Get_State
+                    (Annotation_Table.Table (Node_Id (Node)).Hard_Code)
+            then
+               --  Если не нажата кнопка "вшивать в код", то задаем
+               --  чувствительность для ресурсов отката.
+
+               Xt_Set_Sensitive
+                (Annotation_Table.Table (Node_Id (Node)).Fallback,
+                 True);
+            end if;
 
          else
             raise Program_Error;
@@ -610,9 +750,9 @@ package body Designer.Properties_Editor.Widget_Instance is
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
                                                    "use_in_program",
                                                    Args (0 .. 3));
-        Xt_Add_Callback (Annotation_Table.Table (Node).Use_In_Program,
-                         Xm_N_Value_Changed_Callback,
-                         Callbacks.On_Use_In_Program_Changed'Access);
+         Xt_Add_Callback (Annotation_Table.Table (Node).Use_In_Program,
+                          Xm_N_Value_Changed_Callback,
+                          Callbacks.On_Use_In_Program_Changed'Access);
 
          --  Создание кнопки "вшивать в код".
 
@@ -627,6 +767,9 @@ package body Designer.Properties_Editor.Widget_Instance is
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
                                                    "hard_code",
                                                    Args (0 .. 4));
+         Xt_Add_Callback (Annotation_Table.Table (Node).Hard_Code,
+                          Xm_N_Value_Changed_Callback,
+                          Callbacks.On_Hardcode_Changed'Access);
 
          --  Создание кнопки "ресурс отката".
 
@@ -641,6 +784,9 @@ package body Designer.Properties_Editor.Widget_Instance is
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
                                                    "fallback",
                                                    Args (0 .. 4));
+         Xt_Add_Callback (Annotation_Table.Table (Node).Fallback,
+                          Xm_N_Value_Changed_Callback,
+                          Callbacks.On_Fallback_Changed'Access);
 
          --  Создание поля "название ресурса".
 
