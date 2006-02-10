@@ -159,6 +159,14 @@ package body Designer.Properties_Editor.Widget_Instance is
    Xm_C_Unset : constant := 0;
    Xm_C_Set   : constant := 1;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Check_Sensitive
+   --!    <Purpose> проверка состояния чувствительности кнопок.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Check_Sensitive (Node : in Node_Id);
+
    package Callbacks is
 
       ------------------------------------------------------------------------
@@ -305,26 +313,14 @@ package body Designer.Properties_Editor.Widget_Instance is
                       (Res_List,
                        Resource_Specification (Node_Id (Node)));
 
+         Check_Sensitive (Node_Id (Node));
+         --  Проверяем чувствительность кнопок.
+
          if Data.Set = Xm_C_Set then
             Set_Is_Hardcoded (Res_Node, True);
 
-            --  Если кнопка отжата, то убираем чувствительность
-            --  с ресурсов отката.
-
-            Xm_Toggle_Button_Gadget_Set_State
-             (Annotation_Table.Table (Node_Id (Node)).Fallback, False, True);
-
-            Xt_Set_Sensitive
-             (Annotation_Table.Table (Node_Id (Node)).Fallback, False);
-
          elsif Data.Set = Xm_C_Unset then
             Set_Is_Hardcoded (Res_Node, False);
-
-            --  Если кнопка нажата, то задаем чувствительность
-            --  для ресурсов отката.
-
-            Xt_Set_Sensitive
-             (Annotation_Table.Table (Node_Id (Node)).Fallback, True);
          end if;
 
       exception
@@ -635,25 +631,12 @@ package body Designer.Properties_Editor.Widget_Instance is
                       (Res_List,
                        Resource_Specification (Node_Id (Node)));
 
+         Check_Sensitive (Node_Id (Node));
+         --  Проверяем чувствительность кнопок.
+
          if Data.Set = Xm_C_Unset and Res_Node /= Null_Node then
             --  Если кнопка отжата, то удаляем ресурс из списка
             --  (если он там есть).
-
-            --  Отжимаем остальные кнопки.
-
-            Xm_Toggle_Button_Gadget_Set_State
-             (Annotation_Table.Table (Node_Id (Node)).Hard_Code, False, True);
-            Xm_Toggle_Button_Gadget_Set_State
-             (Annotation_Table.Table (Node_Id (Node)).Fallback, False, True);
-
-            --  И убираем с них чувствительность.
-
-            Xt_Set_Sensitive
-             (Annotation_Table.Table (Node_Id (Node)).Hard_Code,
-              False);
-            Xt_Set_Sensitive
-             (Annotation_Table.Table (Node_Id (Node)).Fallback,
-              False);
 
             Remove (Res_Node);
 
@@ -663,23 +646,6 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             Res_Node := Create_Resource_Value_Copy (Node_Id (Node));
             Append (Res_List, Res_Node);
-
-            --  Устанавливаем чувствительность остальных кнопок.
-
-            Xt_Set_Sensitive
-             (Annotation_Table.Table (Node_Id (Node)).Hard_Code,
-              True);
-
-            if not Xm_Toggle_Button_Gadget_Get_State
-                    (Annotation_Table.Table (Node_Id (Node)).Hard_Code)
-            then
-               --  Если не нажата кнопка "вшивать в код", то задаем
-               --  чувствительность для ресурсов отката.
-
-               Xt_Set_Sensitive
-                (Annotation_Table.Table (Node_Id (Node)).Fallback,
-                 True);
-            end if;
 
          else
             raise Program_Error;
@@ -703,6 +669,66 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Relocate_Annotation_Table (Node : in Node_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Check_Sensitive
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Check_Sensitive (Node : in Node_Id) is
+   begin
+      if Xm_Toggle_Button_Gadget_Get_State
+          (Annotation_Table.Table (Node).Use_In_Program)
+      then
+         --  Если Use_In_Program нажата, то устанавливаем чувствительность
+         --  у Hard_Code.
+
+         Xt_Set_Sensitive
+          (Annotation_Table.Table (Node).Hard_Code,
+           True);
+
+         if Xm_Toggle_Button_Gadget_Get_State
+             (Annotation_Table.Table (Node).Hard_Code)
+         then
+            --  Если Hard_Code нажата, то убираем чувствительность с
+            --  Fallback.
+
+            Xm_Toggle_Button_Gadget_Set_State
+             (Annotation_Table.Table (Node).Fallback, False, True);
+            Xt_Set_Sensitive
+             (Annotation_Table.Table (Node).Fallback,
+              False);
+
+         else
+            --  Если Hard_Code отпущена, то устанавливаем чувствительность
+            --  на Fallback.
+
+            Xt_Set_Sensitive
+             (Annotation_Table.Table (Node).Fallback,
+              True);
+         end if;
+
+      else
+         --  Если Use_In_Program отпущена, то убираем чувствительность с
+         --  остальных кнопок.
+
+         --  Отжимаем остальные кнопки.
+
+         Xm_Toggle_Button_Gadget_Set_State
+          (Annotation_Table.Table (Node).Hard_Code, False, True);
+         Xm_Toggle_Button_Gadget_Set_State
+          (Annotation_Table.Table (Node).Fallback, False, True);
+
+         --  И убираем с них чувствительность.
+
+         Xt_Set_Sensitive
+          (Annotation_Table.Table (Node).Hard_Code,
+           False);
+         Xt_Set_Sensitive
+          (Annotation_Table.Table (Node).Fallback,
+           False);
+      end if;
+   end Check_Sensitive;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -1318,11 +1344,12 @@ package body Designer.Properties_Editor.Widget_Instance is
    ---------------------------------------------------------------------------
    procedure Update_Item (Node : in Node_Id)
    is
-      All_Res  : List_Id;
-      Curr_Res : List_Id;
-      Res_Type : Node_Id;
-      Current  : Node_Id;
-      Args     : Xt_Arg_List (0 .. 0);
+      All_Res   : List_Id;
+      Curr_Res  : List_Id;
+      Res_Type  : Node_Id;
+      Current   : Node_Id;
+      Args      : Xt_Arg_List (0 .. 0);
+      Local_Res : Node_Id;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -1331,19 +1358,19 @@ package body Designer.Properties_Editor.Widget_Instance is
       --! ресурсов воджета.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      function In_Resources (Node : in Node_Id) return Boolean;
+      function In_Resources (Node : in Node_Id) return Node_Id;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> function_name
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function In_Resources (Node : in Node_Id) return Boolean is
+      function In_Resources (Node : in Node_Id) return Node_Id is
          Current : Node_Id;
 
       begin
          if Curr_Res = Null_List then
-            return False;
+            return Null_Node;
          end if;
 
          Current := First (Curr_Res);
@@ -1352,13 +1379,13 @@ package body Designer.Properties_Editor.Widget_Instance is
             if Resource_Specification (Current)
               = Resource_Specification (Node)
             then
-               return True;
+               return Current;
             end if;
 
             Current := Next (Current);
          end loop;
 
-         return False;
+         return Null_Node;
       end In_Resources;
 
    begin
@@ -1380,11 +1407,25 @@ package body Designer.Properties_Editor.Widget_Instance is
             --  Use_In_Program.
 
             while Current /= Null_Node loop
-               if In_Resources (Current) then
+               Local_Res := In_Resources (Current);
+
+               if Local_Res /= Null_Node then
                   Xt_Set_Arg (Args (0), Xm_N_Set, Xm_Set);
                   Xt_Set_Values
                    (Annotation_Table.Table (Current).Use_In_Program,
                     Args (0 .. 0));
+
+                  Xm_Toggle_Button_Gadget_Set_State
+                   (Annotation_Table.Table (Current).Hard_Code,
+                    Is_Hardcoded (Local_Res),
+                    False);
+
+--  XXX                Xm_Toggle_Button_Gadget_Set_State
+--  XXX                 (Annotation_Table.Table (Current).Fallback,
+--  XXX                  Is_Fallback (Local_Res),
+--  XXX                  False);
+
+                  Check_Sensitive (Current);
                end if;
 
                Res_Type := Resource_Type (Resource_Specification (Current));
