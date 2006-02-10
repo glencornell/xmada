@@ -53,6 +53,10 @@
 *main_window.widget_sets.palette_page.packing: PACK_COLUMN
 *main_window.widget_sets.palette_page.orientation: HORIZONTAL
 *main_window.widget_sets.palette_page.numColumns: 6
+*main_window.widget_sets.primitives.labelString: Primitives
+*main_window.widget_sets.managers.labelString: Managers
+*main_window.widget_sets.gadgets.labelString: Gadgets
+*main_window.widget_sets.shells.labelString: Shells
 
 !!  Окно редактора свойств
 

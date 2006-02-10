@@ -39,10 +39,12 @@
 with GNAT.Table;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
+with Xm_Container;
 with Xm.Resource_Management;
 with Xm.Strings;
 with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
+with Xm_Scrolled_Window;
 with Xm_String_Defs;
 
 with Model.Allocations;
@@ -56,7 +58,9 @@ package body Designer.Palette is
    use Model.Tree.Lists;
    use Model.Queries;
    use Xm;
+   use Xm_Container;
    use Xm.Resource_Management;
+   use Xm_Scrolled_Window;
    use Xm_String_Defs;
    use Xm.Strings;
    use Xm_Row_Column;
@@ -76,7 +80,14 @@ package body Designer.Palette is
    record
       case Kind is
          when Annotation_Project      =>
-            Row_Column : Widget;
+            Primitives_Page : Widget;
+            Primitives_Tab  : Widget;
+            Managers_Page   : Widget;
+            Managers_Tab    : Widget;
+            Gadgets_Page    : Widget;
+            Gadgets_Tab     : Widget;
+            Shells_Page     : Widget;
+            Shells_Tab      : Widget;
 
          when Annotation_Widget_Class =>
             Button : Widget;
@@ -141,13 +152,42 @@ package body Designer.Palette is
                Str                  : Xm_String;
 
             begin
-               Relocate_Annotation_Table (Node);
+               --  Добавляем вкладки в палитру виджетов.
 
-               Annotation_Table.Table (Node).Row_Column :=
+               Relocate_Annotation_Table (Node);
+               Current_Widget_Set := First (Imported_Widget_Sets (Node));
+
+               Annotation_Table.Table (Node).Primitives_Page :=
                  Xm_Create_Managed_Row_Column
                   (Palette_Notebook, "palette_page");
 
-               Current_Widget_Set := First (Imported_Widget_Sets (Node));
+               Annotation_Table.Table (Node).Primitives_Tab :=
+                 Xm_Create_Managed_Push_Button_Gadget
+                  (Palette_Notebook, "primitives");
+
+               Annotation_Table.Table (Node).Managers_Page :=
+                 Xm_Create_Managed_Row_Column
+                  (Palette_Notebook, "palette_page");
+
+               Annotation_Table.Table (Node).Managers_Tab :=
+                 Xm_Create_Managed_Push_Button_Gadget
+                  (Palette_Notebook, "managers");
+
+               Annotation_Table.Table (Node).Gadgets_Page :=
+                 Xm_Create_Managed_Row_Column
+                  (Palette_Notebook, "palette_page");
+
+                 Annotation_Table.Table (Node).Gadgets_Tab :=
+                 Xm_Create_Managed_Push_Button_Gadget
+                  (Palette_Notebook, "gadgets");
+
+               Annotation_Table.Table (Node).Shells_Page :=
+                 Xm_Create_Managed_Row_Column
+                  (Palette_Notebook, "palette_page");
+
+               Annotation_Table.Table (Node).Shells_Tab :=
+                 Xm_Create_Managed_Push_Button_Gadget
+                  (Palette_Notebook, "shells");
 
                while Current_Widget_Set /= Null_Node loop
                   --  Построение кнопки для каждого класса виджета.
@@ -158,18 +198,47 @@ package body Designer.Palette is
                   while Current_Widget_Class /= Null_Node loop
 
                      if not Is_Meta_Class (Current_Widget_Class) then
-                        Relocate_Annotation_Table (Current_Widget_Class);
+                       Relocate_Annotation_Table (Current_Widget_Class);
 
                         Str :=
                           Xm_String_Generate
                            (Name_Image (Current_Widget_Class));
 
                         Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
-                        Annotation_Table.Table (Current_Widget_Class).Button :=
-                          Xm_Create_Managed_Push_Button_Gadget
-                           (Annotation_Table.Table (Node).Row_Column,
-                            "callbacks",
-                            Args (0 .. 0));
+
+                        if Is_Primitive (Current_Widget_Class) then
+                           Annotation_Table.Table
+                            (Current_Widget_Class).Button :=
+                              Xm_Create_Managed_Push_Button_Gadget
+                               (Annotation_Table.Table (Node).Primitives_Page,
+                                "callbacks",
+                                Args (0 .. 0));
+
+                        elsif Is_Gadget (Current_Widget_Class) then
+                           Annotation_Table.Table
+                            (Current_Widget_Class).Button :=
+                              Xm_Create_Managed_Push_Button_Gadget
+                               (Annotation_Table.Table (Node).Gadgets_Page,
+                                "callbacks",
+                                Args (0 .. 0));
+
+                        elsif Is_Manager (Current_Widget_Class) then
+                           Annotation_Table.Table
+                            (Current_Widget_Class).Button :=
+                              Xm_Create_Managed_Push_Button_Gadget
+                               (Annotation_Table.Table (Node).Managers_Page,
+                                "callbacks",
+                                Args (0 .. 0));
+
+                        elsif Is_Shell (Current_Widget_Class) then
+                           Annotation_Table.Table
+                            (Current_Widget_Class).Button :=
+                              Xm_Create_Managed_Push_Button_Gadget
+                               (Annotation_Table.Table (Node).Shells_Page,
+                                "callbacks",
+                                Args (0 .. 0));
+
+                        end if;
 
                         Xm_String_Free (Str);
                      end if;
@@ -230,7 +299,14 @@ package body Designer.Palette is
             when Node_Project =>
                 Annotation_Table.Table (J) :=
                  (Kind => Annotation_Project,
-                  Row_Column => Null_Widget);
+                  Primitives_Page => Null_Widget,
+                  Primitives_Tab  => Null_Widget,
+                  Managers_Page   => Null_Widget,
+                  Managers_Tab    => Null_Widget,
+                  Gadgets_Page    => Null_Widget,
+                  Gadgets_Tab     => Null_Widget,
+                  Shells_Page     => Null_Widget,
+                  Shells_Tab      => Null_Widget);
 
             when Node_Widget_Class =>
                 Annotation_Table.Table (J) :=
