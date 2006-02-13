@@ -58,6 +58,7 @@ with Model.Queries;
 with Model.Tree.Designer;
 with Model.Tree.Lists;
 with Model.Utilities;
+with Model.Widget_Instances_Ordering;
 
 package body Designer.Visual_Editor is
 
@@ -302,6 +303,8 @@ package body Designer.Visual_Editor is
    ---------------------------------------------------------------------------
    procedure Create_Component_Class_Widgets (Node : in Node_Id) is
 
+      use Model.Widget_Instances_Ordering;
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Create_Widget
@@ -323,7 +326,6 @@ package body Designer.Visual_Editor is
 
          if Node_Kind (Parent_Node (Node)) = Node_Component_Class then
             Parent := Drawing_Area;
-
          else
             Parent := Annotation_Table.Table (Parent_Node (Node)).Widget;
          end if;
@@ -334,25 +336,24 @@ package body Designer.Visual_Editor is
          Annotation_Table.Table (Node).Widget :=
            Convenience_Create_Function (Class (Node))
             (Parent, "form", Null_Xt_Arg_List);
-
-         if Children (Node) /= Null_List then
-            declare
-               Aux : Node_Id := First (Children (Node));
-
-            begin
-               while Aux /= Null_Node loop
-                  Create_Widget (Aux);
-                  Aux := Next (Aux);
-               end loop;
-            end;
-         end if;
-
-         Xt_Manage_Child (Annotation_Table.Table (Node).Widget);
       end Create_Widget;
 
    begin
       if Root (Node) /= Null_Node then
-         Create_Widget (Root (Node));
+         Find_Widget_Instances_Order (Root (Node));
+
+         for J in Widget_Instances_Order_Table.First
+                    .. Widget_Instances_Order_Table.Last
+         loop
+            Create_Widget (Widget_Instances_Order_Table.Table (J));
+         end loop;
+
+         for J in reverse Widget_Instances_Order_Table.First
+                    .. Widget_Instances_Order_Table.Last
+         loop
+            Xt_Manage_Child (Annotation_Table.Table
+             (Widget_Instances_Order_Table.Table (J)).Widget);
+         end loop;
       end if;
    end Create_Component_Class_Widgets;
 
