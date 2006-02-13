@@ -52,4 +52,13 @@ package Model.Utilities is
    function Create_Corresponding_Resource_Value (Node : in Node_Id)
      return Node_Id;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Widget_Instance
+   --!    <Purpose> Создаёт узел экземпляра виджета с узлами автоматически
+   --! генерируемых родительского и дочерних виджетов.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Create_Widget_Instance (Widget_Class : in Node_Id) return Node_Id;
+
 end Model.Utilities;
