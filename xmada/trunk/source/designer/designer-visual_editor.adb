@@ -754,11 +754,6 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Reinitialize is
-
---      procedure Free is
---        new Ada.Unchecked_Deallocation
---             (Resource_Value_Set, Resource_Value_Set_Access);
-
    begin
       for J in Annotation_Table.First .. Annotation_Table.Last loop
          case Annotation_Table.Table (J).Kind is
