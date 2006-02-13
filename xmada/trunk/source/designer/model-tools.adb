@@ -74,6 +74,7 @@ package body Model.Tools is
 
    Class_Name_Attr     : XML_Tools.Name_Id;
    Is_Class_Attr       : XML_Tools.Name_Id;
+   Is_Fallback_Attr    : XML_Tools.Name_Id;
    Is_Hardcoded_Attr   : XML_Tools.Name_Id;
    Is_Managed_Attr     : XML_Tools.Name_Id;
    Name_Attr           : XML_Tools.Name_Id;
@@ -146,6 +147,7 @@ package body Model.Tools is
 
       Class_Name_Attr         := XML_Tools.Names.Store ("classname");
       Is_Class_Attr           := XML_Tools.Names.Store ("isclass");
+      Is_Fallback_Attr        := XML_Tools.Names.Store ("isfallback");
       Is_Hardcoded_Attr       := XML_Tools.Names.Store ("ishardcoded");
       Is_Managed_Attr         := XML_Tools.Names.Store ("ismanaged");
       Name_Attr               := XML_Tools.Names.Store ("name");
@@ -327,6 +329,13 @@ package body Model.Tools is
 
          else
             Attributes.Create_Attribute (Tag, Is_Class_Attr, No_Value);
+         end if;
+
+         if Is_Fallback (Resource) then
+            Attributes.Create_Attribute (Tag, Is_Fallback_Attr, Yes_Value);
+
+         else
+            Attributes.Create_Attribute (Tag, Is_Fallback_Attr, No_Value);
          end if;
 
          if Is_Hardcoded (Resource) then
@@ -1010,6 +1019,19 @@ package body Model.Tools is
 
                   else
                      Error_Message ("Unknown value of the 'isclass' attr: "
+                       & XML_Tools.Strings.Image (Attributes.Value (A)));
+                     raise Program_Error;
+                  end if;
+
+               elsif Attributes.Name (A) = Is_Fallback_Attr then
+                  if Attributes.Value (A) = Yes_Value then
+                     Set_Is_Fallback (Resource, True);
+
+                  elsif Attributes.Value (A) = No_Value then
+                     Set_Is_Fallback (Resource, False);
+
+                  else
+                     Error_Message ("Unknown value of the 'ishardcoded' attr: "
                        & XML_Tools.Strings.Image (Attributes.Value (A)));
                      raise Program_Error;
                   end if;
