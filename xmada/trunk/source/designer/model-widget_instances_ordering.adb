@@ -391,7 +391,7 @@ package body Model.Widget_Instances_Ordering is
    ---------------------------------------------------------------------------
    procedure Find_Widget_Instances_Order (Root_Node : in Node_Id) is
       Widget     : Widget_Id;
-   
+
    begin
 
       --  Initialize all structures
@@ -467,7 +467,7 @@ package body Model.Widget_Instances_Ordering is
       Widget_Instances.Free;
    end Find_Widget_Instances_Order;
 
-   
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Find_Widget_Id
@@ -479,7 +479,7 @@ package body Model.Widget_Instances_Ordering is
 
    begin
       for J in Widget_Instances.First .. Widget_Instances.Last loop
-         
+
          if Node = Widget_Instances.Table (J).Node then
             Widget := J;
          end if;
@@ -502,6 +502,7 @@ package body Model.Widget_Instances_Ordering is
       --  Loop through all widgets
 
       for K in Widget_Instances.First .. Widget_Instances.Last loop
+
          Node := Widget_Instances.Table(K).Node;
 
          if Resources (Node) /= Null_List then
@@ -538,6 +539,7 @@ package body Model.Widget_Instances_Ordering is
             Aux := First (Children (Node));
 
             while Aux /= Null_Node loop
+            
                Widget := Find_Widget_Id (Aux);
                Build_Link (K, Widget);
                Aux := Next (Aux);
@@ -582,6 +584,8 @@ package body Model.Widget_Instances_Ordering is
          Widget := First (Children (Node));
 
          while Widget /= Null_Node loop
+            Widget_Instances.Increment_Last;
+            Widget_Instances.Table (Widget_Instances.Last).Node := Widget;
             Reindexation (Widget);
             Widget := Next (Widget);
          end loop;
