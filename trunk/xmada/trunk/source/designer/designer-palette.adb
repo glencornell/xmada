@@ -390,8 +390,8 @@ package body Designer.Palette is
       --!    <ImplementationNotes>
       -------------------------------------------------------------------------
       function Get_Sensitive_Indication (Class : in Node_Id;
-                                         Node  : in Node_Id) 
-        return Boolean 
+                                         Node  : in Node_Id)
+        return Boolean
       is
          pragma Unreferenced (Class);
 
@@ -399,21 +399,21 @@ package body Designer.Palette is
          if Node = Null_Node then
             return False;
          end if;
-          
+
          case Node_Kind (Node) is
             when Node_Project | Node_Application =>
                return False;
 
             when Node_Component_Class =>
-               return Root (Node) /= Null_Node;
+               return Root (Node) = Null_Node;
 
             when Node_Widget_Instance =>
-               if Is_Shell (Node) 
+               if Is_Shell (Node)
                     and then Children (Node) /= Null_List
                     and then Length (Children (Node)) = 1
                then
                   return False;
-               
+
                elsif Is_Primitive (Node) then
                   return False;
 
