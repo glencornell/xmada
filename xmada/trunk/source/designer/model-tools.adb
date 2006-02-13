@@ -339,22 +339,9 @@ package body Model.Tools is
          --  Обработка значения ресурса.
 
          case Node_Kind (Resource) is
-            when Node_Widget_Reference_Resource_Value =>
-               declare
-                  N : Node_Id := Resource_Value (Resource);
-
-               begin
-                  if N /= Null_Node then
-                     Attributes.Create_Attribute
-                      (Tag,
-                       Value_Attr,
-                       XML_Tools.Strings.Store (Create_Full_Node_Name (N)));
-                  end if;
-               end;
-
             when Node_Enumeration_Resource_Value =>
                declare
-                  N : Node_Id := Resource_Value (Resource);
+                  N : constant Node_Id := Resource_Value (Resource);
 
                begin
                   if N /= Null_Node then
@@ -367,9 +354,34 @@ package body Model.Tools is
                   end if;
                end;
 
+            when Node_Integer_Resource_Value =>
+               declare
+                  Value : constant Integer := Resource_Value (Resource);
+                  Str   : constant Wide_String := Integer'Wide_Image (Value);
+
+               begin
+                  Attributes.Create_Attribute
+                   (Tag,
+                    Value_Attr,
+                    XML_Tools.Strings.Store (Str (Str'First + 1 .. Str'Last)));
+               end;
+
+            when Node_Widget_Reference_Resource_Value =>
+               declare
+                  N : constant Node_Id := Resource_Value (Resource);
+
+               begin
+                  if N /= Null_Node then
+                     Attributes.Create_Attribute
+                      (Tag,
+                       Value_Attr,
+                       XML_Tools.Strings.Store (Create_Full_Node_Name (N)));
+                  end if;
+               end;
+
             when others =>
                Error_Message ("Unhandled resource node kind: "
-                 & Node_kinds'Wide_Image (Node_Kind (Resource)));
+                 & Node_Kinds'Wide_Image (Node_Kind (Resource)));
                raise Program_Error;
          end case;
 
@@ -881,7 +893,7 @@ package body Model.Tools is
                                                  Name : in Wide_String)
            return Node_Id
          is
-            Specifications      : List_Id
+            Specifications      : constant List_Id
               := Value_Specifications (Resource_Type (Specification));
             Res                 : Node_Id := Null_Node;
             Id                  : constant Model.Name_Id
@@ -1017,17 +1029,6 @@ package body Model.Tools is
 
                elsif Attributes.Name (A) = Value_Attr then
                   case Node_Kind (Resource) is
-                     when Node_Widget_Reference_Resource_Value =>
-                        declare
-                           Value : constant Wide_String
-                             := XML_Tools.Strings.Image (Attributes.Value (A));
-                           N     : constant Node_Id
-                             := Get_Widget_Instance_By_Name (Value);
-
-                        begin
-                           Set_Resource_Value (Resource, N);
-                        end;
-
                      when Node_Enumeration_Resource_Value =>
                         declare
                            Value : constant Wide_String
@@ -1035,6 +1036,27 @@ package body Model.Tools is
                            N     : constant Node_Id
                              := Get_Enumeration_Value_By_Name
                                  (Resource_Specification (Resource), Value);
+
+                        begin
+                           Set_Resource_Value (Resource, N);
+                        end;
+
+                     when Node_Integer_Resource_Value =>
+                        declare
+                           Str   : constant Wide_String
+                             := XML_Tools.Strings.Image (Attributes.Value (A));
+                           Value : constant Integer
+                             := Integer'Wide_Value (Str);
+                        begin
+                           Set_Resource_Value (Resource, Value);
+                        end;
+
+                     when Node_Widget_Reference_Resource_Value =>
+                        declare
+                           Value : constant Wide_String
+                             := XML_Tools.Strings.Image (Attributes.Value (A));
+                           N     : constant Node_Id
+                             := Get_Widget_Instance_By_Name (Value);
 
                         begin
                            Set_Resource_Value (Resource, N);
