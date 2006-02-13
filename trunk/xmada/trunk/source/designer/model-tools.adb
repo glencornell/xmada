@@ -338,25 +338,40 @@ package body Model.Tools is
 
          --  Обработка значения ресурса.
 
-         declare
-            N : Node_Id;
+         case Node_Kind (Resource) is
+            when Node_Widget_Reference_Resource_Value =>
+               declare
+                  N : Node_Id := Resource_Value (Resource);
 
-         begin
-            N := Resource_Value (Resource);
+               begin
+                  if N /= Null_Node then
+                     Attributes.Create_Attribute
+                      (Tag,
+                       Value_Attr,
+                       XML_Tools.Strings.Store (Create_Full_Node_Name (N)));
+                  end if;
+               end;
 
-            if N /= Null_Node then
-               Attributes.Create_Attribute
-                (Tag,
-                 Value_Attr,
-                 XML_Tools.Strings.Store (Create_Full_Node_Name (N)));
-            end if;
+            when Node_Enumeration_Resource_Value =>
+               declare
+                  N : Node_Id := Resource_Value (Resource);
 
-         exception
+               begin
+                  if N /= Null_Node then
+                     Attributes.Create_Attribute
+                      (Tag,
+                       Value_Attr,
+                       XML_Tools.Strings.Store
+                        (Model.Names.Image (Internal_Name (N))));
+
+                  end if;
+               end;
+
             when others =>
-               Error_Message ("Exception appeared while processing "
-                 & "resource value: "
-                 & Node_Kinds'Wide_Image (Node_Kind (Resource)));
-         end;
+               Error_Message ("Unhandled resource node kind: "
+                 & Node_kinds'Wide_Image (Node_Kind (Resource)));
+               raise Program_Error;
+         end case;
 
       end Resource_To_XML;
 
@@ -855,8 +870,41 @@ package body Model.Tools is
       procedure XML_To_Resource (Tag           : in Element_Id;
                                  Resource      : in Node_Id)
       is
+         function Get_Enumeration_Value_By_Name (Specification : in Node_Id;
+                                                 Name : in Wide_String)
+           return Node_Id;
+
          function Get_Widget_Instance_By_Name (Name : in Wide_String)
            return Node_Id;
+
+         function Get_Enumeration_Value_By_Name (Specification : in Node_Id;
+                                                 Name : in Wide_String)
+           return Node_Id
+         is
+            Specifications      : List_Id
+              := Value_Specifications (Resource_Type (Specification));
+            Res                 : Node_Id := Null_Node;
+            Id                  : constant Model.Name_Id
+              := Model.Names.Enter (Name);
+
+         begin
+            if Specifications /= Null_List then
+               Res := First (Specifications);
+
+               while Res /= Null_Node loop
+                  exit when Internal_Name (Res) = Id;
+
+                  Res := Next (Res);
+               end loop;
+            end if;
+
+            if Res = Null_Node then
+               Error_Message ("Can't find enumeration value: " & Name);
+               raise Program_Error;
+            end if;
+
+            return Res;
+         end Get_Enumeration_Value_By_Name;
 
          function Get_Widget_Instance_By_Name (Name : in Wide_String)
            return Node_Id
@@ -968,14 +1016,35 @@ package body Model.Tools is
                   end if;
 
                elsif Attributes.Name (A) = Value_Attr then
-                  declare
-                     N : constant Node_Id
-                       := Get_Widget_Instance_By_Name
-                           (XML_Tools.Strings.Image (Attributes.Value (A)));
+                  case Node_Kind (Resource) is
+                     when Node_Widget_Reference_Resource_Value =>
+                        declare
+                           Value : constant Wide_String
+                             := XML_Tools.Strings.Image (Attributes.Value (A));
+                           N     : constant Node_Id
+                             := Get_Widget_Instance_By_Name (Value);
 
-                  begin
-                     Set_Resource_Value (Resource, N);
-                  end;
+                        begin
+                           Set_Resource_Value (Resource, N);
+                        end;
+
+                     when Node_Enumeration_Resource_Value =>
+                        declare
+                           Value : constant Wide_String
+                             := XML_Tools.Strings.Image (Attributes.Value (A));
+                           N     : constant Node_Id
+                             := Get_Enumeration_Value_By_Name
+                                 (Resource_Specification (Resource), Value);
+
+                        begin
+                           Set_Resource_Value (Resource, N);
+                        end;
+
+                     when others =>
+                        Error_Message ("Unhandled resource value : "
+                          & Node_Kinds'Wide_Image (Node_Kind (Resource)));
+                        raise Program_Error;
+                  end case;
 
                else
                   Error_Message ("Unknown attribute name: "
