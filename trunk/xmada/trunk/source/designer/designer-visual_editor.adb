@@ -202,13 +202,13 @@ package body Designer.Visual_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Make_Arg_List
+   --!    <Unit> Make_Set_Arg_List
    --!    <Purpose> Формирует и возвращает список параметров виджета для
    --! последующего использования при создании виджета или установки значения.
    --! Для пустого списка возвращает пустой список параметров виджета.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Make_Arg_List (List : in List_Id) return Xt_Arg_List;
+   function Make_Set_Arg_List (List : in List_Id) return Xt_Arg_List;
 
    Drawing_Area     : Widget  := Null_Widget;
    Edited_Component : Node_Id := Null_Node;
@@ -355,8 +355,8 @@ package body Designer.Visual_Editor is
            Convenience_Create_Function (Class (Node))
             (Parent,
              "form",
-             Make_Arg_List (Resources (Node))
-               & Make_Arg_List (Constraint_Resources (Node)));
+             Make_Set_Arg_List (Resources (Node))
+               & Make_Set_Arg_List (Constraint_Resources (Node)));
       end Create_Widget;
 
    begin
@@ -693,10 +693,10 @@ package body Designer.Visual_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Make_Arg_List
+   --!    <Unit> Make_Set_Arg_List
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Make_Arg_List (List : in List_Id) return Xt_Arg_List is
+   function Make_Set_Arg_List (List : in List_Id) return Xt_Arg_List is
    begin
       if List = Null_List then
          return Xt_Arg_List'(1 .. 0 => (Interfaces.C.Strings.Null_Ptr, 0));
@@ -791,7 +791,7 @@ package body Designer.Visual_Editor is
 
          return Args (0 .. Next_Arg - 1);
       end;
-   end Make_Arg_List;
+   end Make_Set_Arg_List;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -1010,8 +1010,8 @@ package body Designer.Visual_Editor is
    begin
       Xt_Set_Values
        (Annotation_Table.Table (Node).Widget,
-        Make_Arg_List (All_Resources (Node))
-          & Make_Arg_List (All_Constraint_Resources (Node)));
+        Make_Set_Arg_List (All_Resources (Node))
+          & Make_Set_Arg_List (All_Constraint_Resources (Node)));
 
       Get_Properties (Node);
    end Set_Properties;
