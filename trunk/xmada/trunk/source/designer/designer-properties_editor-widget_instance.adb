@@ -113,6 +113,7 @@ package body Designer.Properties_Editor.Widget_Instance is
      Annotation_Pixmap_Resource_Value,
      Annotation_Screen_Resource_Value,
      Annotation_Translation_Data_Resource_Value,
+     Annotation_Widget_Instance,
      Annotation_Widget_Reference_Resource_Value);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
@@ -135,11 +136,19 @@ package body Designer.Properties_Editor.Widget_Instance is
             Value          : Widget;  --  Значение ресурса
 
          when Annotation_Enumeration_Resource_Type       =>
-            Menu : Widget;
+            RT_Menu : Widget;
             --  Выпадающее меню, используемое в меню опций значения ресурса.
 
          when Annotation_Enumeration_Value_Specification =>
-            Button : Widget;
+            VS_Button : Widget;
+            --  Кнопка выпадающего меню, используемого в меню опций значения
+            --  ресурса.
+
+         when Annotation_Widget_Instance                 =>
+            WI_Child_Menu : Widget;
+            --  Выпадающее меню, используемое в меню опций значения ресурса.
+
+            WI_Button     : Widget;
             --  Кнопка выпадающего меню, используемого в меню опций значения
             --  ресурса.
 
@@ -166,6 +175,38 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Check_Sensitive (Node : in Node_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_Menu
+   --!    <Purpose> функция возвращает виджет всплывающего меню.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Get_Menu (Node : in Node_Id) return Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_Button
+   --!    <Purpose> функция возвращает виджет злемента всплывающего меню.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Get_Button (Node : in Node_Id) return Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Button
+   --!    <Purpose> Устанавливает значение для элемента меню.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Button (Node : in Node_Id; Value : in Widget);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Button
+   --!    <Purpose> Устанавливает значение для меню.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Menu (Node : in Node_Id; Value : in Widget);
 
    package Callbacks is
 
@@ -788,11 +829,8 @@ package body Designer.Properties_Editor.Widget_Instance is
          Form     : Widget;
          Name     : Xm_String;
          Text     : Widget;
-         Menu     : Widget;
          Res_Type : Node_Id;
          Args     : Xt_Arg_List (0 .. 6);
-         List     : List_Id := Null_List;
-         Current  : Node_Id := Null_Node;
 
       begin
          Res_Type := Resource_Type (Resource_Specification (Node));
@@ -875,19 +913,12 @@ package body Designer.Properties_Editor.Widget_Instance is
                Xt_Set_Arg (Args (1),
                            Xm_N_Left_Widget,
                            Annotation_Table.Table (Node).Name);
-               Xt_Set_Arg (Args (2),
-                           Xm_N_Sub_Menu_Id,
-                           Annotation_Table.Table (Res_Type).Menu);
-               Xt_Set_Arg (Args (3),
-                           Xm_N_User_Data,
-                           Xt_Arg_Val (Node));
+               Xt_Set_Arg (Args (2), Xm_N_Sub_Menu_Id, Get_Menu (Res_Type));
+               Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
                Annotation_Table.Table (Node).Value :=
                  Xm_Create_Managed_Option_Menu (Form,
                                                 "resource_value",
                                                 Args (0 .. 3));
-               Xt_Add_Callback (Annotation_Table.Table (Res_Type).Menu,
-                                Xm_N_Entry_Callback,
-                                Callbacks.On_Menu_Entry'Access);
 
             when Node_Predefined_Resource_Type  =>
                case Type_Kind (Res_Type) is
@@ -962,67 +993,53 @@ package body Designer.Properties_Editor.Widget_Instance is
                end case;
 
             when Node_Widget_Reference_Resource_Type =>
-               List    := Null_List;
-               Current := Null_Node;
+               declare
+                  Menu : Widget := Null_Widget;
 
-               --  Если ресурс должен содержать список детей, то получем его.
+               begin
+                  --  Если ресурс должен содержать список детей,
+                  --  то получем его.
 
-               if Widget_Reference_Constraints (Resource_Specification (Node))
-                 = Child
-               then
-                  List := Children (Node);
+                  if Widget_Reference_Constraints
+                      (Resource_Specification (Node))
+                    = Child
+                  then
+                     Menu := Get_Menu (Parent_Node (Node));
 
-               --  Если ресурс должен содержать список братьев, то получем его.
+                  --  Если ресурс должен содержать список братьев,
+                  --  то получем его.
 
-               elsif Widget_Reference_Constraints
+                  elsif Widget_Reference_Constraints
                        (Resource_Specification (Node))
-                 = Parents_Child
+                      = Parents_Child
 
-               then
-                  List := Children (Parent_Node (Node));
-               end if;
+                  then
+                     Menu := Get_Menu (Parent_Node (Parent_Node (Node)));
+                  end if;
 
-               --  Формируем меню.
+                  --  Если есть хоть какое-то меню, то создаем его.
 
-               Menu := Xm_Create_Pulldown_Menu (Form, "widget_menu");
-               Xt_Add_Callback (Menu,
-                                Xm_N_Entry_Callback,
-                                Callbacks.On_Menu_Entry'Access);
+                  if Menu /= Null_Widget then
+                     Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Menu);
+                     Xt_Set_Arg
+                      (Args (1), Xm_N_Left_Attachment, Xm_Attach_Widget);
+                     Xt_Set_Arg (Args (2),
+                                 Xm_N_Left_Widget,
+                                 Annotation_Table.Table (Node).Name);
+                     Xt_Set_Arg
+                      (Args (3), Xm_N_Right_Attachment, Xm_Attach_Form);
+                     Xt_Set_Arg
+                      (Args (4), Xm_N_Top_Attachment, Xm_Attach_Form);
+                     Xt_Set_Arg
+                      (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+                     Xt_Set_Arg
+                      (Args (6), Xm_N_User_Data, Xt_Arg_Val (Node));
+                     Annotation_Table.Table (Node).Value :=
+                       Xm_Create_Managed_Option_Menu
+                        (Form, "widget_reference", Args (0 .. 6));
+                  end if;
+               end;
 
-               if List /= Null_List then
-                  Current := First (List);
-               end if;
-
-               --  Добавляем в меню ссылку на "пустой" виджет.
-
-               Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (Null_Node));
-               Text := Xm_Create_Managed_Push_Button_Gadget
-                        (Menu, "no_widget", Args (0 .. 0));
-
-               --  Добавляем в меню названия виджетов.
-
-               while Current /= Null_Node loop
-                  Name := Xm_String_Generate (Name_Image (Current));
-                  Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
-                  Xt_Set_Arg (Args (1), Xm_N_User_Data, Xt_Arg_Val (Current));
-                  Text := Xm_Create_Managed_Push_Button_Gadget
-                           (Menu, "widget_instance", Args (0 .. 1));
-                  Xm_String_Free (Name);
-
-                  Current := Next (Current);
-               end loop;
-
-               Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Menu);
-               Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Widget);
-               Xt_Set_Arg (Args (2), Xm_N_Left_Widget, Annotation_Table.Table
-                                                        (Node).Name);
-               Xt_Set_Arg (Args (3), Xm_N_Right_Attachment, Xm_Attach_Form);
-               Xt_Set_Arg (Args (4), Xm_N_Top_Attachment, Xm_Attach_Form);
-               Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Form);
-               Xt_Set_Arg (Args (6), Xm_N_User_Data, Xt_Arg_Val (Node));
-               Annotation_Table.Table (Node).Value :=
-                 Xm_Create_Managed_Option_Menu
-                  (Form, "widget_reference", Args (0 .. 6));
             when others =>
                null;
          end case;
@@ -1158,6 +1175,54 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Get_Button
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Get_Button (Node : in Node_Id) return Widget is
+      pragma Assert
+       (Node_Kind (Node) = Node_Widget_Instance
+        or Node_Kind (Node) = Node_Enumeration_Value_Specification);
+
+   begin
+      case Node_Kind (Node) is
+         when Node_Widget_Instance                 =>
+            return Annotation_Table.Table (Node).WI_Button;
+
+         when Node_Enumeration_Value_Specification =>
+            return Annotation_Table.Table (Node).VS_Button;
+
+         when others                               =>
+            raise Program_Error;
+
+      end case;
+   end Get_Button;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_Menu
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Get_Menu (Node : in Node_Id) return Widget is
+      pragma Assert
+       (Node_Kind (Node) = Node_Widget_Instance
+        or Node_Kind (Node) = Node_Enumerated_Resource_Type);
+
+   begin
+      case Node_Kind (Node) is
+         when Node_Widget_Instance                 =>
+            return Annotation_Table.Table (Node).WI_Child_Menu;
+
+         when Node_Enumerated_Resource_Type =>
+            return Annotation_Table.Table (Node).RT_Menu;
+
+         when others                               =>
+            raise Program_Error;
+
+      end case;
+   end Get_Menu;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Hide
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -1191,6 +1256,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                Current_Value : Node_Id;
                Argl          : Xt_Arg_List (0 .. 1);
                Str           : Xm_String;
+               Menu          : Widget;
 
             begin
                Current_Set := First (Imported_Widget_Sets (Node));
@@ -1206,9 +1272,13 @@ package body Designer.Properties_Editor.Widget_Instance is
                      then
                         Relocate_Annotation_Table (Current_Type);
 
-                        Annotation_Table.Table (Current_Type).Menu :=
-                          Xm_Create_Pulldown_Menu
-                           (Notebook, "resourcetype_menu");
+                        Menu := Xm_Create_Pulldown_Menu
+                                 (Notebook, "resourcetype_menu");
+                        Set_Menu (Current_Type, Menu);
+
+                        Xt_Add_Callback (Menu,
+                                         Xm_N_Entry_Callback,
+                                         Callbacks.On_Menu_Entry'Access);
 
                         --  Задание списков возможных значений для каждого меню
                         --  элемента типа ресурсов.
@@ -1225,11 +1295,12 @@ package body Designer.Properties_Editor.Widget_Instance is
                            Xt_Set_Arg (Argl (1),
                                        Xm_N_User_Data,
                                        Xt_Arg_Val (Current_Value));
-                           Annotation_Table.Table (Current_Value).Button :=
+                           Set_Button
+                            (Current_Value,
                              Xm_Create_Managed_Push_Button_Gadget
-                              (Annotation_Table.Table (Current_Type).Menu,
+                              (Get_Menu (Current_Type),
                                "value",
-                               Argl (0 .. 1));
+                               Argl (0 .. 1)));
                            Xm_String_Free (Str);
 
                            Current_Value := Next (Current_Value);
@@ -1242,6 +1313,49 @@ package body Designer.Properties_Editor.Widget_Instance is
                   Current_Set := Next (Current_Set);
                end loop;
             end;
+
+         when Node_Widget_Instance =>
+            declare
+               Args        : Xt_Arg_List (0 .. 1);
+               Name        : Xm_String;
+               Button      : Widget;
+               Menu        : Widget;
+
+            begin
+               --  Создаем меню.
+
+               Menu := Xm_Create_Pulldown_Menu (Notebook, "widget_child");
+               Set_Menu (Node, Menu);
+
+               Xt_Add_Callback (Menu,
+                                Xm_N_Entry_Callback,
+                                Callbacks.On_Menu_Entry'Access);
+
+               --  Добавляем в меню ссылку на "пустой" виджет.
+
+               Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (Null_Node));
+               Button := Xm_Create_Managed_Push_Button_Gadget
+                          (Menu, "no_widget", Args (0 .. 0));
+
+               --  Если виджет является дочерним, то добавляем его в
+               --  меню родителя.
+
+               if Node_Kind (Parent_Node (Node)) = Node_Widget_Instance then
+                  Menu := Get_Menu (Parent_Node (Node));
+                  Name := Xm_String_Generate (Name_Image (Node));
+                  Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+                  Xt_Set_Arg
+                   (Args (1), Xm_N_User_Data, Xt_Arg_Val (Node));
+                  Button := Xm_Create_Managed_Push_Button_Gadget
+                             (Menu, "widget_instance", Args (0 .. 1));
+
+                  pragma Assert (Get_Button (Node) = Null_Widget);
+
+                  Set_Button (Node, Button);
+                  Xm_String_Free (Name);
+               end if;
+            end;
+
 
          when others =>
             null;
@@ -1259,14 +1373,23 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       for J in Annotation_Table.First .. Annotation_Table.Last loop
          case Annotation_Table.Table (J).Kind is
-            when Annotation_Enumeration_Resource_Type         =>
-               if Annotation_Table.Table (J).Menu /= Null_Widget then
-                  Xt_Destroy_Widget (Annotation_Table.Table (J).Menu);
+            when Annotation_Enumeration_Resource_Type       =>
+               if Get_Menu (J) /= Null_Widget then
+                  Xt_Destroy_Widget (Get_Menu (J));
                end if;
 
-            when Annotation_Enumeration_Value_Specification  =>
-               if Annotation_Table.Table (J).Button /= Null_Widget then
-                  Xt_Destroy_Widget (Annotation_Table.Table (J).Button);
+            when Annotation_Enumeration_Value_Specification =>
+               if Get_Button (J) /= Null_Widget then
+                  Xt_Destroy_Widget (Get_Button (J));
+               end if;
+
+            when Annotation_Widget_Instance                 =>
+               if Get_Button (J) /= Null_Widget then
+                  Xt_Destroy_Widget (Get_Button (J));
+               end if;
+
+               if Get_Menu (J) /= Null_Widget then
+                  Xt_Destroy_Widget (Get_Menu (J));
                end if;
 
             when others =>
@@ -1317,8 +1440,8 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             when Node_Enumerated_Resource_Type =>
                Annotation_Table.Table (J) :=
-                (Kind => Annotation_Enumeration_Resource_Type,
-                 Menu => Null_Widget);
+                (Kind    => Annotation_Enumeration_Resource_Type,
+                 RT_Menu => Null_Widget);
 
             when Node_Enumeration_Resource_Value =>
                Annotation_Table.Table (J) :=
@@ -1331,8 +1454,8 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             when Node_Enumeration_Value_Specification =>
                Annotation_Table.Table (J) :=
-                (Kind   => Annotation_Enumeration_Value_Specification,
-                 Button => Null_Widget);
+                (Kind      => Annotation_Enumeration_Value_Specification,
+                 VS_Button => Null_Widget);
 
             when Node_Integer_Resource_Value =>
                Annotation_Table.Table (J) :=
@@ -1388,11 +1511,65 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Name           => Null_Widget,
                  Value          => Null_Widget);
 
+            when Node_Widget_Instance                 =>
+               Annotation_Table.Table (J) :=
+                (Kind          => Annotation_Widget_Instance,
+                 WI_Child_Menu => Null_Widget,
+                 WI_Button     => Null_Widget);
+
             when others =>
                Annotation_Table.Table (J) := (Kind => Annotation_Empty);
          end case;
       end loop;
    end Relocate_Annotation_Table;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Button
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Button (Node : in Node_Id; Value : in Widget) is
+      pragma Assert
+       (Node_Kind (Node) = Node_Widget_Instance
+        or Node_Kind (Node) = Node_Enumeration_Value_Specification);
+
+   begin
+      case Node_Kind (Node) is
+         when Node_Widget_Instance                 =>
+            Annotation_Table.Table (Node).WI_Button := Value;
+
+         when Node_Enumeration_Value_Specification =>
+            Annotation_Table.Table (Node).VS_Button := Value;
+
+         when others                               =>
+            raise Program_Error;
+
+      end case;
+   end Set_Button;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Menu
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Menu (Node : in Node_Id; Value : in Widget) is
+      pragma Assert
+       (Node_Kind (Node) = Node_Widget_Instance
+        or Node_Kind (Node) = Node_Enumerated_Resource_Type);
+
+   begin
+      case Node_Kind (Node) is
+         when Node_Widget_Instance                 =>
+            Annotation_Table.Table (Node).WI_Child_Menu := Value;
+
+         when Node_Enumerated_Resource_Type =>
+            Annotation_Table.Table (Node).RT_Menu := Value;
+
+         when others                               =>
+            raise Program_Error;
+
+      end case;
+   end Set_Menu;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -1530,8 +1707,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                      when Node_Enumerated_Resource_Type =>
                         Xt_Set_Arg (Args (0),
                                     Xm_N_Menu_History,
-                                    Annotation_Table.Table
-                                     (Resource_Value (Current)).Button);
+                                    Get_Button (Resource_Value (Current)));
                         Xt_Set_Values
                          (Annotation_Table.Table (Current).Value,
                           Args (0 .. 0));
@@ -1574,8 +1750,20 @@ package body Designer.Properties_Editor.Widget_Instance is
                         end case;
 
                      when Node_Widget_Reference_Resource_Type =>
-                        null; --  TODO реализовать.
+                        declare
+                           Value : constant Node_Id
+                             := Resource_Value (Current);
 
+                        begin
+                           if Value /= Null_Node then
+                              Xt_Set_Arg (Args (0),
+                                          Xm_N_Menu_History,
+                                          Get_Button (Value));
+                              Xt_Set_Values
+                               (Annotation_Table.Table (Current).Value,
+                                Args (0 .. 0));
+                           end if;
+                        end;
                      when others =>
                         raise Program_Error;
                   end case;
