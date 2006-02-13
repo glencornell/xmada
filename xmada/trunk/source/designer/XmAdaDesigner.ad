@@ -85,6 +85,7 @@
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.resource_value.marginHeight: 0
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.resource_value.marginWidth: 0
 *main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form.resource_value.spacing: 0
+*main_window.horizontal_paned.properties_form.notebook.scrolled*row_column.form*widget_menu.no_widget.labelString:No Widget
 *main_window.horizontal_paned.properties_form.notebook.resources.labelString: Resources
 *main_window.horizontal_paned.properties_form.notebook.resources.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.notebook.constraints.labelString: Constraints
