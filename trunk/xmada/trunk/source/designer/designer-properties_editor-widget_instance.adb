@@ -128,22 +128,22 @@ package body Designer.Properties_Editor.Widget_Instance is
            | Annotation_Translation_Data_Resource_Value
            | Annotation_Widget_Reference_Resource_Value
           =>
-            Use_In_Program : Widget;
-            Hard_Code      : Widget;
-            Fallback       : Widget;
-            Name           : Widget;
-            Value          : Widget;
+            Use_In_Program : Widget;  --  Кнопка "использовать в программе".
+            Hard_Code      : Widget;  --  Кнопка "вшивать в код".
+            Fallback       : Widget;  --  Кнопка "ресурс отката".
+            Name           : Widget;  --  Название ресурса
+            Value          : Widget;  --  Значение ресурса
 
-         when Annotation_Enumeration_Resource_Type          =>
+         when Annotation_Enumeration_Resource_Type       =>
             Menu : Widget;
             --  Выпадающее меню, используемое в меню опций значения ресурса.
 
-         when Annotation_Enumeration_Value_Specification    =>
+         when Annotation_Enumeration_Value_Specification =>
             Button : Widget;
             --  Кнопка выпадающего меню, используемого в меню опций значения
             --  ресурса.
 
-         when Annotation_Empty                              =>
+         when Annotation_Empty                           =>
             null;
       end case;
    end record;
@@ -268,13 +268,37 @@ package body Designer.Properties_Editor.Widget_Instance is
                                      Closure    : in Xt_Pointer;
                                      Call_Data  : in Xt_Pointer)
       is
-         pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
-         pragma Unreferenced (Call_Data);
          --  Данные переменные не используются.
 
+         Data     : constant Xm_Toggle_Button_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+         Args     : Xt_Arg_List (0 .. 0);
+         Node     : Xt_Arg_Val;
+         Res_List : List_Id;
+         Res_Node : Node_Id;
+
       begin
-         null; --  XXX  Fallbacks пока не реализованы.
+           --  Извлекаем узел ресурса.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         --  Получаем узел значения ресурса.
+
+         Res_List := Resources (Parent_Node (Node_Id (Node)));
+         Res_Node := Find_Resource_Value
+                      (Res_List,
+                       Resource_Specification (Node_Id (Node)));
+
+
+         if Data.Set = Xm_C_Set then
+            Set_Is_Fallback (Res_Node, True);
+
+         elsif Data.Set = Xm_C_Unset then
+            Set_Is_Fallback (Res_Node, False);
+         end if;
+
       exception
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback
@@ -385,12 +409,20 @@ package body Designer.Properties_Editor.Widget_Instance is
                --  Если кнопка Use_In_Program  была нажата,
                --  то обновляем значение ресурса.
 
-               Res_Node := Find_Resource_Value
-                            (Res_List,
-                             Resource_Specification (Node_Id (Node)));
-               Set_Resource_Value (Res_Node, Node_Id (Menu));
+               if Node_Id (Menu) /= Null_Node then
+                  Res_Node := Find_Resource_Value
+                               (Res_List,
+                                Resource_Specification (Node_Id (Node)));
+                  Set_Resource_Value (Res_Node, Node_Id (Menu));
 
-            else
+               else
+                  Xm_Toggle_Button_Gadget_Set_State
+                   (Annotation_Table.Table (Node_Id (Node)).Use_In_Program,
+                    False,
+                    True);
+               end if;
+
+            elsif Node_Id (Menu) /= Null_Node then
                --  Если кнопка Use_In_Program  не была нажата,
                --  то нажимаем ее (значение зобавится в callback-е).
 
@@ -756,8 +788,11 @@ package body Designer.Properties_Editor.Widget_Instance is
          Form     : Widget;
          Name     : Xm_String;
          Text     : Widget;
+         Menu     : Widget;
          Res_Type : Node_Id;
-         Args     : Xt_Arg_List (0 .. 5);
+         Args     : Xt_Arg_List (0 .. 6);
+         List     : List_Id := Null_List;
+         Current  : Node_Id := Null_Node;
 
       begin
          Res_Type := Resource_Type (Resource_Specification (Node));
@@ -830,6 +865,7 @@ package body Designer.Properties_Editor.Widget_Instance is
            Xm_Create_Managed_Label_Gadget (Form,
                                            "resource_name",
                                            Args (0 .. 4));
+         Xm_String_Free (Name);
 
          --  Создание поля "значение ресурса".
 
@@ -926,13 +962,70 @@ package body Designer.Properties_Editor.Widget_Instance is
                end case;
 
             when Node_Widget_Reference_Resource_Type =>
-               null; --  TODO реализовать.
+               List    := Null_List;
+               Current := Null_Node;
 
+               --  Если ресурс должен содержать список детей, то получем его.
+
+               if Widget_Reference_Constraints (Resource_Specification (Node))
+                 = Child
+               then
+                  List := Children (Node);
+
+               --  Если ресурс должен содержать список братьев, то получем его.
+
+               elsif Widget_Reference_Constraints
+                       (Resource_Specification (Node))
+                 = Parents_Child
+
+               then
+                  List := Children (Parent_Node (Node));
+               end if;
+
+               --  Формируем меню.
+
+               Menu := Xm_Create_Pulldown_Menu (Form, "widget_menu");
+               Xt_Add_Callback (Menu,
+                                Xm_N_Entry_Callback,
+                                Callbacks.On_Menu_Entry'Access);
+
+               if List /= Null_List then
+                  Current := First (List);
+               end if;
+
+               --  Добавляем в меню ссылку на "пустой" виджет.
+
+               Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (Null_Node));
+               Text := Xm_Create_Managed_Push_Button_Gadget
+                        (Menu, "no_widget", Args (0 .. 0));
+
+               --  Добавляем в меню названия виджетов.
+
+               while Current /= Null_Node loop
+                  Name := Xm_String_Generate (Name_Image (Current));
+                  Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+                  Xt_Set_Arg (Args (1), Xm_N_User_Data, Xt_Arg_Val (Current));
+                  Text := Xm_Create_Managed_Push_Button_Gadget
+                           (Menu, "widget_instance", Args (0 .. 1));
+                  Xm_String_Free (Name);
+
+                  Current := Next (Current);
+               end loop;
+
+               Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Menu);
+               Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Widget);
+               Xt_Set_Arg (Args (2), Xm_N_Left_Widget, Annotation_Table.Table
+                                                        (Node).Name);
+               Xt_Set_Arg (Args (3), Xm_N_Right_Attachment, Xm_Attach_Form);
+               Xt_Set_Arg (Args (4), Xm_N_Top_Attachment, Xm_Attach_Form);
+               Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+               Xt_Set_Arg (Args (6), Xm_N_User_Data, Xt_Arg_Val (Node));
+               Annotation_Table.Table (Node).Value :=
+                 Xm_Create_Managed_Option_Menu
+                  (Form, "widget_reference", Args (0 .. 6));
             when others =>
                null;
          end case;
-
-         Xm_String_Free (Name);
       end Add_Resource;
 
       Result : constant Widget_Instance_Properties_Editor_Access
@@ -1420,10 +1513,10 @@ package body Designer.Properties_Editor.Widget_Instance is
                     Is_Hardcoded (Local_Res),
                     False);
 
---  XXX                Xm_Toggle_Button_Gadget_Set_State
---  XXX                 (Annotation_Table.Table (Current).Fallback,
---  XXX                  Is_Fallback (Local_Res),
---  XXX                  False);
+                  Xm_Toggle_Button_Gadget_Set_State
+                   (Annotation_Table.Table (Current).Fallback,
+                    Is_Fallback (Local_Res),
+                    False);
 
                   Check_Sensitive (Current);
                end if;
