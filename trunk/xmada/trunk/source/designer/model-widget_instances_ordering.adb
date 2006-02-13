@@ -413,10 +413,17 @@ package body Model.Widget_Instances_Ordering is
       Widget     : Widget_Id;
 
    begin
-
       --  Initialize all structures
-      Widget_Instances.Increment_Last;
-      Widget_Instances.Table (Widget_Instances.Last).Node   := Root_Node;
+      Widget_Instances.Init;
+      Widget_Instances_Order_Table.Init;
+      Loop_In_Graph.Init;
+      Widget_Node.Init;
+
+      if Root_Node /= Null_Node then
+         Widget_Instances.Increment_Last;
+         Widget_Instances.Table (Widget_Instances.Last).Node := Root_Node;
+      else return;
+      end if;
 
       Reindexation (Root_Node);
       Initialization;
@@ -485,6 +492,8 @@ package body Model.Widget_Instances_Ordering is
       end loop Outer;
 
       Widget_Instances.Free;
+      Loop_In_Graph.Free;
+      Widget_Node.Free;
    end Find_Widget_Instances_Order;
 
    ---------------------------------------------------------------------------
