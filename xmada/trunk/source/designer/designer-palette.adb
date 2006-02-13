@@ -41,12 +41,11 @@ with GNAT.Table;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
-with Xm_Container;
+with Xt.Utilities;
 with Xm.Resource_Management;
 with Xm.Strings;
 with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
-with Xm_Scrolled_Window;
 with Xm_String_Defs;
 
 with Model.Allocations;
@@ -60,9 +59,7 @@ package body Designer.Palette is
    use Model.Tree.Lists;
    use Model.Queries;
    use Xm;
-   use Xm_Container;
    use Xm.Resource_Management;
-   use Xm_Scrolled_Window;
    use Xm_String_Defs;
    use Xm.Strings;
    use Xm_Row_Column;
@@ -71,8 +68,10 @@ package body Designer.Palette is
    use Xt.Ancillary_Types;
    use Xt.Composite_Management;
    use Xt.Instance_Management;
+   use Xt.Utilities;
 
    Palette_Notebook : Xt.Widget;
+   Project          : Node_Id;
 
    type Annotation_Kinds is
     (Annotation_Empty,
@@ -156,6 +155,7 @@ package body Designer.Palette is
             begin
                --  Добавляем вкладки в палитру виджетов.
 
+               Project := Node;
                Relocate_Annotation_Table (Node);
                Current_Widget_Set := First (Imported_Widget_Sets (Node));
 
@@ -366,14 +366,89 @@ package body Designer.Palette is
          end case;
       end loop;
    end Relocate_Annotation_Table;
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Select_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
+
+      -------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Get_Sensitive_Indication
+      --!    <Purpose>
+      --!    <Exceptions>
+      -------------------------------------------------------------------------
+      function Get_Sensitive_Indication (Class : in Node_Id;
+                                         Node  : in Node_Id)
+        return Boolean;
+
+      -------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Get_Sensitive_Indication
+      --!    <ImplementationNotes>
+      -------------------------------------------------------------------------
+      function Get_Sensitive_Indication (Class : in Node_Id;
+                                         Node  : in Node_Id) 
+        return Boolean 
+      is
+         pragma Unreferenced (Class);
+
+      begin
+         if Node = Null_Node then
+            return False;
+         end if;
+          
+         case Node_Kind (Node) is
+            when Node_Project | Node_Application =>
+               return False;
+
+            when Node_Component_Class =>
+               return Root (Node) /= Null_Node;
+
+            when Node_Widget_Instance =>
+               if Is_Shell (Node) 
+                    and then Children (Node) /= Null_List
+                    and then Length (Children (Node)) = 1
+               then
+                  return False;
+               
+               elsif Is_Primitive (Node) then
+                  return False;
+
+               else
+                  return True;
+               end if;
+
+            when others =>
+               return True;
+
+          end case;
+      end Get_Sensitive_Indication;
+
+      Current_Widget_Set     : Node_Id;
+      Current_Widget_Class   : Node_Id;
+
    begin
-      null;
+      Current_Widget_Set := First (Imported_Widget_Sets (Project));
+
+      while Current_Widget_Set /= Null_Node loop
+         Current_Widget_Class :=
+           First (Widget_Classes (Current_Widget_Set));
+
+         while Current_Widget_Class /= Null_Node loop
+            if not Is_Meta_Class (Current_Widget_Class) then
+               Xt_Set_Sensitive
+                (Annotation_Table.Table (Current_Widget_Class).Button,
+                 Get_Sensitive_Indication (Current_Widget_Class, Node));
+            end if;
+
+            Current_Widget_Class := Next (Current_Widget_Class);
+         end loop;
+
+         Current_Widget_Set := Next (Current_Widget_Set);
+      end loop;
    end Select_Item;
 
    ---------------------------------------------------------------------------
