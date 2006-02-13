@@ -129,6 +129,12 @@ package body Model.Queries is
       Aux : Node_Id := Node;
 
    begin
+      if Aux /= Null_Node
+        and then Node_Kind (Aux) = Node_Widget_Instance
+      then
+         Aux := Class (Aux);
+      end if;
+
       while Aux /= Null_Node loop
          if Aux = Xt_Motif_Gadget_Widget_Class then
             return True;
@@ -149,6 +155,12 @@ package body Model.Queries is
       Aux : Node_Id := Node;
 
    begin
+      if Aux /= Null_Node
+        and then Node_Kind (Aux) = Node_Widget_Instance
+      then
+         Aux := Class (Aux);
+      end if;
+
       while Aux /= Null_Node loop
          if Aux = Xt_Motif_Manager_Widget_Class then
             return True;
@@ -169,6 +181,12 @@ package body Model.Queries is
       Aux : Node_Id := Node;
 
    begin
+      if Aux /= Null_Node
+        and then Node_Kind (Aux) = Node_Widget_Instance
+      then
+         Aux := Class (Aux);
+      end if;
+
       while Aux /= Null_Node loop
          if Aux = Xt_Motif_Primitive_Widget_Class then
             return True;
@@ -189,6 +207,12 @@ package body Model.Queries is
       Aux : Node_Id := Node;
 
    begin
+      if Aux /= Null_Node
+        and then Node_Kind (Aux) = Node_Widget_Instance
+      then
+         Aux := Class (Aux);
+      end if;
+
       while Aux /= Null_Node loop
          if Aux = Xt_Motif_Shell_Widget_Class then
             return True;
