@@ -146,10 +146,10 @@ package body Model.Tools is
       Widget_Instance_Tag     := XML_Tools.Names.Store ("WidgetInstance");
 
       Class_Name_Attr         := XML_Tools.Names.Store ("classname");
-      Is_Class_Attr           := XML_Tools.Names.Store ("isclass");
-      Is_Fallback_Attr        := XML_Tools.Names.Store ("isfallback");
-      Is_Hardcoded_Attr       := XML_Tools.Names.Store ("ishardcoded");
-      Is_Managed_Attr         := XML_Tools.Names.Store ("ismanaged");
+      Is_Class_Attr           := XML_Tools.Names.Store ("isClass");
+      Is_Fallback_Attr        := XML_Tools.Names.Store ("isFallback");
+      Is_Hardcoded_Attr       := XML_Tools.Names.Store ("isHardcoded");
+      Is_Managed_Attr         := XML_Tools.Names.Store ("isManaged");
       Name_Attr               := XML_Tools.Names.Store ("name");
       Value_Attr              := XML_Tools.Names.Store ("value");
 
