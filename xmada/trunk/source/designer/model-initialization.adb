@@ -116,6 +116,19 @@ package body Model.Initialization is
    Xt_Motif_Outline_State_Resource_Type              : Node_Id;
    Xt_Motif_Packing_Resource_Type                    : Node_Id;
    Xt_Motif_Position_Mode_Resource_Type              : Node_Id;
+--   Xt_Motif_Position_Type_Resource_Type              : Node_Id;
+--   Xt_Motif_Primary_Ownership_Resource_Type          : Node_Id;
+--   Xt_Motif_Processing_Direction_Resource_Type       : Node_Id;
+--   Xt_Motif_Resize_Policy_Resource_Type              : Node_Id;
+--   Xt_Motif_Row_Column_Type_Resource_Type            : Node_Id;
+--   Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type  : Node_Id;
+--   Xt_Motif_Scroll_Bar_Placement_Resource_Type       : Node_Id;
+--   Xt_Motif_Scrolled_Window_Child_Type_Resource_Type : Node_Id;
+--   Xt_Motif_Scrolling_Policy_Resource_Type           : Node_Id;
+--   Xt_Motif_Selection_Policy_Resource_Type           : Node_Id;
+--   Xt_Motif_Selection_Technique_Resource_Type        : Node_Id;
+--   Xt_Motif_Separator_Type_Resource_Type             : Node_Id;
+   Xt_Motif_Shadow_Type_Resource_Type                : Node_Id;
 
    Xt_Motif_Accelerators_Resource_Type               : Node_Id;
    Xt_Motif_Boolean_Resource_Type                    : Node_Id;
@@ -151,6 +164,18 @@ package body Model.Initialization is
       Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
       Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
       Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
+      Xt_Motif_Position_Type_Resource_Type              : Node_Id;
+      Xt_Motif_Primary_Ownership_Resource_Type          : Node_Id;
+      Xt_Motif_Processing_Direction_Resource_Type       : Node_Id;
+      Xt_Motif_Resize_Policy_Resource_Type              : Node_Id;
+      Xt_Motif_Row_Column_Type_Resource_Type            : Node_Id;
+      Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type  : Node_Id;
+      Xt_Motif_Scroll_Bar_Placement_Resource_Type       : Node_Id;
+      Xt_Motif_Scrolled_Window_Child_Type_Resource_Type : Node_Id;
+      Xt_Motif_Scrolling_Policy_Resource_Type           : Node_Id;
+      Xt_Motif_Selection_Policy_Resource_Type           : Node_Id;
+      Xt_Motif_Selection_Technique_Resource_Type        : Node_Id;
+      Xt_Motif_Separator_Type_Resource_Type             : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
@@ -1454,6 +1479,646 @@ package body Model.Initialization is
           (Xt_Motif_Position_Mode_Resource_Type, Values);
       end;
 
+      --  PositionType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmPOSITION_INDEX"));
+         Set_Internal_Name (Value, Enter ("POSITION_INDEX"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmPOSITION_VALUE"));
+         Set_Internal_Name (Value, Enter ("POSITION_VALUE"));
+         Append (Values, Value);
+
+         Xt_Motif_Position_Type_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Position_Type_Resource_Type, Enter ("XmRPositionType"));
+         Set_Internal_Name
+          (Xt_Motif_Position_Type_Resource_Type, Enter ("PositionType"));
+         Set_Value_Specifications
+          (Xt_Motif_Position_Type_Resource_Type, Values);
+      end;
+
+      --  PrimaryOwnership
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmOWN_NEVER"));
+         Set_Internal_Name (Value, Enter ("OWN_NEVER"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmOWN_ALWAYS"));
+         Set_Internal_Name (Value, Enter ("OWN_ALWAYS"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmOWN_MULTIPLE"));
+         Set_Internal_Name (Value, Enter ("OWN_MULTIPLE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmOWN_POSSIBLE_MULTIPLE"));
+         Set_Internal_Name (Value, Enter ("OWN_POSSIBLE_MULTIPLE"));
+         Append (Values, Value);
+
+         Xt_Motif_Primary_Ownership_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Primary_Ownership_Resource_Type,
+           Enter ("XmRPrimaryOwnership"));
+         Set_Internal_Name
+          (Xt_Motif_Primary_Ownership_Resource_Type,
+           Enter ("PrimaryOwnership"));
+         Set_Value_Specifications
+          (Xt_Motif_Primary_Ownership_Resource_Type, Values);
+      end;
+
+      --  ProcessingDirection
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMAX_ON_TOP"));
+         Set_Internal_Name (Value, Enter (""));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMAX_ON_BOTTOM"));
+         Set_Internal_Name (Value, Enter (""));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMAX_ON_LEFT"));
+         Set_Internal_Name (Value, Enter (""));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMAX_ON_RIGHT"));
+         Set_Internal_Name (Value, Enter (""));
+         Append (Values, Value);
+
+         Xt_Motif_Processing_Direction_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Processing_Direction_Resource_Type,
+           Enter ("XmRProcessingDirection"));
+         Set_Internal_Name
+          (Xt_Motif_Processing_Direction_Resource_Type,
+           Enter ("ProcessingDirection"));
+         Set_Value_Specifications
+          (Xt_Motif_Processing_Direction_Resource_Type, Values);
+      end;
+
+      --  ResizePolicy
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmRESIZE_NONE"));
+         Set_Internal_Name (Value, Enter ("RESIZE_NONE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmRESIZE_ANY"));
+         Set_Internal_Name (Value, Enter ("RESIZE_ANY"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmRESIZE_GROW"));
+         Set_Internal_Name (Value, Enter ("RESIZE_GROW"));
+         Append (Values, Value);
+
+         Xt_Motif_Resize_Policy_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Resize_Policy_Resource_Type, Enter ("XmRResizePolicy"));
+         Set_Internal_Name
+          (Xt_Motif_Resize_Policy_Resource_Type, Enter ("ResizePolicy"));
+         Set_Value_Specifications
+          (Xt_Motif_Resize_Policy_Resource_Type, Values);
+      end;
+
+      --  RowColumnType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmWORK_AREA"));
+         Set_Internal_Name (Value, Enter ("WORK_AREA"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMENU_BAR"));
+         Set_Internal_Name (Value, Enter ("MENU_BAR"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMENU_PULLDOWN"));
+         Set_Internal_Name (Value, Enter ("MENU_PULLDOWN"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMENU_POPUP"));
+         Set_Internal_Name (Value, Enter ("MENU_POPUP"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMENU_OPTION"));
+         Set_Internal_Name (Value, Enter ("MENU_OPTION"));
+         Append (Values, Value);
+
+         Xt_Motif_Row_Column_Type_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Row_Column_Type_Resource_Type, Enter ("XmRRowColumnType"));
+         Set_Internal_Name
+          (Xt_Motif_Row_Column_Type_Resource_Type, Enter ("RowColumnType"));
+         Set_Value_Specifications
+          (Xt_Motif_Row_Column_Type_Resource_Type, Values);
+      end;
+
+      --  ScrollBarDisplayPolicy
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmAS_NEEDED"));
+         Set_Internal_Name (Value, Enter ("AS_NEEDED"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSTATIC"));
+         Set_Internal_Name (Value, Enter ("STATIC"));
+         Append (Values, Value);
+
+         Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type,
+           Enter ("XmRScrollBarDisplayPolicy"));
+         Set_Internal_Name
+          (Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type,
+           Enter ("ScrollBarDisplayPolicy"));
+         Set_Value_Specifications
+          (Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type, Values);
+      end;
+
+      --  ScrollBarPlacement
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmTOP_LEFT"));
+         Set_Internal_Name (Value, Enter ("TOP_LEFT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmBOTTOM_LEFT"));
+         Set_Internal_Name (Value, Enter ("BOTTOM_LEFT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmTOP_RIGHT"));
+         Set_Internal_Name (Value, Enter ("TOP_RIGHT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmBOTTOM_RIGHT"));
+         Set_Internal_Name (Value, Enter ("BOTTOM_RIGHT"));
+         Append (Values, Value);
+
+         Xt_Motif_Scroll_Bar_Placement_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Scroll_Bar_Placement_Resource_Type,
+           Enter ("XmRScrollBarPlacement"));
+         Set_Internal_Name
+          (Xt_Motif_Scroll_Bar_Placement_Resource_Type,
+           Enter ("ScrollBarPlacement"));
+         Set_Value_Specifications
+          (Xt_Motif_Scroll_Bar_Placement_Resource_Type, Values);
+      end;
+
+      --  ScrolledWindowChildType
+      --  XXX XmMENU_BAR, XmCOMMAND_WINDOW и XmMESSAGE_WINDOW могут задаваться
+      --  только для XmMainWindow.
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmWORK_AREA"));
+         Set_Internal_Name (Value, Enter ("WORK_AREA"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMENU_BAR"));
+         Set_Internal_Name (Value, Enter ("MENU_BAR"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmHOR_SCROLLBAR"));
+         Set_Internal_Name (Value, Enter ("HOR_SCROLLBAR"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmVERT_SCROLLBAR"));
+         Set_Internal_Name (Value, Enter ("VERT_SCROLLBAR"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmCOMMAND_WINDOW"));
+         Set_Internal_Name (Value, Enter ("COMMAND_WINDOW"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSEPARATOR"));
+         Set_Internal_Name (Value, Enter ("SEPARATOR"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMESSAGE_WINDOW"));
+         Set_Internal_Name (Value, Enter ("MESSAGE_WINDOW"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSCROLL_HOR"));
+         Set_Internal_Name (Value, Enter ("SCROLL_HOR"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSCROLL_VERT"));
+         Set_Internal_Name (Value, Enter ("SCROLL_VERT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmNO_SCROLL"));
+         Set_Internal_Name (Value, Enter ("NO_SCROLL"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmCLIP_WINDOW"));
+         Set_Internal_Name (Value, Enter ("CLIP_WINDOW"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmGENERIC_CHILD"));
+         Set_Internal_Name (Value, Enter ("GENERIC_CHILD"));
+         Append (Values, Value);
+
+         Xt_Motif_Scrolled_Window_Child_Type_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Scrolled_Window_Child_Type_Resource_Type,
+           Enter ("XmRScrolledWindowChildType"));
+         Set_Internal_Name
+          (Xt_Motif_Scrolled_Window_Child_Type_Resource_Type,
+           Enter ("ScrolledWindowChildType"));
+         Set_Value_Specifications
+          (Xt_Motif_Scrolled_Window_Child_Type_Resource_Type, Values);
+      end;
+
+      --  ScrollingPolicy
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmAUTOMATIC"));
+         Set_Internal_Name (Value, Enter ("AUTOMATIC"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmAPPLICATION_DEFINED"));
+         Set_Internal_Name (Value, Enter ("APPLICATION_DEFINED"));
+         Append (Values, Value);
+
+         Xt_Motif_Scrolling_Policy_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Scrolling_Policy_Resource_Type,
+           Enter ("XmRScrollingPolicy"));
+         Set_Internal_Name
+          (Xt_Motif_Scrolling_Policy_Resource_Type, Enter ("ScrollingPolicy"));
+         Set_Value_Specifications
+          (Xt_Motif_Scrolling_Policy_Resource_Type, Values);
+      end;
+
+      --  SelectionPolicy
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSINGLE_SELECT"));
+         Set_Internal_Name (Value, Enter ("SINGLE_SELECT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMULTIPLE_SELECT"));
+         Set_Internal_Name (Value, Enter ("MULTIPLE_SELECT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmEXTENDED_SELECT"));
+         Set_Internal_Name (Value, Enter ("EXTENDED_SELECT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmBROWSE_SELECT"));
+         Set_Internal_Name (Value, Enter ("EXTENDED_SELECT"));
+         Append (Values, Value);
+
+         Xt_Motif_Selection_Policy_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Selection_Policy_Resource_Type,
+           Enter ("XmRSelectionPolicy"));
+         Set_Internal_Name
+          (Xt_Motif_Selection_Policy_Resource_Type, Enter ("SelectionPolicy"));
+         Set_Value_Specifications
+          (Xt_Motif_Selection_Policy_Resource_Type, Values);
+      end;
+
+      --  SelectionTechnique
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMARQUEE"));
+         Set_Internal_Name (Value, Enter ("MARQUEE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMARQUEE_EXTEND_START"));
+         Set_Internal_Name (Value, Enter ("MARQUEE_EXTEND_START"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMARQUEE_EXTEND_BOTH"));
+         Set_Internal_Name (Value, Enter ("MARQUEE_EXTEND_BOTH"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmTOUCH_ONLY"));
+         Set_Internal_Name (Value, Enter ("TOUCH_ONLY"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmTOUCH_OVER"));
+         Set_Internal_Name (Value, Enter ("TOUCH_OVER"));
+         Append (Values, Value);
+
+         Xt_Motif_Selection_Technique_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Selection_Technique_Resource_Type,
+           Enter ("XmRSelectionTechnique"));
+         Set_Internal_Name
+          (Xt_Motif_Selection_Technique_Resource_Type,
+           Enter ("SelectionTechnique"));
+         Set_Value_Specifications
+          (Xt_Motif_Selection_Technique_Resource_Type, Values);
+      end;
+
+      --  SeparatorType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmNO_LINE"));
+         Set_Internal_Name (Value, Enter ("NO_LINE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSINGLE_LINE"));
+         Set_Internal_Name (Value, Enter ("SINGLE_LINE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmDOUBLE_LINE"));
+         Set_Internal_Name (Value, Enter ("DOUBLE_LINE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSINGLE_DASHED_LINE"));
+         Set_Internal_Name (Value, Enter ("SINGLE_DASHED_LINE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmDOUBLE_DASHED_LINE"));
+         Set_Internal_Name (Value, Enter ("DOUBLE_DASHED_LINE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSHADOW_ETCHED_IN"));
+         Set_Internal_Name (Value, Enter ("SHADOW_ETCHED_IN"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSHADOW_ETCHED_OUT"));
+         Set_Internal_Name (Value, Enter ("SHADOW_ETCHED_OUT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSHADOW_ETCHED_IN_DASH"));
+         Set_Internal_Name (Value, Enter ("SHADOW_ETCHED_IN_DASH"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSHADOW_ETCHED_OUT_DASH"));
+         Set_Internal_Name (Value, Enter ("SHADOW_ETCHED_OUT_DASH"));
+         Append (Values, Value);
+
+         Xt_Motif_Separator_Type_Resource_Type :=
+           Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Separator_Type_Resource_Type, Enter ("XmRSeparatorType"));
+         Set_Internal_Name
+          (Xt_Motif_Separator_Type_Resource_Type, Enter ("SeparatorType"));
+         Set_Value_Specifications
+          (Xt_Motif_Separator_Type_Resource_Type, Values);
+      end;
+
+      --  ShadowType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSHADOW_IN"));
+         Set_Internal_Name (Value, Enter ("SHADOW_IN"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSHADOW_OUT"));
+         Set_Internal_Name (Value, Enter ("SHADOW_OUT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSHADOW_ETCHED_IN"));
+         Set_Internal_Name (Value, Enter ("SHADOW_ETCHED_IN"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSHADOW_ETCHED_OUT"));
+         Set_Internal_Name (Value, Enter ("SHADOW_ETCHED_OUT"));
+         Append (Values, Value);
+
+         Xt_Motif_Shadow_Type_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Shadow_Type_Resource_Type, Enter ("XmRShadowType"));
+         Set_Internal_Name
+          (Xt_Motif_Shadow_Type_Resource_Type, Enter ("ShadowType"));
+         Set_Value_Specifications
+          (Xt_Motif_Shadow_Type_Resource_Type, Values);
+      end;
+
+      --
+
+--      declare
+--         Values : constant List_Id := New_List;
+--         Value  : Node_Id;
+--
+--      begin
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--          := Create_Enumerated_Resource_Type;
+--         Set_Name
+--          (, Enter (""));
+--         Set_Internal_Name
+--          (, Enter (""));
+--         Set_Value_Specifications
+--          (, Values);
+--      end;
+
+      --
+
+--      declare
+--         Values : constant List_Id := New_List;
+--         Value  : Node_Id;
+--
+--      begin
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--          := Create_Enumerated_Resource_Type;
+--         Set_Name
+--          (, Enter (""));
+--         Set_Internal_Name
+--          (, Enter (""));
+--         Set_Value_Specifications
+--          (, Values);
+--      end;
+
+      --
+
+--      declare
+--         Values : constant List_Id := New_List;
+--         Value  : Node_Id;
+--
+--      begin
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--          := Create_Enumerated_Resource_Type;
+--         Set_Name
+--          (, Enter (""));
+--         Set_Internal_Name
+--          (, Enter (""));
+--         Set_Value_Specifications
+--          (, Values);
+--      end;
+
+      --
+
+--      declare
+--         Values : constant List_Id := New_List;
+--         Value  : Node_Id;
+--
+--      begin
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--          := Create_Enumerated_Resource_Type;
+--         Set_Name
+--          (, Enter (""));
+--         Set_Internal_Name
+--          (, Enter (""));
+--         Set_Value_Specifications
+--          (, Values);
+--      end;
+
       --
 
 --      declare
@@ -1519,6 +2184,19 @@ package body Model.Initialization is
       Append (Types, Xt_Motif_Outline_State_Resource_Type);
       Append (Types, Xt_Motif_Packing_Resource_Type);
       Append (Types, Xt_Motif_Position_Mode_Resource_Type);
+      Append (Types, Xt_Motif_Position_Type_Resource_Type);
+      Append (Types, Xt_Motif_Primary_Ownership_Resource_Type);
+      Append (Types, Xt_Motif_Resize_Policy_Resource_Type);
+      Append (Types, Xt_Motif_Row_Column_Type_Resource_Type);
+      Append (Types, Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type);
+      Append (Types, Xt_Motif_Scroll_Bar_Placement_Resource_Type);
+      Append (Types, Xt_Motif_Scrolled_Window_Child_Type_Resource_Type);
+      Append (Types, Xt_Motif_Scrolling_Policy_Resource_Type);
+      Append (Types, Xt_Motif_Selection_Policy_Resource_Type);
+      Append (Types, Xt_Motif_Selection_Technique_Resource_Type);
+      Append (Types, Xt_Motif_Separator_Type_Resource_Type);
+      Append (Types, Xt_Motif_Shadow_Type_Resource_Type);
+--      Append (Types, );
 --      Append (Types, );
 --      Append (Types, );
 --      Append (Types, );
@@ -2856,7 +3534,6 @@ package body Model.Initialization is
                           Xt_Motif_Label_Widget_Class);
 
          --  TODO XmNpushButtonEnabled
-         --  TODO XmNshadowType
 
          --  TODO XmNactivateCallback
          --  TODO XmNarmCallback
@@ -2886,16 +3563,16 @@ package body Model.Initialization is
 --         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --         Append (Resources, Resource);
 
---         Resource := Create_Resource_Specification;
---         Set_Resource_Name (Resource, Enter (""));
---         Set_Internal_Resource_Name (Resource, Enter (""));
---         Set_Resource_Class_Name (Resource, Enter (""));
---         Set_Internal_Resource_Class_Name (Resource, Enter (""));
---         Set_Resource_Type (Resource, );
---         Set_Can_Be_Set_At_Creation_Time (Resource, True);
---         Set_Can_Be_Set_By_Set_Values (Resource, True);
---         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---         Append (Resources, Resource);
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNshadowType"));
+         Set_Internal_Resource_Name (Resource, Enter ("shadowType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("ShadowType"));
+         Set_Resource_Type (Resource, Xt_Motif_Shadow_Type_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Drawn_Button_Widget_Class, Resources);
 
@@ -4564,7 +5241,6 @@ package body Model.Initialization is
          --  TODO XmNlabelRenderTable
          --  TODO XmNnoResize
          --  TODO XmNresizePolicy
-         --  TODO XmNshadowType
          --  TODO XmNtextFontList
          --  TODO XmNtextRenderTable
          --  TODO XmNtextTranslations
@@ -4625,6 +5301,17 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
          Set_Resource_Type
           (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNshadowType"));
+         Set_Internal_Resource_Name (Resource, Enter ("shadowType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("ShadowType"));
+         Set_Resource_Type (Resource, Xt_Motif_Shadow_Type_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -5542,8 +6229,6 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Frame_Widget_Class,
                           Xt_Motif_Manager_Widget_Class);
 
-         --  TODO XmNshadowType
-
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNmarginHeight"));
          Set_Internal_Resource_Name (Resource, Enter ("marginHeight"));
@@ -5568,16 +6253,16 @@ package body Model.Initialization is
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
          Append (Resources, Resource);
 
---         Resource := Create_Resource_Specification;
---         Set_Resource_Name (Resource, Enter (""));
---         Set_Internal_Resource_Name (Resource, Enter (""));
---         Set_Resource_Class_Name (Resource, Enter (""));
---         Set_Internal_Resource_Class_Name (Resource, Enter (""));
---         Set_Resource_Type (Resource, );
---         Set_Can_Be_Set_At_Creation_Time (Resource, True);
---         Set_Can_Be_Set_By_Set_Values (Resource, True);
---         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---         Append (Resources, Resource);
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNshadowType"));
+         Set_Internal_Resource_Name (Resource, Enter ("shadowType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCShadowType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("ShadowType"));
+         Set_Resource_Type (Resource, Xt_Motif_Shadow_Type_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNchildHorizontalAlignment"));
