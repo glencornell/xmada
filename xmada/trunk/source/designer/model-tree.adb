@@ -70,6 +70,54 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Automatically_Created_Children
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Automatically_Created_Children (Node : in Node_Id)
+     return List_Id
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class
+                       or else Node_Kind (Node) = Node_Widget_Instance);
+
+      case Node_Kind (Node) is
+         when Node_Widget_Class =>
+            return Node_Table.Table (Node).WC_Automatically_Created_Children;
+
+         when Node_Widget_Instance =>
+            return Node_Table.Table (Node).WI_Automatically_Created_Children;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Automatically_Created_Children;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Automatically_Created_Parent
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Automatically_Created_Parent (Node : in Node_Id) return Node_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class
+                       or else Node_Kind (Node) = Node_Widget_Instance);
+
+      case Node_Kind (Node) is
+         when Node_Widget_Class =>
+            return Node_Table.Table (Node).WC_Automatically_Created_Parent;
+
+         when Node_Widget_Instance =>
+            return Node_Table.Table (Node).WI_Automatically_Created_Parent;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Automatically_Created_Parent;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Can_Be_Retrieved_By_Get_Values
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -692,6 +740,60 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Automatically_Created_Children
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Automatically_Created_Children (Node  : in Node_Id;
+                                                 Value : in List_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class
+                      or else Node_Kind (Node) = Node_Widget_Instance);
+
+      case Node_Kind (Node) is
+         when Node_Widget_Class =>
+            Node_Table.Table (Node).WC_Automatically_Created_Children := Value;
+
+         when Node_Widget_Instance =>
+            Node_Table.Table (Node).WI_Automatically_Created_Children := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+
+      Set_Parent_Node (Value, Node);
+   end Set_Automatically_Created_Children;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Automatically_Created_Parent
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Automatically_Created_Parent (Node  : in Node_Id;
+                                               Value : in Node_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class
+                      or else Node_Kind (Node) = Node_Widget_Instance);
+
+      case Node_Kind (Node) is
+         when Node_Widget_Class =>
+            Node_Table.Table (Node).WC_Automatically_Created_Parent := Value;
+
+         when Node_Widget_Instance =>
+            Node_Table.Table (Node).WI_Automatically_Created_Parent := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+
+      Set_Parent_Node (Value, Node);
+   end Set_Automatically_Created_Parent;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Can_Be_Retrieved_By_Get_Values
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -1068,6 +1170,18 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Parent_Node
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Parent_Node (Node : in Node_Id; Value : in Node_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+
+      Node_Table.Table (Value).Parent := Node;
+   end Set_Parent_Node;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Resource_Class_Name
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -1246,7 +1360,7 @@ package body Model.Tree is
       pragma Assert (Node_Kind (Node) = Node_Component_Class);
 
       Node_Table.Table (Node).Root := Value;
-      Node_Table.Table (Value).Parent := Node;
+      Set_Parent_Node (Value, Node);
    end Set_Root;
 
    ---------------------------------------------------------------------------
