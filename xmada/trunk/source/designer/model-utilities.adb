@@ -37,11 +37,13 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Model.Tree.Constructors;
+with Model.Tree.Lists;
 
 package body Model.Utilities is
 
    use Model.Tree;
    use Model.Tree.Constructors;
+   use Model.Tree.Lists;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -104,5 +106,50 @@ package body Model.Utilities is
 
       return Result;
    end Create_Corresponding_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Widget_Instance
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Widget_Instance (Widget_Class : in Node_Id)
+     return Node_Id
+   is
+      Result : Node_Id;
+
+   begin
+      pragma Assert (Node_Kind (Widget_Class) = Node_Widget_Class);
+
+      Result := Create_Widget_Instance;
+
+      if Automatically_Created_Parent (Widget_Class) /= Null_Node then
+         Set_Automatically_Created_Parent
+          (Result,
+           Create_Widget_Instance
+            (Class (Automatically_Created_Parent (Widget_Class))));
+         --  XXX Задать остальные атрибуты: имя и др.
+      end if;
+
+      if Automatically_Created_Children (Widget_Class) /= Null_List then
+         declare
+            List : constant List_Id := New_List;
+            Aux  : Node_Id
+              := First (Automatically_Created_Children (Widget_Class));
+
+         begin
+            while Aux /= Null_Node loop
+               Append (List, Create_Widget_Instance (Class (Aux)));
+
+               --  XXX Задать остальные атрибуты: имя и др.
+
+               Aux := Next (Aux);
+            end loop;
+
+           Set_Automatically_Created_Children (Result, List);
+         end;
+      end if;
+
+      return Result;
+   end Create_Widget_Instance;
 
 end Model.Utilities;
