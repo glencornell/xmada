@@ -241,6 +241,10 @@ package body Designer.Palette is
                         end if;
 
                         Xm_String_Free (Str);
+
+                        Xt_Set_Sensitive
+                         (Annotation_Table.Table (Current_Widget_Class).Button,
+                          False);
                      end if;
 
                      Current_Widget_Class := Next (Current_Widget_Class);
