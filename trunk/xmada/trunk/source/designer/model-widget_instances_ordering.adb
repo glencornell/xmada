@@ -383,6 +383,26 @@ package body Model.Widget_Instances_Ordering is
          end if;
       end loop;
    end Diagnose_Problem;
+   
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Find_Widget_Id
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Find_Widget_Id (Node : in Node_Id) return Widget_Id
+   is
+      Widget : Widget_Id;
+
+   begin
+      for J in Widget_Instances.First .. Widget_Instances.Last loop
+
+         if Node = Widget_Instances.Table (J).Node then
+            Widget := J;
+         end if;
+      end loop;
+
+      return Widget;
+   end Find_Widget_Id;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -467,27 +487,6 @@ package body Model.Widget_Instances_Ordering is
       Widget_Instances.Free;
    end Find_Widget_Instances_Order;
 
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Find_Widget_Id
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Find_Widget_Id (Node : in Node_Id) return Widget_Id
-   is
-      Widget : Widget_Id;
-
-   begin
-      for J in Widget_Instances.First .. Widget_Instances.Last loop
-
-         if Node = Widget_Instances.Table (J).Node then
-            Widget := J;
-         end if;
-      end loop;
-
-      return Widget;
-   end Find_Widget_Id;
-
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Gather_Dependencies
@@ -503,7 +502,7 @@ package body Model.Widget_Instances_Ordering is
 
       for K in Widget_Instances.First .. Widget_Instances.Last loop
 
-         Node := Widget_Instances.Table(K).Node;
+         Node := Widget_Instances.Table (K).Node;
 
          if Resources (Node) /= Null_List then
             Aux := First (Resources (Node));
