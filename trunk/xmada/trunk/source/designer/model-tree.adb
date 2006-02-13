@@ -1177,7 +1177,7 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
 
-      Node_Table.Table (Value).Parent := Node;
+      Node_Table.Table (Node).Parent := Value;
    end Set_Parent_Node;
 
    ---------------------------------------------------------------------------
