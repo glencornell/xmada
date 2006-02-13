@@ -147,6 +147,14 @@ package body Designer.Visual_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Destroy_Component_Class_Widgets
+   --!    <Purpose> Уничтожает виджета класса компонента.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Destroy_Component_Class_Widgets (Node : in Node_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Setup_Reverse_Converters
    --!    <Purpose> Производит установку конверторов обратного преобразования
    --! для всех известных перечислимых типов ресурсов.
@@ -369,6 +377,8 @@ package body Designer.Visual_Editor is
                (Widget_Instances_Order_Table.Table (J)).Widget);
          end loop;
       end if;
+
+      Edited_Component := Node;
    end Create_Component_Class_Widgets;
 
    ---------------------------------------------------------------------------
@@ -382,6 +392,41 @@ package body Designer.Visual_Editor is
    begin
       null;
    end Delete_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Destroy_Component_Class_Widgets
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Destroy_Component_Class_Widgets (Node : in Node_Id) is
+
+      procedure Destroy_Widget (Node : in Node_Id);
+
+      procedure Destroy_Widget (Node : in Node_Id) is
+      begin
+         if Children (Node) /= Null_List then
+            declare
+               Aux : Node_Id := First (Children (Node));
+
+            begin
+               while Aux /= Null_Node loop
+                  Destroy_Widget (Aux);
+                  Aux := Next (Aux);
+               end loop;
+            end;
+         end if;
+
+         Xt_Destroy_Widget (Annotation_Table.Table (Node).Widget);
+         Annotation_Table.Table (Node).Widget := Null_Widget;
+      end Destroy_Widget;
+
+   begin
+      if Root (Node) /= Null_Node then
+         Destroy_Widget (Root (Node));
+      end if;
+
+      Edited_Component := Null_Node;
+   end Destroy_Component_Class_Widgets;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -926,6 +971,10 @@ package body Designer.Visual_Editor is
 
             when Node_Component_Class =>
                if Edited_Component /= Selected_Item then
+                  if Edited_Component /= Null_Node then
+                     Destroy_Component_Class_Widgets (Edited_Component);
+                  end if;
+
                   Create_Component_Class_Widgets (Selected_Item);
                end if;
 
@@ -938,6 +987,10 @@ package body Designer.Visual_Editor is
                if Enclosing_Component_Class (Selected_Item)
                     /= Edited_Component
                then
+                  if Edited_Component /= Null_Node then
+                     Destroy_Component_Class_Widgets (Edited_Component);
+                  end if;
+
                   Create_Component_Class_Widgets
                    (Enclosing_Component_Class (Selected_Item));
                end if;
