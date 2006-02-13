@@ -335,6 +335,14 @@ package Model.Tree is
     (Node  : in Node_Id;
      Value : in Widget_Reference_Constraint);
 
+   function Automatically_Created_Parent (Node : in Node_Id) return Node_Id;
+   procedure Set_Automatically_Created_Parent (Node  : in Node_Id;
+                                               Value : in Node_Id);
+
+   function Automatically_Created_Children (Node : in Node_Id) return List_Id;
+   procedure Set_Automatically_Created_Children (Node  : in Node_Id;
+                                                 Value : in List_Id);
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
@@ -725,5 +733,13 @@ private
                      Table_Low_Bound      => Node_Id'First + 1,
                      Table_Initial        => Allocations.Node_Table_Initial,
                      Table_Increment      => Allocations.Node_Table_Increment);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Parent_Node
+   --!    <Purpose> Устанавливает значение родительского узла.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Parent_Node (Node : in Node_Id; Value : in Node_Id);
 
 end Model.Tree;
