@@ -267,6 +267,38 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Is_Fallback
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Fallback (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            return Node_Table.Table (Node).ERV_Is_Fallback;
+
+         when Node_Integer_Resource_Value =>
+            return Node_Table.Table (Node).IRV_Is_Fallback;
+
+         when Node_Translation_Data_Resource_Value =>
+            return Node_Table.Table (Node).TRV_Is_Fallback;
+
+         when Node_Widget_Reference_Resource_Value =>
+            return Node_Table.Table (Node).WRRV_Is_Fallback;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Is_Fallback;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Is_Hardcoded
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -861,6 +893,38 @@ package body Model.Tree is
 
       Node_Table.Table (Node).Internal_Resource_Name := Value;
    end Set_Internal_Resource_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Is_Fallback
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Is_Fallback (Node : in Node_Id; Value : in Boolean) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumeration_Resource_Value
+          or else Node_Kind (Node) = Node_Integer_Resource_Value
+          or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Enumeration_Resource_Value =>
+            Node_Table.Table (Node).ERV_Is_Fallback := Value;
+
+         when Node_Integer_Resource_Value =>
+            Node_Table.Table (Node).IRV_Is_Fallback := Value;
+
+         when Node_Translation_Data_Resource_Value =>
+            Node_Table.Table (Node).TRV_Is_Fallback := Value;
+
+         when Node_Widget_Reference_Resource_Value =>
+            Node_Table.Table (Node).WRRV_Is_Fallback := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Set_Is_Fallback;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
