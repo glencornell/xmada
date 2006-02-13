@@ -192,6 +192,16 @@ package body Designer.Visual_Editor is
     (Enumeration_Resource_Value_Specification : in Node_Id)
        return Interfaces.C.unsigned_char;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Make_Arg_List
+   --!    <Purpose> Формирует и возвращает список параметров виджета для
+   --! последующего использования при создании виджета или установки значения.
+   --! Для пустого списка возвращает пустой список параметров виджета.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Make_Arg_List (List : in List_Id) return Xt_Arg_List;
+
    Drawing_Area     : Widget  := Null_Widget;
    Edited_Component : Node_Id := Null_Node;
    Selected_Item    : Node_Id := Null_Node;
@@ -335,7 +345,10 @@ package body Designer.Visual_Editor is
 
          Annotation_Table.Table (Node).Widget :=
            Convenience_Create_Function (Class (Node))
-            (Parent, "form", Null_Xt_Arg_List);
+            (Parent,
+             "form",
+             Make_Arg_List (Resources (Node))
+               & Make_Arg_List (Constraint_Resources (Node)));
       end Create_Widget;
 
    begin
@@ -351,8 +364,9 @@ package body Designer.Visual_Editor is
          for J in reverse Widget_Instances_Order_Table.First
                     .. Widget_Instances_Order_Table.Last
          loop
-            Xt_Manage_Child (Annotation_Table.Table
-             (Widget_Instances_Order_Table.Table (J)).Widget);
+            Xt_Manage_Child
+             (Annotation_Table.Table
+               (Widget_Instances_Order_Table.Table (J)).Widget);
          end loop;
       end if;
    end Create_Component_Class_Widgets;
@@ -634,6 +648,108 @@ package body Designer.Visual_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Make_Arg_List
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Make_Arg_List (List : in List_Id) return Xt_Arg_List is
+   begin
+      if List = Null_List then
+         return Xt_Arg_List'(1 .. 0 => (Interfaces.C.Strings.Null_Ptr, 0));
+      end if;
+
+      declare
+         Aux      : Node_Id := First (List);
+         Args     : Xt_Arg_List (0 .. Length (List));
+         Next_Arg : Natural := 0;
+
+      begin
+         while Aux /= Null_Node loop
+            Relocate_Annotation_Table (Aux);
+
+            case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
+               when Node_Predefined_Resource_Type =>
+                  case Type_Kind
+                        (Resource_Type (Resource_Specification (Aux)))
+                  is
+                     when Type_C_Short =>
+                        Xt_Set_Arg
+                         (Args (Next_Arg),
+                          Annotation_Table.Table (Aux).Name,
+                          Xt_Arg_Val (Integer'(Resource_Value (Aux))));
+
+                        Next_Arg := Next_Arg + 1;
+
+                     when Type_C_Int =>
+                        Xt_Set_Arg
+                         (Args (Next_Arg),
+                          Annotation_Table.Table (Aux).Name,
+                          Xt_Arg_Val (Integer'(Resource_Value (Aux))));
+
+                        Next_Arg := Next_Arg + 1;
+
+                     when Type_Dimension =>
+                        Xt_Set_Arg
+                         (Args (Next_Arg),
+                          Annotation_Table.Table (Aux).Name,
+                          Xt_Arg_Val (Integer'(Resource_Value (Aux))));
+
+                        Next_Arg := Next_Arg + 1;
+
+                     when Type_Position =>
+                        Xt_Set_Arg
+                         (Args (Next_Arg),
+                          Annotation_Table.Table (Aux).Name,
+                          Xt_Arg_Val (Integer'(Resource_Value (Aux))));
+
+                        Next_Arg := Next_Arg + 1;
+
+                     when Type_Translation_Data =>
+                        null;
+
+                     when Type_Boolean =>
+                        null;
+
+                     when Type_Colormap =>
+                        null;
+
+                     when Type_Screen =>
+                        null;
+
+                     when Type_Pixel =>
+                        null;
+
+                     when Type_Pixmap =>
+                        null;
+
+                     when others =>
+                        raise Program_Error;
+                 end case;
+
+               when Node_Enumerated_Resource_Type =>
+                  Xt_Set_Arg
+                   (Args (Next_Arg),
+                    Annotation_Table.Table (Aux).Name,
+                    Xt_Arg_Val
+                     (Corresponding_Value (Resource_Value (Aux))));
+
+                  Next_Arg := Next_Arg + 1;
+
+               when Node_Widget_Reference_Resource_Type =>
+                  null;
+
+               when others =>
+                  raise Program_Error;
+            end case;
+
+            Aux := Next (Aux);
+         end loop;
+
+         return Args (0 .. Next_Arg - 1);
+      end;
+   end Make_Arg_List;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Reinitialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -843,100 +959,11 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Set_Properties (Node : in Model.Node_Id) is
-
    begin
-      if All_Resources (Node) /= Null_List then
-         declare
-            Aux      : Node_Id := First (All_Resources (Node));
-            Args     : Xt_Arg_List (0 .. Length (All_Resources (Node)));
-            Next_Arg : Natural := 0;
-
-         begin
-            while Aux /= Null_Node loop
-               Relocate_Annotation_Table (Aux);
-
-               case Node_Kind (Resource_Type (Resource_Specification (Aux))) is
-                  when Node_Predefined_Resource_Type =>
-                     case Type_Kind
-                           (Resource_Type (Resource_Specification (Aux)))
-                     is
-                        when Type_C_Short =>
-                           Xt_Set_Arg
-                            (Args (Next_Arg),
-                             Annotation_Table.Table (Aux).Name,
-                             Xt_Arg_Val (Integer'(Resource_Value (Aux))));
-
-                           Next_Arg := Next_Arg + 1;
-
-                        when Type_C_Int =>
-                           Xt_Set_Arg
-                            (Args (Next_Arg),
-                             Annotation_Table.Table (Aux).Name,
-                             Xt_Arg_Val (Integer'(Resource_Value (Aux))));
-
-                           Next_Arg := Next_Arg + 1;
-
-                        when Type_Dimension =>
-                           Xt_Set_Arg
-                            (Args (Next_Arg),
-                             Annotation_Table.Table (Aux).Name,
-                             Xt_Arg_Val (Integer'(Resource_Value (Aux))));
-
-                           Next_Arg := Next_Arg + 1;
-
-                        when Type_Position =>
-                           Xt_Set_Arg
-                            (Args (Next_Arg),
-                             Annotation_Table.Table (Aux).Name,
-                             Xt_Arg_Val (Integer'(Resource_Value (Aux))));
-
-                           Next_Arg := Next_Arg + 1;
-
-                        when Type_Translation_Data =>
-                           null;
-
-                        when Type_Boolean =>
-                           null;
-
-                        when Type_Colormap =>
-                           null;
-
-                        when Type_Screen =>
-                           null;
-
-                        when Type_Pixel =>
-                           null;
-
-                        when Type_Pixmap =>
-                           null;
-
-                        when others =>
-                           raise Program_Error;
-                    end case;
-
-                  when Node_Enumerated_Resource_Type =>
-                     Xt_Set_Arg
-                      (Args (Next_Arg),
-                       Annotation_Table.Table (Aux).Name,
-                       Xt_Arg_Val
-                        (Corresponding_Value (Resource_Value (Aux))));
-
-                     Next_Arg := Next_Arg + 1;
-
-                  when Node_Widget_Reference_Resource_Type =>
-                     null;
-
-                  when others =>
-                     raise Program_Error;
-               end case;
-
-               Aux := Next (Aux);
-            end loop;
-
-            Xt_Set_Values (Annotation_Table.Table (Node).Widget,
-                           Args (0 .. Next_Arg - 1));
-         end;
-      end if;
+      Xt_Set_Values
+       (Annotation_Table.Table (Node).Widget,
+        Make_Arg_List (All_Resources (Node))
+          & Make_Arg_List (All_Constraint_Resources (Node)));
 
       Get_Properties (Node);
    end Set_Properties;
