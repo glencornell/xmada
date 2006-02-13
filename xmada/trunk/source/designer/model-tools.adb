@@ -333,16 +333,10 @@ package body Model.Tools is
 
          if Is_Fallback (Resource) then
             Attributes.Create_Attribute (Tag, Is_Fallback_Attr, Yes_Value);
-
-         else
-            Attributes.Create_Attribute (Tag, Is_Fallback_Attr, No_Value);
          end if;
 
          if Is_Hardcoded (Resource) then
             Attributes.Create_Attribute (Tag, Is_Hardcoded_Attr, Yes_Value);
-
-         else
-            Attributes.Create_Attribute (Tag, Is_Hardcoded_Attr, No_Value);
          end if;
 
          --  Обработка значения ресурса.
@@ -420,9 +414,6 @@ package body Model.Tools is
 
          if Is_Managed (Widget_Instance) then
             Attributes.Create_Attribute (Tag, Is_Managed_Attr, Yes_Value);
-
-         else
-            Attributes.Create_Attribute (Tag, Is_Managed_Attr, No_Value);
          end if;
 
          --  Создаем список ресурсов виджета.
