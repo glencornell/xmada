@@ -333,9 +333,9 @@ package body Designer.Visual_Editor is
            Width       : in Interfaces.C.unsigned_short;
            Height      : in Interfaces.C.unsigned_short)
          is
-            Maximum_X : Interfaces.C.short
+            Maximum_X : constant Interfaces.C.short
               := X + Interfaces.C.short (Width) - 4;
-            Maximum_Y : Interfaces.C.short
+            Maximum_Y : constant Interfaces.C.short
               := Y + Interfaces.C.short (Height) - 4;
             Middle_X  : constant Interfaces.C.short := Maximum_X / 2;
             Middle_Y  : constant Interfaces.C.short := Maximum_Y / 2;
