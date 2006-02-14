@@ -46,6 +46,7 @@ with Xt.Composite_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Utilities;
+with Xm.Class_Management;
 with Xm.Menu_Management;
 with Xm.Resource_Management;
 with Xm.Strings;
@@ -80,6 +81,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Model.Tree.Lists;
    use Xlib.Events;
    use Xm;
+   use Xm.Class_Management;
    use Xm.Menu_Management;
    use Xm.Resource_Management;
    use Xm.Strings;
@@ -191,6 +193,15 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Get_Button (Node : in Node_Id) return Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_Callback_Type
+   --!    <Purpose> Возвращает признак, из какой вкладки была вызвана callback
+   --! функция. 0 - ресурсы, 1- ограничения.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Get_Callback_Type (The_Widget : in Widget) return Integer;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -327,7 +338,18 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          --  Получаем узел значения ресурса.
 
-         Res_List := Resources (Parent_Node (Node_Id (Node)));
+         case Get_Callback_Type (The_Widget) is
+            when 0 =>
+               Res_List := Resources (Parent_Node (Node_Id (Node)));
+
+            when 1 =>
+               Res_List :=
+                 Constraint_Resources (Parent_Node (Node_Id (Node)));
+
+            when others =>
+               raise Program_Error;
+         end case;
+
          Res_Node := Find_Resource_Value
                       (Res_List,
                        Resource_Specification (Node_Id (Node)));
@@ -373,7 +395,18 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          --  Получаем узел значения ресурса.
 
-         Res_List := Resources (Parent_Node (Node_Id (Node)));
+         case Get_Callback_Type (The_Widget) is
+            when 0 =>
+               Res_List := Resources (Parent_Node (Node_Id (Node)));
+
+            when 1 =>
+               Res_List :=
+                 Constraint_Resources (Parent_Node (Node_Id (Node)));
+
+            when others =>
+               raise Program_Error;
+         end case;
+
          Res_Node := Find_Resource_Value
                       (Res_List,
                        Resource_Specification (Node_Id (Node)));
@@ -439,11 +472,25 @@ package body Designer.Properties_Editor.Widget_Instance is
          --  Если значение не изменилось, то обновляем список ресурсов
 
          declare
-            Res_List : constant List_Id
-              := Resources (Parent_Node (Node_Id (Node)));
+            Res_List : List_Id;
             Res_Node : Node_Id;
 
          begin
+
+            --  Получаем узел значения ресурса.
+
+            case Get_Callback_Type (Xm_Get_Posted_From_Widget (The_Widget)) is
+               when 0 =>
+                  Res_List := Resources (Parent_Node (Node_Id (Node)));
+
+               when 1 =>
+                  Res_List :=
+                     Constraint_Resources (Parent_Node (Node_Id (Node)));
+
+               when others =>
+                  raise Program_Error;
+            end case;
+
             if Xm_Toggle_Button_Gadget_Get_State
                 (Annotation_Table.Table (Node_Id (Node)).Use_In_Program)
             then
@@ -520,14 +567,28 @@ package body Designer.Properties_Editor.Widget_Instance is
                return;
             end if;
 
-            --  Если значение не изменилось, то обновляем список ресурсов
+            --  Если значение не изменилось, то обновляем список ресурсов.
 
             declare
-               Res_List : constant List_Id
-                 := Resources (Parent_Node (Node_Id (Node)));
+               Res_List : List_Id;
                Res_Node : Node_Id;
 
             begin
+
+               --  Получаем узел значения ресурса.
+
+               case Get_Callback_Type (The_Widget) is
+                  when 0 =>
+                     Res_List := Resources (Parent_Node (Node_Id (Node)));
+
+                  when 1 =>
+                     Res_List :=
+                        Constraint_Resources (Parent_Node (Node_Id (Node)));
+
+                  when others =>
+                     raise Program_Error;
+               end case;
+
                if Xm_Toggle_Button_Gadget_Get_State
                  (Annotation_Table.Table (Node_Id (Node)).Use_In_Program)
                then
@@ -676,12 +737,13 @@ package body Designer.Properties_Editor.Widget_Instance is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
-         Data     : constant Xm_Toggle_Button_Callback_Struct_Access
+         Data          : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
-         Node     : Xt_Arg_Val;
-         Args     : Xt_Arg_List (0 .. 0);
-         Res_List : List_Id;
-         Res_Node : Node_Id;
+         Node          : Xt_Arg_Val;
+         Args          : Xt_Arg_List (0 .. 0);
+         Res_List      : List_Id;
+         Res_Node      : Node_Id;
+         Callback_Type : constant Integer := Get_Callback_Type (The_Widget);
 
       begin
          --  Получаем узел ресурса, который поменял значение.
@@ -689,15 +751,37 @@ package body Designer.Properties_Editor.Widget_Instance is
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
          Xt_Get_Values (The_Widget, Args (0 .. 0));
 
-         Res_List := Resources (Parent_Node (Node_Id (Node)));
          --  Получаем список ресурсов виджета.
+
+         case Callback_Type is
+            when 0 =>
+               Res_List := Resources (Parent_Node (Node_Id (Node)));
+
+            when 1 =>
+               Res_List :=
+                 Constraint_Resources (Parent_Node (Node_Id (Node)));
+
+            when others =>
+               raise Program_Error;
+         end case;
 
          --  Если у виджета еще нет списка ресурсов,
          --  то его необходимо создать.
 
          if Res_List = Null_List then
             Res_List := New_List;
-            Set_Resources (Parent_Node (Node_Id (Node)), Res_List);
+
+            case Callback_Type is
+               when 0 =>
+                  Set_Resources (Parent_Node (Node_Id (Node)), Res_List);
+
+               when 1 =>
+                  Set_Constraint_Resources
+                   (Parent_Node (Node_Id (Node)), Res_List);
+
+               when others =>
+                  raise Program_Error;
+            end case;
          end if;
 
          Res_Node := Find_Resource_Value
@@ -1045,10 +1129,11 @@ package body Designer.Properties_Editor.Widget_Instance is
          end case;
       end Add_Resource;
 
-      Result : constant Widget_Instance_Properties_Editor_Access
+      Result   : constant Widget_Instance_Properties_Editor_Access
         := new Widget_Instance_Properties_Editor (Node);
-      Args   : Xt_Arg_List (0 .. 5);
-      Aux    : Node_Id;
+      Args     : Xt_Arg_List (0 .. 5);
+      Aux      : Node_Id;
+      Aux_List : List_Id;
 
    begin
       Result.Notebook := Parent;
@@ -1059,20 +1144,44 @@ package body Designer.Properties_Editor.Widget_Instance is
       Result.Properties_Container :=
         Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
 
+      --  Так как и Resources и Constraints используют одни и те же
+      --  callback-функции, то необходимо различать когда вызов
+      --  был инициирован из редактора ресурсов, или из редактора ограничений
+      --  для этого в воджете RowColumn устанавливается значение User_Data
+      --  0 - для ресурсов, 1 - для ограничений.
+      --  Далее callback-функции читают поле User_Data их родителя
+      --  (XmRowColumn) и в зависимости от возвращенного значения
+      --  обращаются либо с списку ресурсов, либо к списку ограничений.
+
+      Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (0));
       Result.Properties           :=
         Xm_Create_Row_Column (Result.Properties_Container,
-                              "row_column");
+                              "row_column",
+                              Args (0 .. 0));
 
       Result.Properties_Tab       :=
         Xm_Create_Managed_Push_Button_Gadget (Parent, "resources");
 
       --  Создаем вкладку "ограничения".
 
+      Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
       Result.Constraints_Container :=
         Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
+
+      --  Так как и Resources и Constraints используют одни и те же
+      --  callback-функции, то необходимо различать когда вызов
+      --  был инициирован из редактора ресурсов, или из редактора ограничений
+      --  для этого в воджете RowColumn устанавливается значение User_Data
+      --  0 - для ресурсов, 1 - для ограничений.
+      --  Далее callback-функции читают поле User_Data их родителя
+      --  (XmRowColumn) и в зависимости от возвращенного значения
+      --  обращаются либо с списку ресурсов, либо к списку ограничений.
+
+      Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (1));
       Result.Constraints           :=
         Xm_Create_Managed_Row_Column (Result.Constraints_Container,
-                                      "row_column");
+                                      "row_column",
+                                      Args (0 .. 0));
       Result.Constraints_Tab       :=
         Xm_Create_Managed_Push_Button_Gadget (Parent, "constraints");
 
@@ -1097,6 +1206,21 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          Aux := Next (Aux);
       end loop;
+
+      --  Заполнение ограничений.
+
+      Aux_List := All_Constraint_Resources (Node);
+
+      if Aux_List /= Null_List then
+         Aux := First (Aux_List);
+
+         while Aux /= Null_Node loop
+            Add_Resource (Result.Constraints, Aux);
+            --  Создание свойств ресурса.
+
+            Aux := Next (Aux);
+         end loop;
+      end if;
 
       --  Выравнивание полей ввода значений по вертикали. Выравнивание
       --  осуществляется с помощью вычисления значения ресурса XmNleftOffset
@@ -1196,6 +1320,28 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       end case;
    end Get_Button;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_Callback_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Get_Callback_Type (The_Widget : in Widget) return Integer is
+      pragma Assert (Xm_Is_Row_Column (Xt_Parent (Xt_Parent (The_Widget))));
+      --  Первый предок - форма, второй - RowColumn.
+
+      Value : Xt_Arg_Val;
+      Args  : Xt_Arg_List (0 .. 0);
+
+   begin
+      --  В ресурсе User_Data содержится код вкладки.
+      --  0 - вкладка ресурсов, 1 - вкладка ограничений.
+
+      Xt_Set_Arg (Args (0), Xm_N_User_Data, Value'Address);
+      Xt_Get_Values (Xt_Parent (Xt_Parent (The_Widget)), Args (0 .. 0));
+
+      return Integer (Value);
+   end Get_Callback_Type;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
