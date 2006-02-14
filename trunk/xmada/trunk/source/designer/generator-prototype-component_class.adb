@@ -59,6 +59,9 @@ package body Generator.Prototype.Component_Class is
    --    generation of spec
 
          Put_Line (File => File,
+                   Item => "with Xt;");
+         New_Line (File);
+         Put_Line (File => File,
                    Item => "package " & Package_Name & "s is");
          New_Line (File);
          Put_Line (File => File,
@@ -70,13 +73,6 @@ package body Generator.Prototype.Component_Class is
          New_Line (File);
          Put_Line (File => File,
                    Item => "   package Constructors is");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "      procedure Initialize (Object : access "
-                           & Package_Name & ";");
-         Put_Line
-          (File => File,
-           Item => "                            Parent : in Xt.Widget);");
          New_Line (File);
          Put_Line (File => File,
                    Item => "      function Create (Parent : in Xt.Widget)");
@@ -107,14 +103,10 @@ package body Generator.Prototype.Component_Class is
          Put_Line (File => File,
                    Item => "   package CallBacks is");
          Put_Line (File => File,
-                   Item => "      null;");
-         Put_Line (File => File,
                    Item => "   end CallBacks;");
          New_Line (File);
          Put_Line (File => File,
                    Item => "   package body CallBacks is");
-         Put_Line (File => File,
-                   Item => "      null;");
          Put_Line (File => File,
                    Item => "   end CallBacks;");
          New_Line (File);
@@ -122,22 +114,11 @@ package body Generator.Prototype.Component_Class is
                    Item => "   package body Constructors is");
          New_Line (File);
          Put_Line (File => File,
-                   Item => "      procedure Initialize (Object : access "
-                           & Package_Name & ";");
-         Put_Line
-          (File => File,
-           Item => "                            Parent : in Xt.Widget)");
+                   Item => "      function Create (Parent : in Xt.Widget)");
+         Put_Line (File => File,
+                   Item => "        return " & Package_Name & "_Access");
          Put_Line (File => File,
                    Item => "      is");
-         Put_Line (File => File,
-                   Item => "      begin");
-         Put_Line (File => File,
-                   Item => "         null;");
-         Put_Line (File => File,
-                   Item => "      end Initialize;");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "      function Create");
          Put_Line (File => File,
                    Item => "         Result : "
                            & Package_Name & "_Access := new " &
@@ -146,10 +127,7 @@ package body Generator.Prototype.Component_Class is
          Put_Line (File => File,
                    Item => "      begin");
          Put_Line (File => File,
-                   Item => "         Initialize (Result);");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "         return Result;");
+                   Item => "         return null;");
          Put_Line (File => File,
                    Item => "      end Create;");
          New_Line (File);
