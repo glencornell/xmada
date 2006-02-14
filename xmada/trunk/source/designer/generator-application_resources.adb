@@ -36,22 +36,221 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Wide_Text_IO;
+with Ada.Characters.Handling;
+
+with Model;
+with Model.Names;
+with Model.Queries;
 with Model.Tree;
+with Model.Tree.Lists;
 
 package body Generator.Application_Resources is
 
+   use Ada.Wide_Text_IO;
+   use Ada.Characters.Handling;
+
+   use Model;
+   use Model.Names;
+   use Model.Queries;
    use Model.Tree;
+   use Model.Tree.Lists;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Generate
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Generate (Node : in Model.Node_Id) is
+   procedure Generate (Node : in Node_Id) is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Generate_Resources
+      --!    <Purpose>
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Generate_Resources (Res_List    : in List_Id;
+                                    Tmp_Path    : in Wide_String;
+                                    Output_File : in File_Type);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Generate_Widget_Resources
+      --!    <Purpose>
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Generate_Widget_Resources (Widget_Example : in Node_Id;
+                                           Output_File    : in File_Type;
+                                           Current_Path   : in Wide_String);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Convert_To_Resource_Filename
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function Convert_To_Resource_Filename (Node : in Node_Id)
+         return Wide_String;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Convert_To_Resource_Filename
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function Convert_To_Resource_Filename (Node : in Node_Id)
+         return Wide_String
+      is
+         Str : constant Wide_String
+           := Image (Application_Class_Name (Node));
+      begin
+         return Str & ".ad";
+      end Convert_To_Resource_Filename;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Generate_Resources
+      --!    <Purpose>
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Generate_Resources (Res_List    : in List_Id;
+                                    Tmp_Path    : in Wide_String;
+                                    Output_File : in File_Type)
+      is
+         Current_Resource  : Node_Id;
+
+      begin
+         if Res_List = Null_List then
+            return;
+         end if;
+
+         Current_Resource := First (Res_List);
+
+         while Current_Resource /= Null_Node loop
+            case Node_Kind (Current_Resource) is
+               when Node_Enumeration_Resource_Value 
+                 | Node_Widget_Reference_Resource_Value  =>
+
+                  declare
+                     Tmp : constant Node_Id 
+                       := Resource_Value (Current_Resource);
+
+                  begin
+                     if Tmp /= Null_Node then
+                        Put_Line
+                         (Output_File, 
+                          Tmp_Path 
+                          & "."
+                          & Internal_Resource_Name_Image
+                           (Resource_Specification
+                            (Current_Resource))
+                          & " : "
+                          & Internal_Name_Image
+                           (Tmp));
+                     end if;
+                  end;
+
+               when Node_Integer_Resource_Value =>
+
+                  declare
+                     Tmp_Value : constant Wide_String := Integer'Wide_Image
+                      (Resource_Value (Current_Resource));
+                     Index     : Positive := Tmp_Value'First;
+
+                  begin
+                     if Tmp_Value (1) = ' ' then
+                        Index := Index + 1;
+                     end if;
+
+                     Put_Line (Output_File, 
+                      Tmp_Path
+                      & "."
+                      & Internal_Resource_Name_Image
+                       (Resource_Specification 
+                        (Current_Resource))
+                      & " : " 
+                      & Tmp_Value 
+                       (Index .. Tmp_Value'Last));
+                  end;
+               when others =>
+                  raise Program_Error;
+
+            end case;
+
+            Current_Resource := Next (Current_Resource);
+         end loop;
+      end Generate_Resources;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Generate_Widget_Resources
+      --!    <Purpose>
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Generate_Widget_Resources (Widget_Example : in Node_Id;
+                                           Output_File    : in File_Type;
+                                           Current_Path   : in Wide_String)
+
+      is
+         Children_List    : constant List_Id := Children (Widget_Example);
+         Current_Children : Node_Id;
+
+      begin
+         declare
+            Tmp_Path : constant Wide_String :=
+               Current_Path & Image (Name (Widget_Example));
+
+         begin
+            if Resources (Widget_Example) /= Null_List then
+               --  Генерация ресурсов виджета.
+
+               Generate_Resources (Resources (Widget_Example),
+                                   Tmp_Path,
+                                   Output_File);
+
+               --  Генерация ресурсов ограничений виджета.
+
+               Generate_Resources (Constraint_Resources (Widget_Example),
+                                   Tmp_Path,
+                                   Output_File);
+            end if;
+
+            if Children_List /= Null_List then
+              Current_Children := First (Children_List);
+
+               while Current_Children /= Null_Node loop
+                  Generate_Widget_Resources (Current_Children, 
+                                             Output_File, 
+                                             Tmp_Path & ".");
+                  Current_Children := Next (Current_Children);
+               end loop;
+            end if;
+         end;
+      end Generate_Widget_Resources;
+
+      Output_File       : File_Type;
+      Filename          : constant Standard.String
+        := To_String (Convert_To_Resource_Filename (Node));
+      Current_Component : Node_Id;
+      Widget_Example    : Node_Id;
+
    begin
       pragma Assert (Node_Kind (Node) = Node_Application);
 
-      null;
+      Create (File => Output_File,
+              Name => Filename);
+      Current_Component := First (Component_Classes (Node));
+
+      while Current_Component /= Null_Node loop
+         Widget_Example := Root (Current_Component);
+         Generate_Widget_Resources (Widget_Example, Output_File, "*");
+         Current_Component := Next (Current_Component);
+      end loop;
+
+      Close (Output_File);
+
+   exception
+      when others =>
+         Close (Output_File);
+         raise;
    end Generate;
 
 end Generator.Application_Resources;
