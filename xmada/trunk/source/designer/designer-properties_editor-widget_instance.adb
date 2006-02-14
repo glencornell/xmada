@@ -906,6 +906,14 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> Add_Resource_List
+      --!    <Purpose> Функция добавляет на форму значения из списка ресурсов.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Add_Resource_List (Parent : in Widget; List : in List_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> Add_Resource
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -1129,11 +1137,81 @@ package body Designer.Properties_Editor.Widget_Instance is
          end case;
       end Add_Resource;
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Add_Resource_List
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Add_Resource_List (Parent : in Widget; List : in List_Id) is
+         Aux : Node_Id;
+
+      begin
+         --  Заполнение ограничений.
+
+         if List = Null_List then
+            return;
+         end if;
+
+         Aux := First (List);
+
+         while Aux /= Null_Node loop
+            Add_Resource (Parent, Aux);
+            --  Создание свойств ресурса.
+
+            Aux := Next (Aux);
+         end loop;
+
+         --  Выравнивание полей ввода значений по вертикали. Выравнивание
+         --  осуществляется с помощью вычисления значения ресурса
+         --  XmNleftOffset виджета ввода данных на основании значения ширины
+         --  виджета максимально широкого имени ресурса и ширины виджета
+         --  текущего имени ресурса.
+
+         declare
+            Max_Width : Dimension := 0;
+            Value     : Dimension;
+            Args      : Xt_Arg_List (0 .. 0);
+            SArgs     : Xt_Arg_List (0 .. 0);
+
+         begin
+            Xt_Set_Arg (Args (0), Xm_N_Width, Value'Address);
+
+            Aux := First (List);
+
+            while Aux /= Null_Node loop
+               Xt_Get_Values
+                (Annotation_Table.Table (Aux).Name, Args (0 .. 0));
+
+               if Value > Max_Width then
+                  Max_Width := Value;
+               end if;
+
+               Aux := Next (Aux);
+            end loop;
+
+            Aux := First (List);
+
+            while Aux /= Null_Node loop
+               if Annotation_Table.Table (Aux).Value /= Null_Widget then
+                  Xt_Get_Values
+                   (Annotation_Table.Table (Aux).Name, Args (0 .. 0));
+
+                  Xt_Set_Arg
+                   (SArgs (0),
+                    Xm_N_Left_Offset,
+                    Xt_Arg_Val (Max_Width - Value));
+                  Xt_Set_Values
+                   (Annotation_Table.Table (Aux).Value, SArgs (0 .. 0));
+               end if;
+
+               Aux := Next (Aux);
+            end loop;
+         end;
+      end Add_Resource_List;
+
       Result   : constant Widget_Instance_Properties_Editor_Access
         := new Widget_Instance_Properties_Editor (Node);
       Args     : Xt_Arg_List (0 .. 5);
-      Aux      : Node_Id;
-      Aux_List : List_Id;
 
    begin
       Result.Notebook := Parent;
@@ -1198,73 +1276,9 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       --  Заполнение редактора свойств значениями ресурсов.
 
-      Aux := First (All_Resources (Node));
-
-      while Aux /= Null_Node loop
-         Add_Resource (Result.Properties, Aux);
-         --  Создание свойств ресурса.
-
-         Aux := Next (Aux);
-      end loop;
-
-      --  Заполнение ограничений.
-
-      Aux_List := All_Constraint_Resources (Node);
-
-      if Aux_List /= Null_List then
-         Aux := First (Aux_List);
-
-         while Aux /= Null_Node loop
-            Add_Resource (Result.Constraints, Aux);
-            --  Создание свойств ресурса.
-
-            Aux := Next (Aux);
-         end loop;
-      end if;
-
-      --  Выравнивание полей ввода значений по вертикали. Выравнивание
-      --  осуществляется с помощью вычисления значения ресурса XmNleftOffset
-      --  виджета ввода данных на основании значения ширины виджета максимально
-      --  широкого имени ресурса и ширины виджета текущего имени ресурса.
-
-      declare
-         Max_Width : Dimension := 0;
-         Value     : Dimension;
-         SArgs     : Xt_Arg_List (0 .. 0);
-
-      begin
-         Xt_Set_Arg (Args (0), Xm_N_Width, Value'Address);
-
-         Aux := First (All_Resources (Node));
-
-         while Aux /= Null_Node loop
-            Xt_Get_Values (Annotation_Table.Table (Aux).Name, Args (0 .. 0));
-
-            if Value > Max_Width then
-               Max_Width := Value;
-            end if;
-
-            Aux := Next (Aux);
-         end loop;
-
-         Aux := First (All_Resources (Node));
-
-         while Aux /= Null_Node loop
-            if Annotation_Table.Table (Aux).Value /= Null_Widget then
-               Xt_Get_Values
-                (Annotation_Table.Table (Aux).Name, Args (0 .. 0));
-
-               Xt_Set_Arg
-                (SArgs (0),
-                 Xm_N_Left_Offset,
-                 Xt_Arg_Val (Max_Width - Value));
-               Xt_Set_Values
-                (Annotation_Table.Table (Aux).Value, SArgs (0 .. 0));
-            end if;
-
-            Aux := Next (Aux);
-         end loop;
-      end;
+      Add_Resource_List (Result.Properties, All_Resources (Node));
+      Add_Resource_List (Result.Constraints,
+                         All_Constraint_Resources (Node));
 
       Update_Item (Node);
       --  Задаем значение ресурсов.
