@@ -577,7 +577,7 @@ package body Designer.Properties_Editor.Widget_Instance is
 
                --  Получаем узел значения ресурса.
 
-               case Get_Callback_Type (The_Widget) is
+               case Get_Callback_Type (Xt_Parent (The_Widget)) is
                   when 0 =>
                      Res_List := Resources (Parent_Node (Node_Id (Node)));
 
