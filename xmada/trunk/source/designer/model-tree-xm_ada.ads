@@ -51,4 +51,13 @@ package Model.Tree.Xm_Ada is
    function Convenience_Create_Function_Name (Widget_Class : in Node_Id)
      return Name_Id;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Resource_Name_String
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Resource_Name_String (Widget_Class : in Node_Id)
+     return Name_Id;
+
 end Model.Tree.Xm_Ada;
