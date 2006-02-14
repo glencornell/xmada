@@ -148,16 +148,23 @@ package body Designer.Palette is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> New_Name
+   --!    <Purpose> Создаёт уникальное имя имеющее указанный префикс и
+   --! сгенерированный численный суффикс.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function New_Name (Prefix : in Wide_String) return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Widget_Instance
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Create_Widget_Instance (Class  : in Model.Node_Id) is
-     Node          : Node_Id;
-     Children_List : List_Id;
+      Node          : Node_Id;
+      Children_List : List_Id;
 
    begin
-      pragma Assert (Selected_Item /= Null_Node);
-
       Node := Model.Utilities.Create_Widget_Instance (Class);
       Set_Class (Node, Class);
 
@@ -174,7 +181,7 @@ package body Designer.Palette is
         Append (Children_List, Node);
       end if;
 
-      Set_Name (Node, Enter ("Undefined_Name"));
+      Set_Name (Node, New_Name (Name_Image (Class)));
       Designer.Main_Window.Insert_Item (Node);
    end Create_Widget_Instance;
 
@@ -339,6 +346,29 @@ package body Designer.Palette is
             raise Program_Error;
       end case;
    end Insert_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> New_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function New_Name (Prefix : in Wide_String) return Name_Id is
+   begin
+      for J in Positive'Range loop
+         declare
+            Suffix : constant Wide_String := Positive'Wide_Image (J);
+            Name   : constant Wide_String
+              := Prefix & Suffix (Suffix'First + 1 .. Suffix'Last);
+
+         begin
+            if Find (Name) = Null_Name then
+               return Enter (Name);
+            end if;
+         end;
+      end loop;
+
+      raise Program_Error;
+   end New_Name;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
