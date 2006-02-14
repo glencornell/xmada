@@ -36,8 +36,11 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Model.Names;
 
 package body Model.Tree.Xm_Ada is
+
+   Counter : Integer := 1;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -45,12 +48,24 @@ package body Model.Tree.Xm_Ada is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    function Convenience_Create_Function_Name (Widget_Class : in Node_Id)
-     return Name_Id is
+     return Name_Id
+   is
+       pragma Assert (Node_Kind (Widget_Class) = Node_Widget_Class);
    begin
-       pragma Assert (Model.Tree.Node_Kind (Widget_Class)
-         = Model.Tree.Node_Widget_Class);
+      if Counter = 1 then
+         Counter := Counter + 1;
+         return Model.Names.Enter ("Xm_Message_Box.Xm_Create_Message_Box");
 
-       return Null_Name;
+      elsif Counter = 2 then
+         Counter := Counter + 1;
+         return Model.Names.Enter ("Xm_Form.Xm_Create_Form");
+
+      elsif Counter = 3 then
+         Counter := Counter + 1;
+         return Model.Names.Enter ("Xm_Text.Xm_Create_Text");
+      end if;
+
+      return Name (Widget_Class);
    end Convenience_Create_Function_Name;
 
 end Model.Tree.Xm_Ada;
