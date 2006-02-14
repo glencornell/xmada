@@ -417,10 +417,10 @@ package Xt is
 
 	-- Sharing graphics contexts:
 
-	-- XtGetGC
-	function Xt_Get_Gc (W : in Widget;
-			    Value_Mask : in Gc_Mask_Type;
-			    Values : in X_Gc_Values) return Gc;
+--	-- XtGetGC
+--	function Xt_Get_Gc (W : in Widget;
+--			    Value_Mask : in Gc_Mask_Type;
+--			    Values : in X_Gc_Values) return Gc;
 
 	function Xt_Allocate_Gc (W : in Widget;
 				 Depth : in X_Lib.Depth_Type;
@@ -429,8 +429,8 @@ package Xt is
 				 Dynamic_Mask : in Gc_Mask_Type;
 				 Unused_Mask : in Gc_Mask_Type) return Gc;
 
-	-- XtReleaseGC
-	procedure Xt_Release_Gc (W : in Widget; The_Gc : in Gc);
+--	-- XtReleaseGC
+--	procedure Xt_Release_Gc (W : in Widget; The_Gc : in Gc);
 
 	-- XtDestroyGC
 	procedure Xt_Destroy_Gc (The_Gc : in Gc);

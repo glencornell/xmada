@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rost.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rost.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -36,6 +36,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xlib.Graphic_Output;
 
 package Xt.Utilities is
 
@@ -83,6 +84,14 @@ package Xt.Utilities is
    function Xt_Widget_To_Application_Context (The_Widget : in Widget)
      return Xt_App_Context;
 
+
+   function Xt_Get_GC (The_Widget : in Xt.Widget;
+                       Value_Mask : in Xlib.Graphic_Output.GC_Value_Mask_Type;
+                       Values     : in Xlib.Graphic_Output.X_GC_Values)
+     return Xlib.Graphic_Context;
+
+   procedure Xt_Release_GC (The_Widget : in Xt.Widget;
+                            GC         : in Xlib.Graphic_Context);
 
 private
 

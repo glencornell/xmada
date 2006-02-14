@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rost.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rost.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -118,6 +118,45 @@ package body Xt.Utilities is
       return XtDisplayOfObject (Object);
    end Xt_Display_Of_Object;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xt_Get_GC
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Xt_Get_GC (The_Widget : in Xt.Widget;
+                       Value_Mask : in Xlib.Graphic_Output.GC_Value_Mask_Type;
+                       Values     : in Xlib.Graphic_Output.X_GC_Values)
+     return Xlib.Graphic_Context
+   is
+      function XtGetGC (The_Widget : in Xt.Widget;
+                        Value_Mask : in Xlib.Graphic_Output.GC_Value_Mask_Type;
+                        Values     : in Xlib.Graphic_Output.X_GC_Values)
+        return Xlib.Graphic_Context;
+      pragma Import (C, XtGetGC, "XtGetGC");
+
+   begin
+      Check (The_Widget);
+
+      return XtGetGC (The_Widget, Value_Mask, Values);
+   end Xt_Get_GC;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xt_Release_GC
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Xt_Release_GC (The_Widget : in Xt.Widget;
+                            GC         : in Xlib.Graphic_Context)
+   is
+      procedure XtReleaseGC (The_Widget : in Xt.Widget;
+                             GC         : in Xlib.Graphic_Context);
+      pragma Import (C, XtReleaseGC, "XtReleaseGC");
+
+   begin
+      Check (The_Widget);
+      Check (GC);
+      XtReleaseGC (The_Widget, GC);
+   end Xt_Release_GC;
 
    function Xt_Name (Object : in Widget) return String is
       function XtName (Object : in Widget) return chars_ptr;
