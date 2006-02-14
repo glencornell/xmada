@@ -162,12 +162,21 @@ package body Generator.Prototype.Component_Class is
             Put_Line (File => File,
                       Item => "         Result."
                         & Model.Queries.Name_Image (Widgets.Table (J)));
-            Put_Line
+            Put
              (File => File,
               Item => "           := "
                 & Model.Names.Image (Convenience_Create_Function_Name
-                   (Class (Widgets.Table (J))))
-                & " (Parent, """
+                   (Class (Widgets.Table (J)))));
+            if J = Widgets.First then
+               Put (File, " (Parent");
+
+            else
+               Put (File,
+                    " (Result."
+                    & Model.Queries.Name_Image
+                       (Parent_Node (Widgets.Table (J))));
+            end if;
+            Put_Line (File, ", """
                 & Model.Queries.Name_Image (Widgets.Table (J))
                 & """);");
          end loop;
