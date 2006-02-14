@@ -164,6 +164,14 @@ package body Designer.Visual_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Widget
+   --!    <Purpose> Создание виджета на визуальном редакторе.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Create_Widget (Node : in Node_Id; Manage : in Boolean := True);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Setup_Reverse_Converters
    --!    <Purpose> Производит установку конверторов обратного преобразования
    --! для всех известных перечислимых типов ресурсов.
@@ -542,45 +550,6 @@ package body Designer.Visual_Editor is
 
       use Model.Widget_Instances_Ordering;
 
-      ------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> Create_Widget
-      --!    <Purpose> Создание виджета на визуальном редакторе.
-      --!    <Exceptions>
-      ------------------------------------------------------------------------
-      procedure Create_Widget (Node : in Node_Id);
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> Create_Widget
-      --!    <ImplementationNotes>
-      ------------------------------------------------------------------------
-      procedure Create_Widget (Node : in Node_Id) is
-         Parent : Widget;
-         Args   : Xt_Arg_List (0 .. 0);
-
-      begin
-         Relocate_Annotation_Table (Node);
-
-         if Node_Kind (Parent_Node (Node)) = Node_Component_Class then
-            Parent := Drawing_Area;
-         else
-            Parent := Annotation_Table.Table (Parent_Node (Node)).Widget;
-         end if;
-
-         --  TODO Необходимо подготовить соответствующий список значений
-         --  ресурсов на основании атрибутов Resources и Constraints.
-
-         Xt_Set_Arg (Args (0), Xm_N_Translations, Translations);
-         Annotation_Table.Table (Node).Widget :=
-           Convenience_Create_Function (Class (Node))
-            (Parent,
-             "form",
-             Make_Set_Arg_List (Resources (Node))
-               & Make_Set_Arg_List (Constraint_Resources (Node))
-               & Args);
-      end Create_Widget;
-
    begin
       if Root (Node) /= Null_Node then
          Find_Widget_Instances_Order (Root (Node));
@@ -588,7 +557,7 @@ package body Designer.Visual_Editor is
          for J in Widget_Instances_Order_Table.First
                     .. Widget_Instances_Order_Table.Last
          loop
-            Create_Widget (Widget_Instances_Order_Table.Table (J));
+            Create_Widget (Widget_Instances_Order_Table.Table (J), False);
          end loop;
 
          for J in reverse Widget_Instances_Order_Table.First
@@ -602,6 +571,38 @@ package body Designer.Visual_Editor is
 
       Edited_Component := Node;
    end Create_Component_Class_Widgets;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Widget
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Create_Widget (Node : in Node_Id; Manage : in Boolean := True) is
+      Parent : Widget;
+      Args   : Xt_Arg_List (0 .. 0);
+
+   begin
+      Relocate_Annotation_Table (Node);
+
+      if Node_Kind (Parent_Node (Node)) = Node_Component_Class then
+         Parent := Drawing_Area;
+      else
+         Parent := Annotation_Table.Table (Parent_Node (Node)).Widget;
+      end if;
+
+      Xt_Set_Arg (Args (0), Xm_N_Translations, Translations);
+      Annotation_Table.Table (Node).Widget :=
+        Convenience_Create_Function (Class (Node))
+         (Parent,
+          "form",
+          Make_Set_Arg_List (Resources (Node))
+            & Make_Set_Arg_List (Constraint_Resources (Node))
+            & Args);
+
+      if Manage then
+         Xt_Manage_Child (Annotation_Table.Table (Node).Widget);
+      end if;
+   end Create_Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -757,6 +758,13 @@ package body Designer.Visual_Editor is
                   end if;
                end if;
             end;
+
+            --  Производим создание виджета если класс компонента виджета
+            --  совпадает с отображённым.
+
+            if Enclosing_Component_Class (Node) = Edited_Component then
+               Create_Widget (Node);
+            end if;
 
          when others =>
             raise Program_Error;
