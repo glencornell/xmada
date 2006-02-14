@@ -266,6 +266,7 @@ xm-protocol_management.lo: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
 	$(top_srcdir)/source/xlib/xlib-extensions.ads \
+	$(top_srcdir)/source/xlib/xlib-graphic_output.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \

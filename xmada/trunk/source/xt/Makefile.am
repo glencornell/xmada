@@ -159,6 +159,7 @@ xt-resource_management.lo: \
 	$(srcdir)/xt-implementation.ads \
 	$(srcdir)/xt-resource_management.adb \
 	$(srcdir)/xt-resource_management.ads \
+	$(srcdir)/xt-translation_management.ads \
 	$(srcdir)/xt.ads
 xt-translation_management.lo: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
@@ -171,6 +172,7 @@ xt-translation_management.lo: \
 	$(srcdir)/xt.ads
 xt-utilities.lo: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
+	$(top_srcdir)/source/xlib/xlib-graphic_output.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
