@@ -98,7 +98,8 @@ package body Designer.Visual_Editor is
      Value_C_Short,
      Value_C_Int,
      Value_Position,
-     Value_Dimension);
+     Value_Dimension,
+     Value_Widget_Reference);
 
    type Annotation_Record (Kind       : Annotation_Kinds := Annotation_Empty;
                            Value_Kind : Resource_Value_Kinds
@@ -134,6 +135,9 @@ package body Designer.Visual_Editor is
 
                when Value_Dimension =>
                   Dimension_Value : aliased Xt.Dimension;
+
+               when Value_Widget_Reference =>
+                  Widget_Reference_Value : aliased Xt.Widget;
             end case;
       end case;
    end record;
@@ -961,7 +965,20 @@ package body Designer.Visual_Editor is
                   Next_Arg := Next_Arg + 1;
 
                when Node_Widget_Reference_Resource_Type =>
-                  null;
+                  if Resource_Value (Aux) = Null_Node then
+                     Xt_Set_Arg
+                      (Args (Next_Arg),
+                       Annotation_Table.Table (Aux).Name,
+                       Null_Widget);
+
+                  else
+                     Xt_Set_Arg
+                      (Args (Next_Arg),
+                       Annotation_Table.Table (Aux).Name,
+                       Annotation_Table.Table (Resource_Value (Aux)).Widget);
+                  end if;
+
+                  Next_Arg := Next_Arg + 1;
 
                when others =>
                   raise Program_Error;
@@ -1207,7 +1224,16 @@ package body Designer.Visual_Editor is
                        C_Unsigned_Char_Value => 0);
 
                   when Node_Widget_Reference_Resource_Type =>
-                     null;
+                     Annotation_Table.Table (J) :=
+                      (Kind                   => Annotation_Resource_Value,
+                       Value_Kind             => Value_Widget_Reference,
+                       Name                   =>
+                         Interfaces.C.Strings.New_String
+                          (Ada.Characters.Handling.To_String
+                            (Internal_Resource_Name_Image
+                              (Resource_Specification (J)))),
+                       Widget_Reference_Value => Null_Widget);
+
 
                   when others =>
                      raise Program_Error;
