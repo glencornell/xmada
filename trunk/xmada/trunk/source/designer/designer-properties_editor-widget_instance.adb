@@ -1760,13 +1760,6 @@ package body Designer.Properties_Editor.Widget_Instance is
    ---------------------------------------------------------------------------
    procedure Update_Item (Node : in Node_Id)
    is
-      All_Res   : List_Id;
-      Curr_Res  : List_Id;
-      Res_Type  : Node_Id;
-      Current   : Node_Id;
-      Args      : Xt_Arg_List (0 .. 0);
-      Local_Res : Node_Id;
-
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> In_Resources
@@ -1774,14 +1767,28 @@ package body Designer.Properties_Editor.Widget_Instance is
       --! ресурсов воджета.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      function In_Resources (Node : in Node_Id) return Node_Id;
+      function In_Resources (Curr_Res : in List_Id;
+                             Node     : in Node_Id)
+        return Node_Id;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Update_Resource
+      --!    <Purpose> Обновляет значения ресурсов на форме.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Update_Resource (All_Res  : in List_Id;
+                                 Curr_Res : in List_Id);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> function_name
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function In_Resources (Node : in Node_Id) return Node_Id is
+      function In_Resources (Curr_Res : in List_Id;
+                             Node     : in Node_Id)
+        return Node_Id
+      is
          Current : Node_Id;
 
       begin
@@ -1804,119 +1811,131 @@ package body Designer.Properties_Editor.Widget_Instance is
          return Null_Node;
       end In_Resources;
 
+      procedure Update_Resource (All_Res  : in List_Id;
+                                 Curr_Res : in List_Id)
+      is
+         Current   : Node_Id;
+         Res_Type  : Node_Id;
+         Local_Res : Node_Id;
+         Args      : Xt_Arg_List (0 .. 0);
+
+      begin
+         --  Если нет текущих ресурсов, то выходим.
+
+         if  All_Res = Null_List then
+            return;
+         end if;
+
+         Current := First (All_Res);
+
+         --  Находим имеющиеся ресурсы и устанавливаем влажок
+         --  Use_In_Program.
+
+         while Current /= Null_Node loop
+            Local_Res := In_Resources (Curr_Res, Current);
+
+            if Local_Res /= Null_Node then
+               Xt_Set_Arg (Args (0), Xm_N_Set, Xm_Set);
+               Xt_Set_Values
+                (Annotation_Table.Table (Current).Use_In_Program,
+                 Args (0 .. 0));
+
+               Xm_Toggle_Button_Gadget_Set_State
+                (Annotation_Table.Table (Current).Hard_Code,
+                 Is_Hardcoded (Local_Res),
+                 False);
+
+               Xm_Toggle_Button_Gadget_Set_State
+                (Annotation_Table.Table (Current).Fallback,
+                 Is_Fallback (Local_Res),
+                 False);
+
+               Check_Sensitive (Current);
+            end if;
+
+            Res_Type := Resource_Type (Resource_Specification (Current));
+
+            --  Отображаем все остальные ресурсы.
+
+            if Is_Changed (Current) then
+               case Node_Kind (Res_Type) is
+                  when Node_Enumerated_Resource_Type =>
+                     Xt_Set_Arg (Args (0),
+                                 Xm_N_Menu_History,
+                                 Get_Button (Resource_Value (Current)));
+                     Xt_Set_Values
+                      (Annotation_Table.Table (Current).Value,
+                       Args (0 .. 0));
+
+                  when Node_Predefined_Resource_Type =>
+                     case Type_Kind (Res_Type) is
+                        when Type_C_Short  --  Числовые типы.
+                          | Type_C_Int
+                          | Type_Position
+                          | Type_Dimension
+                        =>
+                           Xt_Set_Arg (Args (0),
+                                       Xm_N_Position,
+                                       Xt_Arg_Val
+                                        (Integer'
+                                          (Resource_Value (Current))));
+                           Xt_Set_Values
+                            (Annotation_Table.Table (Current).Value,
+                             Args (0 .. 0));
+                        when Type_Pixel =>
+                           null; --  TODO реализовать.
+
+                        when Type_Pixmap =>
+                           null; --  TODO реализовать.
+
+                        when Type_Screen =>
+                           null; --  TODO реализовать.
+
+                        when Type_Colormap =>
+                           null; --  TODO реализовать.
+
+                        when Type_Translation_Data =>
+                           null; --  TODO реализовать.
+
+                        when Type_Unspecified =>
+                           null; --  TODO реализовать.
+
+                        when Type_Boolean =>
+                           null; --  TODO реализовать.
+                     end case;
+
+                  when Node_Widget_Reference_Resource_Type =>
+                     declare
+                        Value : constant Node_Id
+                          := Resource_Value (Current);
+
+                     begin
+                        if Value /= Null_Node then
+                           Xt_Set_Arg (Args (0),
+                                       Xm_N_Menu_History,
+                                       Get_Button (Value));
+                           Xt_Set_Values
+                            (Annotation_Table.Table (Current).Value,
+                             Args (0 .. 0));
+                        end if;
+                     end;
+                  when others =>
+                     raise Program_Error;
+               end case;
+            end if;
+
+            Current := Next (Current);
+         end loop;
+      end Update_Resource;
+
    begin
       case Node_Kind (Node) is
          when Node_Widget_Instance =>
             Visual_Editor.Get_Properties (Node);
 
-            All_Res  := All_Resources (Node);
-            Curr_Res := Resources (Node);
-            Current  := First (All_Res);
-
-            --  Если нет текущих ресурсов, то выходим.
-
-            if  All_Res = Null_List then
-               return;
-            end if;
-
-            --  Находим имеющиеся ресурсы и устанавливаем влажок
-            --  Use_In_Program.
-
-            while Current /= Null_Node loop
-               Local_Res := In_Resources (Current);
-
-               if Local_Res /= Null_Node then
-                  Xt_Set_Arg (Args (0), Xm_N_Set, Xm_Set);
-                  Xt_Set_Values
-                   (Annotation_Table.Table (Current).Use_In_Program,
-                    Args (0 .. 0));
-
-                  Xm_Toggle_Button_Gadget_Set_State
-                   (Annotation_Table.Table (Current).Hard_Code,
-                    Is_Hardcoded (Local_Res),
-                    False);
-
-                  Xm_Toggle_Button_Gadget_Set_State
-                   (Annotation_Table.Table (Current).Fallback,
-                    Is_Fallback (Local_Res),
-                    False);
-
-                  Check_Sensitive (Current);
-               end if;
-
-               Res_Type := Resource_Type (Resource_Specification (Current));
-
-               --  Отображаем все остальные ресурсы.
-
-               if Is_Changed (Current) then
-                  case Node_Kind (Res_Type) is
-                     when Node_Enumerated_Resource_Type =>
-                        Xt_Set_Arg (Args (0),
-                                    Xm_N_Menu_History,
-                                    Get_Button (Resource_Value (Current)));
-                        Xt_Set_Values
-                         (Annotation_Table.Table (Current).Value,
-                          Args (0 .. 0));
-
-                     when Node_Predefined_Resource_Type =>
-                        case Type_Kind (Res_Type) is
-                           when Type_C_Short  --  Числовые типы.
-                             | Type_C_Int
-                             | Type_Position
-                             | Type_Dimension
-                           =>
-                              Xt_Set_Arg (Args (0),
-                                          Xm_N_Position,
-                                          Xt_Arg_Val
-                                           (Integer'
-                                             (Resource_Value (Current))));
-                              Xt_Set_Values
-                               (Annotation_Table.Table (Current).Value,
-                                Args (0 .. 0));
-                           when Type_Pixel =>
-                              null; --  TODO реализовать.
-
-                           when Type_Pixmap =>
-                              null; --  TODO реализовать.
-
-                           when Type_Screen =>
-                              null; --  TODO реализовать.
-
-                           when Type_Colormap =>
-                              null; --  TODO реализовать.
-
-                           when Type_Translation_Data =>
-                              null; --  TODO реализовать.
-
-                           when Type_Unspecified =>
-                              null; --  TODO реализовать.
-
-                           when Type_Boolean =>
-                              null; --  TODO реализовать.
-                        end case;
-
-                     when Node_Widget_Reference_Resource_Type =>
-                        declare
-                           Value : constant Node_Id
-                             := Resource_Value (Current);
-
-                        begin
-                           if Value /= Null_Node then
-                              Xt_Set_Arg (Args (0),
-                                          Xm_N_Menu_History,
-                                          Get_Button (Value));
-                              Xt_Set_Values
-                               (Annotation_Table.Table (Current).Value,
-                                Args (0 .. 0));
-                           end if;
-                        end;
-                     when others =>
-                        raise Program_Error;
-                  end case;
-               end if;
-
-               Current := Next (Current);
-            end loop;
+            Update_Resource (All_Resources (Node), Resources (Node));
+            Update_Resource (All_Constraint_Resources (Node),
+                             Constraint_Resources (Node));
 
          when others =>
             null;
