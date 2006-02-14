@@ -38,10 +38,24 @@
 ------------------------------------------------------------------------------
 with Ada.Wide_Text_IO;
 with Model.Queries;
+with Model.Tree;
+with Model.Widget_Instances_Ordering;
 
 package body Generator.Prototype.Component_Class is
 
    use Ada.Wide_Text_IO;
+   use Model.Tree;
+   use Model;
+   use Model.Widget_Instances_Ordering;
+
+   function Convenience_Create_Function_Name (Widget_Class : in Node_Id)
+     return Name_Id is
+   begin
+       pragma Assert (Model.Tree.Node_Kind (Widget_Class)
+         = Model.Tree.Node_Widget_Class);
+
+       return Null_Name;
+   end Convenience_Create_Function_Name;
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Generate
@@ -87,8 +101,23 @@ package body Generator.Prototype.Component_Class is
          New_Line (File);
          Put_Line (File => File,
                    Item => "   type " & Package_Name & " is limited record");
-         Put_Line (File => File,
-                   Item => "      null;");
+
+         if Widget_Instances_Order_Table.Last >=
+            Widget_Instances_Order_Table.First
+         then
+            for I in Widget_Instances_Order_Table.First ..
+                     Widget_Instances_Order_Table.Last loop
+               Put_Line (File, "      "
+                 & Model.Queries.Name_Image
+                    (Widget_Instances_Order_Table.Table (I))
+                 & " : Xt.Widget;");
+            end loop;
+
+         else
+            Put_Line (File => File,
+                      Item => "      null;");
+         end if;
+
          Put_Line (File => File,
                    Item => "   end record;");
          Put_Line (File => File,
@@ -146,6 +175,7 @@ package body Generator.Prototype.Component_Class is
       Create (File => File,
               Mode => Out_File,
               Name => "test.ada");
+      Find_Widget_Instances_Order (Root (Node));
       Generate_Package (File, Model.Queries.Name_Image (Node));
       Close (File);
    end Generate;
