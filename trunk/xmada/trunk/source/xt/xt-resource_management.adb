@@ -481,6 +481,23 @@ package body Xt.Resource_Management is
       Arg := (Name, To_Xt_Arg_Val (Value));
    end Xt_Set_Arg;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xt_Set_Arg
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Xt_Set_Arg
+    (Arg   : in out Xt.Ancillary_Types.Xt_Arg;
+     Name  : in     Xt.Xt_Resource_Name_String;
+     Value : in     Xt.Translation_Management.Xt_Translations)
+   is
+      function To_Xt_Arg_Val is
+        new Ada.Unchecked_Conversion
+             (Xt.Translation_Management.Xt_Translations, Xt_Arg_Val);
+
+   begin
+      Arg := (Name, To_Xt_Arg_Val (Value));
+   end Xt_Set_Arg;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
