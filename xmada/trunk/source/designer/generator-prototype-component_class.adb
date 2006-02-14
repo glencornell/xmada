@@ -46,6 +46,7 @@ with Model.Widget_Instances_Ordering;
 package body Generator.Prototype.Component_Class is
 
    use Ada.Wide_Text_IO;
+   use Model;
    use Model.Tree;
    use Model.Tree.Xm_Ada;
    use Model.Widget_Instances_Ordering;
@@ -61,6 +62,8 @@ package body Generator.Prototype.Component_Class is
 
       procedure Generate_Package (File : File_Type;
                                   Package_Name : Wide_String);
+
+      procedure Generate_Widget_Creation (File : File_Type; Widget : Node_Id);
 
       procedure Generate_Package (File : File_Type;
                                   Package_Name : Wide_String)
@@ -159,26 +162,7 @@ package body Generator.Prototype.Component_Class is
                    Item => "      begin");
 
          for J in Widgets.First ..  Widgets.Last loop
-            Put_Line (File => File,
-                      Item => "         Result."
-                        & Model.Queries.Name_Image (Widgets.Table (J)));
-            Put
-             (File => File,
-              Item => "           := "
-                & Model.Names.Image (Convenience_Create_Function_Name
-                   (Class (Widgets.Table (J)))));
-            if J = Widgets.First then
-               Put (File, " (Parent");
-
-            else
-               Put (File,
-                    " (Result."
-                    & Model.Queries.Name_Image
-                       (Parent_Node (Widgets.Table (J))));
-            end if;
-            Put_Line (File, ", """
-                & Model.Queries.Name_Image (Widgets.Table (J))
-                & """);");
+            Generate_Widget_Creation (File, Widgets.Table (J));
          end loop;
 
          New_Line (File);
@@ -194,6 +178,32 @@ package body Generator.Prototype.Component_Class is
                    Item => "end " & Package_Name & "s;");
 
       end Generate_Package;
+
+      procedure Generate_Widget_Creation (File : File_Type; Widget : Node_Id)
+      is
+      begin
+         Put_Line (File => File,
+                   Item => "         Result."
+                     & Model.Queries.Name_Image (Widget));
+         Put
+          (File => File,
+           Item => "           := "
+             & Model.Names.Image (Convenience_Create_Function_Name
+                (Class (Widget))));
+         if Node_Kind (Parent_Node (Widget)) = Node_Component_Class then
+            Put (File, " (Parent");
+
+         else
+            Put (File,
+                 " (Result."
+                 & Model.Queries.Name_Image
+                    (Parent_Node (Widget)));
+         end if;
+         Put_Line (File, ", """
+             & Model.Queries.Name_Image (Widget)
+             & """);");
+
+      end Generate_Widget_Creation;
 
       File : File_Type;
 
