@@ -40,6 +40,7 @@ with System;
 
 with Xlib.Resource_Manager;
 with Xt.Ancillary_Types;
+with Xt.Translation_Management;
 
 package Xt.Resource_Management is
 
@@ -87,6 +88,11 @@ package Xt.Resource_Management is
    procedure Xt_Set_Arg (Arg   : in out Xt.Ancillary_Types.Xt_Arg;
                          Name  : in     Xt_Resource_Name_String;
                          Value : in     Widget);
+
+   procedure Xt_Set_Arg
+    (Arg   : in out Xt.Ancillary_Types.Xt_Arg;
+     Name  : in     Xt.Xt_Resource_Name_String;
+     Value : in     Xt.Translation_Management.Xt_Translations);
 
 
    generic
