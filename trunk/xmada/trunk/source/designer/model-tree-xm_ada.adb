@@ -40,7 +40,7 @@ with Model.Names;
 
 package body Model.Tree.Xm_Ada is
 
-   Counter : Integer := 1;
+   CCFN_Counter : Integer := 0;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -52,20 +52,34 @@ package body Model.Tree.Xm_Ada is
    is
        pragma Assert (Node_Kind (Widget_Class) = Node_Widget_Class);
    begin
-      if Counter = 1 then
-         Counter := Counter + 1;
+      CCFN_Counter := CCFN_Counter + 1;
+
+      if CCFN_Counter = 1 then
          return Model.Names.Enter ("Xm_Message_Box.Xm_Create_Message_Box");
 
-      elsif Counter = 2 then
-         Counter := Counter + 1;
+      elsif CCFN_Counter = 2 then
          return Model.Names.Enter ("Xm_Form.Xm_Create_Form");
 
-      elsif Counter = 3 then
-         Counter := Counter + 1;
+      elsif CCFN_Counter = 3 then
          return Model.Names.Enter ("Xm_Text.Xm_Create_Text");
       end if;
 
-      return Name (Widget_Class);
+      raise Program_Error;
    end Convenience_Create_Function_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Resource_Name_String
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Name_String (Widget_Class : in Node_Id)
+     return Name_Id
+   is
+       pragma Assert (Node_Kind (Widget_Class) = Node_Resource_Specification);
+   begin
+      raise Program_Error;
+
+      return Null_Name;
+   end Resource_Name_String;
 
 end Model.Tree.Xm_Ada;
