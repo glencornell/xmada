@@ -982,7 +982,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          --  Создание поля "название ресурса".
 
          Name := Xm_String_Generate
-                  (Resource_Name_Image
+                  (Internal_Resource_Name_Image
                     (Resource_Specification (Node)));
          Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
          Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Widget);
@@ -1450,7 +1450,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                            Relocate_Annotation_Table (Current_Value);
 
                            Str :=
-                             Xm_String_Generate (Name_Image (Current_Value));
+                             Xm_String_Generate
+                              (Internal_Name_Image (Current_Value));
                            Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
                            Xt_Set_Arg (Argl (1),
                                        Xm_N_User_Data,
