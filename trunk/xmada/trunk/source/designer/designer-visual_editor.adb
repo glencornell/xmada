@@ -422,6 +422,10 @@ package body Designer.Visual_Editor is
               Interfaces.C.unsigned_short (Width) - 1,
               Interfaces.C.unsigned_short (Height) - 1);
          end;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback ("On_Expose", E);
       end On_Expose;
 
       ------------------------------------------------------------------------
@@ -441,6 +445,10 @@ package body Designer.Visual_Editor is
 
       begin
          null;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback ("On_Select", E);
       end On_Select;
 
    end Callbacks;
