@@ -1,6 +1,8 @@
 #!/bin/sh
-ARCHIVE=../xmada-0.3.tar
-TMP=xmada-0.3
+ARCHIVEDATE="-`date +%Y%m%d`"
+ARHIVEVERSION=0.3w
+ARCHIVE=../xmada-$ARHIVEVERSION$ARCHIVEDATE.tar
+TMP=xmada-$ARHIVEVERSION$ARCHIVEDATE
 
 ./support/reconfig
 
@@ -15,6 +17,6 @@ mkdir $TMP
  done)
 
 tar cf $ARCHIVE $TMP
-gzip -9 $ARCHIVE
+gzip -9f $ARCHIVE
 
 (cd $TMP && ./configure && make) && rm -rf $TMP
