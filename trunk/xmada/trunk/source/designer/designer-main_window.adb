@@ -194,6 +194,32 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Generate_Application_Resource_Files
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! генерации файлов ресурсов приложений.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Generate_Application_Resource_Files
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Generate_Application_Resource_Files);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Generate_Component_Classes_Code
+      --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
+      --! генерации файлов ресурсов приложений.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Generate_Component_Classes_Code
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Generate_Component_Classes_Code);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Dump_Tree
       --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
       --! создания дампа дерева модели.
@@ -288,6 +314,54 @@ package body Designer.Main_Window is
          when E : others =>
             Put_Exception_In_Callback ("On_Exit", E);
       end On_Exit;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit>
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Generate_Application_Resource_Files
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Designer.Operations.Generate_Application_Resource_Files;
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback
+             ("On_Generate_Application_Resource_Files", E);
+      end On_Generate_Application_Resource_Files;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit>
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Generate_Component_Classes_Code
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Designer.Operations.Generate_Component_Classes_Code;
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback
+             ("On_Generate_Component_Classes_Code", E);
+      end On_Generate_Component_Classes_Code;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -632,6 +706,31 @@ package body Designer.Main_Window is
       Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Submenu);
       Button :=
         Xm_Create_Managed_Cascade_Button_Gadget (Menu, "file", Args (0 .. 0));
+
+      --  Меню генерации кода.
+
+      Submenu := Xm_Create_Pulldown_Menu (Menu, "generate_menu");
+
+      Element :=
+        Xm_Create_Managed_Push_Button_Gadget
+         (Submenu, "application_resource_files");
+      Xt_Add_Callback
+       (Element,
+        Xm_N_Activate_Callback,
+        Callbacks.On_Generate_Application_Resource_Files'Access);
+
+      Element :=
+        Xm_Create_Managed_Push_Button_Gadget
+         (Submenu, "component_classes_code");
+      Xt_Add_Callback
+       (Element,
+        Xm_N_Activate_Callback,
+        Callbacks.On_Generate_Component_Classes_Code'Access);
+
+      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Submenu);
+      Button :=
+        Xm_Create_Managed_Cascade_Button_Gadget
+         (Menu, "generate", Args (0 .. 0));
 
       --  Меню отладки.
 
