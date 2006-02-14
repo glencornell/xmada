@@ -281,8 +281,8 @@ Xt Functions
    Xt_New
    Xt_New_String
    Xt_Allocate_GC
-   Xt_Get_GC
-   Xt_Release_GC
+ + Xt_Get_GC                             Xt.Utilities
+ + Xt_Release_GC                         Xt.Utilities
    Xt_App_Set_Selection_Timeout
    Xt_App_Get_Selection_Timeout
    Xt_Get_Selection_Request
