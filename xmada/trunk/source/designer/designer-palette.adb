@@ -54,7 +54,6 @@ with Model.Allocations;
 with Model.Names;
 with Model.Queries;
 with Model.Tree.Lists;
-with Model.Tree.Constructors;
 with Model.Utilities;
 
 with Designer.Main_Window;
@@ -125,7 +124,7 @@ package body Designer.Palette is
    --!    <Exceptions>
    -------------------------------------------------------------------------
    procedure Create_Widget_Instance (Class  : in Model.Node_Id);
-   
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> On_Button_Activate
@@ -152,10 +151,10 @@ package body Designer.Palette is
    --!    <Unit> Create_Widget_Instance
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Create_Widget_Instance (Class  : in Model.Node_Id) is 
+   procedure Create_Widget_Instance (Class  : in Model.Node_Id) is
      Node          : Node_Id;
-     Children_List : List_Id; 
-  
+     Children_List : List_Id;
+
    begin
       pragma Assert (Selected_Item /= Null_Node);
 
@@ -166,15 +165,15 @@ package body Designer.Palette is
          Set_Root (Selected_Item, Node);
       else
          Children_List := Children (Selected_Item);
-      
-         if Children_List = Null_List then 
+
+         if Children_List = Null_List then
             Children_List := New_List;
-	    Set_Children (Selected_Item, Children_List);
+            Set_Children (Selected_Item, Children_List);
          end if;
 
         Append (Children_List, Node);
       end if;
-      
+
       Set_Name (Node, Enter ("Undefined_Name"));
       Designer.Main_Window.Insert_Item (Node);
    end Create_Widget_Instance;
@@ -211,7 +210,7 @@ package body Designer.Palette is
             declare
                Current_Widget_Set   : Node_Id;
                Current_Widget_Class : Node_Id;
-               Args                 : Xt_Arg_List (0 .. 0);
+               Args                 : Xt_Arg_List (0 .. 1);
                Str                  : Xm_String;
 
             begin
@@ -268,6 +267,10 @@ package body Designer.Palette is
                            (Name_Image (Current_Widget_Class));
 
                         Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
+                        Xt_Set_Arg
+                         (Args (1),
+                          Xm_N_User_Data,
+                          Xt_Arg_Val (Current_Widget_Class));
 
                         if Is_Primitive (Current_Widget_Class) then
                            Annotation_Table.Table
@@ -275,7 +278,7 @@ package body Designer.Palette is
                               Xm_Create_Managed_Push_Button_Gadget
                                (Annotation_Table.Table (Node).Primitives_Page,
                                 "callbacks",
-                                Args (0 .. 0));
+                                Args (0 .. 1));
 
                         elsif Is_Gadget (Current_Widget_Class) then
                            Annotation_Table.Table
@@ -283,7 +286,7 @@ package body Designer.Palette is
                               Xm_Create_Managed_Push_Button_Gadget
                                (Annotation_Table.Table (Node).Gadgets_Page,
                                 "callbacks",
-                                Args (0 .. 0));
+                                Args (0 .. 1));
 
                         elsif Is_Manager (Current_Widget_Class) then
                            Annotation_Table.Table
@@ -291,7 +294,7 @@ package body Designer.Palette is
                               Xm_Create_Managed_Push_Button_Gadget
                                (Annotation_Table.Table (Node).Managers_Page,
                                 "callbacks",
-                                Args (0 .. 0));
+                                Args (0 .. 1));
 
                         elsif Is_Shell (Current_Widget_Class) then
                            Annotation_Table.Table
@@ -299,7 +302,7 @@ package body Designer.Palette is
                               Xm_Create_Managed_Push_Button_Gadget
                                (Annotation_Table.Table (Node).Shells_Page,
                                 "callbacks",
-                                Args (0 .. 0));
+                                Args (0 .. 1));
                         end if;
 
                         Xm_String_Free (Str);
@@ -307,18 +310,10 @@ package body Designer.Palette is
                         Xt_Set_Sensitive
                          (Annotation_Table.Table (Current_Widget_Class).Button,
                           False);
-                        Xt_Add_Callback 
+                        Xt_Add_Callback
                          (Annotation_Table.Table (Current_Widget_Class).Button,
                           Xm_N_Activate_Callback,
                           On_Button_Activate'Access);
-         
-                        Xt_Set_Arg 
-			 (Args (0), 
-			  Xm_N_User_Data, 
-			  Xt_Arg_Val (Current_Widget_Class));
-                        Xt_Set_Values 
-                         (Annotation_Table.Table (Current_Widget_Class).Button,
-                          Args (0 .. 0));
                      end if;
 
                      Current_Widget_Class := Next (Current_Widget_Class);
@@ -360,11 +355,11 @@ package body Designer.Palette is
       Node : Xt_Arg_Val;
       Args : Xt_Arg_List (0 .. 0);
    begin
-      if Selected_Item /= Null_Node then  
+      if Selected_Item /= Null_Node then
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
          Xt_Get_Values (The_Widget, Args (0 .. 0));
          Create_Widget_Instance (Node_Id (Node));
-      end if;	 
+      end if;
 
    exception
       when E : others =>
@@ -523,7 +518,7 @@ package body Designer.Palette is
                   return False;
 
                else
-                  
+
                   return True;
                end if;
 
@@ -537,11 +532,11 @@ package body Designer.Palette is
       Current_Widget_Class   : Node_Id;
 
    begin
-       if Node = Null_Node then 
+       if Node = Null_Node then
           return;
        end if;
-       
-       if Node_Kind (Node) = Node_Widget_Instance or 
+
+       if Node_Kind (Node) = Node_Widget_Instance or
           Node_Kind (Node) = Node_Component_Class then
           Selected_Item := Node;
 
@@ -560,8 +555,7 @@ package body Designer.Palette is
                Xt_Set_Sensitive
                 (Annotation_Table.Table (Current_Widget_Class).Button,
                  Get_Sensitive_Indication (Current_Widget_Class, Node));
-
-	    end if;
+            end if;
 
             Current_Widget_Class := Next (Current_Widget_Class);
          end loop;
