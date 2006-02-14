@@ -37,19 +37,24 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
+with Ada.Characters.Latin_1;
 with Interfaces.C.Strings;
 with System;
 
 with GNAT.Table;
 
+with Xlib.Graphic_Output;
 with Xlib.Resource_Manager;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
+with Xt.Translation_Management;
+with Xt.Utilities;
 with Xm.Representation_Type_Management;
 with Xm_Drawing_Area;
 with Xm_Scrolled_Window;
+with Xm_String_Defs;
 
 with Designer.Main_Window;
 with Model.Allocations;
@@ -69,14 +74,18 @@ package body Designer.Visual_Editor is
    use Model.Tree.Designer;
    use Model.Tree.Lists;
    use Model.Utilities;
+   use Xlib.Graphic_Output;
    use Xm.Representation_Type_Management;
    use Xm_Drawing_Area;
    use Xm_Scrolled_Window;
+   use Xm_String_Defs;
    use Xt;
    use Xt.Ancillary_Types;
    use Xt.Composite_Management;
    use Xt.Instance_Management;
    use Xt.Resource_Management;
+   use Xt.Translation_Management;
+   use Xt.Utilities;
 
    type Annotation_Kinds is
     (Annotation_Empty,
@@ -148,7 +157,7 @@ package body Designer.Visual_Editor is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Destroy_Component_Class_Widgets
-   --!    <Purpose> Уничтожает виджета класса компонента.
+   --!    <Purpose> Уничтожает виджеты класса компонента.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Destroy_Component_Class_Widgets (Node : in Node_Id);
@@ -229,9 +238,200 @@ package body Designer.Visual_Editor is
    ---------------------------------------------------------------------------
    procedure Pump_Values (List : in List_Id);
 
+   package Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Expose
+      --!    <Purpose> Производит отрисовку рамки выбора вокруг виджета,
+      --! если виджет является выбранным пользователем элементом модели.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Expose (The_Widget : in Widget;
+                           Event      : in X_Event;
+                           Params     : in System.Address;
+                           Num_Params : in Cardinal);
+      pragma Convention (C, On_Expose);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Select
+      --!    <Purpose>
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Select (The_Widget : in Widget;
+                           Event      : in X_Event;
+                           Params     : in System.Address;
+                           Num_Params : in Cardinal);
+      pragma Convention (C, On_Select);
+
+   end Callbacks;
+
+   Actions : constant Xt_Action_List
+     := ((Interfaces.C.Strings.New_String
+           ("XmAdaDesignerVisualEditorOnExpose"),
+          Callbacks.On_Expose'Access),
+         (Interfaces.C.Strings.New_String
+           ("XmAdaDesignerVisualEditorOnSelect"),
+          Callbacks.On_Select'Access));
+
    Drawing_Area     : Widget  := Null_Widget;
    Edited_Component : Node_Id := Null_Node;
    Selected_Item    : Node_Id := Null_Node;
+   Translations     : Xt_Translations;
+
+   -----------------
+   --  Callbacks  --
+   -----------------
+
+   package body Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Expose
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Expose (The_Widget : in Widget;
+                           Event      : in X_Event;
+                           Params     : in System.Address;
+                           Num_Params : in Cardinal)
+      is
+         pragma Unreferenced (Event);
+         pragma Unreferenced (Params);
+         pragma Unreferenced (Num_Params);
+
+         use type Interfaces.C.short;
+         use type Interfaces.C.unsigned_short;
+
+         ---------------------------------------------------------------------
+         --! <Subprogram>
+         --!    <Unit> Draw_Visual_Editor_Selection
+         --!    <Purpose> Производит отрисовку рамки выделения виджета в
+         --! стиле визуального редактора.
+         --!    <Exceptions>
+         ---------------------------------------------------------------------
+         procedure Draw_Visual_Editor_Selection
+          (The_Display : in Xlib.Display;
+           The_Window  : in Xlib.Window;
+           GC          : in Xlib.Graphic_Context;
+           X           : in Interfaces.C.short;
+           Y           : in Interfaces.C.short;
+           Width       : in Interfaces.C.unsigned_short;
+           Height      : in Interfaces.C.unsigned_short);
+
+         ---------------------------------------------------------------------
+         --! <Subprogram>
+         --!    <Unit> Draw_Visual_Editor_Selection
+         --!    <ImplementationNotes>
+         ---------------------------------------------------------------------
+         procedure Draw_Visual_Editor_Selection
+          (The_Display : in Xlib.Display;
+           The_Window  : in Xlib.Window;
+           GC          : in Xlib.Graphic_Context;
+           X           : in Interfaces.C.short;
+           Y           : in Interfaces.C.short;
+           Width       : in Interfaces.C.unsigned_short;
+           Height      : in Interfaces.C.unsigned_short)
+         is
+            Maximum_X : Interfaces.C.short
+              := X + Interfaces.C.short (Width) - 4;
+            Maximum_Y : Interfaces.C.short
+              := Y + Interfaces.C.short (Height) - 4;
+            Middle_X  : constant Interfaces.C.short := Maximum_X / 2;
+            Middle_Y  : constant Interfaces.C.short := Maximum_Y / 2;
+
+         begin
+            X_Draw_Rectangle
+             (The_Display, The_Window, GC, X, Y, Width, Height);
+            X_Draw_Rectangle
+             (The_Display, The_Window, GC,
+              X + 1, Y + 1, Width - 2, Height - 2);
+
+            X_Fill_Rectangle
+             (The_Display, The_Window, GC, X, Y, 5, 5);
+            X_Fill_Rectangle
+             (The_Display, The_Window, GC, Middle_X, Y, 5, 5);
+            X_Fill_Rectangle
+             (The_Display, The_Window, GC, Maximum_X, Y, 5, 5);
+            X_Fill_Rectangle
+             (The_Display, The_Window, GC, Maximum_X, Middle_Y, 5, 5);
+            X_Fill_Rectangle
+             (The_Display, The_Window, GC, Maximum_X, Maximum_Y, 5, 5);
+            X_Fill_Rectangle
+             (The_Display, The_Window, GC, Middle_X, Maximum_Y, 5, 5);
+            X_Fill_Rectangle
+             (The_Display, The_Window, GC, X, Maximum_Y, 5, 5);
+            X_Fill_Rectangle
+             (The_Display, The_Window, GC, X, Middle_Y, 5, 5);
+         end Draw_Visual_Editor_Selection;
+
+      begin
+         if Selected_Item = Null_Node then
+            return;
+         end if;
+
+         case Node_Kind (Selected_Item) is
+            when Node_Project | Node_Application | Node_Component_Class =>
+               return;
+
+            when Node_Widget_Instance =>
+               if The_Widget
+                    /= Annotation_Table.Table (Selected_Item).Widget
+               then
+                  return;
+               end if;
+
+            when others =>
+               raise Program_Error;
+         end case;
+
+         declare
+            Args   : Xt_Arg_List (0 .. 1);
+            Width  : Dimension;
+            Height : Dimension;
+            GC     : Xlib.Graphic_Context;
+
+         begin
+            Xt_Set_Arg (Args (0), Xm_N_Width, Width'Address);
+            Xt_Set_Arg (Args (1), Xm_N_Height, Height'Address);
+            Xt_Get_Values
+             (Annotation_Table.Table (Selected_Item).Widget, Args);
+
+            GC :=
+              Xt_Get_GC
+               (The_Widget, (others => False), (Logical_Operation => GX_Set));
+
+            Draw_Visual_Editor_Selection
+             (Xt_Display_Of_Object (The_Widget),
+              Xt_Window_Of_Object (The_Widget),
+              GC,
+              0,
+              0,
+              Interfaces.C.unsigned_short (Width) - 1,
+              Interfaces.C.unsigned_short (Height) - 1);
+         end;
+      end On_Expose;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Select
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Select (The_Widget : in Widget;
+                           Event      : in X_Event;
+                           Params     : in System.Address;
+                           Num_Params : in Cardinal)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Event);
+         pragma Unreferenced (Params);
+         pragma Unreferenced (Num_Params);
+
+      begin
+         null;
+      end On_Select;
+
+   end Callbacks;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -356,7 +556,8 @@ package body Designer.Visual_Editor is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure Create_Widget (Node : in Node_Id) is
-         Parent  : Widget;
+         Parent : Widget;
+         Args   : Xt_Arg_List (0 .. 0);
 
       begin
          Relocate_Annotation_Table (Node);
@@ -370,12 +571,14 @@ package body Designer.Visual_Editor is
          --  TODO Необходимо подготовить соответствующий список значений
          --  ресурсов на основании атрибутов Resources и Constraints.
 
+         Xt_Set_Arg (Args (0), Xm_N_Translations, Translations);
          Annotation_Table.Table (Node).Widget :=
            Convenience_Create_Function (Class (Node))
             (Parent,
              "form",
              Make_Set_Arg_List (Resources (Node))
-               & Make_Set_Arg_List (Constraint_Resources (Node)));
+               & Make_Set_Arg_List (Constraint_Resources (Node))
+               & Args);
       end Create_Widget;
 
    begin
@@ -471,6 +674,14 @@ package body Designer.Visual_Editor is
       Scroll : Widget;
 
    begin
+      Xt_App_Add_Actions (Xt_Widget_To_Application_Context (Parent), Actions);
+      Translations :=
+        Xt_Parse_Translation_Table
+         ("<Expose>: XmAdaDesignerVisualEditorOnExpose()"
+            & Ada.Characters.Latin_1.LF
+            & "<Btn1Down>: XmAdaDesignerVisualEditorOnSelect()"
+            & Ada.Characters.Latin_1.LF);
+
       Scroll       := Xm_Create_Managed_Scrolled_Window (Parent, "scrolled");
       Drawing_Area := Xm_Create_Managed_Drawing_Area (Scroll, "drawing");
    end Initialize;
@@ -1009,7 +1220,14 @@ package body Designer.Visual_Editor is
    procedure Select_Item (Node : in Model.Node_Id) is
    begin
       if Selected_Item /= Null_Node then
-         null;
+         if Node_Kind (Selected_Item) = Node_Widget_Instance then
+            X_Clear_Area
+             (Xt_Display_Of_Object
+               (Annotation_Table.Table (Selected_Item).Widget),
+              Xt_Window_Of_Object
+               (Annotation_Table.Table (Selected_Item).Widget),
+              0, 0, 0, 0, True);
+         end if;
       end if;
 
       Selected_Item := Node;
@@ -1044,6 +1262,13 @@ package body Designer.Visual_Editor is
                   Create_Component_Class_Widgets
                    (Enclosing_Component_Class (Selected_Item));
                end if;
+
+               X_Clear_Area
+                (Xt_Display_Of_Object
+                  (Annotation_Table.Table (Selected_Item).Widget),
+                 Xt_Window_Of_Object
+                  (Annotation_Table.Table (Selected_Item).Widget),
+                 0, 0, 0, 0, True);
 
             when others =>
                raise Program_Error;
@@ -1109,6 +1334,8 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Update_Item (Node : in Model.Node_Id) is
+      pragma Unreferenced (Node);
+
    begin
       null;
    end Update_Item;
