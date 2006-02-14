@@ -37,31 +37,27 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Wide_Text_IO;
+with Model.Names;
 with Model.Queries;
 with Model.Tree;
+with Model.Tree.Xm_Ada;
 with Model.Widget_Instances_Ordering;
 
 package body Generator.Prototype.Component_Class is
 
    use Ada.Wide_Text_IO;
    use Model.Tree;
-   use Model;
+   use Model.Tree.Xm_Ada;
    use Model.Widget_Instances_Ordering;
 
-   function Convenience_Create_Function_Name (Widget_Class : in Node_Id)
-     return Name_Id is
-   begin
-       pragma Assert (Model.Tree.Node_Kind (Widget_Class)
-         = Model.Tree.Node_Widget_Class);
-
-       return Null_Name;
-   end Convenience_Create_Function_Name;
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Generate
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Generate (Node : in Model.Node_Id) is
+
+      package Widgets renames Widget_Instances_Order_Table;
 
       procedure Generate_Package (File : File_Type;
                                   Package_Name : Wide_String);
@@ -74,6 +70,12 @@ package body Generator.Prototype.Component_Class is
 
          Put_Line (File => File,
                    Item => "with Xt;");
+         Put_Line (File => File,
+                   Item => "with Xm_Form;");
+         Put_Line (File => File,
+                   Item => "with Xm_Message_Box;");
+         Put_Line (File => File,
+                   Item => "with Xm_Text;");
          New_Line (File);
          Put_Line (File => File,
                    Item => "package " & Package_Name & "s is");
@@ -105,11 +107,11 @@ package body Generator.Prototype.Component_Class is
          if Widget_Instances_Order_Table.Last >=
             Widget_Instances_Order_Table.First
          then
-            for I in Widget_Instances_Order_Table.First ..
+            for J in Widget_Instances_Order_Table.First ..
                      Widget_Instances_Order_Table.Last loop
                Put_Line (File, "      "
                  & Model.Queries.Name_Image
-                    (Widget_Instances_Order_Table.Table (I))
+                    (Widget_Instances_Order_Table.Table (J))
                  & " : Xt.Widget;");
             end loop;
 
@@ -155,8 +157,24 @@ package body Generator.Prototype.Component_Class is
          New_Line (File);
          Put_Line (File => File,
                    Item => "      begin");
+
+         for J in Widgets.First ..  Widgets.Last loop
+            Put_Line (File => File,
+                      Item => "         Result."
+                        & Model.Queries.Name_Image (Widgets.Table (J)));
+            Put_Line
+             (File => File,
+              Item => "           := "
+                & Model.Names.Image (Convenience_Create_Function_Name
+                   (Class (Widgets.Table (J))))
+                & " (Parent, """
+                & Model.Queries.Name_Image (Widgets.Table (J))
+                & """);");
+         end loop;
+
+         New_Line (File);
          Put_Line (File => File,
-                   Item => "         return null;");
+                   Item => "         return Result;");
          Put_Line (File => File,
                    Item => "      end Create;");
          New_Line (File);
