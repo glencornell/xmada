@@ -37,6 +37,8 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Designer.Main_Window;
+with Generator.Application_Resources;
+with Generator.Prototype.Component_Class;
 with Model.Initialization.Designer;
 with Model.Names;
 with Model.Tools;
@@ -69,6 +71,60 @@ package body Designer.Operations is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Notify_Designer_Components (Project : in Node_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Generate_Application_Resource_Files
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Generate_Application_Resource_Files is
+   begin
+      if Applications (Project) /= Null_List then
+         declare
+            Application : Node_Id := First (Applications (Project));
+
+         begin
+            while Application /= Null_Node loop
+               Generator.Application_Resources.Generate (Application);
+               Application := Next (Application);
+            end loop;
+         end;
+      end if;
+   end Generate_Application_Resource_Files;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Generate_Component_Classes_Code
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Generate_Component_Classes_Code is
+   begin
+      if Applications (Project) /= Null_List then
+         declare
+            Application : Node_Id := First (Applications (Project));
+
+         begin
+            while Application /= Null_Node loop
+               if Component_Classes (Application) /= Null_List then
+                  declare
+                     Component_Class : Node_Id
+                       := First (Component_Classes (Application));
+
+                  begin
+                     while Component_Class /= Null_Node loop
+                        Generator.Prototype.Component_Class.Generate
+                         (Component_Class);
+
+                        Component_Class := Next (Component_Class);
+                     end loop;
+                  end;
+               end if;
+
+               Application := Next (Application);
+            end loop;
+         end;
+      end if;
+   end Generate_Component_Classes_Code;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

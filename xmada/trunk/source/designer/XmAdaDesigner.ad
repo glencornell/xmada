@@ -39,6 +39,10 @@
 *main_window.main_menu*file_pulldown*close.mnemonic: C
 *main_window.main_menu*file_pulldown*quit.labelString: Exit
 *main_window.main_menu*file_pulldown*quit.mnemonic: x
+*main_window.main_menu*generate.labelString: Generate
+*main_window.main_menu*generate.mnemonic: G
+*main_window.main_menu*generate_menu.application_resource_files.labelString: Application resource files
+*main_window.main_menu*generate_menu.component_classes_code.labelString: Component classes code
 *main_window.main_menu*debug.labelString: Debug
 *main_window.main_menu*debug_menu*dump_tree.labelString: Dump project model tree
 *main_window.main_menu*debug_menu*tables_statistics.labelString: Internal tables statistics
