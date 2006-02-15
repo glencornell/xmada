@@ -40,6 +40,7 @@ with Designer.Main_Window;
 with Generator.Application_Resources;
 with Generator.Prototype.Component_Class;
 with Model.Initialization.Designer;
+with Model.Initialization.Xm_Ada;
 with Model.Names;
 with Model.Tools;
 with Model.Tree.Constructors;
@@ -145,10 +146,11 @@ package body Designer.Operations is
       Designer.Main_Window.Reinitialize;
 
       --  Повторное построение базовых элементов модели и аннотирование их
-      --  дополнительной информацией для дизайнера.
+      --  дополнительной информацией для дизайнера и генератора кода.
 
       Model.Initialization.Initialize;
       Model.Initialization.Designer.Initialize;
+      Model.Initialization.Xm_Ada.Initialize;
 
    end Initialize;
 
