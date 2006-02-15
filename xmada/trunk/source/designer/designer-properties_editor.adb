@@ -40,7 +40,6 @@ with Ada.Unchecked_Deallocation;
 with GNAT.Table;
 
 with Xt.Ancillary_Types;
-with Xm_Notebook;
 
 with Designer.Properties_Editor.Component_Class;
 with Designer.Properties_Editor.Widget_Instance;
@@ -52,7 +51,6 @@ package body Designer.Properties_Editor is
 
    use Model;
    use Model.Tree;
-   use Xm_Notebook;
    use Xt;
    use Xt.Ancillary_Types;
 
@@ -124,7 +122,8 @@ package body Designer.Properties_Editor is
                          Arg_List : in Xt.Ancillary_Types.Xt_Arg_List)
    is
    begin
-      Notebook := Xm_Create_Managed_Notebook (Parent, "notebook", Arg_List);
+      Properties_Args   := Arg_List;
+      Properties_Parent := Parent;
    end Initialize;
 
    ---------------------------------------------------------------------------
@@ -246,11 +245,13 @@ package body Designer.Properties_Editor is
            case Node_Kind (Node) is
               when Node_Component_Class =>
                  Annotation_Table.Table (Node).Properties_Editor :=
-                   Component_Class.Create (Notebook, Node);
+                   Component_Class.Create
+                    (Properties_Parent, Properties_Args, Node);
 
               when Node_Widget_Instance =>
                  Annotation_Table.Table (Node).Properties_Editor :=
-                   Widget_Instance.Create (Notebook, Node);
+                   Widget_Instance.Create
+                    (Properties_Parent, Properties_Args, Node);
 
               when others =>
                  null;

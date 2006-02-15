@@ -45,8 +45,8 @@ with Xt.Ancillary_Types;
 with Model;
 
 package Designer.Properties_Editor is
-
-   Notebook : Xt.Widget;
+   Properties_Args   : Xt.Ancillary_Types.Xt_Arg_List (0 .. 4);
+   Properties_Parent : Xt.Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
