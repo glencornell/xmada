@@ -591,7 +591,7 @@ package body Designer.Visual_Editor is
    ---------------------------------------------------------------------------
    procedure Create_Widget (Node : in Node_Id; Manage : in Boolean := True) is
       Parent : Widget;
-      Args   : Xt_Arg_List (0 .. 0);
+      Args   : Xt_Arg_List (0 .. 1);
 
    begin
       Relocate_Annotation_Table (Node);
@@ -603,6 +603,7 @@ package body Designer.Visual_Editor is
       end if;
 
       Xt_Set_Arg (Args (0), Xm_N_Translations, Translations);
+      Xt_Set_Arg (Args (1), Xm_N_User_Data, Xt_Arg_Val (Node));
       Annotation_Table.Table (Node).Widget :=
         Convenience_Create_Function (Class (Node))
          (Parent,
@@ -871,7 +872,12 @@ package body Designer.Visual_Editor is
                   Next_Arg := Next_Arg + 1;
 
                when Node_Widget_Reference_Resource_Type =>
-                  null;
+                  Xt_Set_Arg
+                   (Args (Next_Arg),
+                    Annotation_Table.Table (Aux).Name,
+                    Annotation_Table.Table
+                     (Aux).Widget_Reference_Value'Address);
+                  Next_Arg := Next_Arg + 1;
 
                when others =>
                   raise Program_Error;
@@ -1074,7 +1080,24 @@ package body Designer.Visual_Editor is
                    Annotation_Table.Table (Aux).C_Unsigned_Char_Value));
 
                when Node_Widget_Reference_Resource_Type =>
-                  null;
+                  declare
+                     Node : Xt_Arg_Val;
+                     Args : Xt_Arg_List (0 .. 0);
+
+                  begin
+                     if Annotation_Table.Table (Aux).Widget_Reference_Value
+                          = Null_Widget
+                     then
+                        Set_Resource_Value (Aux, Null_Node);
+
+                     else
+                        Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+                        Xt_Get_Values
+                         (Annotation_Table.Table (Aux).Widget_Reference_Value,
+                          Args);
+                        Set_Resource_Value (Aux, Node_Id (Node));
+                     end if;
+                  end;
 
                when others =>
                   raise Program_Error;
