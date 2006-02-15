@@ -52,6 +52,11 @@ package Model is
    type Name_Id is new Natural;
    Null_Name : constant Name_Id := Name_Id'First;
 
+   --  Идентификатор строки.
+
+   type String_Id is new Natural;
+   Null_String : constant String_Id := String_Id'First;
+
    --  Идентификатор списка узлов.
 
    type List_Id is new Natural;
