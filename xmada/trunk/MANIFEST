@@ -51,6 +51,8 @@ source/designer/generator.ads
 source/designer/model-allocations.ads
 source/designer/model-initialization-designer.adb
 source/designer/model-initialization-designer.ads
+source/designer/model-initialization-xm_ada.adb
+source/designer/model-initialization-xm_ada.ads
 source/designer/model-initialization.adb
 source/designer/model-initialization.ads
 source/designer/model-names.adb
