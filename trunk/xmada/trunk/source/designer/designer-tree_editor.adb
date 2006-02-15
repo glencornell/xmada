@@ -574,12 +574,28 @@ package body Designer.Tree_Editor is
               Create_Item_Icon (Node, Component_Container (Node));
 
          when Node_Widget_Instance =>
-            Annotation_Table.Table (Node).WI_Component_Tree_Icon :=
-              Create_Item_Icon
-               (Node,
-                Component_Container (Enclosing_Component_Class (Node)),
-                Component_Tree_Icon (Parent_Node (Node)));
+            declare
+               Tab  : constant Widget
+                 := Component_Tab (Enclosing_Component_Class (Node));
+               N    : Integer;
+               Args : Xt_Arg_List (0 .. 0);
 
+            begin
+               Annotation_Table.Table (Node).WI_Component_Tree_Icon :=
+                 Create_Item_Icon
+                  (Node,
+                   Component_Container (Enclosing_Component_Class (Node)),
+                   Component_Tree_Icon (Parent_Node (Node)));
+
+               --  Устанавливаем активной вкладку,
+               --  на которую добавили компонент.
+
+               Xt_Set_Arg (Args (0), Xm_N_Page_Number, N'Address);
+               Xt_Get_Values (Tab, Args (0 .. 0));
+
+               Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (N));
+               Xt_Set_Values (Notebook, Args (0 .. 0));
+            end;
          when Node_Application     =>
             Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
               Create_Item_Icon
