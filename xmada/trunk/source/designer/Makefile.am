@@ -1,6 +1,6 @@
 
 ADAFLAGS = -gnatoa -gnatW8 -gnatwa -gnatyabcefhiknoprstx \
-	 -g3 -O0 -ggdb3 \
+	 -g3 -O0 -ggdb3 -fno-inline\
 	-I$(srcdir) -I$(srcdir)/debug
 
 DESIGNER_ADAFLAGS = $(ADAFLAGS) \
