@@ -1313,21 +1313,8 @@ package body Designer.Properties_Editor.Widget_Instance is
       Result.Form := Xm_Create_Managed_Form (Parent, "subform", Arg_List);
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (2), Xm_N_User_Data, Xt_Arg_Val (Node));
-      Result.Is_Managed :=
-        Xm_Create_Managed_Toggle_Button_Gadget
-         (Result.Form, "manage_after_create", Args (0 .. 2));
-      Xt_Add_Callback (Result.Is_Managed,
-                       Xm_N_Value_Changed_Callback,
-                       Callbacks.On_Is_Managed_Changed'Access);
-      Xm_Toggle_Button_Gadget_Set_State (Result.Is_Managed,
-                                         Is_Managed (Node),
-                                         False);
-
-      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Args (2), Xm_N_Right_Widget, Result.Is_Managed);
+      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Position);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Position, Xt_Arg_Val (50));
       Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
       Result.Name := Xm_Create_Managed_Text_Field
                       (Result.Form, "resource_name", Args (0 .. 3));
@@ -1336,18 +1323,33 @@ package body Designer.Properties_Editor.Widget_Instance is
                        Xm_N_Activate_Callback,
                        Callbacks.On_Widget_Name_Changed'Access);
 
-      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Is_Managed);
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Name);
       Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Widget);
       Xt_Set_Arg (Args (3), Xm_N_Right_Widget, Result.Name);
-      Xt_Set_Arg (Args (4), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (5), Xm_N_Top_Widget, Result.Name);
-      Xt_Set_Arg
-       (Args (6), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (7), Xm_N_Bottom_Widget, Result.Name);
-
+      Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Result.Name);
       Element  := Xm_Create_Managed_Label_Gadget
-                   (Result.Form, "name", Args (0 .. 7));
+                   (Result.Form, "name", Args (0 .. 6));
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Name);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (3), Xm_N_Left_Widget, Result.Name);
+      Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Result.Name);
+      Xt_Set_Arg (Args (7), Xm_N_User_Data, Xt_Arg_Val (Node));
+      Result.Is_Managed :=
+        Xm_Create_Managed_Toggle_Button_Gadget
+         (Result.Form, "manage_after_create", Args (0 .. 7));
+      Xt_Add_Callback (Result.Is_Managed,
+                       Xm_N_Value_Changed_Callback,
+                       Callbacks.On_Is_Managed_Changed'Access);
+      Xm_Toggle_Button_Gadget_Set_State (Result.Is_Managed,
+                                         Is_Managed (Node),
+                                         False);
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
       Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Name);
