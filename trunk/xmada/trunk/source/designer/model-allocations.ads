@@ -80,4 +80,9 @@ package Model.Allocations is
    Widget_Node_Table_Initial              : constant := 100;
    Widget_Node_Table_Increment            : constant := 100;
 
+   --  Таблица отложенных ресурсов.
+
+   Resource_Table_Initial                 : constant := 100;
+   Resource_Table_Increment               : constant := 100;
+
 end Model.Allocations;

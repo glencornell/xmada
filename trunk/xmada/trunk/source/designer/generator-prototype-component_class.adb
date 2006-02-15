@@ -37,9 +37,14 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Wide_Text_IO;
+
+with GNAT.Table;
+
+with Model.Allocations;
 with Model.Names;
 with Model.Queries;
 with Model.Tree;
+with Model.Tree.Lists;
 with Model.Tree.Xm_Ada;
 with Model.Widget_Instances_Ordering;
 
@@ -48,6 +53,7 @@ package body Generator.Prototype.Component_Class is
    use Ada.Wide_Text_IO;
    use Model;
    use Model.Tree;
+   use Model.Tree.Lists;
    use Model.Tree.Xm_Ada;
    use Model.Widget_Instances_Ordering;
 
@@ -58,27 +64,51 @@ package body Generator.Prototype.Component_Class is
    ---------------------------------------------------------------------------
    procedure Generate (Node : in Model.Node_Id) is
 
+      package Postponed_Resource_Table is
+        new GNAT.Table
+         (Table_Component_Type => Node_Id,
+          Table_Index_Type     => Natural,
+          Table_Low_Bound      => Natural'First + 1,
+          Table_Initial        => Allocations.Resource_Table_Initial,
+          Table_Increment      => Allocations.Resource_Table_Increment);
+      --  Таблица отложенных ресурсов.
+
       package Widgets renames Widget_Instances_Order_Table;
+      --  Таблица виджетов, отсортированных по времени создания.
 
       procedure Generate_Package (File : File_Type;
                                   Package_Name : Wide_String);
 
       procedure Generate_Widget_Creation (File : File_Type; Widget : Node_Id);
 
+      function Integer_Image (Value : in Integer) return Wide_String;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Generate_Package
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
       procedure Generate_Package (File : File_Type;
                                   Package_Name : Wide_String)
       is
       begin
-   --    generation of spec
+         --    generation of spec
 
-         Put_Line (File => File,
-                   Item => "with Xt;");
          Put_Line (File => File,
                    Item => "with Xm_Form;");
          Put_Line (File => File,
                    Item => "with Xm_Message_Box;");
          Put_Line (File => File,
+                   Item => "with Xm_String_Defs;");
+         Put_Line (File => File,
                    Item => "with Xm_Text;");
+         New_Line (File);
+         Put_Line (File => File,
+                   Item => "with Xt;");
+         Put_Line (File => File,
+                   Item => "with Xt.Ancillary_Types;");
+         Put_Line (File => File,
+                   Item => "with Xt.Resource_Management;");
          New_Line (File);
          Put_Line (File => File,
                    Item => "package " & Package_Name & "s is");
@@ -165,7 +195,6 @@ package body Generator.Prototype.Component_Class is
             Generate_Widget_Creation (File, Widgets.Table (J));
          end loop;
 
-         New_Line (File);
          Put_Line (File => File,
                    Item => "         return Result;");
          Put_Line (File => File,
@@ -179,35 +208,167 @@ package body Generator.Prototype.Component_Class is
 
       end Generate_Package;
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Generate_Widget_Creation
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
       procedure Generate_Widget_Creation (File : File_Type; Widget : Node_Id)
       is
+         function Separate_Resources (Widget : in Node_Id) return Natural;
+
+         ---------------------------------------------------------------------
+         --! <Subprogram>
+         --!    <Unit> Separate_Resources
+         --!    <ImplementationNotes>
+         ---------------------------------------------------------------------
+         function Separate_Resources (Widget : in Node_Id) return Natural is
+            Res : Natural := 0;
+
+         begin
+            if Resources (Widget) /= Null_List then
+               declare
+                  Resource      : Node_Id := First (Resources (Widget));
+                  Specification : Node_Id;
+
+               begin
+                  while Resource /= Null_Node loop
+                     Specification := Resource_Specification (Resource);
+
+                     if Can_Be_Set_At_Creation_Time (Specification)
+                        and then Node_Kind (Resource_Type (Specification))
+                          /= Node_Widget_Reference_Resource_Type
+                     then
+                        --  Ресурс, устанавливаемый во время создания виджета.
+
+                        Res := Res + 1;
+
+                     else
+                        --  Отложенный ресурс.
+
+                        Set_Is_Postponed (Resource, True);
+
+                        Postponed_Resource_Table.Append (Resource);
+                        --  Добавляем ресурс в глобальный массив
+                        --  отложенных ресурсов.
+                     end if;
+
+                     Resource := Next (Resource);
+                  end loop;
+               end;
+            end if;
+
+            return Res;
+         end Separate_Resources;
+
+         Resource          : Node_Id := Null_Node;
+
+         Hardcoded_Counter : constant Natural := Separate_Resources (Widget);
+         --  Количество ресурсов, устанавливаемых при создании виджета.
+
       begin
+         if Hardcoded_Counter > 0 then
+            Resource := First (Resources (Widget));
+
+            Put_Line (File, "         declare");
+            Put_Line (File,
+                      "            Args : "
+                      & "Xt.Ancillary_Types.Xt_Arg_List (1 .. "
+                      & Integer_Image (Hardcoded_Counter)
+                      & ");");
+            New_Line (File);
+         end if;
+
+         Put_Line (File,
+                   "         begin");
+
+         if Hardcoded_Counter > 0 then
+            declare
+               Counter : Integer := 0;
+               --  Счетчик обработанных ресурсов.
+
+            begin
+               while Resource /= Null_Node loop
+                  Counter := Counter + 1;
+
+                  Put_Line (File,
+                            "            "
+                            & "Xt.Resource_Management.Xt_Set_Arg");
+                  Put_Line (File,
+                            "             (Args ("
+                            & Integer_Image (Counter)
+                            & "),");
+
+                  Put_Line (File,
+                            "              "
+                            & Model.Names.Image
+                               (Resource_Name_String
+                                 (Resource_Specification (Resource)))
+                            & ",");
+                  Put_Line (File, "              "
+                            & "Xt.Ancillary_Types.Xt_Arg_Val ("
+                            & Integer_Image (Resource_Value (Resource))
+                            &"));");
+                  New_Line (File);
+
+                  Resource := Next (Resource);
+               end loop;
+
+               pragma Assert (Hardcoded_Counter = Counter);
+            end;
+         end if;
+
          Put_Line (File => File,
-                   Item => "         Result."
+                   Item => "            Result."
                      & Model.Queries.Name_Image (Widget));
-         Put
+         Put_Line
           (File => File,
-           Item => "           := "
+           Item => "              := "
              & Model.Names.Image (Convenience_Create_Function_Name
                 (Class (Widget))));
+
          if Node_Kind (Parent_Node (Widget)) = Node_Component_Class then
-            Put (File, " (Parent");
+            Put (File, "                  (Parent");
 
          else
             Put (File,
-                 " (Result."
+                 "                  (Result."
                  & Model.Queries.Name_Image
                     (Parent_Node (Widget)));
          end if;
-         Put_Line (File, ", """
-             & Model.Queries.Name_Image (Widget)
-             & """);");
+
+         Put (File, ", """
+             & Model.Queries.Name_Image (Widget));
+
+         if Hardcoded_Counter > 0 then
+            Put_Line (File, """, Args);");
+
+         else
+            Put_Line (File, """);");
+         end if;
+
+         Put_Line (File,
+                   "         end;");
+         New_Line (File);
 
       end Generate_Widget_Creation;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Integer_Image
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function Integer_Image (Value : in Integer) return Wide_String is
+         Str : constant Wide_String := Integer'Wide_Image (Value);
+
+      begin
+         return  Str (Str'First + 1 .. Str'Last);
+      end Integer_Image;
 
       File : File_Type;
 
    begin
+      Postponed_Resource_Table.Init;
 
       Create (File => File,
               Mode => Out_File,
@@ -215,6 +376,8 @@ package body Generator.Prototype.Component_Class is
       Find_Widget_Instances_Order (Root (Node));
       Generate_Package (File, Model.Queries.Name_Image (Node));
       Close (File);
+
+      Postponed_Resource_Table.Free;
    end Generate;
 
 end Generator.Prototype.Component_Class;
