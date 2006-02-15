@@ -41,6 +41,7 @@ with Model.Names;
 package body Model.Tree.Xm_Ada is
 
    CCFN_Counter : Integer := 0;
+   RNS_Counter  : Integer := 0;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -77,7 +78,18 @@ package body Model.Tree.Xm_Ada is
    is
        pragma Assert (Node_Kind (Widget_Class) = Node_Resource_Specification);
    begin
-      raise Program_Error;
+      RNS_Counter := RNS_Counter + 1;
+
+      case RNS_Counter is
+         when 1 =>
+            return Model.Names.Enter ("Xm_String_Defs.Xm_N_Height");
+
+         when 2 =>
+            return Model.Names.Enter ("Xm_String_Defs.Xm_N_Width");
+
+         when others =>
+            raise Program_Error;
+      end case;
 
       return Null_Name;
    end Resource_Name_String;
