@@ -36,11 +36,47 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with GNAT.Table;
+
+with Model.Allocations;
 with Model.Names;
 
 package body Model.Tree.Xm_Ada is
 
-   CCFN_Counter : Integer := 0;
+   type Annotation_Kinds is
+    (Annotation_Empty,
+     Annotation_Widget_Class);
+
+   type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
+   record
+      case Kind is
+         when Annotation_Empty =>
+            null;
+
+         when Annotation_Widget_Class =>
+            Create_Function_Name : Name_Id;
+
+      end case;
+   end record;
+
+
+   package Annotation_Table is
+     new GNAT.Table (Table_Component_Type => Annotation_Record,
+                     Table_Index_Type     => Node_Id,
+                     Table_Low_Bound      => Node_Id'First + 1,
+                     Table_Initial        => Allocations.Node_Table_Initial,
+                     Table_Increment      => Allocations.Node_Table_Increment);
+ 
+    ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Relocate_Annotation_Table
+   --!    <Purpose> Производит перераспределение таблицы аннотирования для
+   --! соответствия размерам таблицы узлов и заполняет добавляемые узлы
+   --! значениями по умолчанию.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table;
+   
    RNS_Counter  : Integer := 0;
 
    ---------------------------------------------------------------------------
@@ -48,35 +84,62 @@ package body Model.Tree.Xm_Ada is
    --!    <Unit> Convenience_Create_Function_Name
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Convenience_Create_Function_Name (Widget_Class : in Node_Id)
+   function Convenience_Create_Function_Name (Node : in Node_Id)
      return Name_Id
    is
-       pragma Assert (Node_Kind (Widget_Class) = Node_Widget_Class);
    begin
-      CCFN_Counter := CCFN_Counter + 1;
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
 
-      if CCFN_Counter = 1 then
-         return Model.Names.Enter ("Xm_Message_Box.Xm_Create_Message_Box");
+      Relocate_Annotation_Table;
 
-      elsif CCFN_Counter = 2 then
-         return Model.Names.Enter ("Xm_Form.Xm_Create_Form");
-
-      elsif CCFN_Counter = 3 then
-         return Model.Names.Enter ("Xm_Text.Xm_Create_Text");
-      end if;
-
-      raise Program_Error;
+      return Annotation_Table.Table (Node).Create_Function_Name;
    end Convenience_Create_Function_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Initialize is
+   begin
+      Annotation_Table.Init;
+   end Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Relocate_Annotation_Table
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table is
+      First : constant Node_Id := Annotation_Table.Last + 1;
+
+   begin
+      if Node_Table.Last > First then
+         Annotation_Table.Set_Last (Node_Table.Last);
+
+         for J in First .. Annotation_Table.Last loop
+            case Node_Kind (J) is
+               when Node_Widget_Class =>
+                  Annotation_Table.Table (J) :=
+                   (Kind                 => Annotation_Widget_Class,
+                    Create_Function_Name => Null_Name);
+
+               when others =>
+                  Annotation_Table.Table (J) := (Kind => Annotation_Empty);
+            end case;
+         end loop;
+      end if;
+   end Relocate_Annotation_Table;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Resource_Name_String
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Resource_Name_String (Widget_Class : in Node_Id)
+   function Resource_Name_String (Node : in Node_Id)
      return Name_Id
    is
-       pragma Assert (Node_Kind (Widget_Class) = Node_Resource_Specification);
    begin
       RNS_Counter := RNS_Counter + 1;
 
@@ -93,8 +156,33 @@ package body Model.Tree.Xm_Ada is
          when others =>
             raise Program_Error;
       end case;
-
-      return Null_Name;
    end Resource_Name_String;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Convenience_Create_Function_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Convenience_Create_Function_Name (Node : in Node_Id;
+                                                   Name : in Name_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Create_Function_Name := Name;
+   end Set_Convenience_Create_Function_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Resource_Name_String
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Name_String (Node : in Node_Id;
+                                       Name : in Name_Id) is
+   begin
+      null;
+   end Set_Resource_Name_String;
 
 end Model.Tree.Xm_Ada;

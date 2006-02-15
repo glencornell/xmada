@@ -48,8 +48,27 @@ package Model.Tree.Xm_Ada is
    --!    <Purpose>
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Convenience_Create_Function_Name (Widget_Class : in Node_Id)
+   function Convenience_Create_Function_Name (Node : in Node_Id)
      return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <Purpose> Производит начальную инициализацию внутренних структур.
+   --! При повторном вызове осуществляет освобождение используемых ресурсов
+   --! и повторную начальную инициализацию внутренних структур.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Initialize;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Convenience_Create_Function_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Convenience_Create_Function_Name (Node : in Node_Id;
+                                                   Name : in Name_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -57,7 +76,16 @@ package Model.Tree.Xm_Ada is
    --!    <Purpose>
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Resource_Name_String (Widget_Class : in Node_Id)
+   function Resource_Name_String (Node : in Node_Id)
      return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Resource_Name_String
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Name_String (Node : in Node_Id;
+                                       Name : in Name_Id);
 
 end Model.Tree.Xm_Ada;
