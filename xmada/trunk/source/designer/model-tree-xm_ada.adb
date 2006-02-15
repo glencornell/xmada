@@ -87,6 +87,9 @@ package body Model.Tree.Xm_Ada is
          when 2 =>
             return Model.Names.Enter ("Xm_String_Defs.Xm_N_Width");
 
+         when 3 =>
+            return Model.Names.Enter ("Xm_String_Defs.Xm_N_Initial_Focus");
+
          when others =>
             raise Program_Error;
       end case;
