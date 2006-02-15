@@ -606,7 +606,7 @@ package body Designer.Visual_Editor is
       Annotation_Table.Table (Node).Widget :=
         Convenience_Create_Function (Class (Node))
          (Parent,
-          "form",
+          Ada.Characters.Handling.To_String (Name_Image (Node)),
           Make_Set_Arg_List (Resources (Node))
             & Make_Set_Arg_List (Constraint_Resources (Node))
             & Args);
