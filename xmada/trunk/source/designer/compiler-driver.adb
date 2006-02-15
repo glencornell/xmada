@@ -44,7 +44,7 @@ with Generator.Application_Resources;
 with Generator.Prototype.Component_Class;
 with Model.Tools;
 with Model.Tree.Lists;
-with Model.Initialization;
+with Model.Initialization.Xm_Ada;
 
 procedure Compiler.Driver is
 
@@ -70,6 +70,7 @@ procedure Compiler.Driver is
 
 begin
    Model.Initialization.Initialize;
+   Model.Initialization.Xm_Ada.Initialize;
 
    if Argument_Count = 2 then
       if Argument (1) = "--application-resources" then
