@@ -121,6 +121,7 @@ package body Model.Utilities is
       pragma Assert (Node_Kind (Widget_Class) = Node_Widget_Class);
 
       Result := Create_Widget_Instance;
+      Set_Class (Result, Widget_Class);
 
       if Automatically_Created_Parent (Widget_Class) /= Null_Node then
          Set_Automatically_Created_Parent
