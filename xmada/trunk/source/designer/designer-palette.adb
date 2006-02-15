@@ -166,6 +166,8 @@ package body Designer.Palette is
 
    begin
       Node := Model.Utilities.Create_Widget_Instance (Class);
+      Set_Is_Managed (Node, True);
+      Set_Class (Node, Class);
 
       if Node_Kind (Selected_Item) = Node_Component_Class then
          Set_Root (Selected_Item, Node);
