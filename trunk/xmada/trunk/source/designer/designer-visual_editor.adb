@@ -1199,22 +1199,34 @@ package body Designer.Visual_Editor is
                              Position_Value => 0);
 
                          when Type_Translation_Data =>
-                            null;
+                            Annotation_Table.Table (J) :=
+                             (Kind        => Annotation_Empty,
+                              Value_Kind  => Value_Undefined);
 
                          when Type_Boolean =>
-                            null;
+                            Annotation_Table.Table (J) :=
+                             (Kind        => Annotation_Empty,
+                              Value_Kind  => Value_Undefined);
 
                          when Type_Colormap =>
-                            null;
+                            Annotation_Table.Table (J) :=
+                             (Kind        => Annotation_Empty,
+                              Value_Kind  => Value_Undefined);
 
                          when Type_Screen =>
-                            null;
+                            Annotation_Table.Table (J) :=
+                             (Kind        => Annotation_Empty,
+                              Value_Kind  => Value_Undefined);
 
                          when Type_Pixel =>
-                            null;
+                            Annotation_Table.Table (J) :=
+                             (Kind        => Annotation_Empty,
+                              Value_Kind  => Value_Undefined);
 
                          when Type_Pixmap =>
-                            null;
+                            Annotation_Table.Table (J) :=
+                             (Kind        => Annotation_Empty,
+                              Value_Kind  => Value_Undefined);
 
                          when others =>
                             raise Program_Error;
