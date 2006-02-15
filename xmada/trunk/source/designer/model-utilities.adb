@@ -119,6 +119,7 @@ package body Model.Utilities is
 
       Result := Create_Widget_Instance;
       Set_Class (Result, Widget_Class);
+      Set_Is_Managed (Result, True);
 
       if Automatically_Created_Parent (Widget_Class) /= Null_Node then
          Set_Automatically_Created_Parent
