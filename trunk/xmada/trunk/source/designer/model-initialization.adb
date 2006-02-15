@@ -1579,22 +1579,22 @@ package body Model.Initialization is
       begin
          Value := Create_Enumeration_Value_Specification;
          Set_Name (Value, Enter ("XmMAX_ON_TOP"));
-         Set_Internal_Name (Value, Enter (""));
+         Set_Internal_Name (Value, Enter ("MAX_ON_TOP"));
          Append (Values, Value);
 
          Value := Create_Enumeration_Value_Specification;
          Set_Name (Value, Enter ("XmMAX_ON_BOTTOM"));
-         Set_Internal_Name (Value, Enter (""));
+         Set_Internal_Name (Value, Enter ("MAX_ON_BOTTOM"));
          Append (Values, Value);
 
          Value := Create_Enumeration_Value_Specification;
          Set_Name (Value, Enter ("XmMAX_ON_LEFT"));
-         Set_Internal_Name (Value, Enter (""));
+         Set_Internal_Name (Value, Enter ("MAX_ON_LEFT"));
          Append (Values, Value);
 
          Value := Create_Enumeration_Value_Specification;
          Set_Name (Value, Enter ("XmMAX_ON_RIGHT"));
-         Set_Internal_Name (Value, Enter (""));
+         Set_Internal_Name (Value, Enter ("MAX_ON_RIGHT"));
          Append (Values, Value);
 
          Xt_Motif_Processing_Direction_Resource_Type :=
