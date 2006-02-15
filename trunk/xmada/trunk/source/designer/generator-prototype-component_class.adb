@@ -79,9 +79,15 @@ package body Generator.Prototype.Component_Class is
       procedure Generate_Package (File : File_Type;
                                   Package_Name : Wide_String);
 
+      procedure Generate_Resource (File     : in File_Type;
+                                   Resource : in Node_Id;
+                                   Index    : in Integer);
+
       procedure Generate_Widget_Creation (File : File_Type; Widget : Node_Id);
 
       function Integer_Image (Value : in Integer) return Wide_String;
+
+      function Resource_Value_String (Node : in Node_Id) return Wide_String;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -195,6 +201,35 @@ package body Generator.Prototype.Component_Class is
             Generate_Widget_Creation (File, Widgets.Table (J));
          end loop;
 
+         if Postponed_Resource_Table.Last > 0 then
+            Put_Line (File, "         declare");
+            Put_Line (File,
+                      "            Args : "
+                      & "Xt.Ancillary_Types.Xt_Arg_List (1 .. "
+                      & Integer_Image (Postponed_Resource_Table.Last)
+                      & ");");
+            New_Line (File);
+
+            Put_Line (File,
+                      "         begin");
+
+            for J in
+              Postponed_Resource_Table.First .. Postponed_Resource_Table.Last
+            loop
+               Generate_Resource (File, Postponed_Resource_Table.Table (J), J);
+
+
+               Put_Line (File,
+                         "            Xt.Resource_Management.Xt_Set_Values "
+                         & "(Result.MessageBox1, Args);");
+               New_Line (File);
+            end loop;
+
+            Put_Line (File,
+                      "         end;");
+         end if;
+
+         New_Line (File);
          Put_Line (File => File,
                    Item => "         return Result;");
          Put_Line (File => File,
@@ -207,6 +242,37 @@ package body Generator.Prototype.Component_Class is
                    Item => "end " & Package_Name & "s;");
 
       end Generate_Package;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Generate_Widget_Creation
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Generate_Resource (File     : in File_Type;
+                                   Resource : in Node_Id;
+                                   Index    : in Integer)
+      is
+      begin
+         Put_Line (File,
+                   "            "
+                   & "Xt.Resource_Management.Xt_Set_Arg");
+         Put_Line (File,
+                   "             (Args ("
+                   & Integer_Image (Index)
+                   & "),");
+
+         Put_Line (File,
+                   "              "
+                   & Model.Names.Image
+                      (Resource_Name_String
+                        (Resource_Specification (Resource)))
+                   & ",");
+         Put_Line (File, "              "
+                   & Resource_Value_String
+                      (Resource)
+                   &");");
+         New_Line (File);
+      end Generate_Resource;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -289,27 +355,10 @@ package body Generator.Prototype.Component_Class is
 
             begin
                while Resource /= Null_Node loop
-                  Counter := Counter + 1;
-
-                  Put_Line (File,
-                            "            "
-                            & "Xt.Resource_Management.Xt_Set_Arg");
-                  Put_Line (File,
-                            "             (Args ("
-                            & Integer_Image (Counter)
-                            & "),");
-
-                  Put_Line (File,
-                            "              "
-                            & Model.Names.Image
-                               (Resource_Name_String
-                                 (Resource_Specification (Resource)))
-                            & ",");
-                  Put_Line (File, "              "
-                            & "Xt.Ancillary_Types.Xt_Arg_Val ("
-                            & Integer_Image (Resource_Value (Resource))
-                            &"));");
-                  New_Line (File);
+                  if not Is_Postponed (Resource) then
+                     Counter := Counter + 1;
+                     Generate_Resource (File, Resource, Counter);
+                  end if;
 
                   Resource := Next (Resource);
                end loop;
@@ -364,6 +413,30 @@ package body Generator.Prototype.Component_Class is
       begin
          return  Str (Str'First + 1 .. Str'Last);
       end Integer_Image;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Resource_Value_String
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function Resource_Value_String (Node : in Node_Id) return Wide_String is
+      begin
+         case Node_Kind (Node) is
+            when Node_Integer_Resource_Value =>
+               return "Xt.Ancillary_Types.Xt_Arg_Val ("
+                 & Integer_Image (Resource_Value (Node))
+                 & ")";
+
+            when Node_Widget_Reference_Resource_Value =>
+               return "Result."
+                 & Model.Queries.Name_Image (Resource_Value (Node));
+
+            when others =>
+               raise Program_Error;
+         end case;
+
+         return "";
+      end Resource_Value_String;
 
       File : File_Type;
 
