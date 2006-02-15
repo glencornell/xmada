@@ -176,6 +176,7 @@ package body Model.Initialization is
       Xt_Motif_Selection_Policy_Resource_Type           : Node_Id;
       Xt_Motif_Selection_Technique_Resource_Type        : Node_Id;
       Xt_Motif_Separator_Type_Resource_Type             : Node_Id;
+      Xt_Motif_Show_Arrows_Resource_Type                : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
@@ -2015,31 +2016,43 @@ package body Model.Initialization is
           (Xt_Motif_Shadow_Type_Resource_Type, Values);
       end;
 
-      --
+      --  ShowArrows
+      --  XXX Необходимо проверить, что XmNONE и XmEACH_SIDE реально указаны
+      --  в Xm.h.
 
---      declare
---         Values : constant List_Id := New_List;
---         Value  : Node_Id;
---
---      begin
---         Value := Create_Enumeration_Value_Specification;
---         Set_Name (Value, Enter (""));
---         Set_Internal_Name (Value, Enter (""));
---         Append (Values, Value);
---
---         Value := Create_Enumeration_Value_Specification;
---         Set_Name (Value, Enter (""));
---         Set_Internal_Name (Value, Enter (""));
---         Append (Values, Value);
---
---          := Create_Enumerated_Resource_Type;
---         Set_Name
---          (, Enter (""));
---         Set_Internal_Name
---          (, Enter (""));
---         Set_Value_Specifications
---          (, Values);
---      end;
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmNONE"));
+         Set_Internal_Name (Value, Enter ("NONE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmEACH_SIDE"));
+         Set_Internal_Name (Value, Enter ("EACH_SIDE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMAX_SIDE"));
+         Set_Internal_Name (Value, Enter ("MAX_SIDE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmMIN_SIDE"));
+         Set_Internal_Name (Value, Enter ("MIN_SIDE"));
+         Append (Values, Value);
+
+         Xt_Motif_Show_Arrows_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Show_Arrows_Resource_Type, Enter ("XmRShowArrows"));
+         Set_Internal_Name
+          (Xt_Motif_Show_Arrows_Resource_Type, Enter ("ShowArrows"));
+         Set_Value_Specifications
+          (Xt_Motif_Show_Arrows_Resource_Type, Values);
+      end;
 
       --
 
@@ -2196,6 +2209,7 @@ package body Model.Initialization is
       Append (Types, Xt_Motif_Selection_Technique_Resource_Type);
       Append (Types, Xt_Motif_Separator_Type_Resource_Type);
       Append (Types, Xt_Motif_Shadow_Type_Resource_Type);
+      Append (Types, Xt_Motif_Show_Arrows_Resource_Type);
 --      Append (Types, );
 --      Append (Types, );
 --      Append (Types, );
@@ -5349,14 +5363,10 @@ package body Model.Initialization is
          --  TODO XmNrubberPositioning
 
          --  TODO XmNbottomOffset
-         --  TODO XmNbottomPosition
          --  TODO XmNleftOffset
-         --  TODO XmNleftPosition
          --  TODO XmNresizable
          --  TODO XmNrightOffset
-         --  TODO XmNrightPosition
          --  TODO XmNtopOffset
-         --  TODO XmNtopPosition
 
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNfractionBase"));
