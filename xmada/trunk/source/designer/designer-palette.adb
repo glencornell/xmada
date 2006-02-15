@@ -461,9 +461,9 @@ package body Designer.Palette is
          end case;
       end loop;
 
-      Annotation_Table.Free;
       Annotation_Table.Init;
 
+      Project := Null_Node;
    end Reinitialize;
 
    ---------------------------------------------------------------------------
@@ -573,37 +573,32 @@ package body Designer.Palette is
       Current_Widget_Class   : Node_Id;
 
    begin
-      if Node = Null_Node then
-         return;
-      end if;
+      Selected_Item := Node;
 
-      if Node_Kind (Node) = Node_Widget_Instance
-        or else Node_Kind (Node) = Node_Component_Class
-      then
-         Selected_Item := Node;
+      --  При запуске программы в процессе реинициализации вызов подпрограммы
+      --  осуществляется по вызова подпрограммы вставки элемента. Поэтому
+      --  узел проекта ещё не установлен.
 
-      else
-         Selected_Item := Null_Node;
-      end if;
+      if Project /= Null_Node then
+         Current_Widget_Set := First (Imported_Widget_Sets (Project));
 
-      Current_Widget_Set := First (Imported_Widget_Sets (Project));
+         while Current_Widget_Set /= Null_Node loop
+            Current_Widget_Class :=
+              First (Widget_Classes (Current_Widget_Set));
 
-      while Current_Widget_Set /= Null_Node loop
-         Current_Widget_Class :=
-           First (Widget_Classes (Current_Widget_Set));
+            while Current_Widget_Class /= Null_Node loop
+               if not Is_Meta_Class (Current_Widget_Class) then
+                  Xt_Set_Sensitive
+                   (Annotation_Table.Table (Current_Widget_Class).Button,
+                    Get_Sensitive_Indication (Current_Widget_Class, Node));
+               end if;
 
-         while Current_Widget_Class /= Null_Node loop
-            if not Is_Meta_Class (Current_Widget_Class) then
-               Xt_Set_Sensitive
-                (Annotation_Table.Table (Current_Widget_Class).Button,
-                 Get_Sensitive_Indication (Current_Widget_Class, Node));
-            end if;
+               Current_Widget_Class := Next (Current_Widget_Class);
+            end loop;
 
-            Current_Widget_Class := Next (Current_Widget_Class);
+            Current_Widget_Set := Next (Current_Widget_Set);
          end loop;
-
-         Current_Widget_Set := Next (Current_Widget_Set);
-      end loop;
+      end if;
    end Select_Item;
 
    ---------------------------------------------------------------------------
