@@ -218,6 +218,7 @@ package body Designer.Palette is
                Current_Widget_Class : Node_Id;
                Args                 : Xt_Arg_List (0 .. 1);
                Str                  : Xm_String;
+               Page_Number          : Integer;
 
             begin
                --  Добавляем вкладки в палитру виджетов.
@@ -233,6 +234,11 @@ package body Designer.Palette is
                Annotation_Table.Table (Node).Primitives_Tab :=
                  Xm_Create_Managed_Push_Button_Gadget
                   (Palette_Notebook, "primitives");
+
+               Xt_Set_Arg (Args (0), Xm_N_Page_Number, Page_Number'Address);
+               Xt_Get_Values
+                (Annotation_Table.Table (Node).Primitives_Tab,
+                 Args (0 .. 0));
 
                Annotation_Table.Table (Node).Managers_Page :=
                  Xm_Create_Managed_Row_Column
@@ -327,6 +333,10 @@ package body Designer.Palette is
 
                   Current_Widget_Set := Next (Current_Widget_Set);
                end loop;
+
+               Xt_Set_Arg
+                (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (Page_Number));
+               Xt_Set_Values (Palette_Notebook, Args (0 .. 0));
             end;
 
             Xt_Unmanage_Child (Palette_Notebook);
@@ -561,17 +571,18 @@ package body Designer.Palette is
       Current_Widget_Class   : Node_Id;
 
    begin
-       if Node = Null_Node then
-          return;
-       end if;
+      if Node = Null_Node then
+         return;
+      end if;
 
-       if Node_Kind (Node) = Node_Widget_Instance or
-          Node_Kind (Node) = Node_Component_Class then
-          Selected_Item := Node;
+      if Node_Kind (Node) = Node_Widget_Instance
+        or else Node_Kind (Node) = Node_Component_Class
+      then
+         Selected_Item := Node;
 
-       else
-          Selected_Item := Null_Node;
-       end if;
+      else
+         Selected_Item := Null_Node;
+      end if;
 
       Current_Widget_Set := First (Imported_Widget_Sets (Project));
 
