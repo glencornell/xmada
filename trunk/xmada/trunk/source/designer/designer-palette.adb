@@ -340,7 +340,7 @@ package body Designer.Palette is
             null;
 
          when Node_Widget_Instance =>
-            null;
+            Select_Item (Selected_Item);
 
          when others =>
             raise Program_Error;
@@ -592,7 +592,6 @@ package body Designer.Palette is
 
          Current_Widget_Set := Next (Current_Widget_Set);
       end loop;
-
    end Select_Item;
 
    ---------------------------------------------------------------------------
