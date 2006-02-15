@@ -412,8 +412,7 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Boolean_Resource_Value
-          or else Node_Kind (Node) = Node_Colormap_Resource_Value
+       (Node_Kind (Node) = Node_Colormap_Resource_Value
           or else Node_Kind (Node) = Node_Enumeration_Resource_Value
           or else Node_Kind (Node) = Node_Integer_Resource_Value
           or else Node_Kind (Node) = Node_Pixel_Resource_Value
@@ -423,9 +422,6 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
 
       case Node_Kind (Node) is
-         when Node_Boolean_Resource_Value =>
-            return Node_Table.Table (Node).BRV_Is_Resource_Class_Value;
-
          when Node_Colormap_Resource_Value =>
             return Node_Table.Table (Node).CRV_Is_Resource_Class_Value;
 
@@ -567,8 +563,7 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Boolean_Resource_Value
-          or else Node_Kind (Node) = Node_Colormap_Resource_Value
+       (Node_Kind (Node) = Node_Colormap_Resource_Value
           or else Node_Kind (Node) = Node_Enumeration_Resource_Value
           or else Node_Kind (Node) = Node_Pixel_Resource_Value
           or else Node_Kind (Node) = Node_Pixmap_Resource_Value
@@ -578,9 +573,6 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
 
       case Node_Kind (Node) is
-         when Node_Boolean_Resource_Value =>
-            return Node_Table.Table (Node).BRV_Resource_Specification;
-
          when Node_Colormap_Resource_Value =>
             return Node_Table.Table (Node).CRV_Resource_Specification;
 
@@ -1217,8 +1209,7 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Boolean_Resource_Value
-          or else Node_Kind (Node) = Node_Colormap_Resource_Value
+       (Node_Kind (Node) = Node_Colormap_Resource_Value
           or else Node_Kind (Node) = Node_Enumeration_Resource_Value
           or else Node_Kind (Node) = Node_Integer_Resource_Value
           or else Node_Kind (Node) = Node_Pixel_Resource_Value
@@ -1228,9 +1219,6 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
 
       case Node_Kind (Node) is
-         when Node_Boolean_Resource_Value =>
-            Node_Table.Table (Node).BRV_Resource_Specification := Value;
-
          when Node_Colormap_Resource_Value =>
             Node_Table.Table (Node).CRV_Resource_Specification := Value;
 

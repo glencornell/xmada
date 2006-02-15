@@ -464,6 +464,7 @@ package body Designer.Visual_Editor is
        return Node_Id
    is
       use type Interfaces.C.unsigned;
+      use type Interfaces.C.unsigned_char;
 
       C_Image : Interfaces.C.Strings.chars_ptr;
       C_Value : constant Interfaces.C.unsigned_char := Value;
@@ -476,15 +477,29 @@ package body Designer.Visual_Editor is
             Xlib.X_Pointer (C_Image'Address));
 
    begin
-      if not Xt_Convert_And_Store
-              (Drawing_Area,
-               Ada.Characters.Handling.To_String
-                (Internal_Name_Image (Enumeration_Resource_Type)),
-               From,
-               "String",
-               To)
-      then
-         raise Program_Error;
+      --  Специальная обработка предопределенного типа Boolean. Тип определён
+      --  в Xt и использовать менеджер представлений Motif для его
+      --  преобразования невозможно.
+
+      if Internal_Name_Image (Enumeration_Resource_Type) = "Boolean" then
+         if Value = 0 then
+            C_Image := Interfaces.C.Strings.New_String ("FALSE");
+
+         else
+            C_Image := Interfaces.C.Strings.New_String ("TRUE");
+         end if;
+
+      else
+         if not Xt_Convert_And_Store
+                 (Drawing_Area,
+                  Ada.Characters.Handling.To_String
+                   (Internal_Name_Image (Enumeration_Resource_Type)),
+                  From,
+                  "String",
+                  To)
+         then
+            raise Program_Error;
+         end if;
       end if;
 
       declare
@@ -844,9 +859,6 @@ package body Designer.Visual_Editor is
                      when Type_Translation_Data =>
                         null;
 
-                     when Type_Boolean =>
-                        null;
-
                      when Type_Colormap =>
                         null;
 
@@ -950,9 +962,6 @@ package body Designer.Visual_Editor is
                      when Type_Translation_Data =>
                         null;
 
-                     when Type_Boolean =>
-                        null;
-
                      when Type_Colormap =>
                         null;
 
@@ -1051,9 +1060,6 @@ package body Designer.Visual_Editor is
                            (Annotation_Table.Table (Aux).Position_Value));
 
                      when Type_Translation_Data =>
-                        null;
-
-                     when Type_Boolean =>
                         null;
 
                      when Type_Colormap =>
@@ -1169,7 +1175,6 @@ package body Designer.Visual_Editor is
               | Node_Colormap_Resource_Value
               | Node_Screen_Resource_Value
               | Node_Translation_Data_Resource_Value
-              | Node_Boolean_Resource_Value
               | Node_Enumeration_Resource_Value
             =>
                case Node_Kind (Resource_Type (Resource_Specification (J))) is
@@ -1222,11 +1227,6 @@ package body Designer.Visual_Editor is
                              Position_Value => 0);
 
                          when Type_Translation_Data =>
-                            Annotation_Table.Table (J) :=
-                             (Kind        => Annotation_Empty,
-                              Value_Kind  => Value_Undefined);
-
-                         when Type_Boolean =>
                             Annotation_Table.Table (J) :=
                              (Kind        => Annotation_Empty,
                               Value_Kind  => Value_Undefined);

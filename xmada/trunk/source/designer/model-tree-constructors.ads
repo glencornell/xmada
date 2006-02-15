@@ -44,8 +44,6 @@ package Model.Tree.Constructors is
 
    function Create_Application return Node_Id;
 
-   function Create_Boolean_Resource_Value return Node_Id;
-
    function Create_Colormap_Resource_Value return Node_Id;
 
    function Create_Component_Class return Node_Id;
