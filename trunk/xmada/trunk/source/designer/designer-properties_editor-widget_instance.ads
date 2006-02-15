@@ -53,8 +53,9 @@ private package Designer.Properties_Editor.Widget_Instance is
    --!    <Purpose> Создает реализацию редактора свойств.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Create (Parent : in Xt.Widget;
-                    Node   : in Model.Node_Id)
+   function Create (Parent   : in Xt.Widget;
+                    Arg_List : in Xt.Ancillary_Types.Xt_Arg_List;
+                    Node     : in Model.Node_Id)
      return Node_Properties_Editor_Access;
 
 
@@ -80,27 +81,9 @@ private
    type Widget_Instance_Properties_Editor is
      new Node_Properties_Editor with
    record
-     --  Вкладка "свойства".
-
-      Properties_Container : Xt.Widget;
-      Properties           : Xt.Widget;
-      Properties_Tab       : Xt.Widget;
-
-      --  Вкладка "ограничения".
-
-      Constraints           : Xt.Widget;
-      Constraints_Container : Xt.Widget;
-      Constraints_Tab       : Xt.Widget;
-
-      --  Вкладка "Функции обратного вызова".
-
-      Callbacks           : Xt.Widget;
-      Callbacks_Container : Xt.Widget;
-      Callbacks_Tab       : Xt.Widget;
-
-      --  Контейнер, в котором содержатся все вкладки.
-
-      Notebook : Xt.Widget;
+      Name       : Xt.Widget;  --  Имя виджета.
+      Is_Managed : Xt.Widget;  --  Признак взятия на управление после создания.
+      Form       : Xt.Widget;  --  Форма, на которой располагаются свойства.
    end record;
 
    type Widget_Instance_Properties_Editor_Access is

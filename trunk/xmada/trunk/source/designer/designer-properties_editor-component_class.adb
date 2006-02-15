@@ -41,17 +41,20 @@ package body Designer.Properties_Editor.Component_Class is
 
    use Model;
    use Xt;
+   use Xt.Ancillary_Types;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Create
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Create (Parent : in Widget;
-                    Node   : in Model.Node_Id)
+   function Create (Parent   : in Widget;
+                    Arg_List : in Xt_Arg_List;
+                    Node     : in Model.Node_Id)
      return Node_Properties_Editor_Access
    is
       pragma Unreferenced (Parent);
+      pragma Unreferenced (Arg_List);
       --  XXX будет использовано при реализации.
 
       Result : constant Node_Properties_Editor_Access

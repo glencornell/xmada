@@ -52,6 +52,7 @@ with Xm.Resource_Management;
 with Xm.Strings;
 with Xm_Form;
 with Xm_Label_Gadget;
+with Xm_Notebook;
 with Xm_Push_Button_Gadget;
 with Xm_Scrolled_Window;
 with Xm_Simple_Spin_Box;
@@ -65,6 +66,7 @@ with Designer.Main_Window;
 with Designer.Model_Utilities;
 with Designer.Visual_Editor;
 with Model.Allocations;
+with Model.Names;
 with Model.Queries;
 with Model.Tree.Designer;
 with Model.Tree.Lists;
@@ -75,6 +77,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Interfaces.C;
    use Interfaces.C.Wide_Strings;
    use Model;
+   use Model.Names;
    use Model.Queries;
    use Model.Tree;
    use Model.Tree.Designer;
@@ -87,6 +90,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Xm.Strings;
    use Xm_Form;
    use Xm_Label_Gadget;
+   use Xm_Notebook;
    use Xm_Push_Button_Gadget;
    use Xm_Scrolled_Window;
    use Xm_Simple_Spin_Box;
@@ -245,6 +249,18 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Is_Managed_Changed
+      --!    <Purpose> Подпрограмма обратного вызова при изменении признака
+      --! "Manage after create".
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Is_Managed_Changed (The_Widget : in Widget;
+                                       Closure    : in Xt_Pointer;
+                                       Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Is_Managed_Changed);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Menu_Entry
       --!    <Purpose> Подпрограмма обратного вызова
       --!    <Exceptions>
@@ -305,6 +321,18 @@ package body Designer.Properties_Editor.Widget_Instance is
                   Closure    : in Xt_Pointer;
                   Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Use_In_Program_Changed);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Widget_Name_Changed
+      --!    <Purpose> Подпрограмма обратного вызова при
+      --! изменении имени виджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Widget_Name_Changed (The_Widget : in Widget;
+                                        Closure    : in Xt_Pointer;
+                                        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Widget_Name_Changed);
    end Callbacks;
 
    package body Callbacks is
@@ -324,7 +352,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          Data     : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
          Args     : Xt_Arg_List (0 .. 0);
-         Node     : Xt_Arg_Val;
+         Node     : Node_Id;
          Res_List : List_Id;
          Res_Node : Node_Id;
 
@@ -338,19 +366,17 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          case Get_Callback_Type (The_Widget) is
             when 0 =>
-               Res_List := Resources (Parent_Node (Node_Id (Node)));
+               Res_List := Resources (Parent_Node (Node));
 
             when 1 =>
-               Res_List :=
-                 Constraint_Resources (Parent_Node (Node_Id (Node)));
+               Res_List := Constraint_Resources (Parent_Node (Node));
 
             when others =>
                raise Program_Error;
          end case;
 
-         Res_Node := Find_Resource_Value
-                      (Res_List,
-                       Resource_Specification (Node_Id (Node)));
+         Res_Node := Find_Resource_Value (Res_List,
+                                          Resource_Specification (Node));
 
 
          if Data.Set = Xm_C_Set then
@@ -381,7 +407,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          Data     : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
          Args     : Xt_Arg_List (0 .. 0);
-         Node     : Xt_Arg_Val;
+         Node     : Node_Id;
          Res_List : List_Id;
          Res_Node : Node_Id;
 
@@ -395,21 +421,19 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          case Get_Callback_Type (The_Widget) is
             when 0 =>
-               Res_List := Resources (Parent_Node (Node_Id (Node)));
+               Res_List := Resources (Parent_Node (Node));
 
             when 1 =>
-               Res_List :=
-                 Constraint_Resources (Parent_Node (Node_Id (Node)));
+               Res_List := Constraint_Resources (Parent_Node (Node));
 
             when others =>
                raise Program_Error;
          end case;
 
-         Res_Node := Find_Resource_Value
-                      (Res_List,
-                       Resource_Specification (Node_Id (Node)));
+         Res_Node := Find_Resource_Value (Res_List,
+                                          Resource_Specification (Node));
 
-         Check_Sensitive (Node_Id (Node));
+         Check_Sensitive  (Node);
          --  Проверяем чувствительность кнопок.
 
          if Data.Set = Xm_C_Set then
@@ -427,6 +451,46 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Is_Managed_Changed
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Is_Managed_Changed (The_Widget : in Widget;
+                                Closure    : in Xt_Pointer;
+                                Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Args : Xt_Arg_List (0 .. 0);
+         Node : Node_Id;
+         Data : constant Xm_Toggle_Button_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+         --  Получаем значение текущего узла.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         if Data.Set = Xm_C_Unset then
+            Set_Is_Managed (Node, False);
+
+         elsif Data.Set = Xm_C_Set then
+            Set_Is_Managed (Node, True);
+
+         else
+            raise Program_Error;
+         end if;
+
+         Main_Window.Update_Item (Node);
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Is_Managed_Changed", E);
+      end On_Is_Managed_Changed;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Menu_Entry
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -438,8 +502,8 @@ package body Designer.Properties_Editor.Widget_Instance is
          --  Данные переменные не используются.
 
          Args : Xt_Arg_List (0 .. 0);
-         Menu : Xt_Arg_Val;
-         Node : Xt_Arg_Val;
+         Menu : Node_Id;
+         Node : Node_Id;
          Data : constant Xm_Row_Column_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
 
@@ -457,13 +521,13 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          --  Задаем значения ресурса и обновляем Visual_Editor.
 
-         Set_Resource_Value (Node_Id (Node), Node_Id (Menu));
-         Set_Is_Changed (Node_Id (Node), True);
+         Set_Resource_Value (Node, Menu);
+         Set_Is_Changed (Node, True);
 
-         Visual_Editor.Set_Properties (Parent_Node (Node_Id (Node)));
-         Update_Item (Parent_Node (Node_Id (Node)));
+         Visual_Editor.Set_Properties (Parent_Node (Node));
+         Update_Item (Parent_Node (Node));
 
-         if Resource_Value (Node_Id (Node)) /= Node_Id (Menu) then
+         if Resource_Value (Node) /= Menu then
             return;
          end if;
 
@@ -479,41 +543,40 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             case Get_Callback_Type (Xm_Get_Posted_From_Widget (The_Widget)) is
                when 0 =>
-                  Res_List := Resources (Parent_Node (Node_Id (Node)));
+                  Res_List := Resources (Parent_Node (Node));
 
                when 1 =>
-                  Res_List :=
-                     Constraint_Resources (Parent_Node (Node_Id (Node)));
+                  Res_List := Constraint_Resources (Parent_Node (Node));
 
                when others =>
                   raise Program_Error;
             end case;
 
             if Xm_Toggle_Button_Gadget_Get_State
-                (Annotation_Table.Table (Node_Id (Node)).Use_In_Program)
+                (Annotation_Table.Table (Node).Use_In_Program)
             then
                --  Если кнопка Use_In_Program  была нажата,
                --  то обновляем значение ресурса.
 
-               if Node_Id (Menu) /= Null_Node then
+               if Menu /= Null_Node then
                   Res_Node := Find_Resource_Value
                                (Res_List,
-                                Resource_Specification (Node_Id (Node)));
-                  Set_Resource_Value (Res_Node, Node_Id (Menu));
+                                Resource_Specification (Node));
+                  Set_Resource_Value (Res_Node, Menu);
 
                else
                   Xm_Toggle_Button_Gadget_Set_State
-                   (Annotation_Table.Table (Node_Id (Node)).Use_In_Program,
+                   (Annotation_Table.Table (Node).Use_In_Program,
                     False,
                     True);
                end if;
 
-            elsif Node_Id (Menu) /= Null_Node then
+            elsif Menu /= Null_Node then
                --  Если кнопка Use_In_Program  не была нажата,
                --  то нажимаем ее (значение зобавится в callback-е).
 
                Xm_Toggle_Button_Gadget_Set_State
-                (Annotation_Table.Table (Node_Id (Node)).Use_In_Program,
+                (Annotation_Table.Table (Node).Use_In_Program,
                  True,
                  True);
             end if;
@@ -539,7 +602,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          pragma Unreferenced (Call_Data);
          --  Данные переменные не используются.
 
-         Node   : Xt_Arg_Val;
+         Node   : Node_Id;
          Args   : Xt_Arg_List (0 .. 5);
          Pos    : Xm_Spin_Box_Position := 0;
          Status : Xm_Spin_Box_Validation_Status;
@@ -554,14 +617,14 @@ package body Designer.Properties_Editor.Widget_Instance is
             Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
             Xt_Get_Values (Xt_Parent (The_Widget), Args (0 .. 0));
 
-            Set_Resource_Value (Node_Id (Node), Integer (Pos));
-            Set_Is_Changed (Node_Id (Node), True);
+            Set_Resource_Value (Node, Integer (Pos));
+            Set_Is_Changed (Node, True);
 
-            Visual_Editor.Set_Properties (Parent_Node (Node_Id (Node)));
-            Update_Item (Parent_Node (Node_Id (Node)));
+            Visual_Editor.Set_Properties (Parent_Node (Node));
+            Update_Item (Parent_Node (Node));
 
 
-            if Resource_Value (Node_Id (Node)) /= Integer (Pos) then
+            if Resource_Value (Node) /= Integer (Pos) then
                return;
             end if;
 
@@ -577,25 +640,24 @@ package body Designer.Properties_Editor.Widget_Instance is
 
                case Get_Callback_Type (Xt_Parent (The_Widget)) is
                   when 0 =>
-                     Res_List := Resources (Parent_Node (Node_Id (Node)));
+                     Res_List := Resources (Parent_Node (Node));
 
                   when 1 =>
-                     Res_List :=
-                        Constraint_Resources (Parent_Node (Node_Id (Node)));
+                     Res_List := Constraint_Resources (Parent_Node (Node));
 
                   when others =>
                      raise Program_Error;
                end case;
 
                if Xm_Toggle_Button_Gadget_Get_State
-                 (Annotation_Table.Table (Node_Id (Node)).Use_In_Program)
+                 (Annotation_Table.Table (Node).Use_In_Program)
                then
                   --  Если кнопка Use_In_Program  была нажата,
                   --  то обновляем значение ресурса.
 
                   Res_Node := Find_Resource_Value
                                (Res_List,
-                                Resource_Specification (Node_Id (Node)));
+                                Resource_Specification (Node));
                   Set_Resource_Value (Res_Node, Integer (Pos));
 
                else
@@ -603,7 +665,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                   --  то нажимаем ее (значение зобавится в callback-е).
 
                   Xm_Toggle_Button_Gadget_Set_State
-                   (Annotation_Table.Table (Node_Id (Node)).Use_In_Program,
+                   (Annotation_Table.Table (Node).Use_In_Program,
                     True,
                     True);
                end if;
@@ -737,7 +799,7 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          Data          : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
-         Node          : Xt_Arg_Val;
+         Node          : Node_Id;
          Args          : Xt_Arg_List (0 .. 0);
          Res_List      : List_Id;
          Res_Node      : Node_Id;
@@ -753,11 +815,10 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          case Callback_Type is
             when 0 =>
-               Res_List := Resources (Parent_Node (Node_Id (Node)));
+               Res_List := Resources (Parent_Node (Node));
 
             when 1 =>
-               Res_List :=
-                 Constraint_Resources (Parent_Node (Node_Id (Node)));
+               Res_List := Constraint_Resources (Parent_Node (Node));
 
             when others =>
                raise Program_Error;
@@ -771,22 +832,20 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             case Callback_Type is
                when 0 =>
-                  Set_Resources (Parent_Node (Node_Id (Node)), Res_List);
+                  Set_Resources (Parent_Node (Node), Res_List);
 
                when 1 =>
-                  Set_Constraint_Resources
-                   (Parent_Node (Node_Id (Node)), Res_List);
+                  Set_Constraint_Resources (Parent_Node (Node), Res_List);
 
                when others =>
                   raise Program_Error;
             end case;
          end if;
 
-         Res_Node := Find_Resource_Value
-                      (Res_List,
-                       Resource_Specification (Node_Id (Node)));
+         Res_Node := Find_Resource_Value (Res_List,
+                                          Resource_Specification (Node));
 
-         Check_Sensitive (Node_Id (Node));
+         Check_Sensitive (Node);
          --  Проверяем чувствительность кнопок.
 
          if Data.Set = Xm_C_Unset and Res_Node /= Null_Node then
@@ -799,7 +858,7 @@ package body Designer.Properties_Editor.Widget_Instance is
             --  Если кнопка нажата, то ресурс необходимо добавить
             --  (если его там нет).
 
-            Res_Node := Create_Resource_Value_Copy (Node_Id (Node));
+            Res_Node := Create_Resource_Value_Copy (Node);
             Append (Res_List, Res_Node);
 
          else
@@ -812,6 +871,40 @@ package body Designer.Properties_Editor.Widget_Instance is
             Designer.Main_Window.Put_Exception_In_Callback
              ("On_Use_In_Program_Changed", E);
       end On_Use_In_Program_Changed;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Widget_Name_Changed
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Widget_Name_Changed (The_Widget : in Widget;
+                                        Closure    : in Xt_Pointer;
+                                        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Name : Name_Id;
+         Node : Node_Id;
+         Args : Xt_Arg_List (0 .. 0);
+
+
+      begin
+         --  Получаем значение текущего узла.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         Name := Enter (Xm_Text_Field_Get_String_Wcs (The_Widget));
+         Set_Name (Node, Name);
+         Main_Window.Update_Item (Node);
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Widget_Name_Changed", E);
+      end On_Widget_Name_Changed;
 
    end Callbacks;
 
@@ -890,10 +983,13 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <Unit> Create
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Create (Parent : in Widget;
-                    Node   : in Model.Node_Id)
+   function Create (Parent   : in Widget;
+                    Arg_List : in Xt_Arg_List;
+                    Node     : in Model.Node_Id)
      return Node_Properties_Editor_Access
    is
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Add_Resource
@@ -1204,18 +1300,68 @@ package body Designer.Properties_Editor.Widget_Instance is
          end;
       end Add_Resource_List;
 
-      Result   : constant Widget_Instance_Properties_Editor_Access
+      Result        : constant Widget_Instance_Properties_Editor_Access
         := new Widget_Instance_Properties_Editor (Node);
-      Args     : Xt_Arg_List (0 .. 5);
+      Args          : Xt_Arg_List (0 .. 7);
+      Element       : Widget;
+      Notebook      : Widget;
+      Properties    : Widget;
+      Constraints   : Widget;
+      Callbacks_Tab : Widget;
 
    begin
-      Result.Notebook := Parent;
+      Result.Form := Xm_Create_Managed_Form (Parent, "subform", Arg_List);
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (2), Xm_N_User_Data, Xt_Arg_Val (Node));
+      Result.Is_Managed :=
+        Xm_Create_Managed_Toggle_Button_Gadget
+         (Result.Form, "manage_after_create", Args (0 .. 2));
+      Xt_Add_Callback (Result.Is_Managed,
+                       Xm_N_Value_Changed_Callback,
+                       Callbacks.On_Is_Managed_Changed'Access);
+      Xm_Toggle_Button_Gadget_Set_State (Result.Is_Managed,
+                                         Is_Managed (Node),
+                                         False);
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Widget, Result.Is_Managed);
+      Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
+      Result.Name := Xm_Create_Managed_Text_Field
+                      (Result.Form, "resource_name", Args (0 .. 3));
+      Xm_Text_Field_Set_String_Wcs (Result.Name, Name_Image (Node));
+      Xt_Add_Callback (Result.Name,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Widget_Name_Changed'Access);
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Is_Managed);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (3), Xm_N_Right_Widget, Result.Name);
+      Xt_Set_Arg (Args (4), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (5), Xm_N_Top_Widget, Result.Name);
+      Xt_Set_Arg
+       (Args (6), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (7), Xm_N_Bottom_Widget, Result.Name);
+
+      Element  := Xm_Create_Managed_Label_Gadget
+                   (Result.Form, "name", Args (0 .. 7));
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Name);
+      Xt_Set_Arg (Args (2), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (3), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Notebook := Xm_Create_Managed_Notebook
+                   (Result.Form, "notebook", Args (0 .. 4));
 
       --  Создаем вкладку "Свойства".
 
       Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
-      Result.Properties_Container :=
-        Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
+      Element := Xm_Create_Managed_Scrolled_Window
+                  (Notebook, "scrolled", Args (0 .. 0));
 
       --  Так как и Resources и Constraints используют одни и те же
       --  callback-функции, то необходимо различать когда вызов
@@ -1227,19 +1373,18 @@ package body Designer.Properties_Editor.Widget_Instance is
       --  обращаются либо с списку ресурсов, либо к списку ограничений.
 
       Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (0));
-      Result.Properties           :=
-        Xm_Create_Row_Column (Result.Properties_Container,
-                              "row_column",
-                              Args (0 .. 0));
+      Properties :=
+        Xm_Create_Row_Column (Element, "row_column", Args (0 .. 0));
 
-      Result.Properties_Tab       :=
-        Xm_Create_Managed_Push_Button_Gadget (Parent, "resources");
+      Element    :=
+        Xm_Create_Managed_Push_Button_Gadget (Notebook, "resources");
 
       --  Создаем вкладку "ограничения".
 
       Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
-      Result.Constraints_Container :=
-        Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
+      Element    :=
+        Xm_Create_Managed_Scrolled_Window
+         (Notebook, "scrolled", Args (0 .. 0));
 
       --  Так как и Resources и Constraints используют одни и те же
       --  callback-функции, то необходимо различать когда вызов
@@ -1251,34 +1396,31 @@ package body Designer.Properties_Editor.Widget_Instance is
       --  обращаются либо с списку ресурсов, либо к списку ограничений.
 
       Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (1));
-      Result.Constraints           :=
-        Xm_Create_Managed_Row_Column (Result.Constraints_Container,
-                                      "row_column",
-                                      Args (0 .. 0));
-      Result.Constraints_Tab       :=
-        Xm_Create_Managed_Push_Button_Gadget (Parent, "constraints");
+      Constraints :=
+        Xm_Create_Managed_Row_Column (Element, "row_column", Args (0 .. 0));
+      Element     :=
+        Xm_Create_Managed_Push_Button_Gadget (Notebook, "constraints");
 
       --  Создаем вкладку "функции обратного вызова".
 
-      Result.Callbacks_Container   :=
-        Xm_Create_Managed_Scrolled_Window (Parent, "scrolled", Args (0 .. 0));
-      Result.Callbacks             :=
-        Xm_Create_Managed_Row_Column (Result.Callbacks_Container,
-                                      "row_column");
+      Element       :=
+        Xm_Create_Managed_Scrolled_Window
+         (Notebook, "scrolled", Args (0 .. 0));
+      Callbacks_Tab :=
+        Xm_Create_Managed_Row_Column (Element, "row_column");
 
-      Result.Callbacks_Tab         :=
-        Xm_Create_Managed_Push_Button_Gadget (Parent, "callbacks");
+      Element       :=
+        Xm_Create_Managed_Push_Button_Gadget (Notebook, "callbacks");
 
       --  Заполнение редактора свойств значениями ресурсов.
 
-      Add_Resource_List (Result.Properties, All_Resources (Node));
-      Add_Resource_List (Result.Constraints,
-                         All_Constraint_Resources (Node));
+      Add_Resource_List (Properties, All_Resources (Node));
+      Add_Resource_List (Constraints, All_Constraint_Resources (Node));
 
       Update_Item (Node);
       --  Задаем значение ресурсов.
 
-      Xt_Manage_Child (Result.Properties);
+      Xt_Manage_Child (Properties);
       return Node_Properties_Editor_Access (Result);
    end Create;
 
@@ -1289,21 +1431,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    ---------------------------------------------------------------------------
    procedure Finalize (Object : in out Widget_Instance_Properties_Editor) is
    begin
-
-      --  Удаление вкладки "Свойства".
-
-      Xt_Destroy_Widget (Object.Properties_Container);
-      Xt_Destroy_Widget (Object.Properties_Tab);
-
-      --  Удаление вкладки "Ограничения".
-
-      Xt_Destroy_Widget (Object.Constraints_Container);
-      Xt_Destroy_Widget (Object.Constraints_Tab);
-
-      --  Удаление вкладки "Функции обратного вызова".
-
-      Xt_Destroy_Widget (Object.Callbacks_Container);
-      Xt_Destroy_Widget (Object.Callbacks_Tab);
+      Xt_Destroy_Widget (Object.Form);
    end Finalize;
 
    ---------------------------------------------------------------------------
@@ -1367,7 +1495,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          when Node_Widget_Instance                 =>
             return Annotation_Table.Table (Node).WI_Child_Menu;
 
-         when Node_Enumerated_Resource_Type =>
+         when Node_Enumerated_Resource_Type        =>
             return Annotation_Table.Table (Node).RT_Menu;
 
          when others                               =>
@@ -1383,13 +1511,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    ---------------------------------------------------------------------------
    procedure Hide (Object : access Widget_Instance_Properties_Editor) is
    begin
-      Xt_Unmanage_Child (Object.Properties_Tab);
-      Xt_Unmanage_Child (Object.Constraints_Tab);
-      Xt_Unmanage_Child (Object.Callbacks_Tab);
-
-      Xt_Unmanage_Child (Object.Properties);
-      Xt_Unmanage_Child (Object.Constraints);
-      Xt_Unmanage_Child (Object.Callbacks);
+      Xt_Unmanage_Child (Object.Form);
    end Hide;
 
    ---------------------------------------------------------------------------
@@ -1428,7 +1550,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                         Relocate_Annotation_Table (Current_Type);
 
                         Menu := Xm_Create_Pulldown_Menu
-                                 (Notebook, "resourcetype_menu");
+                                 (Properties_Parent, "resourcetype_menu");
                         Set_Menu (Current_Type, Menu);
 
                         Xt_Add_Callback (Menu,
@@ -1480,7 +1602,8 @@ package body Designer.Properties_Editor.Widget_Instance is
             begin
                --  Создаем меню.
 
-               Menu := Xm_Create_Pulldown_Menu (Notebook, "widget_child");
+               Menu := Xm_Create_Pulldown_Menu
+                        (Properties_Parent, "widget_child");
                Set_Menu (Node, Menu);
 
                Xt_Add_Callback (Menu,
@@ -1735,23 +1858,8 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Show (Object : access Widget_Instance_Properties_Editor) is
-      Args : Xt_Arg_List (0 .. 0);
-      Page : Xt_Arg_Val;
-
    begin
-      Xt_Manage_Child (Object.Properties_Tab);
-      Xt_Manage_Child (Object.Constraints_Tab);
-      Xt_Manage_Child (Object.Callbacks_Tab);
-
-      Xt_Manage_Child (Object.Properties);
-      Xt_Manage_Child (Object.Constraints);
-      Xt_Manage_Child (Object.Callbacks);
-
-      Xt_Set_Arg (Args (0), Xm_N_Page_Number, Page'Address);
-      Xt_Get_Values (Object.Properties_Tab, Args (0 .. 0));
-
-      Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Page);
-      Xt_Set_Values (Object.Notebook, Args (0 .. 0));
+      Xt_Manage_Child (Object.Form);
    end Show;
 
    ---------------------------------------------------------------------------

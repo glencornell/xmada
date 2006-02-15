@@ -38,7 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Xt;
+with Xt.Ancillary_Types;
 
 with Model;
 
@@ -53,8 +53,9 @@ private package Designer.Properties_Editor.Component_Class is
    --!    <Purpose> Создает реализацию редактора свойств.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Create (Parent : in Xt.Widget;
-                    Node   : in Model.Node_Id)
+   function Create (Parent   : in Xt.Widget;
+                    Arg_List : in Xt.Ancillary_Types.Xt_Arg_List;
+                    Node     : in Model.Node_Id)
      return Node_Properties_Editor_Access;
 
 private
