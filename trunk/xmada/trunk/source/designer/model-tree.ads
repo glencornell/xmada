@@ -49,20 +49,6 @@ package Model.Tree is
    --
    --  Описание экземпляра компонента.
 
-   --  Node_Resource_Value
-   --
-   --  Описание значения ресурса.
-   --
-   --  Resource (Node)
-   --  Value (Node)
-
-   --  Node_Resource_Class_Value
-   --
-   --  Описание значения класса ресурса. ???
-   --
-   --  Resource (Node)
-   --  Value (Node)
-
    --  Node_Integer_Value
    --  Node_String_Value
 
@@ -89,6 +75,9 @@ package Model.Tree is
 
      Node_Enumerated_Resource_Type,
      --  Описание перечислимого типа ресурса.
+
+     Node_Xm_String_Resource_Type,
+     --  Описание типа ресурса со значением композитной строки.
 
      Node_Enumeration_Value_Specification,
      --  Описание значения перечислимого типа ресурса.
@@ -125,6 +114,9 @@ package Model.Tree is
 
      Node_Translation_Data_Resource_Value,
      --  Значение ресурса, содержащего таблицу трансляции.
+
+     Node_Xm_String_Resource_Value,
+     --  Значение ресурса, содержащего композитную строку.
 
      Node_Enumeration_Resource_Value);
      --  Значение ресурса, содержащего ссылку на величину перечислимого типа.
@@ -289,6 +281,9 @@ package Model.Tree is
 
    function Resource_Value (Node : in Node_Id) return Node_Id;
    procedure Set_Resource_Value (Node : in Node_Id; Value : in Node_Id);
+
+   function Resource_Value (Node : in Node_Id) return String_Id;
+   procedure Set_Resource_Value (Node : in Node_Id; Value : in String_Id);
 
    function Resource_Value (Node : in Node_Id) return Integer;
    procedure Set_Resource_Value (Node : in Node_Id; Value : in Integer);
@@ -554,6 +549,9 @@ private
             --  Признак необходимости занесения значения ресурса в список
             --  ресурсов отката приложения.
 
+            ERV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
+
          when Node_Integer_Resource_Value =>
             IRV_Resource_Specification  : Node_Id;
             --  Ссылка на спецификацию ресурса.
@@ -596,6 +594,9 @@ private
             --  Признак необходимости занесения значения ресурса в список
             --  ресурсов отката приложения.
 
+            PRV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
+
          when Node_Pixmap_Resource_Value =>
             PMRV_Resource_Specification  : Node_Id;
             --  Ссылка на спецификацию ресурса.
@@ -615,6 +616,9 @@ private
             PMRV_Is_Fallback             : Boolean;
             --  Признак необходимости занесения значения ресурса в список
             --  ресурсов отката приложения.
+
+            PMRV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
 
          when Node_Colormap_Resource_Value =>
             CRV_Resource_Specification  : Node_Id;
@@ -636,6 +640,9 @@ private
             --  Признак необходимости занесения значения ресурса в список
             --  ресурсов отката приложения.
 
+            CRV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
+
          when Node_Translation_Data_Resource_Value =>
             TRV_Resource_Specification  : Node_Id;
             --  Ссылка на спецификацию ресурса.
@@ -656,6 +663,9 @@ private
             --  Признак необходимости занесения значения ресурса в список
             --  ресурсов отката приложения.
 
+            TRV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
+
          when Node_Screen_Resource_Value =>
             SRV_Resource_Specification  : Node_Id;
             --  Ссылка на спецификацию ресурса.
@@ -675,6 +685,9 @@ private
             SRV_Is_Fallback             : Boolean;
             --  Признак необходимости занесения значения ресурса в список
             --  ресурсов отката приложения.
+
+            SRV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
 
          when Node_Widget_Reference_Resource_Type =>
             WRRT_Name          : Name_Id;
@@ -705,6 +718,37 @@ private
             --  ресурсов отката приложения.
 
             WRRV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
+
+         when Node_Xm_String_Resource_Type =>
+            XSRT_Name             : Name_Id;
+            --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
+
+            XSRT_Internal_Name    : Name_Id;
+            --  Внутреннее имя типа ресурса, используемое Xt для преобразований
+            --  типов ресурсов.
+
+         when Node_Xm_String_Resource_Value =>
+            XSRV_Resource_Specification  : Node_Id;
+            --  Ссылка на спецификацию ресурса.
+
+            XSRV_Is_Resource_Class_Value : Boolean;
+            --  Признак значения класса ресурса (а не ресурса).
+
+            XSRV_Resource_Value          : String_Id;
+            --  Ссылка на экземпляр виджета, используемого в качестве
+            --  значения ресурса.
+
+            XSRV_Is_Hardcoded            : Boolean;
+            --  Признак необходимости жесткой фиксации значения ресурса
+            --  в генерируемом коде программы. В противном случае значение
+            --  ресурса по возможности будет сохраняться в файле ресурсов.
+
+            XSRV_Is_Fallback             : Boolean;
+            --  Признак необходимости занесения значения ресурса в список
+            --  ресурсов отката приложения.
+
+            XSRV_Is_Postponed            : Boolean;
             --  Признак отложенного ресурса.
 
       end case;

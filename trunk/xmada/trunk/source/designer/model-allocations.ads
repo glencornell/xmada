@@ -57,6 +57,16 @@ package Model.Allocations is
    Name_Table_Initial                     : constant := 100;
    Name_Table_Increment                   : constant := 100;
 
+   --  Таблица символов строк (пакет Model.Strings).
+
+   String_Character_Table_Initial         : constant := 100;
+   String_Character_Table_Increment       : constant := 100;
+
+   --  Таблица строк (пакет Model.Strings).
+
+   String_Table_Initial                   : constant := 100;
+   String_Table_Increment                 : constant := 100;
+
    --  Таблица узлов дерева модели (пакет Model.Tree).
 
    Node_Table_Initial                     : constant := 100;

@@ -38,6 +38,7 @@
 ------------------------------------------------------------------------------
 with Model.Names;
 with Model.Queries;
+with Model.Strings;
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
 with Model.Xt_Motif;
@@ -7941,6 +7942,7 @@ package body Model.Initialization is
    procedure Initialize is
    begin
       Model.Names.Initialize;
+      Model.Strings.Initialize;
       Model.Tree.Initialize;
 
       Types := New_List;

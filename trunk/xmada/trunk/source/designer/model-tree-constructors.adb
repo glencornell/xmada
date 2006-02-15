@@ -73,7 +73,8 @@ package body Model.Tree.Constructors is
          CRV_Resource_Specification  => Null_Node,
          CRV_Is_Resource_Class_Value => False,
          CRV_Is_Hardcoded            => False,
-         CRV_Is_Fallback             => False));
+         CRV_Is_Fallback             => False,
+         CRV_Is_Postponed            => False));
 
       return Node_Table.Last;
    end Create_Colormap_Resource_Value;
@@ -133,7 +134,8 @@ package body Model.Tree.Constructors is
          ERV_Resource_Value          => Null_Node,
          ERV_Is_Resource_Class_Value => False,
          ERV_Is_Hardcoded            => False,
-         ERV_Is_Fallback             => False));
+         ERV_Is_Fallback             => False,
+         ERV_Is_Postponed            => False));
 
       return Node_Table.Last;
    end Create_Enumeration_Resource_Value;
@@ -198,7 +200,8 @@ package body Model.Tree.Constructors is
          PRV_Resource_Specification  => Null_Node,
          PRV_Is_Resource_Class_Value => False,
          PRV_Is_Hardcoded            => False,
-         PRV_Is_Fallback             => False));
+         PRV_Is_Fallback             => False,
+         PRV_Is_Postponed            => False));
 
       return Node_Table.Last;
    end Create_Pixel_Resource_Value;
@@ -219,7 +222,8 @@ package body Model.Tree.Constructors is
          PMRV_Resource_Specification  => Null_Node,
          PMRV_Is_Resource_Class_Value => False,
          PMRV_Is_Hardcoded            => False,
-         PMRV_Is_Fallback             => False));
+         PMRV_Is_Fallback             => False,
+         PMRV_Is_Postponed            => False));
 
       return Node_Table.Last;
    end Create_Pixmap_Resource_Value;
@@ -306,7 +310,8 @@ package body Model.Tree.Constructors is
          SRV_Resource_Specification  => Null_Node,
          SRV_Is_Resource_Class_Value => False,
          SRV_Is_Hardcoded            => False,
-         SRV_Is_Fallback             => False));
+         SRV_Is_Fallback             => False,
+         SRV_Is_Postponed            => False));
 
       return Node_Table.Last;
    end Create_Screen_Resource_Value;
@@ -327,7 +332,8 @@ package body Model.Tree.Constructors is
          TRV_Resource_Specification  => Null_Node,
          TRV_Is_Resource_Class_Value => False,
          TRV_Is_Hardcoded            => False,
-         TRV_Is_Fallback             => False));
+         TRV_Is_Fallback             => False,
+         TRV_Is_Postponed            => False));
 
       return Node_Table.Last;
    end Create_Translation_Data_Resource_Value;
@@ -444,5 +450,47 @@ package body Model.Tree.Constructors is
 
       return Node_Table.Last;
    end Create_Widget_Set;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Xm_String_Resource_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Xm_String_Resource_Type return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind               => Node_Xm_String_Resource_Type,
+         Parent             => Null_Node,
+         List               => Null_List,
+         Previous           => Null_Node,
+         Next               => Null_Node,
+         XSRT_Name          => Null_Name,
+         XSRT_Internal_Name => Null_Name));
+
+      return Node_Table.Last;
+   end Create_Xm_String_Resource_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Xm_String_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Xm_String_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                         => Node_Xm_String_Resource_Value,
+         Parent                       => Null_Node,
+         List                         => Null_List,
+         Previous                     => Null_Node,
+         Next                         => Null_Node,
+         XSRV_Resource_Specification  => Null_Node,
+         XSRV_Resource_Value          => Null_String,
+         XSRV_Is_Resource_Class_Value => False,
+         XSRV_Is_Hardcoded            => False,
+         XSRV_Is_Fallback             => False,
+         XSRV_Is_Postponed            => False));
+
+      return Node_Table.Last;
+   end Create_Xm_String_Resource_Value;
 
 end Model.Tree.Constructors;
