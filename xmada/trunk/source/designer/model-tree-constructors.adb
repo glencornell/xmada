@@ -421,7 +421,8 @@ package body Model.Tree.Constructors is
          WRRV_Resource_Value          => Null_Node,
          WRRV_Is_Resource_Class_Value => False,
          WRRV_Is_Hardcoded            => False,
-         WRRV_Is_Fallback             => False));
+         WRRV_Is_Fallback             => False,
+         WRRV_Is_Postponed            => False));
 
       return Node_Table.Last;
    end Create_Widget_Reference_Resource_Value;

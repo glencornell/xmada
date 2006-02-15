@@ -411,11 +411,15 @@ package body Model.Tree is
    function Is_Postponed (Node : in Node_Id) return Boolean is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
-      pragma Assert (Node_Kind (Node) = Node_Integer_Resource_Value);
+      pragma Assert (Node_Kind (Node) = Node_Integer_Resource_Value
+        or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
 
       case Node_Kind (Node) is
          when Node_Integer_Resource_Value =>
             return Node_Table.Table (Node).IRV_Is_Postponed;
+
+         when Node_Widget_Reference_Resource_Value =>
+            return Node_Table.Table (Node).WRRV_Is_Postponed;
 
          when others =>
             raise Program_Error;
@@ -1105,11 +1109,15 @@ package body Model.Tree is
    procedure Set_Is_Postponed (Node : in Node_Id; Value : in Boolean) is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
-      pragma Assert (Node_Kind (Node) = Node_Integer_Resource_Value);
+      pragma Assert (Node_Kind (Node) = Node_Integer_Resource_Value
+        or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
 
       case Node_Kind (Node) is
          when Node_Integer_Resource_Value =>
             Node_Table.Table (Node).IRV_Is_Postponed := Value;
+
+         when Node_Widget_Reference_Resource_Value =>
+            Node_Table.Table (Node).WRRV_Is_Postponed := Value;
 
          when others =>
             raise Program_Error;
