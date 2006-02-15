@@ -114,6 +114,8 @@ package body Generator.Prototype.Component_Class is
          Put_Line (File => File,
                    Item => "with Xt.Ancillary_Types;");
          Put_Line (File => File,
+                   Item => "with Xt.Composite_Management;");
+         Put_Line (File => File,
                    Item => "with Xt.Resource_Management;");
          New_Line (File);
          Put_Line (File => File,
@@ -195,37 +197,58 @@ package body Generator.Prototype.Component_Class is
 
          --  Генерируем создание виджетов.
 
-         for J in Widgets.First ..  Widgets.Last loop
+         for J in Widgets.First .. Widgets.Last loop
             Generate_Widget_Creation (File, Widgets.Table (J));
          end loop;
 
-         --  Генерируем создание отложенных ресурсов.
+         --  Генерируем создание отложенных ресурсов
+         --  и берем виджет на управление.
 
-         if Postponed_Resources.Last > 0 then
-            Put_Line (File, "         declare");
-            Put_Line (File,
-                      "            Args : "
-                      & "Xt.Ancillary_Types.Xt_Arg_List (1 .. "
-                      & Integer_Image (Postponed_Resources.Last)
-                      & ");");
-            New_Line (File);
+         for J in reverse Widgets.First .. Widgets.Last loop
+            declare
+               N : constant Node_Id := Widgets.Table (J);
 
-            Put_Line (File,
-                      "         begin");
+            begin
+               for K in Postponed_Resources.First .. Postponed_Resources.Last
+               loop
+                  declare
+                     R : constant Node_Id := Postponed_Resources.Table (K);
 
-            for J in Postponed_Resources.First .. Postponed_Resources.Last loop
-               Generate_Resource (File, Postponed_Resources.Table (J), J);
-               Put_Line (File,
-                         "            Xt.Resource_Management.Xt_Set_Values "
-                         & "(Result.MessageBox1, Args);");
-               New_Line (File);
-            end loop;
+                  begin
+                     if Parent_Node (R) = N then
+                        Put_Line (File, "         declare");
+                        Put_Line (File,
+                                  "            Args : "
+                                  & "Xt.Ancillary_Types.Xt_Arg_List (1 .. 1"
+                                  & ");");
+                        New_Line (File);
 
-            Put_Line (File,
-                      "         end;");
-         end if;
+                        Put_Line (File,
+                                  "         begin");
 
-         New_Line (File);
+                        Generate_Resource (File, R, J);
+                        Put_Line (File,
+                                  "            "
+                                  & "Xt.Resource_Management.Xt_Set_Values "
+                                  & "(Result.MessageBox1, Args);");
+                        New_Line (File);
+                        Put_Line (File,
+                                  "         end;");
+                        New_Line (File);
+                     end if;
+
+                     Put_Line (File,
+                               "         "
+                               & "Xt.Composite_Management.Xt_Manage_Child ("
+                               & "Result."
+                               & Model.Queries.Name_Image (N)
+                               & ");");
+                     New_Line (File);
+                  end;
+               end loop;
+            end;
+         end loop;
+
          Put_Line (File => File,
                    Item => "         return Result;");
          Put_Line (File => File,
@@ -313,6 +336,7 @@ package body Generator.Prototype.Component_Class is
                         Postponed_Resources.Append (Resource);
                         --  Добавляем ресурс в глобальный массив
                         --  отложенных ресурсов.
+
                      end if;
 
                      Resource := Next (Resource);
