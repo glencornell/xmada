@@ -64,7 +64,7 @@ package body Generator.Prototype.Component_Class is
    ---------------------------------------------------------------------------
    procedure Generate (Node : in Model.Node_Id) is
 
-      package Postponed_Resource_Table is
+      package Postponed_Resources is
         new GNAT.Table
          (Table_Component_Type => Node_Id,
           Table_Index_Type     => Natural,
@@ -143,14 +143,10 @@ package body Generator.Prototype.Component_Class is
          Put_Line (File => File,
                    Item => "   type " & Package_Name & " is limited record");
 
-         if Widget_Instances_Order_Table.Last >=
-            Widget_Instances_Order_Table.First
-         then
-            for J in Widget_Instances_Order_Table.First ..
-                     Widget_Instances_Order_Table.Last loop
+         if Widgets.Last >= Widgets.First then
+            for J in Widgets.First ..  Widgets.Last loop
                Put_Line (File, "      "
-                 & Model.Queries.Name_Image
-                    (Widget_Instances_Order_Table.Table (J))
+                 & Model.Queries.Name_Image (Widgets.Table (J))
                  & " : Xt.Widget;");
             end loop;
 
@@ -197,28 +193,28 @@ package body Generator.Prototype.Component_Class is
          Put_Line (File => File,
                    Item => "      begin");
 
+         --  Генерируем создание виджетов.
+
          for J in Widgets.First ..  Widgets.Last loop
             Generate_Widget_Creation (File, Widgets.Table (J));
          end loop;
 
-         if Postponed_Resource_Table.Last > 0 then
+         --  Генерируем создание отложенных ресурсов.
+
+         if Postponed_Resources.Last > 0 then
             Put_Line (File, "         declare");
             Put_Line (File,
                       "            Args : "
                       & "Xt.Ancillary_Types.Xt_Arg_List (1 .. "
-                      & Integer_Image (Postponed_Resource_Table.Last)
+                      & Integer_Image (Postponed_Resources.Last)
                       & ");");
             New_Line (File);
 
             Put_Line (File,
                       "         begin");
 
-            for J in
-              Postponed_Resource_Table.First .. Postponed_Resource_Table.Last
-            loop
-               Generate_Resource (File, Postponed_Resource_Table.Table (J), J);
-
-
+            for J in Postponed_Resources.First .. Postponed_Resources.Last loop
+               Generate_Resource (File, Postponed_Resources.Table (J), J);
                Put_Line (File,
                          "            Xt.Resource_Management.Xt_Set_Values "
                          & "(Result.MessageBox1, Args);");
@@ -314,7 +310,7 @@ package body Generator.Prototype.Component_Class is
 
                         Set_Is_Postponed (Resource, True);
 
-                        Postponed_Resource_Table.Append (Resource);
+                        Postponed_Resources.Append (Resource);
                         --  Добавляем ресурс в глобальный массив
                         --  отложенных ресурсов.
                      end if;
@@ -382,8 +378,7 @@ package body Generator.Prototype.Component_Class is
          else
             Put (File,
                  "                  (Result."
-                 & Model.Queries.Name_Image
-                    (Parent_Node (Widget)));
+                 & Model.Queries.Name_Image (Parent_Node (Widget)));
          end if;
 
          Put (File, ", """
@@ -434,14 +429,12 @@ package body Generator.Prototype.Component_Class is
             when others =>
                raise Program_Error;
          end case;
-
-         return "";
       end Resource_Value_String;
 
       File : File_Type;
 
    begin
-      Postponed_Resource_Table.Init;
+      Postponed_Resources.Init;
 
       Create (File => File,
               Mode => Out_File,
@@ -450,7 +443,7 @@ package body Generator.Prototype.Component_Class is
       Generate_Package (File, Model.Queries.Name_Image (Node));
       Close (File);
 
-      Postponed_Resource_Table.Free;
+      Postponed_Resources.Free;
    end Generate;
 
 end Generator.Prototype.Component_Class;
