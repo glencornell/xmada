@@ -176,7 +176,8 @@ package body Model.Tree.Constructors is
          IRV_Resource_Value          => 0,
          IRV_Is_Resource_Class_Value => False,
          IRV_Is_Hardcoded            => False,
-         IRV_Is_Fallback             => False));
+         IRV_Is_Fallback             => False,
+         IRV_Is_Postponed            => False));
 
       return Node_Table.Last;
    end Create_Integer_Resource_Value;

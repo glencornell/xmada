@@ -337,6 +337,9 @@ package Model.Tree is
    procedure Set_Automatically_Created_Children (Node  : in Node_Id;
                                                  Value : in List_Id);
 
+   function Is_Postponed (Node : in Node_Id) return Boolean;
+   procedure Set_Is_Postponed (Node : in Node_Id; Value : in Boolean);
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
@@ -569,6 +572,9 @@ private
             IRV_Is_Fallback             : Boolean;
             --  Признак необходимости занесения значения ресурса в список
             --  ресурсов отката приложения.
+
+            IRV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
 
          when Node_Pixel_Resource_Value =>
             PRV_Resource_Specification  : Node_Id;

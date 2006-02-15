@@ -405,6 +405,25 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Is_Postponed
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Postponed (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Integer_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Integer_Resource_Value =>
+            return Node_Table.Table (Node).IRV_Is_Postponed;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Is_Postponed;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Is_Resource_Class_Value
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -1077,6 +1096,25 @@ package body Model.Tree is
 
       Node_Table.Table (Node).Is_Meta_Class := Value;
    end Set_Is_Meta_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Is_Postponed
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Is_Postponed (Node : in Node_Id; Value : in Boolean) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Integer_Resource_Value);
+
+      case Node_Kind (Node) is
+         when Node_Integer_Resource_Value =>
+            Node_Table.Table (Node).IRV_Is_Postponed := Value;
+
+         when others =>
+            raise Program_Error;
+      end case;
+   end Set_Is_Postponed;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
