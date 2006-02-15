@@ -105,7 +105,6 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    type Annotation_Kinds is
     (Annotation_Empty,
-     Annotation_Boolean_Resource_Value,
      Annotation_Colormap_Resource_Value,
      Annotation_Enumeration_Resource_Value,
      Annotation_Enumeration_Resource_Type,
@@ -121,8 +120,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
       case Kind is
-         when Annotation_Boolean_Resource_Value
-           | Annotation_Colormap_Resource_Value
+         when Annotation_Colormap_Resource_Value
            | Annotation_Enumeration_Resource_Value
            | Annotation_Integer_Resource_Value
            | Annotation_Pixel_Resource_Value
@@ -130,7 +128,7 @@ package body Designer.Properties_Editor.Widget_Instance is
            | Annotation_Screen_Resource_Value
            | Annotation_Translation_Data_Resource_Value
            | Annotation_Widget_Reference_Resource_Value
-          =>
+         =>
             Use_In_Program : Widget;  --  Кнопка "использовать в программе".
             Hard_Code      : Widget;  --  Кнопка "вшивать в код".
             Fallback       : Widget;  --  Кнопка "ресурс отката".
@@ -1079,9 +1077,6 @@ package body Designer.Properties_Editor.Widget_Instance is
 
                   when Type_Unspecified =>
                      null; --  TODO реализовать.
-
-                  when Type_Boolean =>
-                     null; --  TODO реализовать.
                end case;
 
             when Node_Widget_Reference_Resource_Type =>
@@ -1581,15 +1576,6 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       for J in First .. Node loop
          case Node_Kind (J) is
-            when Node_Boolean_Resource_Value =>
-               Annotation_Table.Table (J) :=
-                (Kind           => Annotation_Boolean_Resource_Value,
-                 Use_In_Program => Null_Widget,
-                 Hard_Code      => Null_Widget,
-                 Fallback       => Null_Widget,
-                 Name           => Null_Widget,
-                 Value          => Null_Widget);
-
             when Node_Colormap_Resource_Value =>
                Annotation_Table.Table (J) :=
                 (Kind           => Annotation_Colormap_Resource_Value,
@@ -1913,9 +1899,6 @@ package body Designer.Properties_Editor.Widget_Instance is
                            null; --  TODO реализовать.
 
                         when Type_Unspecified =>
-                           null; --  TODO реализовать.
-
-                        when Type_Boolean =>
                            null; --  TODO реализовать.
                      end case;
 

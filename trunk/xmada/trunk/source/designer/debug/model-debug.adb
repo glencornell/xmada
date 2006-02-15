@@ -50,11 +50,6 @@ package body Model.Debug is
                                 Node   : in Node_Id;
                                 Offset : in Ada.Wide_Text_IO.Count);
 
-   procedure Print_Boolean_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
-     Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
-
    procedure Print_Colormap_Resource_Value
     (File   : in Ada.Wide_Text_IO.File_Type;
      Node   : in Node_Id;
@@ -183,9 +178,6 @@ package body Model.Debug is
          when Node_Application =>
             Print_Application (File, Node, Offset + Indent);
 
-         when Node_Boolean_Resource_Value =>
-            Print_Boolean_Resource_Value (File, Node, Offset + Indent);
-
          when Node_Colormap_Resource_Value =>
             Print_Colormap_Resource_Value (File, Node, Offset + Indent);
 
@@ -270,33 +262,6 @@ package body Model.Debug is
          Print (File, Component_Classes (Node), Offset + Indent);
       end if;
    end Print_Application;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Print_Boolean_Resource_Value
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   procedure Print_Boolean_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
-     Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
-   is
-      pragma Unreferenced (Offset);
-
-   begin
-      if Is_Resource_Class_Value (Node) then
-         Put (File,
-              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
-
-      else
-         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
-      end if;
-
-      Put (File,
-           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
-
-      --  TODO Вывод значения.
-   end Print_Boolean_Resource_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -545,8 +510,6 @@ package body Model.Debug is
      Node   : in Node_Id;
      Offset : in Ada.Wide_Text_IO.Count)
    is
-      pragma Unreferenced (Offset);
-
    begin
       if not Can_Be_Set_At_Creation_Time (Node)
         and then not Can_Be_Set_By_Set_Values (Node)

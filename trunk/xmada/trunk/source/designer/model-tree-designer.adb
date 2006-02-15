@@ -173,8 +173,7 @@ package body Model.Tree.Designer is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Boolean_Resource_Value
-          or else Node_Kind (Node) = Node_Colormap_Resource_Value
+       (Node_Kind (Node) = Node_Colormap_Resource_Value
           or else Node_Kind (Node) = Node_Enumeration_Resource_Value
           or else Node_Kind (Node) = Node_Integer_Resource_Value
           or else Node_Kind (Node) = Node_Pixel_Resource_Value
@@ -212,11 +211,6 @@ package body Model.Tree.Designer is
                    (Kind                     => Annotation_Widget_Instance,
                     All_Resources            => Null_List,
                     All_Constraint_Resources => Null_List);
-
-               when Node_Boolean_Resource_Value =>
-                  Annotation_Table.Table (J) :=
-                   (Kind       => Annotation_Boolean_Resource_Value,
-                    Is_Changed => False);
 
                when Node_Colormap_Resource_Value =>
                   Annotation_Table.Table (J) :=
@@ -325,8 +319,7 @@ package body Model.Tree.Designer is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Boolean_Resource_Value
-          or else Node_Kind (Node) = Node_Colormap_Resource_Value
+       (Node_Kind (Node) = Node_Colormap_Resource_Value
           or else Node_Kind (Node) = Node_Enumeration_Resource_Value
           or else Node_Kind (Node) = Node_Integer_Resource_Value
           or else Node_Kind (Node) = Node_Pixel_Resource_Value

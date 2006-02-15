@@ -550,6 +550,32 @@ package body Model.Initialization is
           (Xt_Motif_Binding_Type_Resource_Type, Values);
       end;
 
+      --  Boolean
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("FALSE"));
+         Set_Internal_Name (Value, Enter ("FALSE"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("TRUE"));
+         Set_Internal_Name (Value, Enter ("TRUE"));
+         Append (Values, Value);
+
+         Xt_Motif_Boolean_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Xt_Motif_Boolean_Resource_Type, Enter ("XtRBoolean"));
+         Set_Internal_Name
+          (Xt_Motif_Boolean_Resource_Type, Enter ("Boolean"));
+         Set_Value_Specifications
+          (Xt_Motif_Boolean_Resource_Type, Values);
+      end;
+
       --  ChildHorizontalAlignment
 
       declare
@@ -2170,6 +2196,7 @@ package body Model.Initialization is
       Append (Types, Xt_Motif_Auto_Drag_Model_Resource_Type);
       Append (Types, Xt_Motif_Automatic_Selection_Resource_Type);
       Append (Types, Xt_Motif_Binding_Type_Resource_Type);
+      Append (Types, Xt_Motif_Boolean_Resource_Type);
       Append (Types, Xt_Motif_Child_Horizontal_Alignment_Resource_Type);
       Append (Types, Xt_Motif_Child_Placement_Resource_Type);
       Append (Types, Xt_Motif_Frame_Child_Type_Resource_Type);  --  ???
@@ -2244,13 +2271,6 @@ package body Model.Initialization is
       Set_Name (Xt_Motif_C_Int_Resource_Type, Enter ("XtRInt"));
       Set_Internal_Name (Xt_Motif_C_Int_Resource_Type, Enter ("Int"));
       Set_Type_Kind (Xt_Motif_C_Int_Resource_Type, Type_C_Int);
-
-      --  Boolean
-
-      Xt_Motif_Boolean_Resource_Type := Create_Predefined_Resource_Type;
-      Set_Name (Xt_Motif_Boolean_Resource_Type, Enter ("XtRBoolean"));
-      Set_Internal_Name (Xt_Motif_Boolean_Resource_Type, Enter ("Boolean"));
-      Set_Type_Kind (Xt_Motif_Boolean_Resource_Type, Type_Boolean);
 
       --  Position
 
@@ -2418,7 +2438,6 @@ package body Model.Initialization is
 
 --      Append (Types, Xt_Motif__Resource_Type);
       Append (Types, Xt_Motif_Accelerators_Resource_Type);
-      Append (Types, Xt_Motif_Boolean_Resource_Type);
       Append (Types, Xt_Motif_Dimension_Resource_Type);
       Append (Types, Xt_Motif_Dynamic_Pixmap_Resource_Type);
       Append (Types, Xt_Motif_Horizontal_Dimension_Resource_Type);
