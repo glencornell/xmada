@@ -215,24 +215,24 @@ package body Model.Initialization.Designer is
       Set_Representation_Type
        (Xt_Motif_Processing_Direction_Resource_Type,
         Representation_Type_C_Unsigned_Char);
---      Set_Representation_Type
---       (Xt_Motif_Resize_Policy_Resource_Type,
---        Representation_Type_C_Unsigned_Char);
---      Set_Representation_Type
---       (Xt_Motif_Row_Column_Type_Resource_Type,
---        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
+       (Xt_Motif_Resize_Policy_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
+       (Xt_Motif_Row_Column_Type_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
       Set_Representation_Type
        (Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type,
         Representation_Type_C_Unsigned_Char);
---      Set_Representation_Type
---       (Xt_Motif_Scroll_Bar_Placement_Resource_Type,
---        Representation_Type_C_Unsigned_Char);
---      Set_Representation_Type
---       (Xt_Motif_Scrolled_Window_Child_Type_Resource_Type,
---        Representation_Type_C_Unsigned_Char);
---      Set_Representation_Type
---       (Xt_Motif_Scrolling_Policy_Resource_Type,
---        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
+       (Xt_Motif_Scroll_Bar_Placement_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
+       (Xt_Motif_Scrolled_Window_Child_Type_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
+       (Xt_Motif_Scrolling_Policy_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
 --      Set_Representation_Type
 --       (Xt_Motif_Selection_Policy_Resource_Type,
 --        Representation_Type_C_Unsigned_Char);

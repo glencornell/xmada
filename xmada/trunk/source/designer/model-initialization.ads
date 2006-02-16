@@ -95,12 +95,12 @@ private
 --   Xt_Motif_Position_Type_Resource_Type              : Node_Id;
    Xt_Motif_Primary_Ownership_Resource_Type          : Node_Id;
    Xt_Motif_Processing_Direction_Resource_Type       : Node_Id;
---   Xt_Motif_Resize_Policy_Resource_Type              : Node_Id;
---   Xt_Motif_Row_Column_Type_Resource_Type            : Node_Id;
+   Xt_Motif_Resize_Policy_Resource_Type              : Node_Id;
+   Xt_Motif_Row_Column_Type_Resource_Type            : Node_Id;
    Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type  : Node_Id;
---   Xt_Motif_Scroll_Bar_Placement_Resource_Type       : Node_Id;
---   Xt_Motif_Scrolled_Window_Child_Type_Resource_Type : Node_Id;
---   Xt_Motif_Scrolling_Policy_Resource_Type           : Node_Id;
+   Xt_Motif_Scroll_Bar_Placement_Resource_Type       : Node_Id;
+   Xt_Motif_Scrolled_Window_Child_Type_Resource_Type : Node_Id;
+   Xt_Motif_Scrolling_Policy_Resource_Type           : Node_Id;
 --   Xt_Motif_Selection_Policy_Resource_Type           : Node_Id;
 --   Xt_Motif_Selection_Technique_Resource_Type        : Node_Id;
    Xt_Motif_Separator_Type_Resource_Type             : Node_Id;
