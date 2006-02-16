@@ -555,38 +555,98 @@ package body Designer.Visual_Editor is
             (Ada.Characters.Handling.To_String
               (Internal_Name_Image
                 (Enumeration_Resource_Value_Specification)));
-      C_Value : Interfaces.C.unsigned_char;
-      From    : constant Xlib.Resource_Manager.Xrm_Value
-        := (Xlib.X_String_Pointer'Size / System.Storage_Unit,
-            Xlib.X_Pointer (C_Image'Address));
-      To      : constant Xlib.Resource_Manager.Xrm_Value
-        := (Interfaces.C.unsigned_char'Size / System.Storage_Unit,
-            Xlib.X_Pointer (C_Value'Address));
+
 
    begin
-      if not Xt_Convert_And_Store
-              (Drawing_Area,
-               "String",
-               From,
-               Ada.Characters.Handling.To_String
-                (Internal_Name_Image
-                  (Parent_Node (Enumeration_Resource_Value_Specification))),
-               To)
-      then
-         Main_Window.Put_Line
-          ("Storage size for enumeration type '"
-             & Internal_Name_Image
-                (Parent_Node (Enumeration_Resource_Value_Specification))
-             & "' conversion to small, should be"
-             & " at least"
-             & Interfaces.C.unsigned'Wide_Image
-                (From.Size * System.Storage_Unit)
-             & " bits.");
+      case Representation_Type
+            (Parent_Node (Enumeration_Resource_Value_Specification))
+      is
+         when Representation_Type_C_Unsigned_Char =>
+            declare
+               C_Value : Interfaces.C.unsigned_char;
+               From    : constant Xlib.Resource_Manager.Xrm_Value
+                 := (Xlib.X_String_Pointer'Size / System.Storage_Unit,
+                     Xlib.X_Pointer (C_Image'Address));
+               To      : constant Xlib.Resource_Manager.Xrm_Value
+                 := (C_Value'Size / System.Storage_Unit,
+                     Xlib.X_Pointer (C_Value'Address));
 
-         raise Program_Error;
-      end if;
+            begin
+               if not Xt_Convert_And_Store
+                       (Drawing_Area,
+                        "String",
+                        From,
+                        Ada.Characters.Handling.To_String
+                         (Internal_Name_Image
+                           (Parent_Node
+                             (Enumeration_Resource_Value_Specification))),
+                        To)
+               then
+                  Main_Window.Put_Line
+                   ("Storage size for enumeration type '"
+                      & Internal_Name_Image
+                         (Parent_Node
+                           (Enumeration_Resource_Value_Specification))
+                      & "' conversion to small, should be"
+                      & " at least"
+                      & Interfaces.C.unsigned'Wide_Image
+                         (From.Size * System.Storage_Unit)
+                      & " bits.");
 
-      return C_Value;
+                  raise Program_Error;
+               end if;
+
+               return C_Value;
+            end;
+
+         when Representation_Type_C_Int =>
+            declare
+               C_Value : Interfaces.C.int;
+               From    : constant Xlib.Resource_Manager.Xrm_Value
+                 := (Xlib.X_String_Pointer'Size / System.Storage_Unit,
+                     Xlib.X_Pointer (C_Image'Address));
+               To      : constant Xlib.Resource_Manager.Xrm_Value
+                 := (C_Value'Size / System.Storage_Unit,
+                     Xlib.X_Pointer (C_Value'Address));
+
+            begin
+               if not Xt_Convert_And_Store
+                       (Drawing_Area,
+                        "String",
+                        From,
+                        Ada.Characters.Handling.To_String
+                         (Internal_Name_Image
+                           (Parent_Node
+                             (Enumeration_Resource_Value_Specification))),
+                        To)
+               then
+                  Main_Window.Put_Line
+                   ("Storage size for enumeration type '"
+                      & Internal_Name_Image
+                         (Parent_Node
+                           (Enumeration_Resource_Value_Specification))
+                      & "' conversion to small, should be"
+                      & " at least"
+                      & Interfaces.C.unsigned'Wide_Image
+                         (From.Size * System.Storage_Unit)
+                      & " bits.");
+
+                  raise Program_Error;
+               end if;
+
+               return Interfaces.C.unsigned_char (C_Value);
+            end;
+
+         when Representation_Type_Unspecified =>
+            Main_Window.Put_Line
+             ("Representation size for enumeration type '"
+                 & Internal_Name_Image
+                    (Parent_Node
+                      (Enumeration_Resource_Value_Specification))
+                 & "' not defined.");
+
+            raise Program_Error;
+      end case;
    end Corresponding_Value;
 
    ---------------------------------------------------------------------------
