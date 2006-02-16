@@ -1,4 +1,4 @@
-AC_INIT(xmada, 0.3, vgodunko@rost.ru)
+AC_INIT(xmada, 0.3, vgodunko@rostel.ru)
 AC_CONFIG_SRCDIR(source/xlib/xlib.ads)
 AC_CONFIG_AUX_DIR(support)
 AC_CANONICAL_SYSTEM
