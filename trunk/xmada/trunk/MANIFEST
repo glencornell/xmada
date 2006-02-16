@@ -19,6 +19,8 @@ source/designer/debug/model-debug.adb
 source/designer/debug/model-debug.ads
 source/designer/debug/model-names-debug.adb
 source/designer/debug/model-names-debug.ads
+source/designer/debug/model-strings-debug.adb
+source/designer/debug/model-strings-debug.ads
 source/designer/debug/model-tree-debug.adb
 source/designer/debug/model-tree-debug.ads
 source/designer/designer-driver.adb
@@ -59,6 +61,8 @@ source/designer/model-names.adb
 source/designer/model-names.ads
 source/designer/model-queries.adb
 source/designer/model-queries.ads
+source/designer/model-strings.adb
+source/designer/model-strings.ads
 source/designer/model-tools.adb
 source/designer/model-tools.ads
 source/designer/model-tree-constructors.adb
