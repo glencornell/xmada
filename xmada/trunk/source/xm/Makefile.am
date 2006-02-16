@@ -4,7 +4,7 @@ alidir = $(includedir)/xmada
 
 ADACOMPILER = ../../support/adacompiler
 
-ADAFLAGS = -I$(srcdir)/../xlib -I$(srcdir)/../xt
+ADAFLAGS = -I$(srcdir)/../xlib -I$(srcdir)/../xlib/extensions -I$(srcdir)/../xlib/extensions/print -I$(srcdir)/../xt
 
 ADA_SPECS_WITH_BODY = \
 	i-cwistr.ads \
@@ -96,10 +96,10 @@ i-cwistr.lo: \
 	$(srcdir)/i-cwistr.adb \
 	$(srcdir)/i-cwistr.ads
 xm-class_management.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
 	$(srcdir)/i-cwistr.ads \
@@ -166,10 +166,10 @@ xm-class_management.lo: \
 	$(top_srcdir)/source/xt/xt_vendor_shell.ads \
 	$(top_srcdir)/source/xt/xt_wm_shell.ads
 xm-clipboard_management.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -182,10 +182,10 @@ xm-clipboard_management.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-implementation.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -197,10 +197,10 @@ xm-implementation.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-input_management.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -213,10 +213,10 @@ xm-input_management.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-internal.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -229,11 +229,11 @@ xm-internal.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-menu_management.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-cursors.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -246,10 +246,10 @@ xm-menu_management.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-print_management.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -262,10 +262,10 @@ xm-print_management.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-protocol_management.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-graphic_output.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
@@ -280,10 +280,10 @@ xm-protocol_management.lo: \
 	$(top_srcdir)/source/xt/xt-utilities.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-render_tables.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.adb \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
@@ -297,10 +297,10 @@ xm-render_tables.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-representation_type_management.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.adb \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
@@ -314,10 +314,10 @@ xm-representation_type_management.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-resource_management.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.adb \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
@@ -331,10 +331,10 @@ xm-resource_management.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-strings.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
 	$(srcdir)/i-cwistr.ads \
@@ -344,10 +344,10 @@ xm-strings.lo: \
 	$(top_srcdir)/source/xt/xt-ancillary_types.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-traversal_management.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -360,11 +360,11 @@ xm-traversal_management.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm-utilities.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-colors.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -377,10 +377,10 @@ xm-utilities.lo: \
 	$(top_srcdir)/source/xt/xt-implementation.ads \
 	$(top_srcdir)/source/xt/xt.ads
 xm.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.adb \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
@@ -429,10 +429,10 @@ xm_bulletin_board.lo: \
 	$(top_srcdir)/source/xt/xt_constraint.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_cascade_button.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -449,10 +449,10 @@ xm_cascade_button.lo: \
 	$(top_srcdir)/source/xt/xt.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_cascade_button_gadget.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -470,10 +470,10 @@ xm_cascade_button_gadget.lo: \
 	$(top_srcdir)/source/xt/xt_object.ads \
 	$(top_srcdir)/source/xt/xt_rect_obj.ads
 xm_combo_box.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -491,10 +491,10 @@ xm_combo_box.lo: \
 	$(top_srcdir)/source/xt/xt_constraint.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_command.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -514,10 +514,10 @@ xm_command.lo: \
 	$(top_srcdir)/source/xt/xt_constraint.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_container.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -608,10 +608,10 @@ xm_drop_transfer.lo: \
 	$(top_srcdir)/source/xt/xt.ads \
 	$(top_srcdir)/source/xt/xt_object.ads
 xm_file_selection_box.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -701,10 +701,10 @@ xm_label_gadget.lo: \
 	$(top_srcdir)/source/xt/xt_object.ads \
 	$(top_srcdir)/source/xt/xt_rect_obj.ads
 xm_list.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -720,10 +720,10 @@ xm_list.lo: \
 	$(top_srcdir)/source/xt/xt.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_main_window.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -763,10 +763,10 @@ xm_menu_shell.lo: \
 	$(top_srcdir)/source/xt/xt_override_shell.ads \
 	$(top_srcdir)/source/xt/xt_shell.ads
 xm_message_box.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -785,10 +785,10 @@ xm_message_box.lo: \
 	$(top_srcdir)/source/xt/xt_constraint.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_notebook.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -864,10 +864,10 @@ xm_push_button_gadget.lo: \
 	$(top_srcdir)/source/xt/xt_object.ads \
 	$(top_srcdir)/source/xt/xt_rect_obj.ads
 xm_row_column.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -929,10 +929,10 @@ xm_scrolled_window.lo: \
 	$(top_srcdir)/source/xt/xt_constraint.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_selection_box.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -974,10 +974,10 @@ xm_separator_gadget.lo: \
 	$(top_srcdir)/source/xt/xt_object.ads \
 	$(top_srcdir)/source/xt/xt_rect_obj.ads
 xm_simple_spin_box.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
 	$(srcdir)/i-cwistr.ads \
@@ -993,10 +993,10 @@ xm_simple_spin_box.lo: \
 	$(top_srcdir)/source/xt/xt_constraint.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_spin_box.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
 	$(srcdir)/i-cwistr.ads \
@@ -1018,10 +1018,10 @@ xm_string_defs.lo: \
 	$(top_srcdir)/source/xt/xt.ads \
 	$(top_srcdir)/source/xt/xt_string_defs.ads
 xm_text.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -1037,10 +1037,10 @@ xm_text.lo: \
 	$(top_srcdir)/source/xt/xt.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_text_field.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -1056,10 +1056,10 @@ xm_text_field.lo: \
 	$(top_srcdir)/source/xt/xt.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_toggle_button.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
@@ -1076,10 +1076,10 @@ xm_toggle_button.lo: \
 	$(top_srcdir)/source/xt/xt.ads \
 	$(top_srcdir)/source/xt/xt_core.ads
 xm_toggle_button_gadget.lo: \
+	$(top_srcdir)/source/xlib/extensions/print/xlib-extensions-print.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions-print.ads \
-	$(top_srcdir)/source/xlib/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \

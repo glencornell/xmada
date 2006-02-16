@@ -39,6 +39,9 @@ AC_OUTPUT([
 	source/Makefile
 	source/designer/Makefile
 	source/xlib/Makefile
+	source/xlib/extensions/Makefile
+	source/xlib/extensions/input/Makefile
+	source/xlib/extensions/print/Makefile
 	source/xt/Makefile
 	source/xm/Makefile
 	source/xml/Makefile

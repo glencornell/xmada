@@ -6,6 +6,10 @@ ADAFLAGS = -gnatoa -gnatW8 -gnatwa -gnatyabcefhiknoprstx \
 DESIGNER_ADAFLAGS = $(ADAFLAGS) \
 	-I$(top_srcdir)/source/xlib \
 	-I$(top_builddir)/source/xlib \
+	-I$(top_srcdir)/source/xlib/extensions \
+	-I$(top_builddir)/source/xlib/extensions \
+	-I$(top_srcdir)/source/xlib/extensions/print \
+	-I$(top_builddir)/source/xlib/extensions/print \
 	-I$(top_srcdir)/source/xt \
 	-I$(top_builddir)/source/xt \
 	-I$(top_srcdir)/source/xm \

@@ -1,23 +1,21 @@
 include ../../support/Makefile.common
 
+SUBDIRS=extensions
+
 alidir = $(includedir)/xmada
 
 ADACOMPILER = ../../support/adacompiler
-
 
 ADA_SPECS_WITH_BODY = \
 	xlib.ads \
 	xlib-atoms.ads \
 	xlib-events.ads \
-	xlib-extensions-input_device.ads \
-	xlib-extensions-print.ads \
 	xlib-graphic_output.ads \
 	xlib-implementation.ads
 
 ADA_SPECS = $(ADA_SPECS_WITH_BODY) \
 	xlib-colors.ads \
 	xlib-cursors.ads \
-	xlib-extensions.ads \
 	xlib-resource_manager.ads
 
 ADA_BODIES = $(ADA_SPECS_WITH_BODY:.ads=.adb)
@@ -33,6 +31,10 @@ install-data-local:
 	$(INSTALL) -d $(DESTDIR)$(alidir)
 	for f in $(srcdir)/*.ad[sb] *.ali; do $(INSTALL) -m 444 $$f $(DESTDIR)$(alidir); done
 
+depend-local:
+	for d in $(SUBDIRS); do \
+		(cd $$d && ${MAKE} depend-local); \
+	done
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
 xlib-atoms.lo: \
 	$(srcdir)/xlib-atoms.adb \
@@ -49,23 +51,6 @@ xlib-events.lo: \
 	$(srcdir)/xlib-events.adb \
 	$(srcdir)/xlib-events.ads \
 	$(srcdir)/xlib-implementation.ads \
-	$(srcdir)/xlib.ads
-xlib-extensions-input_device.lo: \
-	$(srcdir)/xlib-atoms.ads \
-	$(srcdir)/xlib-extensions-input_device.adb \
-	$(srcdir)/xlib-extensions-input_device.ads \
-	$(srcdir)/xlib-extensions.ads \
-	$(srcdir)/xlib-implementation.adb \
-	$(srcdir)/xlib-implementation.ads \
-	$(srcdir)/xlib.ads
-xlib-extensions-print.lo: \
-	$(srcdir)/xlib-extensions-print.adb \
-	$(srcdir)/xlib-extensions-print.ads \
-	$(srcdir)/xlib-extensions.ads \
-	$(srcdir)/xlib-implementation.ads \
-	$(srcdir)/xlib.ads
-xlib-extensions.lo: \
-	$(srcdir)/xlib-extensions.ads \
 	$(srcdir)/xlib.ads
 xlib-graphic_output.lo: \
 	$(srcdir)/xlib-graphic_output.adb \
