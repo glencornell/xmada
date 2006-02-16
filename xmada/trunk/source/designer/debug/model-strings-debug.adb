@@ -28,7 +28,7 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Designer.Operations.Debug
+--! <Unit> Model.Strings.Debug
 --! <ImplementationNotes>
 --! <PortabilityIssues>
 --! <AnticipatedChanges>
@@ -36,73 +36,34 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Wide_Text_IO;
+with Ada.Integer_Wide_Text_IO;
 
-with Model.Debug;
-with Model.Debug.Designer;
-pragma Warnings (Off, Model.Debug.Designer);
---  Используется только для включения дополнительных подпрограмм вывода
---  отладочной информации, специфической для дизайнера.
+package body Model.Strings.Debug is
 
-with Model.Names.Debug;
-with Model.Strings.Debug;
-with Model.Tree.Debug;
-
-package body Designer.Operations.Debug is
-
+   use Ada.Integer_Wide_Text_IO;
    use Ada.Wide_Text_IO;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Dump_Tree
+   --!    <Unit> Print_Statistics
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Dump_Tree is
-      File : File_Type;
-
+   procedure Print_Statistics (File         : in Ada.Wide_Text_IO.File_Type;
+                               Title_Offset : in Ada.Wide_Text_IO.Count;
+                               Data_Offset  : in Ada.Wide_Text_IO.Count)
+   is
    begin
-      Create (File, Out_File, "project_tree_dump.txt");
-
-      Model.Debug.Print (File, Project);
-
-      Close (File);
-
-   exception
-      when others =>
-         if Is_Open (File) then
-            Close (File);
-         end if;
-
-         raise;
-   end Dump_Tree;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Tables_Statistics
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   procedure Tables_Statistics is
-      File : File_Type;
-
-   begin
-      Create (File, Out_File, "tables_statistics.txt");
-
-      Put_Line (File, "Internal tables statistics");
-      Put_Line (File, "--------------------------");
+      Set_Col (File, Title_Offset);
+      Put (File, "Strings characters table");
+      Set_Col (File, Data_Offset);
+      Put (File, Integer (String_Character_Table.Last));
       New_Line (File);
-      Model.Names.Debug.Print_Statistics (File, 3, 30);
-      Model.Strings.Debug.Print_Statistics (File, 3, 30);
-      Model.Tree.Debug.Print_Statistics (File, 3, 30);
 
-      Close (File);
+      Set_Col (File, Title_Offset);
+      Put (File, "Strings table");
+      Set_Col (File, Data_Offset);
+      Put (File, Integer (String_Table.Last));
+      New_Line (File);
+   end Print_Statistics;
 
-   exception
-      when others =>
-         if Is_Open (File) then
-            Close (File);
-         end if;
-
-         raise;
-   end Tables_Statistics;
-
-end Designer.Operations.Debug;
+end Model.Strings.Debug;

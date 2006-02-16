@@ -46,12 +46,13 @@ package body Model.Strings is
    ---------------------------------------------------------------------------
    function Image (Item : in String_Id) return Wide_String is
    begin
-      pragma Assert (Item in Strings.First .. Strings.Last);
+      pragma Assert (Item in String_Table.First .. String_Table.Last);
 
       return
         Wide_String
-         (String_Characters.Table
-           (Strings.Table (Item).First .. Strings.Table (Item).Last));
+         (String_Character_Table.Table
+           (String_Table.Table (Item).First
+              .. String_Table.Table (Item).Last));
    end Image;
 
    ---------------------------------------------------------------------------
@@ -61,8 +62,8 @@ package body Model.Strings is
    ---------------------------------------------------------------------------
    procedure Initialize is
    begin
-      Strings.Init;
-      String_Characters.Init;
+      String_Table.Init;
+      String_Character_Table.Init;
    end Initialize;
 
    ---------------------------------------------------------------------------
@@ -72,12 +73,12 @@ package body Model.Strings is
    ---------------------------------------------------------------------------
    function Store (Item : in Wide_String) return String_Id is
    begin
-      for J in Strings.First .. Strings.Last loop
+      for J in String_Table.First .. String_Table.Last loop
          declare
-            N : String_Record renames Strings.Table (J);
+            N : String_Record renames String_Table.Table (J);
 
          begin
-            if Wide_String (String_Characters.Table (N.First .. N.Last))
+            if Wide_String (String_Character_Table.Table (N.First .. N.Last))
                  = Item
             then
                return J;
@@ -86,16 +87,16 @@ package body Model.Strings is
       end loop;
 
       declare
-         First : constant Positive := String_Characters.Last + 1;
+         First : constant Positive := String_Character_Table.Last + 1;
 
       begin
-         String_Characters.Set_Last (First + Item'Length - 1);
-         String_Characters.Table (First .. String_Characters.Last) :=
-           String_Characters.Table_Type (Item);
+         String_Character_Table.Set_Last (First + Item'Length - 1);
+         String_Character_Table.Table (First .. String_Character_Table.Last) :=
+           String_Character_Table.Table_Type (Item);
 
-         Strings.Append ((First, String_Characters.Last));
+         String_Table.Append ((First, String_Character_Table.Last));
 
-         return Strings.Last;
+         return String_Table.Last;
       end;
    end Store;
 
