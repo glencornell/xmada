@@ -289,6 +289,7 @@ package body Model.Tree.Constructors is
          Can_Be_Set_At_Creation_Time    => False,
          Can_Be_Set_By_Set_Values       => False,
          Can_Be_Retrieved_By_Get_Values => False,
+         Cannot_Be_Set_In_Resource_File => False,
          Widget_Reference_Constraints   => Unspecified));
 
       return Node_Table.Last;

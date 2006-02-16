@@ -318,6 +318,10 @@ package Model.Tree is
    procedure Set_Can_Be_Retrieved_By_Get_Values (Node  : in Node_Id;
                                                  Value : in Boolean);
 
+   function Cannot_Be_Set_In_Resource_File (Node : in Node_Id) return Boolean;
+   procedure Set_Cannot_Be_Set_In_Resource_File (Node  : in Node_Id;
+                                                 Value : in Boolean);
+
    function Widget_Reference_Constraints (Node : in Node_Id)
      return Widget_Reference_Constraint;
    procedure Set_Widget_Reference_Constraints
@@ -475,6 +479,9 @@ private
             Can_Be_Retrieved_By_Get_Values : Boolean;
             --  Значение ресурса может быть извлечено с использованием
             --  XtGetValues.
+
+            Cannot_Be_Set_In_Resource_File : Boolean;
+            --  Значение ресурса не может быть заданно в файле ресурсов.
 
             Widget_Reference_Constraints   : Widget_Reference_Constraint;
             --  Ограничения на используемый в качестве значения экземпляр
