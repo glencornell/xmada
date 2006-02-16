@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2006
+--!  Copyright (C) 2006  TechnoServ A/S
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -126,18 +126,18 @@ package body Generator.Application_Resources is
 
          while Current_Resource /= Null_Node loop
             case Node_Kind (Current_Resource) is
-               when Node_Enumeration_Resource_Value 
+               when Node_Enumeration_Resource_Value
                  | Node_Widget_Reference_Resource_Value  =>
 
                   declare
-                     Tmp : constant Node_Id 
+                     Tmp : constant Node_Id
                        := Resource_Value (Current_Resource);
 
                   begin
                      if Tmp /= Null_Node then
                         Put_Line
-                         (Output_File, 
-                          Tmp_Path 
+                         (Output_File,
+                          Tmp_Path
                           & "."
                           & Internal_Resource_Name_Image
                            (Resource_Specification
@@ -160,14 +160,14 @@ package body Generator.Application_Resources is
                         Index := Index + 1;
                      end if;
 
-                     Put_Line (Output_File, 
+                     Put_Line (Output_File,
                       Tmp_Path
                       & "."
                       & Internal_Resource_Name_Image
-                       (Resource_Specification 
+                       (Resource_Specification
                         (Current_Resource))
-                      & " : " 
-                      & Tmp_Value 
+                      & " : "
+                      & Tmp_Value
                        (Index .. Tmp_Value'Last));
                   end;
                when others =>
@@ -217,8 +217,8 @@ package body Generator.Application_Resources is
               Current_Children := First (Children_List);
 
                while Current_Children /= Null_Node loop
-                  Generate_Widget_Resources (Current_Children, 
-                                             Output_File, 
+                  Generate_Widget_Resources (Current_Children,
+                                             Output_File,
                                              Tmp_Path & ".");
                   Current_Children := Next (Current_Children);
                end loop;

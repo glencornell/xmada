@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2006
+--!  Copyright (C) 2006  TechnoServ A/S
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -176,7 +176,7 @@ package body Model.Initialization.Xm_Ada is
         Enter ("Xm_Toggle_Button_Gadget.Xm_Create_Toggle_Button_Gadget"));
       Set_Convenience_Create_Function_Name
        (Xt_Motif_Toggle_Button_Widget_Class,
-        Enter ("Xm_Toggle_Button.Xm_Create_Toggle_Button")); 
+        Enter ("Xm_Toggle_Button.Xm_Create_Toggle_Button"));
    end Initialize;
-   
+
 end Model.Initialization.Xm_Ada;
