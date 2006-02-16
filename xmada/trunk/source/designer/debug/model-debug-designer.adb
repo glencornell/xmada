@@ -83,6 +83,8 @@ package body Model.Debug.Designer is
            | Node_Widget_Reference_Resource_Type
            | Node_Widget_Reference_Resource_Value
            | Node_Widget_Set
+           | Node_Xm_String_Resource_Type
+           | Node_Xm_String_Resource_Value
          =>
             null;
 
