@@ -105,23 +105,41 @@ package body Designer.Model_Utilities is
    procedure Delete_Node (Node : in Model.Node_Id) is
       pragma Assert (Node /= Null_Node);
 
-      List    : constant List_Id := Children (Node);
+      List    : List_Id;
       Current : Node_Id;
       Parent  : Node_Id;
 
    begin
+      --  Удаляем потомков.
 
-      if List /= Null_List then
-         Current := First (List);
+      case Node_Kind (Node) is
+         when Node_Widget_Instance =>
+            List := Children (Node);
 
-         while Current /= Null_Node loop
-            Delete_Node (Current);
+            if List /= Null_List then
+               Current := First (List);
 
-            Current := Next (Current);
-         end loop;
-      end if;
+               while Current /= Null_Node loop
+                  Delete_Node (Current);
+
+                  Current := Next (Current);
+               end loop;
+            end if;
+
+         when Node_Component_Class =>
+            Current := Root (Node);
+
+            if Current /= Null_Node then
+               Delete_Node (Current);
+            end if;
+         when others =>
+            null;
+      end case;
 
       Main_Window.Delete_Item (Node);
+      --  Рассылаем уведомления о удалении свмого узла.
+
+      --  Говорим родителю, что его потомок убился.
 
       Parent := Parent_Node (Node);
 
