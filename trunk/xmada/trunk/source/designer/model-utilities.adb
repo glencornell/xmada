@@ -64,7 +64,11 @@ package body Model.Utilities is
                when Type_Unspecified =>
                   raise Program_Error;
 
-               when Type_Position | Type_Dimension | Type_C_Int =>
+               when Type_Position
+                 | Type_Dimension
+                 | Type_C_Int
+                 | Type_C_Short
+               =>
                   Result := Create_Integer_Resource_Value;
 
                when Type_Pixel =>
@@ -81,9 +85,6 @@ package body Model.Utilities is
 
                when Type_Translation_Data =>
                   Result := Create_Translation_Data_Resource_Value;
-
-               when others =>
-                  raise Program_Error;
             end case;
 
          when Node_Enumerated_Resource_Type =>

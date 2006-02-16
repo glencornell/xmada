@@ -63,7 +63,11 @@ package body Designer.Model_Utilities is
                when Type_Unspecified =>
                   raise Program_Error;
 
-               when Type_Position | Type_Dimension | Type_C_Int =>
+               when Type_Position
+                 | Type_Dimension
+                 | Type_C_Int
+                 | Type_C_Short
+               =>
                   Result := Create_Integer_Resource_Value;
                   Set_Resource_Value (Result, Integer'(Resource_Value (Node)));
 
