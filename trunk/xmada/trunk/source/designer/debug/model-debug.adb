@@ -29,16 +29,18 @@
 --! <PortabilityIssues>
 --! <AnticipatedChanges>
 ------------------------------------------------------------------------------
---  $Source$
---  $Revision$ $Date$ $Author$
+--  $Revision$ $Author$
+--  $Date$
 ------------------------------------------------------------------------------
 with Model.Queries;
+with Model.Strings;
 with Model.Tree.Lists;
 
 package body Model.Debug is
 
    use Ada.Wide_Text_IO;
    use Model.Queries;
+   use Model.Strings;
    use Model.Tree;
    use Model.Tree.Lists;
 
@@ -130,6 +132,16 @@ package body Model.Debug is
    procedure Print_Widget_Set (File   : in Ada.Wide_Text_IO.File_Type;
                                Node   : in Node_Id;
                                Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Xm_String_Resource_Type
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
+
+   procedure Print_Xm_String_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -234,6 +246,12 @@ package body Model.Debug is
 
          when Node_Widget_Set =>
             Print_Widget_Set (File, Node, Offset + Indent);
+
+         when Node_Xm_String_Resource_Type =>
+            Print_Xm_String_Resource_Type (File, Node, Offset + Indent);
+
+         when Node_Xm_String_Resource_Value =>
+            Print_Xm_String_Resource_Value (File, Node, Offset + Indent);
 
          when others =>
             raise Program_Error;
@@ -753,5 +771,57 @@ package body Model.Debug is
       Put (File, "Widget classes:");
       Print (File, Widget_Classes (Node), Offset + Indent);
    end Print_Widget_Set;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Xm_String_Resource_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Xm_String_Resource_Type
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Name (Node) /= Null_Name then
+         Put (File, " '" & Name_Image (Node) & ''');
+      end if;
+
+      Put (File, " (" & Internal_Name_Image (Node) & ')');
+   end Print_Xm_String_Resource_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Print_Xm_String_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Print_Xm_String_Resource_Value
+    (File   : in Ada.Wide_Text_IO.File_Type;
+     Node   : in Node_Id;
+     Offset : in Ada.Wide_Text_IO.Count)
+   is
+      pragma Unreferenced (Offset);
+
+   begin
+      if Is_Resource_Class_Value (Node) then
+         Put (File,
+              ' ' & Resource_Class_Name_Image (Resource_Specification (Node)));
+
+      else
+         Put (File, ' ' & Resource_Name_Image (Resource_Specification (Node)));
+      end if;
+
+      Put (File,
+           " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
+
+      if Resource_Value (Node) /= Null_String then
+         Put (File, " := """ & Image (Resource_Value (Node)) & '"');
+
+      else
+         Put (File, " := (UNDEFINED)");
+      end if;
+   end Print_Xm_String_Resource_Value;
 
 end Model.Debug;
