@@ -52,6 +52,8 @@ with Xt.Resource_Management;
 with Xt.Translation_Management;
 with Xt.Utilities;
 with Xm.Representation_Type_Management;
+with Xm.Resource_Management;
+with Xm.Strings;
 with Xm_Drawing_Area;
 with Xm_Scrolled_Window;
 with Xm_String_Defs;
@@ -60,6 +62,7 @@ with Designer.Main_Window;
 with Model.Allocations;
 with Model.Names;
 with Model.Queries;
+with Model.Strings;
 with Model.Tree.Designer;
 with Model.Tree.Lists;
 with Model.Utilities;
@@ -70,12 +73,16 @@ package body Designer.Visual_Editor is
    use Model;
    use Model.Names;
    use Model.Queries;
+   use Model.Strings;
    use Model.Tree;
    use Model.Tree.Designer;
    use Model.Tree.Lists;
    use Model.Utilities;
    use Xlib.Graphic_Output;
+   use Xm;
    use Xm.Representation_Type_Management;
+   use Xm.Resource_Management;
+   use Xm.Strings;
    use Xm_Drawing_Area;
    use Xm_Scrolled_Window;
    use Xm_String_Defs;
@@ -99,7 +106,8 @@ package body Designer.Visual_Editor is
      Value_C_Int,
      Value_Position,
      Value_Dimension,
-     Value_Widget_Reference);
+     Value_Widget_Reference,
+     Value_Xm_String);
 
    type Annotation_Record (Kind       : Annotation_Kinds := Annotation_Empty;
                            Value_Kind : Resource_Value_Kinds
@@ -138,6 +146,9 @@ package body Designer.Visual_Editor is
 
                when Value_Widget_Reference =>
                   Widget_Reference_Value : aliased Xt.Widget;
+
+               when Value_Xm_String =>
+                  Xm_String_Value : aliased Xm.Xm_String;
             end case;
       end case;
    end record;
@@ -891,6 +902,14 @@ package body Designer.Visual_Editor is
                      (Aux).Widget_Reference_Value'Address);
                   Next_Arg := Next_Arg + 1;
 
+               when Node_Xm_String_Resource_Type =>
+                  Xt_Set_Arg
+                   (Args (Next_Arg),
+                    Annotation_Table.Table (Aux).Name,
+                    Annotation_Table.Table
+                     (Aux).Xm_String_Value'Address);
+                  Next_Arg := Next_Arg + 1;
+
                when others =>
                   raise Program_Error;
             end case;
@@ -1003,6 +1022,16 @@ package body Designer.Visual_Editor is
 
                   Next_Arg := Next_Arg + 1;
 
+               when Node_Xm_String_Resource_Type =>
+                  if Resource_Value (Aux) /= Null_String then
+                     Xt_Set_Arg
+                      (Args (Next_Arg),
+                       Annotation_Table.Table (Aux).Name,
+                       Xm_String_Generate (Image (Resource_Value (Aux))));
+
+                     Next_Arg := Next_Arg + 1;
+                  end if;
+
                when others =>
                   raise Program_Error;
             end case;
@@ -1105,6 +1134,25 @@ package body Designer.Visual_Editor is
                      end if;
                   end;
 
+               when Node_Xm_String_Resource_Type =>
+                  declare
+                     Str : constant Wide_String
+                       := Xm_String_Unparse
+                           (Annotation_Table.Table (Aux).Xm_String_Value);
+
+                  begin
+                     if Resource_Value (Aux) = Null_String
+                       or else Image (Resource_Value (Aux)) /= Str
+                     then
+                        Set_Resource_Value (Aux, Store (Str));
+                     end if;
+
+                     Xm_String_Free
+                      (Annotation_Table.Table (Aux).Xm_String_Value);
+                     Annotation_Table.Table (Aux).Xm_String_Value :=
+                       Null_Xm_String;
+                  end;
+
                when others =>
                   raise Program_Error;
             end case;
@@ -1176,6 +1224,7 @@ package body Designer.Visual_Editor is
               | Node_Screen_Resource_Value
               | Node_Translation_Data_Resource_Value
               | Node_Enumeration_Resource_Value
+              | Node_Xm_String_Resource_Value
             =>
                case Node_Kind (Resource_Type (Resource_Specification (J))) is
                   when Node_Predefined_Resource_Type =>
@@ -1277,6 +1326,16 @@ package body Designer.Visual_Editor is
                               (Resource_Specification (J)))),
                        Widget_Reference_Value => Null_Widget);
 
+                  when Node_Xm_String_Resource_Type =>
+                     Annotation_Table.Table (J) :=
+                      (Kind            => Annotation_Resource_Value,
+                       Value_Kind      => Value_Xm_String,
+                       Name            =>
+                         Interfaces.C.Strings.New_String
+                          (Ada.Characters.Handling.To_String
+                            (Internal_Resource_Name_Image
+                              (Resource_Specification (J)))),
+                       Xm_String_Value => Null_Xm_String);
 
                   when others =>
                      raise Program_Error;

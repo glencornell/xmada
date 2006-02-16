@@ -57,7 +57,8 @@ package body Model.Tree.Designer is
      Annotation_Translation_Data_Resource_Value,
      Annotation_Widget_Reference_Resource_Value,
      Annotation_Widget_Class,
-     Annotation_Widget_Instance);
+     Annotation_Widget_Instance,
+     Annotation_Xm_String_Resource_Value);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
@@ -74,6 +75,7 @@ package body Model.Tree.Designer is
            | Annotation_Screen_Resource_Value
            | Annotation_Translation_Data_Resource_Value
            | Annotation_Widget_Reference_Resource_Value
+           | Annotation_Xm_String_Resource_Value
          =>
             Is_Changed : Boolean;
 
@@ -180,7 +182,8 @@ package body Model.Tree.Designer is
           or else Node_Kind (Node) = Node_Pixmap_Resource_Value
           or else Node_Kind (Node) = Node_Screen_Resource_Value
           or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
-          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value
+          or else Node_Kind (Node) = Node_Xm_String_Resource_Value);
 
       Relocate_Annotation_Table;
 
@@ -250,6 +253,11 @@ package body Model.Tree.Designer is
                when Node_Widget_Reference_Resource_Value =>
                   Annotation_Table.Table (J) :=
                    (Kind       => Annotation_Widget_Reference_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_Xm_String_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_Xm_String_Resource_Value,
                     Is_Changed => False);
 
                when others =>
@@ -326,7 +334,8 @@ package body Model.Tree.Designer is
           or else Node_Kind (Node) = Node_Pixmap_Resource_Value
           or else Node_Kind (Node) = Node_Screen_Resource_Value
           or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
-          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value);
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value
+          or else Node_Kind (Node) = Node_Xm_String_Resource_Value);
 
       Relocate_Annotation_Table;
 

@@ -92,6 +92,9 @@ package body Model.Utilities is
          when Node_Widget_Reference_Resource_Type =>
             Result := Create_Widget_Reference_Resource_Value;
 
+         when Node_Xm_String_Resource_Type =>
+            Result := Create_Xm_String_Resource_Value;
+
          when others =>
             raise Program_Error;
       end case;
