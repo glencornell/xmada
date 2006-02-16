@@ -48,6 +48,7 @@ package XML_Tools is
    Null_Attribute_Id : constant Attribute_Id := Attribute_Id'First;
 
    type String_Id is new Natural;
+   Null_String_Id : constant String_Id := String_Id'First;
 
    type Name_Id is new Natural;
 
