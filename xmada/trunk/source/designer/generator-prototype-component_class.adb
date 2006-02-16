@@ -236,16 +236,16 @@ package body Generator.Prototype.Component_Class is
                                   "         end;");
                         New_Line (File);
                      end if;
-
-                     Put_Line (File,
-                               "         "
-                               & "Xt.Composite_Management.Xt_Manage_Child ("
-                               & "Result."
-                               & Model.Queries.Name_Image (N)
-                               & ");");
-                     New_Line (File);
                   end;
                end loop;
+
+               Put_Line (File,
+                         "         "
+                         & "Xt.Composite_Management.Xt_Manage_Child ("
+                         & "Result."
+                         & Model.Queries.Name_Image (N)
+                         & ");");
+               New_Line (File);
             end;
          end loop;
 
