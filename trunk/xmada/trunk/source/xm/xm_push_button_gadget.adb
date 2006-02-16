@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rost.ru)
+--!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rostel.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -27,6 +27,8 @@
 --! covered by the GNU General Public License. This exception does not
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
+--!
+--! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
 --!
 --! <Unit> Xm_Push_Button_Gadget
 --! <ImplementationNotes>
