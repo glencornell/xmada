@@ -36,12 +36,15 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Interfaces.C.Strings;
+with System;
 with GNAT.Table;
 
 with Xt.Callbacks;
 with Xt.Composite_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
+with Xt.Translation_Management;
 with Xt.Utilities;
 with Xm.Resource_Management;
 with Xm.Strings;
@@ -67,6 +70,7 @@ package body Designer.Tree_Editor is
    use Xt.Composite_Management;
    use Xt.Instance_Management;
    use Xt.Resource_Management;
+   use Xt.Translation_Management;
    use Xt.Utilities;
    use Xm;
    use Xm.Resource_Management;
@@ -128,6 +132,8 @@ package body Designer.Tree_Editor is
            Table_Low_Bound      => Node_Id'First + 1,
            Table_Initial        => Model.Allocations.Node_Table_Initial,
            Table_Increment      => Model.Allocations.Node_Table_Increment);
+
+   Actions : Xt_Action_List (0 .. 0);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -197,6 +203,18 @@ package body Designer.Tree_Editor is
                              Closure    : in Xt_Pointer;
                              Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Activate);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Delete
+      --!    <Purpose> Подпрограмма обратного вызова при удалении виджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Delete (The_Widget : in Widget;
+                           Event      : in X_Event;
+                           Params     : in System.Address;
+                           Num_Params : in Cardinal);
+      pragma Convention (C, On_Delete);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -277,6 +295,48 @@ package body Designer.Tree_Editor is
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback ("On_Activate", E);
       end On_Activate;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Delete
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Delete (The_Widget : in Widget;
+                           Event      : in X_Event;
+                           Params     : in System.Address;
+                           Num_Params : in Cardinal)
+      is
+         pragma Unreferenced (Event);
+         pragma Unreferenced (Params);
+         pragma Unreferenced (Num_Params);
+         --  Данные переменные не используются.
+
+         Count : Integer;
+         Node  : Node_Id;
+         Args  : Xt_Arg_List (0 .. 0);
+
+      begin
+         --  Получаем количество выделенных елементов.
+
+         Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Count'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         if Count /= 1 then
+            raise Program_Error;
+         end if;
+
+         --  Убираем выделение с элемента и удаляем его.
+
+         if Selected_Item /= Null_Node then
+            Node := Selected_Item;
+            Main_Window.Select_Item (Null_Node);
+            Main_Window.Delete_Item (Node);
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback ("On_Delete", E);
+      end On_Delete;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -462,6 +522,13 @@ package body Designer.Tree_Editor is
       Button   : Widget;
 
    begin
+      --  Добавляем реакцию на кнопку delete.
+
+      Actions (0) := Xt_Action_Rec'(Interfaces.C.Strings.New_String
+                                     ("XmAdaDesignerTreeEditorOnDelete"),
+                                    Callbacks.On_Delete'Access);
+      Xt_App_Add_Actions (Xt_Widget_To_Application_Context (Parent), Actions);
+
       Notebook := Xm_Create_Managed_Notebook (Parent, "notebook", Arg_List);
 
       --  С ноутбука удаляется элемент PageScroller.
@@ -574,11 +641,11 @@ package body Designer.Tree_Editor is
               Create_Item_Icon (Node, Component_Container (Node));
 
          when Node_Widget_Instance =>
-            declare
-               Tab  : constant Widget
-                 := Component_Tab (Enclosing_Component_Class (Node));
-               N    : Integer;
-               Args : Xt_Arg_List (0 .. 0);
+--  XXX            declare
+--  XXX               Tab  : constant Widget
+--  XXX                 := Component_Tab (Enclosing_Component_Class (Node));
+--  XXX               N    : Integer;
+--  XXX               Args : Xt_Arg_List (0 .. 0);
 
             begin
                Annotation_Table.Table (Node).WI_Component_Tree_Icon :=
