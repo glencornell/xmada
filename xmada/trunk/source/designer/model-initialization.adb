@@ -100,7 +100,7 @@ package body Model.Initialization is
 --   Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
    Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
    Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
---   Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
+   Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
    Xt_Motif_Toggle_Indicator_On_Resource_Type        : Node_Id;
    Xt_Motif_Indicator_Type_Resource_Type             : Node_Id;
 --   Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
@@ -128,7 +128,7 @@ package body Model.Initialization is
 --   Xt_Motif_Scrolling_Policy_Resource_Type           : Node_Id;
 --   Xt_Motif_Selection_Policy_Resource_Type           : Node_Id;
 --   Xt_Motif_Selection_Technique_Resource_Type        : Node_Id;
---   Xt_Motif_Separator_Type_Resource_Type             : Node_Id;
+   Xt_Motif_Separator_Type_Resource_Type             : Node_Id;
    Xt_Motif_Shadow_Type_Resource_Type                : Node_Id;
    Xt_Motif_Show_Arrows_Resource_Type                : Node_Id;
 
@@ -152,6 +152,7 @@ package body Model.Initialization is
    Xt_Motif_Vertical_Dimension_Resource_Type         : Node_Id;
    Xt_Motif_Vertical_Position_Resource_Type          : Node_Id;
    Xt_Motif_Widget_Reference_Resource_Type           : Node_Id;
+   Xt_Motif_Xm_String_Resource_Type                  : Node_Id;
 
    Types   : List_Id;
    Classes : List_Id;
@@ -164,7 +165,6 @@ package body Model.Initialization is
    procedure Create_Enumerated_Resource_Types is
       Xt_Motif_Audible_Warning_Resource_Type            : Node_Id;
       Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
-      Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
       Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
       Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
       Xt_Motif_Position_Type_Resource_Type              : Node_Id;
@@ -175,7 +175,6 @@ package body Model.Initialization is
       Xt_Motif_Scrolling_Policy_Resource_Type           : Node_Id;
       Xt_Motif_Selection_Policy_Resource_Type           : Node_Id;
       Xt_Motif_Selection_Technique_Resource_Type        : Node_Id;
-      Xt_Motif_Separator_Type_Resource_Type             : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
 --      Xt_Motif__Resource_Type : Node_Id;
@@ -2441,6 +2440,14 @@ package body Model.Initialization is
       Set_Internal_Name
        (Xt_Motif_Menu_Widget_Reference_Resource_Type, Enter ("MenuWidget"));
 
+      --  XmString
+
+      Xt_Motif_Xm_String_Resource_Type := Create_Xm_String_Resource_Type;
+      Set_Name
+       (Xt_Motif_Xm_String_Resource_Type, Enter ("XmRXmString"));
+      Set_Internal_Name
+       (Xt_Motif_Xm_String_Resource_Type, Enter ("XmString"));
+
       --  Формирование списка предопределенных типов ресурсов.
 
 --      Append (Types, Xt_Motif__Resource_Type);
@@ -2461,6 +2468,7 @@ package body Model.Initialization is
       Append (Types, Xt_Motif_Vertical_Dimension_Resource_Type);
       Append (Types, Xt_Motif_Vertical_Position_Resource_Type);
       Append (Types, Xt_Motif_Widget_Reference_Resource_Type);
+      Append (Types, Xt_Motif_Xm_String_Resource_Type);
    end Create_Predefined_Resource_Types;
 
    ---------------------------------------------------------------------------
@@ -3383,13 +3391,23 @@ package body Model.Initialization is
                           Xt_Motif_Primitive_Widget_Class);
 
          --  TODO XmNaccelerator
-         --  TODO XmNacceleratorText
          --  TODO XmNfontList
-         --  TODO XmNlabelString
          --  TODO XmNmnemonic
          --  TODO XmNmnemonicCharSet
          --  TODO XmNrenderTable
          --  TODO XmNstringDirection
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNacceleratorText"));
+         Set_Internal_Resource_Name (Resource, Enter ("acceleratorText"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAcceleratorText"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("AcceleratorText"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_String_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNalignment"));
@@ -3422,6 +3440,17 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCLabelPixmap"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("LabelPixmap"));
          Set_Resource_Type (Resource, Xt_Motif_Dynamic_Pixmap_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlabelString"));
+         Set_Internal_Resource_Name (Resource, Enter ("labelString"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCXmString"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("XmString"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_String_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4135,7 +4164,6 @@ package body Model.Initialization is
          --  TODO XmNsliderVisual
          --  TODO XmNslidingMode
          --  TODO XmNsnapBackMultiple
-         --  TODO XmNtroughColor
 
          --  TODO XmNdecrementCallback
          --  TODO XmNdragCallback
@@ -4270,6 +4298,17 @@ package body Model.Initialization is
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNtroughColor"));
+         Set_Internal_Resource_Name (Resource, Enter ("troughColor"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCTroughColor"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("TroughColor"));
+         Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNvalue"));
          Set_Internal_Resource_Name (Resource, Enter ("value"));
          Set_Resource_Class_Name (Resource, Enter ("XmCValue"));
@@ -4308,8 +4347,6 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Separator_Widget_Class,
                           Xt_Motif_Primitive_Widget_Class);
 
-         --  TODO XmNseparatorType
-
          Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNmargin"));
          Set_Internal_Resource_Name (Resource, Enter ("margin"));
@@ -4333,16 +4370,16 @@ package body Model.Initialization is
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
          Append (Resources, Resource);
 
---         Resource := Create_Resource_Specification;
---         Set_Resource_Name (Resource, Enter (""));
---         Set_Internal_Resource_Name (Resource, Enter (""));
---         Set_Resource_Class_Name (Resource, Enter (""));
---         Set_Internal_Resource_Class_Name (Resource, Enter (""));
---         Set_Resource_Type (Resource, );
---         Set_Can_Be_Set_At_Creation_Time (Resource, True);
---         Set_Can_Be_Set_By_Set_Values (Resource, True);
---         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---         Append (Resources, Resource);
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNseparatorType"));
+         Set_Internal_Resource_Name (Resource, Enter ("separatorType"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCSeparatorType"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("SeparatorType"));
+         Set_Resource_Type (Resource, Xt_Motif_Separator_Type_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
 
          Set_Resources (Xt_Motif_Separator_Widget_Class, Resources);
 
@@ -4361,13 +4398,8 @@ package body Model.Initialization is
          Set_Super_Class (Xt_Motif_Text_Widget_Class,
                           Xt_Motif_Primitive_Widget_Class);
 
-         --  TODO XmNautoShowCursorPosition
          --  TODO XmNcursorPosition
-         --  TODO XmNcursorPositionVisible
-         --  TODO XmNeditable
-         --  TODO XmNeditMode
-         --  TODO XmNmaxLength
-         --  TODO XmtotalLines
+         --  TODO XmNtotalLines
          --  TODO XmNsource
          --  TODO XmNtopCharacter
          --  TODO XmNvalue
@@ -4407,11 +4439,72 @@ package body Model.Initialization is
          --  TODO XmNscrollVertical
 
          Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNautoShowCursorPosition"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("autoShowCursorPosition"));
+         Set_Resource_Class_Name
+          (Resource, Enter ("XmCAutoShowCursorPosition"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("AutoShowCursorPosition"));
+         Set_Resource_Type (Resource, Xt_Motif_Boolean_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNblinkRate"));
          Set_Internal_Resource_Name (Resource, Enter ("blinkRate"));
          Set_Resource_Class_Name (Resource, Enter ("XmCBlinkRate"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("BlinkRate"));
          Set_Resource_Type (Resource, Xt_Motif_C_Int_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+--         Resource := Create_Resource_Specification;
+--         Set_Resource_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Name (Resource, Enter (""));
+--         Set_Resource_Class_Name (Resource, Enter (""));
+--         Set_Internal_Resource_Class_Name (Resource, Enter (""));
+--         Set_Resource_Type (Resource, Xt_Motif_Text_Position_Resource_Type);
+--         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+--         Set_Can_Be_Set_By_Set_Values (Resource, True);
+--         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNcursorPositionVisible"));
+         Set_Internal_Resource_Name
+          (Resource, Enter ("cursorPositionVisible"));
+         Set_Resource_Class_Name
+          (Resource, Enter ("XmCCursorPositionVisible"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("CursorPositionVisible"));
+         Set_Resource_Type (Resource, Xt_Motif_Boolean_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNeditable"));
+         Set_Internal_Resource_Name (Resource, Enter ("editable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCEditable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("Editable"));
+         Set_Resource_Type (Resource, Xt_Motif_Boolean_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNeditMode"));
+         Set_Internal_Resource_Name (Resource, Enter ("editMode"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCEditMode"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("EditMode"));
+         Set_Resource_Type (Resource, Xt_Motif_Edit_Mode_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4436,6 +4529,28 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("MarginWidth"));
          Set_Resource_Type
           (Resource, Xt_Motif_Horizontal_Dimension_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNmaxLength"));
+         Set_Internal_Resource_Name (Resource, Enter ("maxLength"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCMaxLength"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("MaxLength"));
+         Set_Resource_Type (Resource, Xt_Motif_C_Int_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNtotalLines"));
+         Set_Internal_Resource_Name (Resource, Enter ("totalLines"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCTotalLines"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("TotalLines"));
+         Set_Resource_Type (Resource, Xt_Motif_C_Int_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4764,7 +4879,6 @@ package body Model.Initialization is
          --  TODO XmNdetail
          --  TODO XmNdetailCount
          --  TODO XmNfontList
-         --  TODO XmNlabelString
          --  TODO XmNlargeIconMask
          --  TODO XmNlargeIconPixmap
          --  TODO XmNrenderTable
@@ -4779,6 +4893,17 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCAlignment"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Alignment"));
          Set_Resource_Type (Resource, Xt_Motif_Alignment_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlabelString"));
+         Set_Internal_Resource_Name (Resource, Enter ("labelString"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCXmString"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("XmString"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_String_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4850,11 +4975,8 @@ package body Model.Initialization is
                           Xt_Motif_Gadget_Widget_Class);
 
          --  TODO XmNaccelerator
-         --  TODO XmNacceleratorText
          --  TODO XmNfontList
          --  TODO XmNlabelInsensitivePixmap
-         --  TODO XmNlabelPixmap
-         --  TODO XmNlabelString
          --  TODO XmNmnemonic
          --  TODO XmNmnemonicCharSet
          --  TODO XmNrecomputeSize
@@ -4862,11 +4984,45 @@ package body Model.Initialization is
          --  TODO XmNstringDirection
 
          Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNacceleratorText"));
+         Set_Internal_Resource_Name (Resource, Enter ("acceleratorText"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCAcceleratorText"));
+         Set_Internal_Resource_Class_Name
+          (Resource, Enter ("AcceleratorText"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_String_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNalignment"));
          Set_Internal_Resource_Name (Resource, Enter ("alignment"));
          Set_Resource_Class_Name (Resource, Enter ("XmCAlignment"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Alignment"));
          Set_Resource_Type (Resource, Xt_Motif_Alignment_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlabelPixmap"));
+         Set_Internal_Resource_Name (Resource, Enter ("labelPixmap"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCLabelPixmap"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("LabelPixmap"));
+         Set_Resource_Type (Resource, Xt_Motif_Dynamic_Pixmap_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNlabelString"));
+         Set_Internal_Resource_Name (Resource, Enter ("labelString"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCXmString"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("XmString"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_String_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
