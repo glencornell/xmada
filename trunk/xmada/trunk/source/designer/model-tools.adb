@@ -49,6 +49,7 @@ with XML_Tools.Printer;
 with XML_Tools.Strings;
 
 with Model.Names;
+with Model.Strings;
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
 with Model.Queries;
@@ -223,7 +224,7 @@ package body Model.Tools is
          Attributes.Create_Attribute
           (Tag,
            Class_Name_Attr,
-           Strings.Store
+           XML_Tools.Strings.Store
             (Model.Names.Image (Application_Class_Name (Application))));
 
          --  Создаем Component_Classes.
@@ -252,7 +253,8 @@ package body Model.Tools is
          Attributes.Create_Attribute
           (Tag,
            Name_Attr,
-           Strings.Store (Model.Names.Image (Name (Component_Class))));
+           XML_Tools.Strings.Store
+            (Model.Names.Image (Name (Component_Class))));
 
          --  Создаем Widget_Instance.
 
@@ -382,6 +384,18 @@ package body Model.Tools is
                   end if;
                end;
 
+            when Node_Xm_String_Resource_Value =>
+               declare
+                  S : constant String_Id := Resource_Value (Resource);
+
+               begin
+                  if S /= Null_String then
+                     Elements.Create_String
+                      (Tag,
+                       XML_Tools.Strings.Store (Model.Strings.Image (S)));
+                  end if;
+               end;
+
             when others =>
                Error_Message ("Unhandled resource node kind: "
                  & Node_Kinds'Wide_Image (Node_Kind (Resource)));
@@ -405,12 +419,14 @@ package body Model.Tools is
          Attributes.Create_Attribute
           (Tag,
            Name_Attr,
-           Strings.Store (Model.Names.Image (Name (Widget_Instance))));
+           XML_Tools.Strings.Store
+            (Model.Names.Image (Name (Widget_Instance))));
 
          Attributes.Create_Attribute
           (Tag,
            Class_Name_Attr,
-           Strings.Store (Model.Names.Image (Name (Class (Widget_Instance)))));
+           XML_Tools.Strings.Store
+            (Model.Names.Image (Name (Class (Widget_Instance)))));
 
          if Is_Managed (Widget_Instance) then
             Attributes.Create_Attribute (Tag, Is_Managed_Attr, Yes_Value);
@@ -477,7 +493,7 @@ package body Model.Tools is
       Attributes.Create_Attribute
        (Root,
         Name_Attr,
-        Strings.Store (Model.Names.Image (Name (Project))));
+        XML_Tools.Strings.Store (Model.Names.Image (Name (Project))));
 
       --  Создаем Applications.
 
@@ -1090,6 +1106,34 @@ package body Model.Tools is
                A := Attributes.Next (A);
             end loop;
          end;
+
+         --  Проверка наличия строки внутри тега.
+
+         declare
+            Child : constant Element_Id := Elements.Child (Tag);
+
+         begin
+            if Child /= Null_Element_Id then
+               if Elements.Kind (Child) /= A_String then
+                  raise Program_Error;
+                  --  Сейчас ресурс может содержать только
+                  --  строку текста в качестве дочернего элемента.
+
+               end if;
+
+               if Elements.Value (Child) /= Null_String_Id then
+                  declare
+                     S : constant String_Id
+                       := Model.Strings.Store
+                           (XML_Tools.Strings.Image (Elements.Value (Child)));
+
+                  begin
+                     Set_Resource_Value (Resource, S);
+                  end;
+               end if;
+            end if;
+         end;
+
       end XML_To_Resource;
 
       ------------------------------------------------------------------------
