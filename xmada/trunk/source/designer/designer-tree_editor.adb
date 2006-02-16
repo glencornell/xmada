@@ -590,11 +590,11 @@ package body Designer.Tree_Editor is
                --  Устанавливаем активной вкладку,
                --  на которую добавили компонент.
 
-               Xt_Set_Arg (Args (0), Xm_N_Page_Number, N'Address);
-               Xt_Get_Values (Tab, Args (0 .. 0));
+--  XXX        Xt_Set_Arg (Args (0), Xm_N_Page_Number, N'Address);
+--  XXX        Xt_Get_Values (Tab, Args (0 .. 0));
 
-               Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (N));
-               Xt_Set_Values (Notebook, Args (0 .. 0));
+--  XXX        Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (N));
+--  XXX        Xt_Set_Values (Notebook, Args (0 .. 0));
             end;
          when Node_Application     =>
             Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
