@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2006
+--!  Copyright (C) 2006  TechnoServ A/S
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -83,7 +83,7 @@ package body Model.Tree.Xm_Ada is
                      Table_Low_Bound      => Node_Id'First + 1,
                      Table_Initial        => Allocations.Node_Table_Initial,
                      Table_Increment      => Allocations.Node_Table_Increment);
- 
+
     ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
@@ -93,7 +93,7 @@ package body Model.Tree.Xm_Ada is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Relocate_Annotation_Table;
-   
+
    RNS_Counter  : Integer := 0;
 
    ---------------------------------------------------------------------------
@@ -159,14 +159,14 @@ package body Model.Tree.Xm_Ada is
 
                 when Node_Resource_Specification =>
                   Annotation_Table.Table (J) :=
-                   (Kind                       => 
+                   (Kind                       =>
                      Annotation_Resource_Specification,
                     Resource_Name_String       => Null_Name,
                     Resource_Class_Name_String => Null_Name);
 
                when Node_Enumeration_Value_Specification =>
                   Annotation_Table.Table (J) :=
-                   (Kind                      => 
+                   (Kind                      =>
                      Annotation_Enumeration_Value_Specification,
                     Literal_Identifier        => Null_Name,
                     Use_Qualified_Expression  => False);
@@ -250,7 +250,7 @@ package body Model.Tree.Xm_Ada is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Set_Resource_Name_String (Node : in Node_Id;
-                                       Name : in Name_Id) 
+                                       Name : in Name_Id)
    is
    begin
       null;
@@ -289,7 +289,7 @@ package body Model.Tree.Xm_Ada is
 
       Annotation_Table.Table (Node).Use_Qualified_Expression := Value;
    end Set_Use_Qualified_Expression;
- 
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Type_Identifier
