@@ -573,6 +573,16 @@ package body Designer.Visual_Editor is
                   (Parent_Node (Enumeration_Resource_Value_Specification))),
                To)
       then
+         Main_Window.Put_Line
+          ("Storage size for enumeration type '"
+             & Internal_Name_Image
+                (Parent_Node (Enumeration_Resource_Value_Specification))
+             & "' conversion to small, should be"
+             & " at least"
+             & Interfaces.C.unsigned'Wide_Image
+                (From.Size * System.Storage_Unit)
+             & " bits.");
+
          raise Program_Error;
       end if;
 
