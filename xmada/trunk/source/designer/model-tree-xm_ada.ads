@@ -39,7 +39,6 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-
 package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
@@ -63,15 +62,6 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Set_Convenience_Create_Function_Name
-   --!    <Purpose>
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Set_Convenience_Create_Function_Name (Node : in Node_Id;
-                                                   Name : in Name_Id);
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
    --!    <Unit> Resource_Name_String
    --!    <Purpose>
    --!    <Exceptions>
@@ -81,11 +71,71 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Convenience_Create_Function_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Convenience_Create_Function_Name (Node : in Node_Id;
+                                                   Name : in Name_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Resource_Name_String
    --!    <Purpose>
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Resource_Name_String (Node : in Node_Id;
                                        Name : in Name_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Type_Identifier
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Type_Identifier (Node : in Node_Id) return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Type_Identifier
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Type_Identifier (Node  : in Node_Id;
+                                  Value : in Name_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Literal_Identifier
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Literal_Identifier (Node : in Node_Id) return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Literal_Identifier
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Literal_Identifier (Node  : in Node_Id;
+                                     Value : in Name_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Use_Qualified_Expression
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Use_Qualified_Expression (Node : in Node_Id) return Boolean;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Use_Qualified_Expression
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Use_Qualified_Expression (Node : in Node_Id;
+                                           Value : in Boolean);
 
 end Model.Tree.Xm_Ada;
