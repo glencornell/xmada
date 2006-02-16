@@ -38,14 +38,12 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
---  with Model.Initialization;
 with Model.Tree.Xm_Ada;
 with Model.Names;
 with Model.Xt_Motif;
 
 package body Model.Initialization.Xm_Ada is
 
- --  use Model.Initialization;
    use Model.Tree.Xm_Ada;
    use Model.Xt_Motif;
    use Model.Names;
@@ -57,7 +55,7 @@ package body Model.Initialization.Xm_Ada is
    ---------------------------------------------------------------------------
    procedure Initialize is
    begin
-      Model.Tree.Xm_Ada.Initialize;
+      --  Установка имён подпрограмм создания экземпляров виджетов.
 
       Set_Convenience_Create_Function_Name
        (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
