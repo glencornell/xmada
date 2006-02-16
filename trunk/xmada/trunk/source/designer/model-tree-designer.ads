@@ -53,7 +53,7 @@ package Model.Tree.Designer is
 
    type Representation_Types is
     (Representation_Type_Unspecified,
-     Representation_Type_C_Unsigned_Short,
+     Representation_Type_C_Unsigned_Char,
      Representation_Type_C_Int);
 
    function All_Resources (Node : in Node_Id) return List_Id;
