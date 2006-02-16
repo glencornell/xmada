@@ -38,12 +38,14 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+--  with Model.Initialization;
 with Model.Tree.Xm_Ada;
 with Model.Names;
 with Model.Xt_Motif;
 
 package body Model.Initialization.Xm_Ada is
 
+ --  use Model.Initialization;
    use Model.Tree.Xm_Ada;
    use Model.Xt_Motif;
    use Model.Names;
@@ -179,6 +181,162 @@ package body Model.Initialization.Xm_Ada is
       Set_Convenience_Create_Function_Name
        (Xt_Motif_Toggle_Button_Widget_Class,
         Enter ("Xm_Toggle_Button.Xm_Create_Toggle_Button"));
+
+      --  Инициализация типов ресурсов
+
+      Set_Type_Identifier
+       (Xt_Motif_Alignment_Resource_Type,
+        Enter ("Xm.Xm_Alignment"));
+      Set_Type_Identifier
+       (Xt_Motif_Arrow_Direction_Resource_Type,
+        Enter ("Xm.Xm_Arrow_Direction"));
+      Set_Type_Identifier
+       (Xt_Motif_Arrow_Layout_Resource_Type,
+        Enter ("Xm.Xm_Arrow_Layout"));
+      Set_Type_Identifier
+       (Xt_Motif_Arrow_Orientation_Resource_Type,
+        Enter ("Xm.Xm_Arrow_Orientation"));
+      Set_Type_Identifier
+       (Xt_Motif_Arrow_Sensitivity_Resource_Type,
+        Enter ("Xm.Xm_Arrow_Sensitivity "));
+      Set_Type_Identifier
+       (Xt_Motif_Attachment_Resource_Type,
+        Enter ("Xm.Xm_Attachment"));
+  --     Set_Type_Identifier
+  --     (Xt_Motif_Audible_Warning_Resource_Type ,
+  --      Enter ("Xm_Audible_Warning"));
+      Set_Type_Identifier
+       (Xt_Motif_Auto_Drag_Model_Resource_Type,
+        Enter ("Xm.Xm_Auto_Drag_Model"));
+      Set_Type_Identifier
+       (Xt_Motif_Automatic_Selection_Resource_Type,
+        Enter ("Xm.Xm_Automatic_Selection"));
+      Set_Type_Identifier
+       (Xt_Motif_Binding_Type_Resource_Type,
+        Enter ("Xm.Xm_Binding_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Child_Horizontal_Alignment_Resource_Type,
+        Enter ("Xm.Xm_Child_Horizontal_Alignment"));
+      Set_Type_Identifier
+       (Xt_Motif_Child_Placement_Resource_Type,
+        Enter ("Xm.Xm_Child_Placement"));
+      Set_Type_Identifier
+       (Xt_Motif_Frame_Child_Type_Resource_Type,
+        Enter ("Xm.Xm_Child_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Child_Vertical_Alignment_Resource_Type,
+        Enter ("Xm.Xm_Child_Vertical_Alignment"));
+      Set_Type_Identifier
+       (Xt_Motif_Combo_Box_Type_Resource_Type,
+        Enter ("Xm.Xm_Combo_Box_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Command_Window_Location_Resource_Type,
+        Enter ("Xm.Xm_Command_Window_Location"));
+      Set_Type_Identifier
+       (Xt_Motif_Default_Button_Type_Resource_Type,
+        Enter ("Xm.Xm_Default_Button_Type"));
+ --     Set_Type_Identifier
+ --      (Xt_Motif_Delete_Response_Resource_Type,
+ --       Enter ("Xm.Xm_Delete_Response "));
+      Set_Type_Identifier
+       (Xt_Motif_Dialog_Style_Resource_Type,
+        Enter ("Xm.Xm_Delete_Response"));
+      Set_Type_Identifier
+       (Xt_Motif_Dialog_Type_Resource_Type,
+        Enter ("Xm.Xm_Dialog_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Edit_Mode_Resource_Type,
+        Enter ("Xm.Xm_Edit_Mode"));
+      Set_Type_Identifier
+       (Xt_Motif_Toggle_Indicator_On_Resource_Type,
+        Enter ("Xm.Xm_Indicator_On"));
+      Set_Type_Identifier
+       (Xt_Motif_Indicator_Type_Resource_Type,
+        Enter ("Xm.Xm_Indicator_Type"));
+  --    Set_Type_Identifier
+  --     (Xt_Motif_Input_Policy_Resource_Type,
+  --      Enter ("Xm.Xm_Input_Policy"));
+  --    Set_Type_Identifier
+  --     (Xt_Motif_Keyboard_Focus_Policy_Resource_Type,
+  --      Enter ("Xm.Xm_Keyboard_Focus_Policy"));
+      Set_Type_Identifier
+       (Xt_Motif_Label_Type_Resource_Type,
+        Enter ("Xm.Xm_Label_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Layout_Type_Resource_Type,
+        Enter ("Xm.Xm_Layout_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Container_Line_Style_Resource_Type,
+        Enter ("Xm_Line_Style"));
+      Set_Type_Identifier
+       (Xt_Motif_Match_Behavior_Resource_Type,
+        Enter ("Xm.Xm_Match_Behavior"));
+      Set_Type_Identifier
+       (Xt_Motif_Multi_Click_Resource_Type,
+        Enter ("Xm.Xm_Multi_Click"));
+      Set_Type_Identifier
+       (Xt_Motif_Navigation_Type_Resource_Type,
+        Enter ("Xm.Xm_Navigation_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Notebook_Child_Type_Resource_Type,
+        Enter ("Xm.Xm_Notebook_Child_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Orientation_Resource_Type,
+        Enter ("Xm.Xm_Orientation"));
+      Set_Type_Identifier
+       (Xt_Motif_Outline_Button_Policy_Resource_Type,
+        Enter ("Xm.Xm_Outline_Button_Policy"));
+      Set_Type_Identifier
+       (Xt_Motif_Outline_State_Resource_Type,
+        Enter ("Xm.Xm_Outline_State"));
+      Set_Type_Identifier
+       (Xt_Motif_Packing_Resource_Type,
+        Enter ("Xm.Xm_Packing"));
+      Set_Type_Identifier
+       (Xt_Motif_Position_Mode_Resource_Type,
+        Enter ("Xm.Xm_Position_Mode"));
+   --   Set_Type_Identifier
+   --    (Xt_Motif_Position_Type_Resource_Type,
+   --     Enter ("Xm.Xm_Position_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Primary_Ownership_Resource_Type,
+        Enter ("Xm.Xm_Primary_Ownership"));
+      Set_Type_Identifier
+       (Xt_Motif_Processing_Direction_Resource_Type,
+        Enter ("Xm.Xm_Processing_Direction"));
+--      Set_Type_Identifier
+--       (Xt_Motif_Resize_Policy_Resource_Type,
+--        Enter ("Xm.Xm_Resize_Policy"));
+--      Set_Type_Identifier
+--       (Xt_Motif_Row_Column_Type_Resource_Type,
+--        Enter ("Xm.Xm_Row_Column_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type,
+        Enter ("Xm.Xm_Scroll_Bar_Display_Policy"));
+--      Set_Type_Identifier
+--       (Xt_Motif_Scroll_Bar_Placement_Resource_Type,
+--        Enter ("Xm.Xm_Scroll_Bar_Placement"));
+--      Set_Type_Identifier
+--       (Xt_Motif_Scrolled_Window_Child_Type_Resource_Type,
+--        Enter ("Xm.Xm_Scrolled_Window_Child_Type"));
+--      Set_Type_Identifier
+--       (Xt_Motif_Scrolling_Policy_Resource_Type,
+--        Enter ("Xm.Xm_Scrolling_Policy"));
+--      Set_Type_Identifier
+--       (Xt_Motif_Selection_Policy_Resource_Type,
+--        Enter ("Xm.Xm_Selection_Policy"));
+--      Set_Type_Identifier
+--       (Xt_Motif_Selection_Technique_Resource_Type,
+--        Enter ("Xm.Xm_Selection_Technique"));
+      Set_Type_Identifier
+       (Xt_Motif_Separator_Type_Resource_Type,
+        Enter ("Xm.Xm_Separator_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Shadow_Type_Resource_Type,
+        Enter ("Xm.Xm_Shadow_Type"));
+      Set_Type_Identifier
+       (Xt_Motif_Show_Arrows_Resource_Type,
+        Enter ("Xm.Xm_Show_Arrows"));
    end Initialize;
 
 end Model.Initialization.Xm_Ada;
