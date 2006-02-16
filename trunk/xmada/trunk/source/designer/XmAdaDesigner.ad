@@ -15,6 +15,20 @@
 *XmSimpleSpinBox.shadowThickness: 0
 *XmSpinBox.shadowThickness: 0
 
+!!  Окно "О программе".
+
+*about_dialog.dialogTitle: About XmAda designer
+*about_dialog.cancelLabelString: Close
+*about_dialog.defaultButtonType:DIALOG_CANCEL_BUTTON
+*about_dialog.messageAlignment: ALIGNMENT_CENTER
+*about_dialog.messageString: XmAda designer\n\
+Copyright (C) 2006 TechnoServ A/S\n\n\
+Vasiliy Dibala <dibalavs@yandex.ru>\n\
+Vadim Godunko <vgodunko@rostel.ru>\n\
+Natalia Korepanova <destinymail@yandex.ru>\n\
+Roman Marchenko <roman.marchenko@mail.ru>\n\
+Michail Shilov <shilovm@list.ru>\n
+
 !!  Главное окно.
 
 *open_file_dialog.dialogTitle : Open existing file
@@ -46,6 +60,10 @@
 *main_window.main_menu*debug.labelString: Debug
 *main_window.main_menu*debug_menu*dump_tree.labelString: Dump project model tree
 *main_window.main_menu*debug_menu*tables_statistics.labelString: Internal tables statistics
+*main_window.main_menu*help.labelString: Help
+*main_window.main_menu*help.mnemonic: H
+*main_window.main_menu*help_menu.about.labelString: About ...
+*main_window.main_menu*help_menu.about.mnemonic: A
 *main_window.horizontal_paned.orientation: HORIZONTAL
 
 !!  Окно команд - палитра классов виджетов.

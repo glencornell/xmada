@@ -62,6 +62,7 @@ with Xm_File_Selection_Box;
 with Xm_Form;
 with Xm_Label_Gadget;
 with Xm_Main_Window;
+with Xm_Message_Box;
 with Xm_Notebook;
 with Xm_Paned_Window;
 with Xm_Push_Button_Gadget;
@@ -89,6 +90,7 @@ package body Designer.Main_Window is
    use Xm_Form;
    use Xm_Label_Gadget;
    use Xm_Main_Window;
+   use Xm_Message_Box;
    use Xm_Notebook;
    use Xm_Paned_Window;
    use Xm_Push_Button_Gadget;
@@ -103,11 +105,24 @@ package body Designer.Main_Window is
    use Xt.Resource_Management;
    use Xt.Utilities;
 
+   About_Dialog : Widget;
+
    function To_Closure is new Ada.Unchecked_Conversion (Widget, Xt_Pointer);
 
    function To_Widget is new Ada.Unchecked_Conversion (Xt_Pointer, Widget);
 
    package Callbacks is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_About
+      --!    <Purpose> Подпрограмма обратного вызова выборе элемента меню
+      --! "О программе".
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_About (The_Widget : in Widget;
+                          Closure    : in Xt_Pointer;
+                          Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_About);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -271,6 +286,27 @@ package body Designer.Main_Window is
    ---------------
 
    package body Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_About
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_About (The_Widget : in Widget;
+                          Closure    : in Xt_Pointer;
+                          Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Xt_Manage_Child (About_Dialog);
+      exception
+         when E : others =>
+            Put_Exception_In_Callback ("On_About", E);
+      end On_About;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -628,6 +664,10 @@ package body Designer.Main_Window is
       Element         : Widget;
 
    begin
+      --  Создание диалога "О программе".
+
+      About_Dialog := Xm_Create_Template_Dialog (App_Shell, "about_dialog");
+
       --  Создание диалога открытия файлов.
 
       Open_Dialog :=
@@ -752,6 +792,22 @@ package body Designer.Main_Window is
       Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Submenu);
       Button :=
         Xm_Create_Managed_Cascade_Button_Gadget (Menu, "debug", Args (0 .. 0));
+
+      --  Меню "О программе".
+
+      Submenu := Xm_Create_Pulldown_Menu (Menu, "help_menu");
+
+      Element := Xm_Create_Managed_Push_Button_Gadget (Submenu, "about");
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_About'Access);
+
+      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Submenu);
+      Button :=
+        Xm_Create_Managed_Cascade_Button_Gadget (Menu, "help", Args (0 .. 0));
+
+      Xt_Set_Arg (Args (0), Xm_N_Menu_Help_Widget, Button);
+      Xt_Set_Values (Menu, Args (0 .. 0));
 
       --
       --  Создание панели редактирования свойств.
