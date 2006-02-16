@@ -267,7 +267,8 @@ package body Model.Tree is
        (Node_Kind (Node) = Node_Enumerated_Resource_Type
           or else Node_Kind (Node) = Node_Enumeration_Value_Specification
           or else Node_Kind (Node) = Node_Predefined_Resource_Type
-          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type
+          or else Node_Kind (Node) = Node_Xm_String_Resource_Type);
 
       case Node_Kind (Node) is
          when Node_Enumerated_Resource_Type =>
@@ -281,6 +282,9 @@ package body Model.Tree is
 
          when Node_Widget_Reference_Resource_Type =>
             return Node_Table.Table (Node).WRRT_Internal_Name;
+
+         when Node_Xm_String_Resource_Type =>
+            return Node_Table.Table (Node).XSRT_Internal_Name;
 
          when others =>
             raise Program_Error;
@@ -514,7 +518,8 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Widget_Class
           or else Node_Kind (Node) = Node_Widget_Instance
           or else Node_Kind (Node) = Node_Predefined_Resource_Type
-          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type
+          or else Node_Kind (Node) = Node_Xm_String_Resource_Type);
 
       case Node_Kind (Node) is
          when Node_Component_Class =>
@@ -540,6 +545,9 @@ package body Model.Tree is
 
          when Node_Widget_Reference_Resource_Type =>
             return Node_Table.Table (Node).WRRT_Name;
+
+         when Node_Xm_String_Resource_Type =>
+            return Node_Table.Table (Node).XSRT_Name;
 
          when others =>
             raise Program_Error;
@@ -999,23 +1007,27 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Enumeration_Value_Specification
+       (Node_Kind (Node) = Node_Enumerated_Resource_Type
+          or else Node_Kind (Node) = Node_Enumeration_Value_Specification
           or else Node_Kind (Node) = Node_Predefined_Resource_Type
-          or else Node_Kind (Node) = Node_Enumerated_Resource_Type
-          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type
+          or else Node_Kind (Node) = Node_Xm_String_Resource_Type);
 
       case Node_Kind (Node) is
+         when Node_Enumerated_Resource_Type =>
+            Node_Table.Table (Node).ERT_Internal_Name := Value;
+
          when Node_Enumeration_Value_Specification =>
             Node_Table.Table (Node).EVS_Internal_Name := Value;
 
          when Node_Predefined_Resource_Type =>
             Node_Table.Table (Node).PRT_Internal_Name := Value;
 
-         when Node_Enumerated_Resource_Type =>
-            Node_Table.Table (Node).ERT_Internal_Name := Value;
-
          when Node_Widget_Reference_Resource_Type =>
             Node_Table.Table (Node).WRRT_Internal_Name := Value;
+
+         when Node_Xm_String_Resource_Type =>
+            Node_Table.Table (Node).XSRT_Internal_Name := Value;
 
          when others =>
             raise Program_Error;
@@ -1224,30 +1236,31 @@ package body Model.Tree is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert
-       (Node_Kind (Node) = Node_Enumeration_Value_Specification
-          or else Node_Kind (Node) = Node_Predefined_Resource_Type
+       (Node_Kind (Node) = Node_Component_Class
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type
+          or else Node_Kind (Node) = Node_Enumeration_Value_Specification
+          or else Node_Kind (Node) = Node_Predefined_Resource_Type
           or else Node_Kind (Node) = Node_Project
-          or else Node_Kind (Node) = Node_Component_Class
           or else Node_Kind (Node) = Node_Widget_Class
           or else Node_Kind (Node) = Node_Widget_Instance
-          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
+          or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type
+          or else Node_Kind (Node) = Node_Xm_String_Resource_Type);
 
       case Node_Kind (Node) is
+         when Node_Component_Class =>
+            Node_Table.Table (Node).CC_Name := Value;
+
+         when Node_Enumerated_Resource_Type =>
+            Node_Table.Table (Node).ERT_Name := Value;
+
          when Node_Enumeration_Value_Specification =>
             Node_Table.Table (Node).EVS_Name := Value;
 
          when Node_Predefined_Resource_Type =>
             Node_Table.Table (Node).PRT_Name := Value;
 
-         when Node_Enumerated_Resource_Type =>
-            Node_Table.Table (Node).ERT_Name := Value;
-
          when Node_Project =>
             Node_Table.Table (Node).P_Name := Value;
-
-         when Node_Component_Class =>
-            Node_Table.Table (Node).CC_Name := Value;
 
          when Node_Widget_Class =>
             Node_Table.Table (Node).WC_Name := Value;
@@ -1257,6 +1270,9 @@ package body Model.Tree is
 
          when Node_Widget_Reference_Resource_Type =>
             Node_Table.Table (Node).WRRT_Name := Value;
+
+         when Node_Xm_String_Resource_Type =>
+            Node_Table.Table (Node).XSRT_Name := Value;
 
          when others =>
             raise Program_Error;

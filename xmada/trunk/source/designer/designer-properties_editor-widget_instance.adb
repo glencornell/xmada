@@ -121,7 +121,8 @@ package body Designer.Properties_Editor.Widget_Instance is
      Annotation_Screen_Resource_Value,
      Annotation_Translation_Data_Resource_Value,
      Annotation_Widget_Instance,
-     Annotation_Widget_Reference_Resource_Value);
+     Annotation_Widget_Reference_Resource_Value,
+     Annotation_Xm_String_Resource_Value);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
@@ -134,6 +135,7 @@ package body Designer.Properties_Editor.Widget_Instance is
            | Annotation_Screen_Resource_Value
            | Annotation_Translation_Data_Resource_Value
            | Annotation_Widget_Reference_Resource_Value
+           | Annotation_Xm_String_Resource_Value
          =>
             Use_In_Program : Widget;  --  Кнопка "использовать в программе".
             Hard_Code      : Widget;  --  Кнопка "вшивать в код".
@@ -1904,6 +1906,15 @@ package body Designer.Properties_Editor.Widget_Instance is
                 (Kind          => Annotation_Widget_Instance,
                  WI_Child_Menu => Null_Widget,
                  WI_Button     => Null_Widget);
+
+            when Node_Xm_String_Resource_Value =>
+               Annotation_Table.Table (J) :=
+                (Kind           => Annotation_Xm_String_Resource_Value,
+                 Use_In_Program => Null_Widget,
+                 Hard_Code      => Null_Widget,
+                 Fallback       => Null_Widget,
+                 Name           => Null_Widget,
+                 Value          => Null_Widget);
 
             when others =>
                Annotation_Table.Table (J) := (Kind => Annotation_Empty);

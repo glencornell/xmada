@@ -79,6 +79,10 @@ package body Designer.Model_Utilities is
             Result := Create_Widget_Reference_Resource_Value;
             Set_Resource_Value (Result, Node_Id'(Resource_Value (Node)));
 
+         when Node_Xm_String_Resource_Type =>
+            Result := Create_Xm_String_Resource_Value;
+            Set_Resource_Value (Result, String_Id'(Resource_Value (Node)));
+
          when others =>
             raise Program_Error;
       end case;
