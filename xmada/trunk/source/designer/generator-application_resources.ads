@@ -28,6 +28,8 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
+--! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
+--!
 --! <Unit> Generator.Application_Resources
 --! <Purpose>
 --!   Пакет содержит реализацию генератора файлов ресурсов приложения.

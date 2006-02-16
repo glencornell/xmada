@@ -28,6 +28,8 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
+--! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
+--!
 --! <Unit> Model.Widget_Instances_Ordering
 --! <Purpose>
 --!   This package contains the routines to determine right order of widget
