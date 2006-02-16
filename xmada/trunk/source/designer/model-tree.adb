@@ -159,6 +159,21 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Cannot_Be_Set_In_Resource_File
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Cannot_Be_Set_In_Resource_File (Node : in Node_Id)
+     return Boolean
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      return Node_Table.Table (Node).Cannot_Be_Set_In_Resource_File;
+   end Cannot_Be_Set_In_Resource_File;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Children
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -900,6 +915,21 @@ package body Model.Tree is
 
       Node_Table.Table (Node).Can_Be_Set_By_Set_Values := Value;
    end Set_Can_Be_Set_By_Set_Values;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Cannot_Be_Set_In_Resource_File
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Cannot_Be_Set_In_Resource_File (Node  : in Node_Id;
+                                                 Value : in Boolean)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Node_Table.Table (Node).Cannot_Be_Set_In_Resource_File := Value;
+   end Set_Cannot_Be_Set_In_Resource_File;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
