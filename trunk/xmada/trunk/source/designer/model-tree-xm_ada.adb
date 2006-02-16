@@ -45,7 +45,10 @@ package body Model.Tree.Xm_Ada is
 
    type Annotation_Kinds is
     (Annotation_Empty,
-     Annotation_Widget_Class);
+     Annotation_Widget_Class,
+     Annotation_Resource_Specification,
+     Annotation_Enumeration_Value_Specification,
+     Annotation_Enumerated_Resource_Type);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
@@ -56,9 +59,23 @@ package body Model.Tree.Xm_Ada is
          when Annotation_Widget_Class =>
             Create_Function_Name : Name_Id;
 
+         when Annotation_Resource_Specification =>
+            Resource_Name_String       : Name_Id;
+            Resource_Class_Name_String : Name_Id;
+
+         when Annotation_Enumeration_Value_Specification =>
+            Literal_Identifier       : Name_Id;
+            --  Представление значения перечислимого типа в коде программы.
+
+            Use_Qualified_Expression : Boolean;
+            --  Использование характеризующего данного значение выражения.
+
+         when Annotation_Enumerated_Resource_Type =>
+            Type_Identifier : Name_Id;
+            --  Уникальный идентификатор типа ресурса.
+
       end case;
    end record;
-
 
    package Annotation_Table is
      new GNAT.Table (Table_Component_Type => Annotation_Record,
@@ -108,6 +125,21 @@ package body Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Literal_Identifier
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Literal_Identifier (Node : in Node_Id) return Name_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumeration_Value_Specification);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Literal_Identifier;
+   end Literal_Identifier;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -125,11 +157,31 @@ package body Model.Tree.Xm_Ada is
                    (Kind                 => Annotation_Widget_Class,
                     Create_Function_Name => Null_Name);
 
+                when Node_Resource_Specification =>
+                  Annotation_Table.Table (J) :=
+                   (Kind                       => 
+                     Annotation_Resource_Specification,
+                    Resource_Name_String       => Null_Name,
+                    Resource_Class_Name_String => Null_Name);
+
+               when Node_Enumeration_Value_Specification =>
+                  Annotation_Table.Table (J) :=
+                   (Kind                      => 
+                     Annotation_Enumeration_Value_Specification,
+                    Literal_Identifier        => Null_Name,
+                    Use_Qualified_Expression  => False);
+
+               when Node_Enumerated_Resource_Type =>
+                  Annotation_Table.Table (J) :=
+                   (Kind            => Annotation_Enumerated_Resource_Type,
+                    Type_Identifier => Null_Name);
+
                when others =>
                   Annotation_Table.Table (J) := (Kind => Annotation_Empty);
             end case;
          end loop;
       end if;
+
    end Relocate_Annotation_Table;
 
    ---------------------------------------------------------------------------
@@ -164,7 +216,8 @@ package body Model.Tree.Xm_Ada is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Set_Convenience_Create_Function_Name (Node : in Node_Id;
-                                                   Name : in Name_Id) is
+                                                   Name : in Name_Id)
+   is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert (Node_Kind (Node) = Node_Widget_Class);
@@ -176,13 +229,95 @@ package body Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Literal_Identifier
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Literal_Identifier (Node  : in Node_Id;
+                                     Value : in Name_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumeration_Value_Specification);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Literal_Identifier := Value;
+   end Set_Literal_Identifier;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Resource_Name_String
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Set_Resource_Name_String (Node : in Node_Id;
-                                       Name : in Name_Id) is
+                                       Name : in Name_Id) 
+   is
    begin
       null;
    end Set_Resource_Name_String;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Type_Identifier
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Type_Identifier (Node  : in Node_Id;
+                                  Value : in Name_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Type_Identifier := Value;
+   end Set_Type_Identifier;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Use_Qualified_Expression
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Use_Qualified_Expression (Node : in Node_Id;
+                                           Value : in Boolean)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumeration_Value_Specification);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Use_Qualified_Expression := Value;
+   end Set_Use_Qualified_Expression;
+ 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Type_Identifier
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Type_Identifier (Node : in Node_Id) return Name_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Type_Identifier;
+   end Type_Identifier;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Use_Qualified_Expression
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Use_Qualified_Expression (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumeration_Value_Specification);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Use_Qualified_Expression;
+   end Use_Qualified_Expression;
 
 end Model.Tree.Xm_Ada;
