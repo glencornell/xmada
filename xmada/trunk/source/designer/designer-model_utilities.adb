@@ -39,6 +39,7 @@
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
 
+with Designer.Main_Window;
 package body Designer.Model_Utilities is
 
    use Model;
@@ -95,6 +96,48 @@ package body Designer.Model_Utilities is
 
       return Result;
    end Create_Resource_Value_Copy;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Delete_Node
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Delete_Node (Node : in Model.Node_Id) is
+      pragma Assert (Node /= Null_Node);
+
+      List    : constant List_Id := Children (Node);
+      Current : Node_Id;
+      Parent  : Node_Id;
+
+   begin
+
+      if List /= Null_List then
+         Current := First (List);
+
+         while Current /= Null_Node loop
+            Delete_Node (Current);
+
+            Current := Next (Current);
+         end loop;
+      end if;
+
+      Main_Window.Delete_Item (Node);
+
+      Parent := Parent_Node (Node);
+
+      if Parent /= Null_Node then
+         case Node_Kind (Parent) is
+            when Node_Widget_Instance  =>
+               Remove (Node);
+
+            when  Node_Component_Class =>
+               Set_Root (Parent, Null_Node);
+
+            when others =>
+               null;
+         end case;
+      end if;
+   end Delete_Node;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

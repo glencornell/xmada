@@ -1514,7 +1514,10 @@ package body Model.Tree is
       pragma Assert (Node_Kind (Node) = Node_Component_Class);
 
       Node_Table.Table (Node).Root := Value;
-      Set_Parent_Node (Value, Node);
+
+      if Value /= Null_Node then
+         Set_Parent_Node (Value, Node);
+      end if;
    end Set_Root;
 
    ---------------------------------------------------------------------------
