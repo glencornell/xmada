@@ -49,6 +49,13 @@ package Model.Tree.Designer is
                       Arg_List : in Xt.Ancillary_Types.Xt_Arg_List)
                         return Xt.Widget;
 
+   --  Тип данных, используемый для представления значения перечислимого типа.
+
+   type Representation_Types is
+    (Representation_Type_Unspecified,
+     Representation_Type_C_Unsigned_Short,
+     Representation_Type_C_Int);
+
    function All_Resources (Node : in Node_Id) return List_Id;
    procedure Set_All_Resources (Node : in Node_Id; Value : in List_Id);
 
@@ -63,6 +70,11 @@ package Model.Tree.Designer is
 
    function Is_Changed (Node : in Node_Id) return Boolean;
    procedure Set_Is_Changed (Node : in Node_Id; Value : in Boolean);
+
+   function Representation_Type (Node : in Node_Id)
+     return Representation_Types;
+   procedure Set_Representation_Type (Node  : in Node_Id;
+                                      Value : in Representation_Types);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

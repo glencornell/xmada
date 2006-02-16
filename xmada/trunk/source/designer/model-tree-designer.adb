@@ -49,6 +49,7 @@ package body Model.Tree.Designer is
     (Annotation_Empty,
      Annotation_Boolean_Resource_Value,
      Annotation_Colormap_Resource_Value,
+     Annotation_Enumerated_Resource_Type,
      Annotation_Enumeration_Resource_Value,
      Annotation_Integer_Resource_Value,
      Annotation_Pixel_Resource_Value,
@@ -79,6 +80,8 @@ package body Model.Tree.Designer is
          =>
             Is_Changed : Boolean;
 
+         when Annotation_Enumerated_Resource_Type =>
+            Representation_Type : Representation_Types;
 
          when Annotation_Widget_Class =>
             Convenience_Create_Function : Convenience_Create;
@@ -220,6 +223,11 @@ package body Model.Tree.Designer is
                    (Kind       => Annotation_Colormap_Resource_Value,
                     Is_Changed => False);
 
+               when Node_Enumerated_Resource_Type =>
+                  Annotation_Table.Table (J) :=
+                   (Kind                => Annotation_Enumerated_Resource_Type,
+                    Representation_Type => Representation_Type_Unspecified);
+
                when Node_Enumeration_Resource_Value =>
                   Annotation_Table.Table (J) :=
                    (Kind       => Annotation_Enumeration_Resource_Value,
@@ -266,6 +274,23 @@ package body Model.Tree.Designer is
          end loop;
       end if;
    end Relocate_Annotation_Table;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Representation_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Representation_Type (Node : in Node_Id)
+     return Representation_Types
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Representation_Type;
+   end Representation_Type;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -341,5 +366,22 @@ package body Model.Tree.Designer is
 
       Annotation_Table.Table (Node).Is_Changed := Value;
    end Set_Is_Changed;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Representation_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Representation_Type (Node  : in Node_Id;
+                                      Value : in Representation_Types)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Representation_Type := Value;
+   end Set_Representation_Type;
 
 end Model.Tree.Designer;
