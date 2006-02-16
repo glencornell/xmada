@@ -223,6 +223,16 @@ package body Designer.Properties_Editor.Widget_Instance is
    ---------------------------------------------------------------------------
    procedure Set_Menu (Node : in Node_Id; Value : in Widget);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Relocate_Annotation_Table
+   --!    <Purpose> Производит расширение таблицы для обеспечения возможности
+   --! её использования для указанного узла. Все добавленные элементы
+   --! инициализируются значениями по умолчанию.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Relocate_Annotation_Table (Node : in Node_Id);
+
    package Callbacks is
 
       ------------------------------------------------------------------------
@@ -998,16 +1008,6 @@ package body Designer.Properties_Editor.Widget_Instance is
              ("On_Use_In_Program_Changed", E);
       end On_Xm_String_Activate;
    end Callbacks;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Relocate_Annotation_Table
-   --!    <Purpose> Производит расширение таблицы для обеспечения возможности
-   --! её использования для указанного узла. Все добавленные элементы
-   --! инициализируются значениями по умолчанию.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Relocate_Annotation_Table (Node : in Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
