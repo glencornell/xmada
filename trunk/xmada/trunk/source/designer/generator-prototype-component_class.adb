@@ -103,7 +103,11 @@ package body Generator.Prototype.Component_Class is
          Put_Line (File => File,
                    Item => "with Xm_Form;");
          Put_Line (File => File,
+                   Item => "with Xm_Label;");
+         Put_Line (File => File,
                    Item => "with Xm_Message_Box;");
+         Put_Line (File => File,
+                   Item => "with Xm_Push_Button;");
          Put_Line (File => File,
                    Item => "with Xm_String_Defs;");
          Put_Line (File => File,
@@ -321,14 +325,13 @@ package body Generator.Prototype.Component_Class is
                      Specification := Resource_Specification (Resource);
 
                      if Can_Be_Set_At_Creation_Time (Specification)
-                        and then Node_Kind (Resource_Type (Specification))
-                          /= Node_Widget_Reference_Resource_Type
+                       and not Is_Postponed (Resource)
                      then
                         --  Ресурс, устанавливаемый во время создания виджета.
 
                         Res := Res + 1;
 
-                     else
+                     elsif Can_Be_Set_By_Set_Values (Specification) then
                         --  Отложенный ресурс.
 
                         Set_Is_Postponed (Resource, True);
@@ -336,6 +339,12 @@ package body Generator.Prototype.Component_Class is
                         Postponed_Resources.Append (Resource);
                         --  Добавляем ресурс в глобальный массив
                         --  отложенных ресурсов.
+
+                     else
+                        raise Program_Error;
+                        --  Ресурс не может быть задан в момент
+                        --  создания виджета, но и не может быть
+                        --  задан позже.
 
                      end if;
 
@@ -451,6 +460,9 @@ package body Generator.Prototype.Component_Class is
                  & Model.Queries.Name_Image (Resource_Value (Node));
 
             when others =>
+               Ada.Wide_Text_IO.Put_Line
+                (Standard_Error, "ERROR: Unhandled resource type : "
+                 & Node_Kinds'Wide_Image (Node_Kind (Node)));
                raise Program_Error;
          end case;
       end Resource_Value_String;
