@@ -68,8 +68,8 @@
 
 !!  Окно редактора свойств
 
-*main_window.horizontal_paned.properties_form.width: 400
-*main_window.horizontal_paned.properties_form.height: 600
+*main_window.horizontal_paned.properties_form.width: 480
+*main_window.horizontal_paned.properties_form.height: 700
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
 *main_window.horizontal_paned.properties_form.subform.name.labelString: Name
