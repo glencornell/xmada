@@ -28,9 +28,9 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Model.Strings
+--! <Unit> Model.Strings.Debug
 --! <Purpose>
---!   Пакет предназначен для управления хранением строк используемых в модели.
+--!   Пакет содержит подпрограммы вывода отладочной информации.
 --!
 --! <Effects>
 --! <Perfomance>
@@ -38,48 +38,18 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with GNAT.Table;
+with Ada.Wide_Text_IO;
 
-with Model.Allocations;
-
-package Model.Strings is
-
-   function Store (Item : in Wide_String) return String_Id;
-
-   function Image (Item : in String_Id) return Wide_String;
+package Model.Strings.Debug is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Initialize
-   --!    <Purpose> Производит начальную инициализацию внутренних структур.
-   --! При повторном вызове осуществляет освобождение используемых ресурсов
-   --! и повторную начальную инициализацию внутренних структур.
+   --!    <Unit> Print_Statistics
+   --!    <Purpose> Выводит статистические данные по таблицам имён.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Initialize;
+   procedure Print_Statistics (File         : in Ada.Wide_Text_IO.File_Type;
+                               Title_Offset : in Ada.Wide_Text_IO.Count;
+                               Data_Offset  : in Ada.Wide_Text_IO.Count);
 
-private
-
-   package String_Character_Table is
-     new GNAT.Table
-          (Table_Component_Type => Wide_Character,
-           Table_Index_Type     => Natural,
-           Table_Low_Bound      => Natural'First + 1,
-           Table_Initial        => Allocations.String_Character_Table_Initial,
-           Table_Increment      =>
-             Allocations.String_Character_Table_Increment);
-
-   type String_Record is record
-      First : Positive;
-      Last  : Natural;
-   end record;
-
-   package String_Table is
-     new GNAT.Table
-          (Table_Component_Type => String_Record,
-           Table_Index_Type     => String_Id,
-           Table_Low_Bound      => String_Id'First + 1,
-           Table_Initial        => Allocations.String_Table_Initial,
-           Table_Increment      => Allocations.String_Table_Increment);
-
-end Model.Strings;
+end Model.Strings.Debug;
