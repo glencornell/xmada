@@ -56,6 +56,7 @@ with Xm_Scrolled_Window;
 with Xm_String_Defs;
 
 with Designer.Main_Window;
+with Designer.Model_Utilities;
 with Model.Allocations;
 with Model.Queries;
 with Model.Tree;
@@ -311,26 +312,15 @@ package body Designer.Tree_Editor is
          pragma Unreferenced (Num_Params);
          --  Данные переменные не используются.
 
-         Count : Integer;
          Node  : Node_Id;
-         Args  : Xt_Arg_List (0 .. 0);
 
       begin
-         --  Получаем количество выделенных елементов.
-
-         Xt_Set_Arg (Args (0), Xm_N_Selected_Object_Count, Count'Address);
-         Xt_Get_Values (The_Widget, Args (0 .. 0));
-
-         if Count /= 1 then
-            raise Program_Error;
-         end if;
-
          --  Убираем выделение с элемента и удаляем его.
 
          if Selected_Item /= Null_Node then
             Node := Selected_Item;
             Main_Window.Select_Item (Null_Node);
-            Main_Window.Delete_Item (Node);
+            Model_Utilities.Delete_Node (Node);
          end if;
 
       exception

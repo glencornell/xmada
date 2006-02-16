@@ -65,4 +65,12 @@ package Designer.Model_Utilities is
    function Create_Resource_Value_Copy (Node : in Model.Node_Id)
      return Model.Node_Id;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Delete_Node
+   --!    <Purpose> функция удаляет узел из дерева.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Delete_Node (Node : in Model.Node_Id);
+
 end Designer.Model_Utilities;
