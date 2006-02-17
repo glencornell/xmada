@@ -289,38 +289,13 @@ package body Model.Tree.Xm_Ada is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    function Resource_Name_String (Node : in Node_Id) return Name_Id is
-      Res : Name_Id := Null_Name;
-
-   begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
 
+   begin
       Relocate_Annotation_Table;
 
-      declare
-         Internal_Name : constant Wide_String
-           := Model.Names.Image (Internal_Resource_Name (Node));
-
-      begin
-         if Internal_Name = "leftAttachment" then
-            Res := Model.Names.Enter ("Xm_String_Defs.Xm_N_Left_Attachment");
-
-         elsif Internal_Name = "leftWidget" then
-            Res := Model.Names.Enter ("Xm_String_Defs.Xm_N_Left_Widget");
-         end if;
-      end;
-
-      pragma Assert (Res /= Annotation_Table.Table (Node).Resource_Name_String);
-      --  Сработает, когда проблема будет устранена
-      --  или в случае отсутствия символьного имени
-      --  ресурса и в таблице и в заглушке.
-
-      if Res = Null_Name then
-         Res := Annotation_Table.Table (Node).Resource_Name_String;
-      end if;
-
-      return Res;
-      --  return Annotation_Table.Table (Node).Resource_Name_String;
+      return Annotation_Table.Table (Node).Resource_Name_String;
    end Resource_Name_String;
 
    ---------------------------------------------------------------------------
