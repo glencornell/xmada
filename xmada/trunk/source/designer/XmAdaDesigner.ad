@@ -97,7 +97,9 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.packing: PACK_COLUMN
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.orientation: VERTICAL
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.spacing: 0
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.create_in_record.labelString: In record name
+*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.create_in_record.labelString: Create in record
+*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.create_in_record_button.labelString:
+*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.variable_name.labelString: Variable name
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.use_in_program.labelString:
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.use_in_program.spacing: 0
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.hard_code.labelString:

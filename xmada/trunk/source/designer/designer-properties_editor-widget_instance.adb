@@ -1253,8 +1253,9 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure Add_Ada_Names (Parent : in Widget) is
-         Form : Widget;
-         Args : Xt_Arg_List (0 .. 5);
+         Form  : Widget;
+         Args  : Xt_Arg_List (0 .. 5);
+         Label : Widget;
 
       begin
          Form := Xm_Create_Managed_Form (Parent, "form");
@@ -1264,21 +1265,34 @@ package body Designer.Properties_Editor.Widget_Instance is
          Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Form);
          Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
          Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
-         Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
+         Label := Xm_Create_Managed_Label_Gadget
+                   (Form, "create_in_record", Args (0 .. 2));
+
+         Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
+         Xt_Set_Arg (Args (1), Xm_N_Left_Widget, Label);
+         Xt_Set_Arg (Args (2), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (4), Xm_N_User_Data, Xt_Arg_Val (Node));
          Annotation_Table.Table (Node).Create_In_Record :=
            Xm_Create_Managed_Toggle_Button_Gadget (Form,
-                                                   "create_in_record",
-                                                   Args (0 .. 3));
+                                                   "create_in_record_button",
+                                                   Args (0 .. 4));
          Xt_Add_Callback (Annotation_Table.Table (Node).Create_In_Record,
                           Xm_N_Value_Changed_Callback,
                           Callbacks.On_Create_In_Record_Changed'Access);
 
          --  Поле ввода имени элемента.
 
+         Form := Xm_Create_Managed_Form (Parent, "form");
+
+         Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+         Label := Xm_Create_Managed_Label_Gadget
+                   (Form, "variable_name", Args (0 .. 2));
+
          Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
-         Xt_Set_Arg (Args (1),
-                     Xm_N_Left_Widget,
-                     Annotation_Table.Table (Node).Create_In_Record);
+         Xt_Set_Arg (Args (1), Xm_N_Left_Widget, Label);
          Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
          Xt_Set_Arg (Args (3), Xm_N_Top_Attachment, Xm_Attach_Form);
          Xt_Set_Arg (Args (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
