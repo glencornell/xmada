@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2006  TechnoServ A/S
+--!  Copyright (C) 2006
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -28,8 +28,6 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
---!
 --! <Unit> Model.Widget_Instances_Ordering.
 --! <ImplementationNotes>
 --! <PortabilityIssues>
@@ -38,11 +36,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
---  with Ada.Wide_Text_IO;
-
 with GNAT.Table;
 
-with Model.Names;
 with Model.Queries;
 with Model.Tree.Lists;
 
@@ -50,9 +45,6 @@ package body Model.Widget_Instances_Ordering is
 
    use Model.Tree;
    use Model.Tree.Lists;
-
-   Conflict_Node      : Node_Id := Null_Node;
-   Conflict_Exception : exception;
 
    --  Идентификатор виджета в дереве узлов.
 
@@ -240,9 +232,10 @@ package body Model.Widget_Instances_Ordering is
       Widget    : Widget_Id;
 
    begin
-      Widget_Instances_Order_Table.Increment_Last;
-      Widget_Instances_Order_Table.Table (Widget_Instances_Order_Table.Last) :=
-        Widget_Instances.Table (Chosen).Node;
+         Widget_Instances_Order_Table.Increment_Last;
+         Widget_Instances_Order_Table.Table 
+           (Widget_Instances_Order_Table.Last) :=
+             Widget_Instances.Table (Chosen).Node;
 
       if No_Predecessors = Chosen then
          No_Predecessors := Widget_Node.Table (Chosen).Next_No_Predecessors;
@@ -356,7 +349,6 @@ package body Model.Widget_Instances_Ordering is
                       (Links.Table (Successor).After, Path_Length + 1)
                   then
                      return True;
-                     --  XXX Точка, где мы нашли узел со ссылкой.
                   end if;
 
                   Successor := Links.Table (Successor).Next;
@@ -385,81 +377,15 @@ package body Model.Widget_Instances_Ordering is
       for J in Widget_Instances.First .. Widget_Instances.Last loop
          if Widget_Node.Table (J).Widget_Position = 0 then
             if Find_Path (J, J, 1) then
-               --  Нашли путь от узла J до J длиной не менее 1 -
-               --  цикл налицо.
-
-               declare
-                  N : constant Node_Id
-                    := Widget_Instances.Table (J).Node;
-
-                  Is_Resolved    : Boolean := False;
-
-               begin
---                Ada.Wide_Text_IO.Put_Line
---                 (Node_Id'Wide_Image (N)
---                  & " "
---                  & Node_Kinds'Wide_Image (Node_Kind (N))
---                  & " "
---                  & Model.Queries.Name_Image (N));
-
-                  --  Перебираем по очереди все widget_reference_resource
-                  --  этого виджета и проверяем, не разрешится ли конфликт,
-                  --  если сделать ресурс отложенным.
-
-                  if Conflict_Node = Null_Node
-                    or else Parent_Node (Conflict_Node) /= N
-                  then
-                     --  Первая итерация.
-
-                     if Resources (N) /= Null_List then
-                        Conflict_Node := First (Resources (N));
-                     end if;
-
-                     while Conflict_Node /= Null_Node loop
-                        if Node_Kind (Conflict_Node)
-                             = Node_Widget_Reference_Resource_Value
-                          and then not Is_Postponed (Conflict_Node)
-                        then
---                         Ada.Wide_Text_IO.Put_Line
---                          ("    "
---                           & Node_Id'Wide_Image (Conflict_Node)
---                           & " "
---                           & Node_Kinds'Wide_Image (Node_Kind (Conflict_Node))
---                           & " "
---                           & Model.Names.Image
---                              (Internal_Resource_Name
---                                (Resource_Specification (Conflict_Node))));
-                           exit;
-                        end if;
-
-                        Conflict_Node := Next (Conflict_Node);
-                     end loop;
-                  else
-                     --  Текущий ресурс не повлиял на конфликт.
-                     --  Восстанавливаем атрибут ресурса.
-
-                     Set_Is_Postponed (Conflict_Node, False);
-
-                     --  Следующий ресурс в списке.
-
-                     raise Program_Error;
-                  end if;
-
-                  if Conflict_Node /= Null_Node then
-                     Set_Is_Postponed (Conflict_Node, True);
-                  end if;
-               end;
-
---             Loop_In_Graph.Free;
---             Widget_Instances.Free;
---             Widget_Instances_Order_Table.Free;
-
-               raise Conflict_Exception;
+               Loop_In_Graph.Free;
+               Widget_Instances.Free;
+               Widget_Instances_Order_Table.Free;
+               raise Program_Error;
             end if;
          end if;
       end loop;
    end Diagnose_Problem;
-
+   
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Find_Widget_Id
@@ -489,8 +415,6 @@ package body Model.Widget_Instances_Ordering is
       Widget     : Widget_Id;
 
    begin
-      loop
-         begin
       --  Initialize all structures
       Widget_Instances.Init;
       Widget_Instances_Order_Table.Init;
@@ -569,29 +493,6 @@ package body Model.Widget_Instances_Ordering is
          end if;
       end loop Outer;
 
-      Conflict_Node := Null_Node;
-
-         exception
-            when Conflict_Exception =>
-               Widget_Instances.Free;
-               Loop_In_Graph.Free;
-               Widget_Node.Free;
-
-               if Conflict_Node = Null_Node then
-                  raise;
-               end if;
-
-            when others =>
-               Widget_Instances.Free;
-               Loop_In_Graph.Free;
-               Widget_Node.Free;
-               raise;
-         end;
-
-         exit when Conflict_Node = Null_Node;
-
-      end loop;
-
       Widget_Instances.Free;
       Loop_In_Graph.Free;
       Widget_Node.Free;
@@ -618,26 +519,19 @@ package body Model.Widget_Instances_Ordering is
             Aux := First (Resources (Node));
 
             while Aux /= Null_Node loop
---                         Ada.Wide_Text_IO.Put
---                          ("---"
---                           & Node_Id'Wide_Image (Aux)
---                           & " "
---                           & Node_Kinds'Wide_Image (Node_Kind (Aux))
---                           & " "
---                           & Model.Names.Image
---                              (Internal_Resource_Name
---                                (Resource_Specification (Aux)))
---                           & " : "
---                           & Boolean'Wide_Image (Is_Postponed (Aux)));
-               if Node_Kind (Resource_Type (Resource_Specification (Aux)))
-                    = Node_Widget_Reference_Resource_Type
-                 and then not Is_Postponed (Aux)
-               then
---                Ada.Wide_Text_IO.Put (" :  +");
-                  Widget := Find_Widget_Id (Resource_Value (Aux));
-                  Build_Link (Widget, K);
+               if Node_Kind (Aux) = Node_Widget_Reference_Resource_Value then
+                  if Parent_Node (Resource_Value (Aux)) = Node then
+                     if Can_Be_Set_By_Set_Values (Resource_Specification (Aux))
+                     then
+                        Set_Is_Postponed (Aux, True);
+                     else
+                        raise Program_Error;
+                     end if;
+                  else
+                     Widget := Find_Widget_Id (Resource_Value (Aux));
+                     Build_Link (Widget, K);
+                  end if;
                end if;
---             Ada.Wide_Text_IO.New_Line;
 
                Aux := Next (Aux);
             end loop;
@@ -647,12 +541,18 @@ package body Model.Widget_Instances_Ordering is
             Aux := First (Constraint_Resources (Node));
 
             while Aux /= Null_Node loop
-               if Node_Kind (Resource_Type (Resource_Specification (Aux)))
-                    = Node_Widget_Reference_Resource_Type
-                 and then not Is_Postponed (Aux)
-               then
-                  Widget := Find_Widget_Id (Resource_Value (Aux));
-                  Build_Link (Widget, K);
+               if Node_Kind (Aux) = Node_Widget_Reference_Resource_Value then
+                  if Parent_Node (Resource_Value (Aux)) = Node then
+                     if Can_Be_Set_By_Set_Values (Resource_Specification (Aux))
+                     then
+                        Set_Is_Postponed (Aux, True);
+                     else
+                        raise Program_Error;
+                     end if;
+                  else
+                     Widget := Find_Widget_Id (Resource_Value (Aux));
+                     Build_Link (Widget, K);
+                  end if;
                end if;
 
                Aux := Next (Aux);
@@ -701,17 +601,36 @@ package body Model.Widget_Instances_Ordering is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Reindexation (Node : in Node_Id) is
-      Widget : Node_Id;
-
+      Aux : Node_Id;
+      
    begin
-      if Children (Node) /= Null_List then
-         Widget := First (Children (Node));
 
-         while Widget /= Null_Node loop
+      if Resources (Node) /= Null_List then
+         Aux := First (Resources (Node));
+
+         while Aux /= Null_Node loop
+            Set_Is_Postponed (Aux, False);
+            Aux := Next (Aux);
+         end loop;
+      end if;
+
+      if Constraint_Resources (Node) /= Null_List then
+         Aux := First (Constraint_Resources (Node));
+
+         while Aux /= Null_Node loop
+            Set_Is_Postponed (Aux, False);
+            Aux := Next (Aux);
+         end loop;
+      end if;
+
+      if Children (Node) /= Null_List then
+         Aux := First (Children (Node));
+
+         while Aux /= Null_Node loop
             Widget_Instances.Increment_Last;
-            Widget_Instances.Table (Widget_Instances.Last).Node := Widget;
-            Reindexation (Widget);
-            Widget := Next (Widget);
+            Widget_Instances.Table (Widget_Instances.Last).Node := Aux;
+            Reindexation (Aux);
+            Aux := Next (Aux);
          end loop;
       end if;
    end Reindexation;
