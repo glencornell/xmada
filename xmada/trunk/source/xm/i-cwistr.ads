@@ -98,6 +98,7 @@ package Interfaces.C.Wide_Strings is
 
 private
    type wchars_ptr is access all wchar_t;
+   pragma No_Strict_Aliasing (wchars_ptr);
 
    Null_Ptr : constant wchars_ptr := null;
 end Interfaces.C.Wide_Strings;

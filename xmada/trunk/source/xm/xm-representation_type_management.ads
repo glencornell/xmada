@@ -50,6 +50,7 @@ package Xm.Representation_Type_Management is
    type unsigned_char_List
      is array (Natural range <>) of aliased Interfaces.C.unsigned_char;
    type unsigned_char_Pointer is access all Interfaces.C.unsigned_char;
+   pragma No_Strict_Aliasing (unsigned_char_Pointer);
 
    function To_unsigned_char_List (Pointer : in unsigned_char_Pointer;
                                    Length  : in Natural)
@@ -66,6 +67,7 @@ package Xm.Representation_Type_Management is
    pragma Convention (C, Xm_Rep_Type_Entry);
 
    type Xm_Rep_Type_Entry_Pointer is access all Xm_Rep_Type_Entry;
+   pragma No_Strict_Aliasing (Xm_Rep_Type_Entry_Pointer);
 
    type Xm_Rep_Type_List is array (Natural range <>) of Xm_Rep_Type_Entry;
 
