@@ -1314,11 +1314,11 @@ private
 
    pragma Convention (C, Xm_Any_Callback_Struct);
 
-   pragma Convention (C, Xm_Any_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Any_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Arrow_Button_Callback_Struct);
 
-   pragma Convention (C, Xm_Arrow_Button_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Arrow_Button_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Arrow_Direction);
    for Xm_Arrow_Direction'Size use Interfaces.C.unsigned_char'Size;
@@ -1367,29 +1367,29 @@ private
 
    pragma Convention (C, Xm_Combo_Box_Callback_Struct);
 
-   pragma Convention (C, Xm_Combo_Box_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Combo_Box_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Combo_Box_Type);
    for Xm_Combo_Box_Type'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Command_Callback_Struct);
 
-   pragma Convention (C, Xm_Command_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Command_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Command_Window_Location);
    for Xm_Command_Window_Location'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Container_Outline_Callback_Struct);
 
-   pragma Convention (C, Xm_Container_Outline_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Container_Outline_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Container_Select_Callback_Struct);
 
-   pragma Convention (C, Xm_Container_Select_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Container_Select_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Convert_Callback_Struct);
 
-   pragma Convention (C, Xm_Convert_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Convert_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Convert_Status);
    for Xm_Convert_Status'Size use Interfaces.C.int'Size;
@@ -1411,7 +1411,7 @@ private
 
    pragma Convention (C, Xm_Destination_Callback_Struct);
 
-   pragma Convention (C, Xm_Destination_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Destination_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Destination_Operation);
    for Xm_Destination_Operation'Size use Xt.Ancillary_Types.Xt_Enum'Size;
@@ -1434,15 +1434,19 @@ private
 
    pragma Convention (C, Xm_Display_Callback_Struct);
 
-   pragma Convention (C, Xm_Display_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Display_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Drag_Start_Callback_Struct);
 
-   pragma Convention (C, Xm_Drag_Start_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Drag_Start_Callback_Struct_Access);
+
+   pragma Convention (C, Xm_Drawing_Area_Callback_Struct);
+
+   pragma No_Strict_Aliasing (Xm_Drawing_Area_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Drawn_Button_Callback_Struct);
 
-   pragma Convention (C, Xm_Drawn_Button_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Drawn_Button_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Edit_Mode);
    for Xm_Edit_Mode'Size use Interfaces.C.unsigned_char'Size;
@@ -1461,7 +1465,7 @@ private
 
    pragma Convention (C, Xm_File_Selection_Box_Callback_Struct);
 
-   pragma Convention (C, Xm_File_Selection_Box_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_File_Selection_Box_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Highlight_Mode);
 
@@ -1505,6 +1509,12 @@ private
    pragma Convention (C, Xm_Line_Style);
    for Xm_Line_Style'Size use Interfaces.C.unsigned_char'Size;
 
+   pragma Convention (C, Xm_List_Callback_Struct);
+
+   pragma No_Strict_Aliasing (Xm_List_Callback_Struct_Access);
+
+   pragma No_Strict_Aliasing (Xm_List_Position_Pointer);
+
    pragma Convention (C, Xm_List_Selection_Type);
    for Xm_List_Selection_Type'Size use Interfaces.C.unsigned_char'Size;
 
@@ -1521,7 +1531,7 @@ private
 
    pragma Convention (C, Xm_Notebook_Callback_Struct);
 
-   pragma Convention (C, Xm_Notebook_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Notebook_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Notebook_Child_Type);
    for Xm_Notebook_Child_Type'Size use Interfaces.C.unsigned_char'Size;
@@ -1554,7 +1564,7 @@ private
 
    pragma Convention (C, Xm_Popup_Handler_Callback_Struct);
 
-   pragma Convention (C, Xm_Popup_Handler_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Popup_Handler_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Position_Mode);
    for Xm_Position_Mode'Size use Interfaces.C.unsigned_char'Size;
@@ -1567,32 +1577,32 @@ private
 
    pragma Convention (C, Xm_Print_Shell_Callback_Struct);
 
-   pragma Convention (C, Xm_Print_Shell_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Print_Shell_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Processing_Direction);
    for Xm_Processing_Direction'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Push_Button_Callback_Struct);
 
-   pragma Convention (C, Xm_Push_Button_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Push_Button_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Resize_Policy);
    for Xm_Resize_Policy'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Row_Column_Callback_Struct);
 
-   pragma Convention (C, Xm_Row_Column_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Row_Column_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Row_Column_Type);
    for Xm_Row_Column_Type'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Scale_Callback_Struct);
 
-   pragma Convention (C, Xm_Scale_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Scale_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Scroll_Bar_Callback_Struct);
 
-   pragma Convention (C, Xm_Scroll_Bar_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Scroll_Bar_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Scroll_Bar_Display_Policy);
    for Xm_Scroll_Bar_Display_Policy'Size use Interfaces.C.unsigned_char'Size;
@@ -1610,7 +1620,7 @@ private
 
    pragma Convention (C, Xm_Selection_Box_Callback_Struct);
 
-   pragma Convention (C, Xm_Selection_Box_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Selection_Box_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Selection_Policy);
    for Xm_Selection_Policy'Size use Interfaces.C.unsigned_char'Size;
@@ -1624,12 +1634,14 @@ private
    pragma Convention (C, Xm_Separator_Type);
    for Xm_Separator_Type'Size use Interfaces.C.unsigned_char'Size;
 
+   pragma No_Strict_Aliasing (Xm_String_Pointer);
+
    pragma Convention (C, Xm_Toggle_Button_State);
    for Xm_Toggle_Button_State'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Traversal_Obscured_Callback_Struct);
 
-   pragma Convention (C, Xm_Traversal_Obscured_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Traversal_Obscured_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Shadow_Type);
    for Xm_Shadow_Type'Size use Interfaces.C.unsigned_char'Size;
@@ -1667,7 +1679,7 @@ private
 
    pragma Convention (C, Xm_Spin_Box_Callback_Struct);
 
-   pragma Convention (C, Xm_Spin_Box_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Spin_Box_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Spin_Box_Child_Type);
    for Xm_Spin_Box_Child_Type'Size use Interfaces.C.unsigned_char'Size;
@@ -1707,15 +1719,15 @@ private
 
    pragma Convention (C, Xm_Text_Verify_Callback_Struct);
 
-   pragma Convention (C, Xm_Text_Verify_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Text_Verify_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Text_Verify_Callback_Struct_Wcs);
 
-   pragma Convention (C, Xm_Text_Verify_Callback_Struct_Wcs_Access);
+   pragma No_Strict_Aliasing (Xm_Text_Verify_Callback_Struct_Wcs_Access);
 
    pragma Convention (C, Xm_Toggle_Button_Callback_Struct);
 
-   pragma Convention (C, Xm_Toggle_Button_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Toggle_Button_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Toggle_Mode);
    for Xm_Toggle_Mode'Size use Interfaces.C.unsigned_char'Size;

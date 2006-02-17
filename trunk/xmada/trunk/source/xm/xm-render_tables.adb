@@ -51,12 +51,12 @@ package body Xm.Render_Tables is
    use Xt.Ancillary_Types;
 
    type Xm_Rendition_Pointer is access all Xm_Rendition;
-   pragma Convention (C, Xm_Rendition_Pointer);
+   pragma No_Strict_Aliasing (Xm_Rendition_Pointer);
 
    Null_Xm_Rendition_Pointer : constant Xm_Rendition_Pointer := null;
 
    type Xm_String_Tag_Pointer is access all Xm_String_Tag;
-   pragma Convention (C, Xm_String_Tag_Pointer);
+   pragma No_Strict_Aliasing (Xm_String_Tag_Pointer);
 
 
    function Xm_Render_Table_Add_Rendition

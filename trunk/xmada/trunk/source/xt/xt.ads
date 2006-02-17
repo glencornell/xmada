@@ -193,6 +193,7 @@ private
 
    type Widget is access Widget_Record;
    Null_Widget : constant Widget := null;
+   pragma No_Strict_Aliasing (Widget);
 
    type Widget_Class_Record is null record;
    pragma Convention (C, Widget_Class_Record);

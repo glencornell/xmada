@@ -77,6 +77,7 @@ package Xlib is
    Null_X_String_Pointer_List : constant X_String_Pointer_List;
 
    type X_String_Pointer_Pointer is access all X_String_Pointer;
+   pragma No_Strict_Aliasing (X_String_Pointer_Pointer);
    Null_X_String_Pointer_Pointer : constant X_String_Pointer_Pointer;
 
    function To_X_String_Pointer_List (Pointer : in X_String_Pointer_Pointer;

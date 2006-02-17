@@ -92,6 +92,7 @@ package Xlib.Extensions.Input_Device is
    pragma Convention (C, X_Axis_Info);
 
    type X_Axis_Info_Pointer is access all X_Axis_Info;
+   pragma No_Strict_Aliasing (X_Axis_Info_Pointer);
    pragma Convention (C, X_Axis_Info_Pointer);
 
    type X_Axis_Info_List is array (Natural range <>) of aliased X_Axis_Info;
@@ -131,6 +132,7 @@ package Xlib.Extensions.Input_Device is
    subtype X_Valuator_Info is X_Any_Class_Info (Valuator_Class);
 
    type X_Any_Class_Info_Pointer is access all X_Any_Class_Info;
+   pragma No_Strict_Aliasing (X_Any_Class_Info_Pointer);
    pragma Convention (C, X_Any_Class_Info_Pointer);
 
    type X_Any_Class_Info_Pointer_List is
@@ -157,6 +159,7 @@ package Xlib.Extensions.Input_Device is
    pragma Convention (C, X_Device_Info_List);
 
    type X_Device_Info_Pointer is access all X_Device_Info;
+   pragma No_Strict_Aliasing (X_Device_Info_Pointer);
    pragma Convention (C, X_Device_Info_Pointer);
 
    function To_X_Device_Info_List is

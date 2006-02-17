@@ -249,7 +249,7 @@ package Xm.Internal is
 private
 
    pragma Convention (C, Xm_Focus_Moved_Callback_Struct);
-   pragma Convention (C, Xm_Focus_Moved_Callback_Struct_Access);
+   pragma No_Strict_Aliasing (Xm_Focus_Moved_Callback_Struct_Access);
 
    pragma Convention (C, Xm_Render_Table_Type);
    for Xm_Render_Table_Type'Size use Interfaces.C.unsigned_char'Size;

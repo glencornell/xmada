@@ -53,7 +53,7 @@ package body Xm.Resource_Management is
 
    type Xm_Secondary_Resource_Data_Pointer is
      access all Xm_Secondary_Resource_Data;
-
+   pragma No_Strict_Aliasing (Xm_Secondary_Resource_Data_Pointer);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
