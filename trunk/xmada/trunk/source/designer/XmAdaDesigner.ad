@@ -97,6 +97,7 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.packing: PACK_COLUMN
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.orientation: VERTICAL
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.spacing: 0
+*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.create_in_record.labelString: In record name
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.use_in_program.labelString:
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.use_in_program.spacing: 0
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.hard_code.labelString:
@@ -111,6 +112,8 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.marginHeight: 0
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.marginWidth: 0
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.spacing: 0
+*main_window.horizontal_paned.properties_form.subform.notebook.ada.labelString: Ada
+*main_window.horizontal_paned.properties_form.subform.notebook.ada.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.subform.notebook.resources.labelString: Resources
 *main_window.horizontal_paned.properties_form.subform.notebook.resources.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.subform.notebook.constraints.labelString: Constraints

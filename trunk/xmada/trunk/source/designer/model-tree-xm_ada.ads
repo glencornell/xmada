@@ -90,6 +90,38 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_In_Record_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_In_Record_Name (Node : in Node_Id; Name : in String_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> In_Record_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function In_Record_Name (Node : in Node_Id) return String_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Use_In_Record
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Create_In_Record (Node : in Node_Id; Value : in Boolean);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Use_In_Record
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Create_In_Record (Node : in Node_Id) return Boolean;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Convenience_Create_Function_Name
    --!    <Purpose>
    --!    <Exceptions>

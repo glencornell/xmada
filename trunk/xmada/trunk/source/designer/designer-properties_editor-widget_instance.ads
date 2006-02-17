@@ -83,8 +83,6 @@ private
    type Widget_Instance_Properties_Editor is
      new Node_Properties_Editor with
    record
-      Name       : Xt.Widget;  --  Имя виджета.
-      Is_Managed : Xt.Widget;  --  Признак взятия на управление после создания.
       Form       : Xt.Widget;  --  Форма, на которой располагаются свойства.
    end record;
 
