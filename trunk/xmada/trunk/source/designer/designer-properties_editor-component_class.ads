@@ -63,7 +63,13 @@ private package Designer.Properties_Editor.Component_Class is
 private
 
    type Component_Class_Properties_Editor is
-     new Node_Properties_Editor with null record;
+     new Node_Properties_Editor with
+   record
+      Form : Xt.Widget;
+   end record;
+
+   type Component_Class_Properties_Editor_Access is
+     access all Component_Class_Properties_Editor'Class;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
