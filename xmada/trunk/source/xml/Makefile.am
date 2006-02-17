@@ -2,7 +2,10 @@ include ../../support/Makefile.common
 
 alidir = $(includedir)/xmada
 
-ADAFLAGS = -I$(srcdir)/../xlib -I$(srcdir)/../xt -I$(srcdir)/../xm
+ADAFLAGS = $(STD_ADAFLAGS) \
+	-I$(srcdir)/../xlib \
+	-I$(srcdir)/../xt \
+	-I$(srcdir)/../xm
 
 ADA_SPECS_WITH_BODY = \
 	xml_grid.ads

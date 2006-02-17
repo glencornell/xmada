@@ -4,7 +4,8 @@ SUBDIRS=input print
 
 alidir = $(includedir)/xmada
 
-ADAFLAGS = -I$(srcdir)/..
+ADAFLAGS = $(STD_ADAFLAGS) \
+	-I$(srcdir)/..
 
 ADA_SPECS = $(ADA_SPECS_WITH_BODY) \
 	xlib-extensions.ads

@@ -3,6 +3,17 @@ ADACOMPILER = $(top_builddir)/support/adacompiler
 
 GNAT_PG = -gnatpg
 
+if MAINTAINER_MODE
+STD_CFLAGS = -g3 -O0 -ggdb3 -fno-inline
+STD_ADAFLAGS = $(STD_CFLAGS) -gnatoa -gnatW8 -gnatwa -gnatyabcefhiknoprstx 
+STD_BARGS = -E
+
+else
+STD_CFLAGS = -O2
+STD_ADAFLAGS = $(STD_CFLAGS)
+STD_BARGS =
+endif
+
 #ADA_BODIES = $(ADA_SPECS_WITH_BODY:.ads=.adb)
 #
 #ADA_LIBADD = $(ADA_SPECS:.ads=.lo)
