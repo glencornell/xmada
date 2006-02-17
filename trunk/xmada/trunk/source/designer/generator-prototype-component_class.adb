@@ -103,6 +103,8 @@ package body Generator.Prototype.Component_Class is
          --    generation of spec
 
          Put_Line (File => File,
+                   Item => "with Xm;");
+         Put_Line (File => File,
                    Item => "with Xm_Form;");
          Put_Line (File => File,
                    Item => "with Xm_Label;");
@@ -110,6 +112,8 @@ package body Generator.Prototype.Component_Class is
                    Item => "with Xm_Message_Box;");
          Put_Line (File => File,
                    Item => "with Xm_Push_Button;");
+         Put_Line (File => File,
+                   Item => "with Xm.Resource_Management;");
          Put_Line (File => File,
                    Item => "with Xm_String_Defs;");
          Put_Line (File => File,
@@ -236,7 +240,9 @@ package body Generator.Prototype.Component_Class is
                         Put_Line (File,
                                   "            "
                                   & "Xt.Resource_Management.Xt_Set_Values "
-                                  & "(Result.MessageBox1, Args);");
+                                  & "(Result."
+                                  & Model.Queries.Name_Image (N)
+                                  & ", Args);");
                         New_Line (File);
                         Put_Line (File,
                                   "         end;");
@@ -270,7 +276,7 @@ package body Generator.Prototype.Component_Class is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Generate_Widget_Creation
+      --!    <Unit> Generate_Resource
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure Generate_Resource (File     : in File_Type;
@@ -280,7 +286,10 @@ package body Generator.Prototype.Component_Class is
       begin
          Put_Line (File,
                    "            "
-                   & "Xt.Resource_Management.Xt_Set_Arg");
+                   & Model.Names.Image
+                      (Argument_Package_Name
+                        (Resource_Type (Resource_Specification (Resource))))
+                   & ".Xt_Set_Arg");
          Put_Line (File,
                    "             (Args ("
                    & Integer_Image (Index)
@@ -308,52 +317,126 @@ package body Generator.Prototype.Component_Class is
       is
          function Separate_Resources (Widget : in Node_Id) return Natural;
 
+         function Generate_Resources (Resources : in List_Id;
+                                      Counter   : in Natural)
+           return Natural;
+
          ---------------------------------------------------------------------
          --! <Subprogram>
-         --!    <Unit> Separate_Resources
+         --!    <Unit> Generate_Resources
          --!    <ImplementationNotes>
          ---------------------------------------------------------------------
-         function Separate_Resources (Widget : in Node_Id) return Natural is
-            Res : Natural := 0;
+         function Generate_Resources (Resources : in List_Id;
+                                      Counter   : in Natural)
+           return Natural
+         is
+            Res : Natural := Counter;
 
          begin
-            if Resources (Widget) /= Null_List then
+            if Resources /= Null_List then
                declare
-                  Resource      : Node_Id := First (Resources (Widget));
-                  Specification : Node_Id;
+                  Resource : Node_Id := First (Resources);
 
                begin
                   while Resource /= Null_Node loop
-                     Specification := Resource_Specification (Resource);
-
-                     if Can_Be_Set_At_Creation_Time (Specification)
-                       and not Is_Postponed (Resource)
-                     then
-                        --  Ресурс, устанавливаемый во время создания виджета.
-
+                     if not Is_Postponed (Resource) then
                         Res := Res + 1;
-
-                     elsif Can_Be_Set_By_Set_Values (Specification) then
-                        --  Отложенный ресурс.
-
-                        Set_Is_Postponed (Resource, True);
-
-                        Postponed_Resources.Append (Resource);
-                        --  Добавляем ресурс в глобальный массив
-                        --  отложенных ресурсов.
-
-                     else
-                        raise Program_Error;
-                        --  Ресурс не может быть задан в момент
-                        --  создания виджета, но и не может быть
-                        --  задан позже.
-
+                        Generate_Resource (File, Resource, Res);
                      end if;
 
                      Resource := Next (Resource);
                   end loop;
                end;
             end if;
+
+            return Res;
+         end Generate_Resources;
+
+         ---------------------------------------------------------------------
+         --! <Subprogram>
+         --!    <Unit> Separate_Resources
+         --!    <ImplementationNotes>
+         ---------------------------------------------------------------------
+         function Separate_Resources (Widget : in Node_Id) return Natural is
+            function Is_Postponed_Resource (Resource : in Node_Id)
+               return Boolean;
+
+            function Process_Resources (Resources : in List_Id)
+              return Natural;
+
+            ------------------------------------------------------------------
+            --! <Subprogram>
+            --!    <Unit> Is_Postponed_Resource
+            --!    <ImplementationNotes>
+            ------------------------------------------------------------------
+            function Is_Postponed_Resource (Resource : in Node_Id)
+              return Boolean
+            is
+               Specification : constant Node_Id
+                 := Resource_Specification (Resource);
+
+            begin
+               if Can_Be_Set_At_Creation_Time (Specification)
+                 and not Is_Postponed (Resource)
+               then
+                  --  Ресурс, устанавливаемый во время создания виджета.
+
+                  return False;
+
+               elsif Can_Be_Set_By_Set_Values (Specification) then
+                  --  Отложенный ресурс.
+
+                  Set_Is_Postponed (Resource, True);
+
+                  Postponed_Resources.Append (Resource);
+                  --  Добавляем ресурс в глобальный массив
+                  --  отложенных ресурсов.
+
+                  return True;
+
+               else
+                  raise Program_Error;
+                  --  Ресурс не может быть задан в момент
+                  --  создания виджета, но и не может быть
+                  --  задан позже.
+
+               end if;
+            end Is_Postponed_Resource;
+
+            ------------------------------------------------------------------
+            --! <Subprogram>
+            --!    <Unit> Process_Resources
+            --!    <ImplementationNotes>
+            ------------------------------------------------------------------
+            function Process_Resources (Resources : in List_Id)
+              return Natural
+            is
+               Res : Natural := 0;
+
+            begin
+               if Resources /= Null_List then
+                  declare
+                     Resource : Node_Id := First (Resources);
+
+                  begin
+                     while Resource /= Null_Node loop
+                        if not Is_Postponed_Resource (Resource) then
+                           Res := Res + 1;
+                        end if;
+
+                        Resource := Next (Resource);
+                     end loop;
+                  end;
+               end if;
+
+               return Res;
+            end Process_Resources;
+
+            Res : Natural := 0;
+
+         begin
+            Res := Process_Resources (Resources (Widget))
+              + Process_Resources (Constraint_Resources (Widget));
 
             return Res;
          end Separate_Resources;
@@ -365,8 +448,6 @@ package body Generator.Prototype.Component_Class is
 
       begin
          if Hardcoded_Counter > 0 then
-            Resource := First (Resources (Widget));
-
             Put_Line (File, "         declare");
             Put_Line (File,
                       "            Args : "
@@ -385,14 +466,10 @@ package body Generator.Prototype.Component_Class is
                --  Счетчик обработанных ресурсов.
 
             begin
-               while Resource /= Null_Node loop
-                  if not Is_Postponed (Resource) then
-                     Counter := Counter + 1;
-                     Generate_Resource (File, Resource, Counter);
-                  end if;
-
-                  Resource := Next (Resource);
-               end loop;
+               Counter := Generate_Resources
+                           (Resources (Widget), 0);
+               Counter := Generate_Resources
+                           (Constraint_Resources (Widget), Counter);
 
                pragma Assert (Hardcoded_Counter = Counter);
             end;
@@ -460,6 +537,11 @@ package body Generator.Prototype.Component_Class is
             when Node_Widget_Reference_Resource_Value =>
                return "Result."
                  & Model.Queries.Name_Image (Resource_Value (Node));
+
+            when Node_Enumeration_Resource_Value =>
+               return "Xm.Xm_Attach_Widget";
+--             return Model.Names.Image
+--                     (Literal_Identifier (Resource_Value (Node)));
 
             when others =>
                Ada.Wide_Text_IO.Put_Line
