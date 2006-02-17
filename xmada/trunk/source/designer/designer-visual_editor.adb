@@ -49,6 +49,7 @@ with Xlib.Graphic_Output;
 with Xlib.Resource_Manager;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
+with Xt.Event_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Translation_Management;
@@ -91,6 +92,7 @@ package body Designer.Visual_Editor is
    use Xt;
    use Xt.Ancillary_Types;
    use Xt.Composite_Management;
+   use Xt.Event_Management;
    use Xt.Instance_Management;
    use Xt.Resource_Management;
    use Xt.Translation_Management;
@@ -290,6 +292,17 @@ package body Designer.Visual_Editor is
                            Num_Params : in Cardinal);
       pragma Convention (C, On_Select);
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Work
+      --!    <Purpose> Производит создание виджетов редактируемого класса
+      --! компонента. Регистрируется при обработке извещения о предстоящем
+      --! удалении экземпляра виджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      function On_Work (Closure : in Xt_Pointer) return Xt_Boolean;
+      pragma Convention (C, On_Work);
+
    end Callbacks;
 
    Actions : constant Xt_Action_List
@@ -304,6 +317,9 @@ package body Designer.Visual_Editor is
    Edited_Component : Node_Id := Null_Node;
    Selected_Item    : Node_Id := Null_Node;
    Translations     : Xt_Translations;
+   Reincarnate      : Node_Id := Null_Node;
+   --  Используется для указания класса компонента виджеты которого должна
+   --  повторна создать подпрограмма On_Work.
 
    -----------------
    --  Callbacks  --
@@ -463,6 +479,29 @@ package body Designer.Visual_Editor is
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback ("On_Select", E);
       end On_Select;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Work
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function On_Work (Closure : in Xt_Pointer) return Xt_Boolean is
+         pragma Unreferenced (Closure);
+
+      begin
+         if Reincarnate /= Null_Node then
+            Create_Component_Class_Widgets (Reincarnate);
+            Reincarnate := Null_Node;
+         end if;
+
+         return not Xt_False;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback ("On_Work", E);
+
+            return not Xt_False;
+      end On_Work;
 
    end Callbacks;
 
@@ -721,10 +760,40 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
-      pragma Unreferenced (Node);
-
    begin
-      null;
+      case Node_Kind (Node) is
+         when Node_Project | Node_Application =>
+            null;
+
+         when Node_Component_Class =>
+            if Node = Edited_Component
+              and then Edited_Component /= Null_Node
+            then
+               Reincarnate := Null_Node;
+               Destroy_Component_Class_Widgets (Edited_Component);
+            end if;
+
+         when Node_Widget_Instance =>
+            if Enclosing_Component_Class (Node) = Edited_Component then
+               declare
+                  Aux : Xt_Work_Proc_Id;
+                  pragma Warnings (Off, Aux);
+                  --  Используется для сохранения возвращаемого функцией
+                  --  значения.
+
+               begin
+                  Reincarnate := Edited_Component;
+                  Destroy_Component_Class_Widgets (Edited_Component);
+                  Aux :=
+                    Xt_App_Add_Work_Proc
+                     (Xt_Widget_To_Application_Context (Drawing_Area),
+                      Callbacks.On_Work'Access);
+               end;
+            end if;
+
+         when others =>
+            raise Program_Error;
+      end case;
    end Delete_Item;
 
    ---------------------------------------------------------------------------
