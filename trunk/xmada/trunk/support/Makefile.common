@@ -1,3 +1,6 @@
+
+ADACOMPILER = $(top_builddir)/support/adacompiler
+
 GNAT_PG = -gnatpg
 
 #ADA_BODIES = $(ADA_SPECS_WITH_BODY:.ads=.adb)

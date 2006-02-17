@@ -4,8 +4,6 @@ alidir = $(includedir)/xmada
 
 ADAFLAGS = -I$(srcdir)/.. -I$(srcdir)/../..
 
-ADACOMPILER = ../../../../support/adacompiler
-
 ADA_SPECS_WITH_BODY = \
 	xlib-extensions-print.ads
 
