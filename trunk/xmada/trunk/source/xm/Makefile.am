@@ -2,7 +2,11 @@ include ../../support/Makefile.common
 
 alidir = $(includedir)/xmada
 
-ADAFLAGS = -I$(srcdir)/../xlib -I$(srcdir)/../xlib/extensions -I$(srcdir)/../xlib/extensions/print -I$(srcdir)/../xt
+ADAFLAGS = $(STD_ADAFLAGS) \
+	-I$(srcdir)/../xlib \
+	-I$(srcdir)/../xlib/extensions \
+	-I$(srcdir)/../xlib/extensions/print \
+	-I$(srcdir)/../xt
 
 ADA_SPECS_WITH_BODY = \
 	i-cwistr.ads \

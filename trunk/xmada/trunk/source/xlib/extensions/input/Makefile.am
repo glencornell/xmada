@@ -2,7 +2,9 @@ include ../../../../support/Makefile.common
 
 alidir = $(includedir)/xmada
 
-ADAFLAGS = -I$(srcdir)/.. -I$(srcdir)/../..
+ADAFLAGS = $(STD_ADAFLAGS) \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../..
 
 ADA_SPECS_WITH_BODY = \
 	xlib-extensions-input_device.ads

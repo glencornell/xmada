@@ -4,6 +4,8 @@ SUBDIRS=extensions
 
 alidir = $(includedir)/xmada
 
+ADAFLAGS = $(STD_ADAFLAGS)
+
 ADA_SPECS_WITH_BODY = \
 	xlib.ads \
 	xlib-atoms.ads \

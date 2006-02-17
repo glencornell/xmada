@@ -1,7 +1,8 @@
+include $(top_srcdir)/support/Makefile.common
 
-ADAFLAGS = -gnatoa -gnatW8 -gnatwa -gnatyabcefhiknoprstx \
-	 -g3 -O0 -ggdb3 -fno-inline\
-	-I$(srcdir) -I$(srcdir)/debug
+ADAFLAGS = $(STD_ADAFLAGS) \
+	-I$(srcdir) \
+	-I$(srcdir)/debug
 
 DESIGNER_ADAFLAGS = $(ADAFLAGS) \
 	-I$(top_srcdir)/source/xlib \
@@ -23,14 +24,14 @@ LIBS = -L/usr/X11R6/lib \
 	-L$(top_builddir)/source/xm/.libs \
 	-lXm -lXt -lxmadaxlib -lxmadaxt -lxmadaxm -lgmem
 
-ADABFLAGS = -E
+BARGS = $(STD_BARGS)
 ADALFLAGS = $(LIBS)
 
-CLEANFILES = *.ali *.o XmAdaDesigner b~designer-driver.ad[sb] designer
+CLEANFILES += *.ali *.o XmAdaDesigner b~designer-driver.ad[sb] designer
 
 all: XmAdaDesigner
-	gnatmake $(DESIGNER_ADAFLAGS) designer-driver.adb -o designer -bargs $(ADABFLAGS) -largs $(ADALFLAGS)
-	gnatmake $(COMPILER_ADAFLAGS) compiler-driver.adb -o compiler -bargs $(ADABFLAGS)
+	gnatmake $(DESIGNER_ADAFLAGS) designer-driver.adb -o designer -bargs $(BARGS) -largs $(ADALFLAGS)
+	gnatmake $(COMPILER_ADAFLAGS) compiler-driver.adb -o compiler -bargs $(BARGS)
 
 XmAdaDesigner:
 	ln -s $(srcdir)/XmAdaDesigner.ad XmAdaDesigner
