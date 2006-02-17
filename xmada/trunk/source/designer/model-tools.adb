@@ -944,26 +944,20 @@ package body Model.Tools is
             Res       : Node_Id := Root (Component);
             First     : Natural := Name'First;
             Finish    : Natural := Name'First - 1;
-            Pos       : Natural := Name'First;
+            Pos       : Natural := Name'First - 1;
 
          begin
             --  Разбиваем полное имя узла на токены.
             --  В качестве разделителя используется символ точка ('.').
 
-            while Pos < Name'Last loop
-               if Pos /= Name'Last and then Name (Pos) /= '.' then
-                  Pos := Pos + 1;
+            while Pos <= Name'Last + 1 loop
+               Pos := Pos + 1;
 
-               else
+               if Pos > Name'Last or else Name (Pos) = '.' then
                   --  Ищем узел, имя которого совпадает
                   --  с текущим токеном.
 
-                  if Pos = Name'Last then
-                     Finish := Pos;
-
-                  else
-                     Finish := Pos - 1;
-                  end if;
+                  Finish := Pos - 1;
 
                   declare
                      Id     : constant Name_Id
@@ -991,7 +985,7 @@ package body Model.Tools is
                      end if;
                   end;
 
-                  if Pos /= Name'Last then
+                  if Pos < Name'Last then
                      Res := Model.Tree.Lists.First (Children (Res));
                   end if;
 
@@ -1059,45 +1053,45 @@ package body Model.Tools is
                   end if;
 
                elsif Attributes.Name (A) = Value_Attr then
-                  case Node_Kind (Resource) is
-                     when Node_Enumeration_Resource_Value =>
-                        declare
-                           Value : constant Wide_String
-                             := XML_Tools.Strings.Image (Attributes.Value (A));
-                           N     : constant Node_Id
-                             := Get_Enumeration_Value_By_Name
-                                 (Resource_Specification (Resource), Value);
+                  declare
+                     Value : constant Wide_String
+                        := XML_Tools.Strings.Image (Attributes.Value (A));
 
-                        begin
-                           Set_Resource_Value (Resource, N);
-                        end;
+                  begin
+                     case Node_Kind (Resource) is
+                        when Node_Enumeration_Resource_Value =>
+                           declare
+                              N : constant Node_Id
+                                := Get_Enumeration_Value_By_Name
+                                    (Resource_Specification (Resource), Value);
 
-                     when Node_Integer_Resource_Value =>
-                        declare
-                           Str   : constant Wide_String
-                             := XML_Tools.Strings.Image (Attributes.Value (A));
-                           Value : constant Integer
-                             := Integer'Wide_Value (Str);
-                        begin
-                           Set_Resource_Value (Resource, Value);
-                        end;
+                           begin
+                              Set_Resource_Value (Resource, N);
+                           end;
 
-                     when Node_Widget_Reference_Resource_Value =>
-                        declare
-                           Value : constant Wide_String
-                             := XML_Tools.Strings.Image (Attributes.Value (A));
-                           N     : constant Node_Id
-                             := Get_Widget_Instance_By_Name (Value);
+                        when Node_Integer_Resource_Value =>
+                           declare
+                              Int : constant Integer
+                                := Integer'Wide_Value (Value);
+                           begin
+                              Set_Resource_Value (Resource, Int);
+                           end;
 
-                        begin
-                           Set_Resource_Value (Resource, N);
-                        end;
+                        when Node_Widget_Reference_Resource_Value =>
+                           declare
+                              N : constant Node_Id
+                                := Get_Widget_Instance_By_Name (Value);
 
-                     when others =>
-                        Error_Message ("Unhandled resource value : "
-                          & Node_Kinds'Wide_Image (Node_Kind (Resource)));
-                        raise Program_Error;
-                  end case;
+                           begin
+                              Set_Resource_Value (Resource, N);
+                           end;
+
+                        when others =>
+                           Error_Message ("Unhandled resource value : "
+                             & Node_Kinds'Wide_Image (Node_Kind (Resource)));
+                           raise Program_Error;
+                     end case;
+                  end;
 
                else
                   Error_Message ("Unknown attribute name: "
