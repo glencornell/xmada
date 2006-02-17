@@ -115,9 +115,9 @@ Michail Shilov <shilovm@list.ru>\n
 *main_window.horizontal_paned.properties_form.subform.notebook.constraints.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.subform.notebook.callbacks.labelString: Callbacks
 *main_window.horizontal_paned.properties_form.subform.notebook.callbacks.notebookChildType: MINOR_TAB
-*main_window.horizontal_paned.properties_form.subform.notebook*widget_child.no_widget.labelString:No Widget
 *main_window.horizontal_paned.properties_form.properties_hide.arrowDirection: ARROW_LEFT
 *main_window.horizontal_paned.properties_form.properties_label.labelString: Properties editor
+*main_window.horizontal_paned.properties_form*widget_child.no_widget.labelString:No Widget
 *main_window.horizontal_paned.properties_show.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_show.arrowDirection: ARROW_RIGHT
 
