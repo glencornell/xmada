@@ -1442,6 +1442,9 @@ package body Designer.Properties_Editor.Widget_Instance is
       Xt_Add_Callback (Result.Name,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Widget_Name_Changed'Access);
+      Xt_Add_Callback (Result.Name,
+                       Xm_N_Losing_Focus_Callback,
+                       Callbacks.On_Widget_Name_Changed'Access);
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
       Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Name);
