@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rostel.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rostel.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -46,6 +46,29 @@ package body Xt.Event_Management is
 
    use Xt.Implementation;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xt_App_Add_Work_Proc
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Xt_App_Add_Work_Proc
+    (App_Context : in Xt_App_Context;
+     Proc        : in Xt_Work_Proc;
+     Closure     : in Xt_Pointer := Null_Xt_Pointer)
+       return Xt_Work_Proc_Id
+   is
+      function XtAppAddWorkProc (App_Context : in Xt_App_Context;
+                                 Proc        : in Xt_Work_Proc;
+                                 Closure     : in Xt_Pointer)
+        return Xt_Work_Proc_Id;
+      pragma Import (C, XtAppAddWorkProc, "XtAppAddWorkProc");
+
+   begin
+      Check (App_Context);
+
+      return XtAppAddWorkProc (App_Context, Proc, Closure);
+   end Xt_App_Add_Work_Proc;
+
    procedure Xt_App_Main_Loop (App_Context : in Xt_App_Context) is
       procedure XtAppMainLoop (App_Context : in Xt_App_Context);
       pragma Import (C, XtAppMainLoop, "XtAppMainLoop");
@@ -64,7 +87,6 @@ package body Xt.Event_Management is
       Check (App_Context);
       XtAppNextEvent (App_Context, Event_Return);
    end Xt_App_Next_Event;
-
 
    function Xt_Dispatch_Event (Event : in X_Event) return Boolean is
       function XtDispatchEvent (Event : in X_Event) return Xt_Boolean;

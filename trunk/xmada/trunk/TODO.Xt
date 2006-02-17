@@ -44,7 +44,7 @@ Xt Data Types
    Xt_Timer_Callback_Proc
    Xt_Signal_Callback_Proc
    Xt_Accept_Focus_Proc
-   Xt_Work_Proc
+ + Xt_Work_Proc                Xt
    Xt_Expose_Proc
    Xt_Event_Handler
    Xt_List_Position
@@ -193,10 +193,10 @@ Xt Functions
    Xt_App_Process_Event
    Xt_Dispatch_Event
    Xt_App_Main_Loop
- + Xt_Set_Sensitive                 Xt.Utilities
+ + Xt_Set_Sensitive                      Xt.Utilities
    Xt_Is_Sensitive
-   Xt_App_Add_Work_Proc
-   Xt_Remove_Work_Proc
+ + Xt_App_Add_Work_Proc                  Xt.Event_Management
+ + Xt_Remove_Work_Proc                   Xt.Event_Management
    Xt_Add_Event_Handler
    Xt_Remove_Event_Handler
    Xt_Insert_Event_Handler
@@ -350,7 +350,7 @@ Xt Functions
    Xt_Pending
    Xt_Add_Input
    Xt_Add_Time_Out
-   Xt_Add_Work_Proc
+ + Xt_Add_Work_Proc                      Xt.Event_Management
    Xt_Create_Application_Shell
    Xt_String_Conversion_Warning
    Xt_Add_Converter
