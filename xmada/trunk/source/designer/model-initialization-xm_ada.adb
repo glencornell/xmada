@@ -55,7 +55,19 @@ package body Model.Initialization.Xm_Ada is
    use Model.Tree.Xm_Ada;
    use Model.Xt_Motif;
 
-    ---------------------------------------------------------------------------
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Enumeration_Resource_Values
+   --!    <Purpose> Производит задание значений для перечислимого типа 
+   --! ресурсов. 
+   --! .
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Enumeration_Resource_Value (Node        : in Node_Id;
+                                             Value_Image : in Name_Id; 
+                                             Value       : in Name_Id);
+
+   ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Resource_Names
    --!    <Purpose> Производит задание типов ресурсов для соответсвующих 
@@ -352,10 +364,22 @@ package body Model.Initialization.Xm_Ada is
        (Xt_Motif_Show_Arrows_Resource_Type,
         Enter ("Xm.Xm_Show_Arrows"));
 
+      --  Инициализация значений типов ресурсов
+
+--      Set_Enumeration_Resource_Value
+--       (Xt_Motif_Alignment_Resource_Type,
+--        Enter ("XmAlignmentBeginning"),
+--        Enter ("Xm.Xm_Alignment_Beginning"));
+
       Set_Resource_Names (Model.Xt_Motif.Xt_Motif_Widget_Set);
    end Initialize;
 
-   procedure Set_Resource_Names (Node : in Node_Id) 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Resource_Names
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Names (Node : in Node_Id)
    is 
       function Create_Resource_Name (Label_String : in Wide_String) 
         return Wide_String 
@@ -459,9 +483,24 @@ package body Model.Initialization.Xm_Ada is
 
          while Current_Class /= Null_Node loop
             Set_Resource_Name (Resources (Current_Class));
+	    Set_Resource_Name (Constraint_Resources (Current_Class));
 	    Current_Class := Next (Current_Class);
 	 end loop;
       end if;
    end Set_Resource_Names;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Enumeration_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Enumeration_Resource_Value (Node        : in Node_Id;
+                                             Value_Image : in Name_Id; 
+                                             Value       : in Name_Id)
+   is
+   begin
+        null;
+ --     Set_Literal_Identifier (Node, Value);
+   end Set_Enumeration_Resource_Value;
 
 end Model.Initialization.Xm_Ada;
