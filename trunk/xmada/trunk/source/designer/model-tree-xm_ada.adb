@@ -51,6 +51,7 @@ package body Model.Tree.Xm_Ada is
     (Annotation_Empty,
      Annotation_Widget_Class,
      Annotation_Widget_Instance,
+     Annotation_Component_Class,
      Annotation_Resource_Specification,
      Annotation_Enumeration_Value_Specification,
      Annotation_Enumerated_Resource_Type);
@@ -83,6 +84,12 @@ package body Model.Tree.Xm_Ada is
             Type_Identifier : Name_Id;
             --  Уникальный идентификатор типа ресурса.
 
+         when Annotation_Component_Class =>
+            Package_Name : String_Id;
+            --  Имя пакета, в котором будет содержаться компонент.
+
+            Type_Name    : String_Id;
+            --  Название типа, в которов будут храниться виджеты.
       end case;
    end record;
 
@@ -216,6 +223,21 @@ package body Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Package_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Package_Name (Node : in Node_Id) return String_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Package_Name;
+   end Package_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -257,6 +279,12 @@ package body Model.Tree.Xm_Ada is
                    (Kind             => Annotation_Widget_Instance,
                     Create_In_Record => True,
                     In_Record_Name   => Null_String);
+
+               when Node_Component_Class =>
+                  Annotation_Table.Table (J) :=
+                   (Kind             => Annotation_Component_Class,
+                    Type_Name        => Null_String,
+                    Package_Name     => Null_String);
 
                when others =>
                   Annotation_Table.Table (J) := (Kind => Annotation_Empty);
@@ -364,6 +392,21 @@ package body Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Package_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Package_Name (Node : in Node_Id; Name : in String_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Package_Name := Name;
+   end Set_Package_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Resource_Class_Name_String
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -415,6 +458,21 @@ package body Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Type_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Type_Name (Node : in Node_Id; Name : in String_Id) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Type_Name := Name;
+   end Set_Type_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Use_Qualified_Expression
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -444,6 +502,21 @@ package body Model.Tree.Xm_Ada is
 
       return Annotation_Table.Table (Node).Type_Identifier;
    end Type_Identifier;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Type_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Type_Name (Node : in Node_Id) return String_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Type_Name;
+   end Type_Name;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
