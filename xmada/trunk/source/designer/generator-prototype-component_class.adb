@@ -66,6 +66,15 @@ package body Generator.Prototype.Component_Class is
    ---------------------------------------------------------------------------
    procedure Generate (Node : in Model.Node_Id) is
 
+      package Package_Names is
+        new GNAT.Table
+         (Table_Component_Type => Name_Id,
+          Table_Index_Type     => Natural,
+          Table_Low_Bound      => Natural'First + 1,
+          Table_Initial        => Allocations.Package_Names_Initial,
+          Table_Increment      => Allocations.Package_Names_Increment);
+      --  Таблица имен использульзуемых пакетов.
+
       package Postponed_Resources is
         new GNAT.Table
          (Table_Component_Type => Node_Id,
@@ -101,32 +110,26 @@ package body Generator.Prototype.Component_Class is
       is
       begin
          --    generation of spec
+         Package_Names.Append (Model.Names.Enter ("with Xm"));
+         Package_Names.Append (Model.Names.Enter ("with Xm_Form"));
+         Package_Names.Append (Model.Names.Enter ("with Xm_Label"));
+         Package_Names.Append (Model.Names.Enter ("with Xm_Message_Box"));
+         Package_Names.Append (Model.Names.Enter ("with Xm_Push_Button"));
+         Package_Names.Append (Model.Names.Enter
+           ("with Xm.Resource_Management"));
+         Package_Names.Append (Model.Names.Enter ("with Xm_String_Defs"));
+         Package_Names.Append (Model.Names.Enter ("with Xm_Text"));
+         Package_Names.Append (Model.Names.Enter ("with Xt"));
+         Package_Names.Append (Model.Names.Enter ("with Xt.Ancillary_Types"));
+         Package_Names.Append (Model.Names.Enter
+           ("with Xt.Composite_Management"));
+         Package_Names.Append (Model.Names.Enter
+           ("with Xt.Resource_Management"));
 
-         Put_Line (File => File,
-                   Item => "with Xm;");
-         Put_Line (File => File,
-                   Item => "with Xm_Form;");
-         Put_Line (File => File,
-                   Item => "with Xm_Label;");
-         Put_Line (File => File,
-                   Item => "with Xm_Message_Box;");
-         Put_Line (File => File,
-                   Item => "with Xm_Push_Button;");
-         Put_Line (File => File,
-                   Item => "with Xm.Resource_Management;");
-         Put_Line (File => File,
-                   Item => "with Xm_String_Defs;");
-         Put_Line (File => File,
-                   Item => "with Xm_Text;");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "with Xt;");
-         Put_Line (File => File,
-                   Item => "with Xt.Ancillary_Types;");
-         Put_Line (File => File,
-                   Item => "with Xt.Composite_Management;");
-         Put_Line (File => File,
-                   Item => "with Xt.Resource_Management;");
+         for J in Package_Names.First .. Package_Names.Last loop
+            Put_Line (File, Model.Names.Image (Package_Names.Table (J)) & ";");
+         end loop;
+
          New_Line (File);
          Put_Line (File => File,
                    Item => "package " & Package_Name & "s is");

@@ -97,4 +97,8 @@ package Model.Allocations is
    Resource_Table_Initial                 : constant := 100;
    Resource_Table_Increment               : constant := 100;
 
+   --  Таблица имён используемых пакетов
+
+   Package_Names_Initial                  : constant := 100;
+   Package_Names_Increment                : constant := 100;
 end Model.Allocations;
