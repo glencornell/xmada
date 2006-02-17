@@ -433,7 +433,7 @@ package body Model.Initialization.Xm_Ada is
 		    (Current_Resource)));
 
             begin
-               Set_Resource_Class_Name_String
+               Set_Resource_Name_String
 	        (Current_Resource,
                  Model.Names.Enter (Resource_Label_String));
                Set_Resource_Class_Name_String

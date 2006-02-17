@@ -42,11 +42,8 @@ with GNAT.Table;
 
 with Model.Allocations;
 with Model.Names;
-with Model.Tree.Lists;
 
 package body Model.Tree.Xm_Ada is
-
-   use Model.Tree.Lists;
 
    type Annotation_Kinds is
     (Annotation_Empty,
@@ -98,8 +95,6 @@ package body Model.Tree.Xm_Ada is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Relocate_Annotation_Table;
-
-   RNS_Counter  : Integer := 0;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -191,6 +186,23 @@ package body Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Resource_Class_Name_String
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Resource_Class_Name_String (Node : in Node_Id)
+     return Name_Id
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Resource_Class_Name_String;
+   end Resource_Class_Name_String;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Resource_Name_String
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -198,21 +210,12 @@ package body Model.Tree.Xm_Ada is
      return Name_Id
    is
    begin
-      RNS_Counter := RNS_Counter + 1;
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
 
-      case RNS_Counter is
-         when 1 =>
-            return Model.Names.Enter ("Xm_String_Defs.Xm_N_Height");
+      Relocate_Annotation_Table;
 
-         when 2 =>
-            return Model.Names.Enter ("Xm_String_Defs.Xm_N_Width");
-
-         when 3 =>
-            return Model.Names.Enter ("Xm_String_Defs.Xm_N_Initial_Focus");
-
-         when others =>
-            raise Program_Error;
-      end case;
+      return Annotation_Table.Table (Node).Resource_Name_String;
    end Resource_Name_String;
 
    ---------------------------------------------------------------------------

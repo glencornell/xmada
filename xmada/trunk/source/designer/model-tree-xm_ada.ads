@@ -72,6 +72,15 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Resource_Class_Name_String
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Resource_Class_Name_String (Node : in Node_Id)
+     return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Resource_Name_String
    --!    <Purpose>
    --!    <Exceptions>
