@@ -158,4 +158,12 @@ package Model.Tree.Xm_Ada is
    procedure Set_Use_Qualified_Expression (Node : in Node_Id;
                                            Value : in Boolean);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Argument_Package_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Argument_Package_Name (Node : in Node_Id) return Name_Id;
+
 end Model.Tree.Xm_Ada;
