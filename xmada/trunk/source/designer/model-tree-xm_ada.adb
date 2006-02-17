@@ -38,6 +38,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Wide_Text_IO;
+
 with GNAT.Table;
 
 with Model.Allocations;
@@ -95,6 +97,45 @@ package body Model.Tree.Xm_Ada is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Relocate_Annotation_Table;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Argument_Package_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Argument_Package_Name (Node : in Node_Id) return Name_Id is
+   begin
+      Ada.Wide_Text_IO.Put_Line
+       (Node_Kinds'Wide_Image (Node_Kind (Node))
+        & " - "
+        & Model.Names.Image (Name (Node)));
+
+      pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type
+        or else Node_Kind (Node) = Node_Predefined_Resource_Type
+        or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
+
+      declare
+         Type_Name : constant Wide_String
+           := Model.Names.Image (Name (Node));
+
+      begin
+         if Type_Name = "XmRAttachment" then
+            return Model.Names.Enter ("Xm.Resource_Management");
+
+         elsif Type_Name = "XmRHorizontalDimension" then
+            return Model.Names.Enter ("Xt.Resource_Management");
+
+         elsif Type_Name = "XmRVerticalDimension" then
+            return Model.Names.Enter ("Xt.Resource_Management");
+
+         elsif Type_Name = "XmRWidget" then
+            return Model.Names.Enter ("Xt.Resource_Management");
+
+         else
+            raise Program_Error;
+         end if;
+      end;
+   end Argument_Package_Name;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -206,16 +247,39 @@ package body Model.Tree.Xm_Ada is
    --!    <Unit> Resource_Name_String
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Resource_Name_String (Node : in Node_Id)
-     return Name_Id
-   is
+   function Resource_Name_String (Node : in Node_Id) return Name_Id is
+      Res : Name_Id := Null_Name;
+
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
 
       Relocate_Annotation_Table;
 
-      return Annotation_Table.Table (Node).Resource_Name_String;
+      declare
+         Internal_Name : constant Wide_String
+           := Model.Names.Image (Internal_Resource_Name (Node));
+
+      begin
+         if Internal_Name = "leftAttachment" then
+            Res := Model.Names.Enter ("Xm_String_Defs.Xm_N_Left_Attachment");
+
+         elsif Internal_Name = "leftWidget" then
+            Res := Model.Names.Enter ("Xm_String_Defs.Xm_N_Left_Widget");
+         end if;
+      end;
+
+      pragma Assert (Res /= Annotation_Table.Table (Node).Resource_Name_String);
+      --  Сработает, когда проблема будет устранена
+      --  или в случае отсутствия символьного имени
+      --  ресурса и в таблице и в заглушке.
+
+      if Res = Null_Name then
+         Res := Annotation_Table.Table (Node).Resource_Name_String;
+      end if;
+
+      return Res;
+      --  return Annotation_Table.Table (Node).Resource_Name_String;
    end Resource_Name_String;
 
    ---------------------------------------------------------------------------
