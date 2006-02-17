@@ -73,6 +73,7 @@ with Model.Queries;
 with Model.Strings;
 with Model.Tree.Designer;
 with Model.Tree.Lists;
+with Model.Tree.Xm_Ada;
 
 package body Designer.Properties_Editor.Widget_Instance is
 
@@ -86,6 +87,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Model.Tree;
    use Model.Tree.Designer;
    use Model.Tree.Lists;
+   use Model.Tree.Xm_Ada;
    use Xlib.Events;
    use Xm;
    use Xm.Class_Management;
@@ -139,11 +141,11 @@ package body Designer.Properties_Editor.Widget_Instance is
            | Annotation_Widget_Reference_Resource_Value
            | Annotation_Xm_String_Resource_Value
          =>
-            Use_In_Program : Widget;  --  Кнопка "использовать в программе".
-            Hard_Code      : Widget;  --  Кнопка "вшивать в код".
-            Fallback       : Widget;  --  Кнопка "ресурс отката".
-            Name           : Widget;  --  Название ресурса
-            Value          : Widget;  --  Значение ресурса
+            Use_In_Program  : Widget;  --  Кнопка "использовать в программе".
+            Hard_Code       : Widget;  --  Кнопка "вшивать в код".
+            Fallback        : Widget;  --  Кнопка "ресурс отката".
+            Name            : Widget;  --  Название ресурса
+            Value           : Widget;  --  Значение ресурса
 
          when Annotation_Enumeration_Resource_Type       =>
             RT_Menu : Widget;
@@ -155,13 +157,15 @@ package body Designer.Properties_Editor.Widget_Instance is
             --  ресурса.
 
          when Annotation_Widget_Instance                 =>
-            WI_Child_Menu : Widget;
+            WI_Child_Menu    : Widget;
             --  Выпадающее меню, используемое в меню опций значения ресурса.
 
-            WI_Button     : Widget;
+            WI_Button        : Widget;
             --  Кнопка выпадающего меню, используемого в меню опций значения
             --  ресурса.
 
+            Create_In_Record : Widget;  --  Создавать элемент записи.
+            In_Record_Name   : Widget;  --  Имя элемента записи.
          when Annotation_Empty                           =>
             null;
       end case;
@@ -241,6 +245,18 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Create_In_Record_Changed
+      --!    <Purpose> Подпрограмма обратного вызова при изменении состояния
+      --! флага "create_in_record".
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Create_In_Record_Changed (The_Widget : in Widget;
+                                             Closure    : in Xt_Pointer;
+                                             Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Create_In_Record_Changed);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Fallback_Changed
       --!    <Purpose> Подпрограмма обратного вызова при нажатии кнопки
       --! "ресурс отката".
@@ -262,6 +278,18 @@ package body Designer.Properties_Editor.Widget_Instance is
                                      Closure    : in Xt_Pointer;
                                      Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Hardcode_Changed);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_In_Record_Name_Activate
+      --!    <Purpose> Подпрограмма обратного вызова при активации поля
+      --! ввода имени переменной.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_In_Record_Name_Activate (The_Widget : in Widget;
+                                            Closure    : in Xt_Pointer;
+                                            Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_In_Record_Name_Activate);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -364,6 +392,67 @@ package body Designer.Properties_Editor.Widget_Instance is
    end Callbacks;
 
    package body Callbacks is
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Create_In_Record_Changed
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Create_In_Record_Changed (The_Widget : in Widget;
+                                             Closure    : in Xt_Pointer;
+                                             Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Data : constant Xm_Toggle_Button_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+         Node : Node_Id;
+         Args : Xt_Arg_List (0 .. 0);
+
+      begin
+         --  Получаем узел, для которого вызван callback.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         --  При нажатии кнопки утанавливаем признак использования
+         --  в программе переменной и формируем ее имя.
+
+         if Data.Set = Xm_C_Set then
+            Set_Create_In_Record (Node, True);
+
+            if In_Record_Name (Node) = Null_String then
+               declare
+                  Name : constant Wide_String := Name_Image (Node);
+
+               begin
+                  Xm_Text_Field_Set_String_Wcs
+                   (Annotation_Table.Table (Node).In_Record_Name, Name);
+
+                  Set_In_Record_Name (Node, Store (Name));
+               end;
+            end if;
+
+         --  При отпускаии кнопки запрещаем использование имени переменной
+         --  и убираем имя.
+
+         elsif Data.Set = Xm_C_Unset then
+            Set_Create_In_Record (Node, False);
+
+            Xm_Text_Field_Set_String_Wcs
+             (Annotation_Table.Table (Node).In_Record_Name, "");
+            Set_In_Record_Name (Node, Null_String);
+
+         else
+            raise Program_Error;
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Create_In_Record_Changed", E);
+      end On_Create_In_Record_Changed;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -476,6 +565,55 @@ package body Designer.Properties_Editor.Widget_Instance is
             Designer.Main_Window.Put_Exception_In_Callback
              ("On_Hradcode_Changed", E);
       end On_Hardcode_Changed;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_In_Record_Name_Activate
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_In_Record_Name_Activate (The_Widget : in Widget;
+                                            Closure    : in Xt_Pointer;
+                                            Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Args     : Xt_Arg_List (0 .. 0);
+         Node     : Node_Id;
+         Name     : constant Wide_String
+           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+
+      begin
+         --  Извлекаем узел ресурса.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         --  Если имя пустое, то убираем признак
+         --  "создавать в записи".
+
+         if Name = "" then
+            Xm_Toggle_Button_Gadget_Set_State
+             (Annotation_Table.Table (Node).Create_In_Record, False, True);
+
+         --  Иначе задаем новое имя и если раньше кнопка
+         --  "создавать в записи" небыла нажата, то нажимаем ее.
+
+         else
+            Set_In_Record_Name (Node, Store (Name));
+
+            if not Create_In_Record (Node) then
+               Xm_Toggle_Button_Gadget_Set_State
+                (Annotation_Table.Table (Node).Create_In_Record, True, True);
+            end if;
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_In_Record_Name_Activate", E);
+      end On_In_Record_Name_Activate;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -1087,6 +1225,14 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> Add_Ada_Names
+      --!    <Purpose> Заполнение вкладки Ada.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Add_Ada_Names (Parent : in Widget);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> Add_Resource
       --!    <Purpose> Добавляет на редактор свойств опимвние ресурса.
       --!    <Exceptions>
@@ -1100,6 +1246,65 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure Add_Resource_List (Parent : in Widget; List : in List_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Add_Ada_Name
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Add_Ada_Names (Parent : in Widget) is
+         Form : Widget;
+         Args : Xt_Arg_List (0 .. 5);
+
+      begin
+         Form := Xm_Create_Managed_Form (Parent, "form");
+
+         --  Создание кнопки "Создавать член записи".
+
+         Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
+         Annotation_Table.Table (Node).Create_In_Record :=
+           Xm_Create_Managed_Toggle_Button_Gadget (Form,
+                                                   "create_in_record",
+                                                   Args (0 .. 3));
+         Xt_Add_Callback (Annotation_Table.Table (Node).Create_In_Record,
+                          Xm_N_Value_Changed_Callback,
+                          Callbacks.On_Create_In_Record_Changed'Access);
+
+         --  Поле ввода имени элемента.
+
+         Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
+         Xt_Set_Arg (Args (1),
+                     Xm_N_Left_Widget,
+                     Annotation_Table.Table (Node).Create_In_Record);
+         Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (3), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Args (5), Xm_N_User_Data, Xt_Arg_Val (Node));
+         Annotation_Table.Table (Node).In_Record_Name :=
+           Xm_Create_Managed_Text_Field (Form,
+                                         "in_record_name",
+                                         Args (0 .. 5));
+         Xt_Add_Callback (Annotation_Table.Table (Node).In_Record_Name,
+                          Xm_N_Activate_Callback,
+                          Callbacks.On_In_Record_Name_Activate'Access);
+         Xt_Add_Callback (Annotation_Table.Table (Node).In_Record_Name,
+                          Xm_N_Losing_Focus_Callback,
+                          Callbacks.On_In_Record_Name_Activate'Access);
+
+         Xm_Toggle_Button_Gadget_Set_State
+          (Annotation_Table.Table (Node).Create_In_Record,
+           Create_In_Record (Node),
+           True);
+
+         if In_Record_Name (Node) /= Null_String then
+            Xm_Text_Field_Set_String_Wcs
+             (Annotation_Table.Table (Node).In_Record_Name,
+              Image (In_Record_Name (Node)));
+         end if;
+      end Add_Ada_Names;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -1343,6 +1548,9 @@ package body Designer.Properties_Editor.Widget_Instance is
                Xt_Add_Callback (Annotation_Table.Table (Node).Value,
                                 Xm_N_Activate_Callback,
                                 Callbacks.On_Xm_String_Activate'Access);
+               Xt_Add_Callback (Annotation_Table.Table (Node).Value,
+                                Xm_N_Losing_Focus_Callback,
+                                Callbacks.On_Xm_String_Activate'Access);
             when others =>
                null;
          end case;
@@ -1422,9 +1630,12 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       Result        : constant Widget_Instance_Properties_Editor_Access
         := new Widget_Instance_Properties_Editor (Node);
+      Ada           : Widget;
       Args          : Xt_Arg_List (0 .. 7);
+      Name          : Widget;
       Element       : Widget;
       Notebook      : Widget;
+      Is_Managed    : Widget;
       Properties    : Widget;
       Constraints   : Widget;
       Callbacks_Tab : Widget;
@@ -1436,46 +1647,46 @@ package body Designer.Properties_Editor.Widget_Instance is
       Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Position);
       Xt_Set_Arg (Args (2), Xm_N_Right_Position, Xt_Arg_Val (50));
       Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
-      Result.Name := Xm_Create_Managed_Text_Field
-                      (Result.Form, "resource_name", Args (0 .. 3));
-      Xm_Text_Field_Set_String_Wcs (Result.Name, Name_Image (Node));
-      Xt_Add_Callback (Result.Name,
+      Name := Xm_Create_Managed_Text_Field
+               (Result.Form, "resource_name", Args (0 .. 3));
+      Xm_Text_Field_Set_String_Wcs (Name, Name_Image (Node));
+      Xt_Add_Callback (Name,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Widget_Name_Changed'Access);
-      Xt_Add_Callback (Result.Name,
+      Xt_Add_Callback (Name,
                        Xm_N_Losing_Focus_Callback,
                        Callbacks.On_Widget_Name_Changed'Access);
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Name);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Name);
       Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Args (3), Xm_N_Right_Widget, Result.Name);
+      Xt_Set_Arg (Args (3), Xm_N_Right_Widget, Name);
       Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Result.Name);
+      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Name);
       Element  := Xm_Create_Managed_Label_Gadget
                    (Result.Form, "name", Args (0 .. 6));
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Name);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Name);
       Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Args (3), Xm_N_Left_Widget, Result.Name);
+      Xt_Set_Arg (Args (3), Xm_N_Left_Widget, Name);
       Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Result.Name);
+      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Name);
       Xt_Set_Arg (Args (7), Xm_N_User_Data, Xt_Arg_Val (Node));
-      Result.Is_Managed :=
+      Is_Managed :=
         Xm_Create_Managed_Toggle_Button_Gadget
          (Result.Form, "manage_after_create", Args (0 .. 7));
-      Xt_Add_Callback (Result.Is_Managed,
+      Xt_Add_Callback (Is_Managed,
                        Xm_N_Value_Changed_Callback,
                        Callbacks.On_Is_Managed_Changed'Access);
-      Xm_Toggle_Button_Gadget_Set_State (Result.Is_Managed,
-                                         Is_Managed (Node),
+      Xm_Toggle_Button_Gadget_Set_State (Is_Managed,
+                                         Model.Tree.Is_Managed (Node),
                                          False);
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Result.Name);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Name);
       Xt_Set_Arg (Args (2), Xm_N_Left_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Args (3), Xm_N_Right_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Args (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
@@ -1522,30 +1733,48 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (1));
       Constraints :=
-        Xm_Create_Managed_Row_Column (Element, "row_column", Args (0 .. 0));
+        Xm_Create_Row_Column (Element, "row_column", Args (0 .. 0));
       Element     :=
         Xm_Create_Managed_Push_Button_Gadget (Notebook, "constraints");
 
       --  Создаем вкладку "функции обратного вызова".
 
+      Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
       Element       :=
         Xm_Create_Managed_Scrolled_Window
          (Notebook, "scrolled", Args (0 .. 0));
       Callbacks_Tab :=
-        Xm_Create_Managed_Row_Column (Element, "row_column");
+        Xm_Create_Row_Column (Element, "row_column");
 
       Element       :=
         Xm_Create_Managed_Push_Button_Gadget (Notebook, "callbacks");
+
+      --  Создаем вкладку "Привязки Ада".
+
+      Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
+      Element       :=
+        Xm_Create_Managed_Scrolled_Window
+          (Notebook, "scrolled", Args (0 .. 0));
+      Ada           :=
+        Xm_Create_Row_Column (Element, "row_column");
+
+      Element       :=
+        Xm_Create_Managed_Push_Button_Gadget (Notebook, "ada");
 
       --  Заполнение редактора свойств значениями ресурсов.
 
       Add_Resource_List (Properties, All_Resources (Node));
       Add_Resource_List (Constraints, All_Constraint_Resources (Node));
+      Add_Ada_Names (Ada);
 
       Update_Item (Node);
       --  Задаем значение ресурсов.
 
       Xt_Manage_Child (Properties);
+      Xt_Manage_Child (Constraints);
+      Xt_Manage_Child (Callbacks_Tab);
+      Xt_Manage_Child (Ada);
+
       return Node_Properties_Editor_Access (Result);
    end Create;
 
@@ -1908,9 +2137,11 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             when Node_Widget_Instance                 =>
                Annotation_Table.Table (J) :=
-                (Kind          => Annotation_Widget_Instance,
-                 WI_Child_Menu => Null_Widget,
-                 WI_Button     => Null_Widget);
+                (Kind             => Annotation_Widget_Instance,
+                 WI_Child_Menu    => Null_Widget,
+                 WI_Button        => Null_Widget,
+                 Create_In_Record => Null_Widget,
+                 In_Record_Name   => Null_Widget);
 
             when Node_Xm_String_Resource_Value =>
                Annotation_Table.Table (J) :=

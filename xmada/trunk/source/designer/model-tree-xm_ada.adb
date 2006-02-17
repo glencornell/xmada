@@ -50,6 +50,7 @@ package body Model.Tree.Xm_Ada is
    type Annotation_Kinds is
     (Annotation_Empty,
      Annotation_Widget_Class,
+     Annotation_Widget_Instance,
      Annotation_Resource_Specification,
      Annotation_Enumeration_Value_Specification,
      Annotation_Enumerated_Resource_Type);
@@ -62,6 +63,10 @@ package body Model.Tree.Xm_Ada is
 
          when Annotation_Widget_Class =>
             Create_Function_Name : Name_Id;
+
+         when Annotation_Widget_Instance =>
+             Create_In_Record  : Boolean;
+             In_Record_Name    : String_Id;
 
          when Annotation_Resource_Specification =>
             Resource_Name_String       : Name_Id;
@@ -156,6 +161,36 @@ package body Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_In_Record
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_In_Record (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Create_In_Record;
+   end Create_In_Record;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> In_Record_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function In_Record_Name (Node : in Node_Id) return String_Id is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).In_Record_Name;
+   end In_Record_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -216,6 +251,12 @@ package body Model.Tree.Xm_Ada is
                   Annotation_Table.Table (J) :=
                    (Kind            => Annotation_Enumerated_Resource_Type,
                     Type_Identifier => Null_Name);
+
+               when Node_Widget_Instance =>
+                  Annotation_Table.Table (J) :=
+                   (Kind             => Annotation_Widget_Instance,
+                    Create_In_Record => True,
+                    In_Record_Name   => Null_String);
 
                when others =>
                   Annotation_Table.Table (J) := (Kind => Annotation_Empty);
@@ -298,6 +339,36 @@ package body Model.Tree.Xm_Ada is
 
       Annotation_Table.Table (Node).Create_Function_Name := Name;
    end Set_Convenience_Create_Function_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Create_In_Record
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Create_In_Record (Node : in Node_Id; Value : in Boolean) is
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+   begin
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Create_In_Record := Value;
+   end Set_Create_In_Record;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_In_Record_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_In_Record_Name (Node : in Node_Id; Name : in String_Id) is
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+   begin
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).In_Record_Name := Name;
+   end Set_In_Record_Name;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
