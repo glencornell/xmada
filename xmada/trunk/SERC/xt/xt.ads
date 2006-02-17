@@ -64,7 +64,7 @@ package Xt is
 
     type Xt_Interval_Id is new X_Lib.X_Id;
 
-    type Xt_Work_Proc_Id is new X_Lib.X_Id;
+--    type Xt_Work_Proc_Id is new X_Lib.X_Id;
 
     -- Convenient subtypes used as renamings for X_Lib types follow below:
 
@@ -111,7 +111,7 @@ package Xt is
     subtype Xt_Input_Callback_Proc is X_Address;
     subtype Xt_Timer_Callback_Proc is X_Address;
     subtype Xt_Create_Popup_Child_Proc is X_Address;
-    subtype Xt_Work_Proc is X_Address;
+--    subtype Xt_Work_Proc is X_Address;
     subtype Xt_Event_Handler is X_Address;
     subtype Xt_Converter is X_Address;
     subtype Xt_Cache_Ref is X_Address;
@@ -1219,19 +1219,19 @@ package Xt is
 				Poll_Delay : in Duration :=
 				   Get_Options.Poll_Delay);
 
-	-- XtAppAddWorkProc
-	function Xt_App_Add_Work_Proc
-		    (App_Context : in Xt_App_Context;
-		     Proc : in Xt_Work_Proc;
-		     Client_Data : in Xt_Pointer) return Xt_Work_Proc_Id;
-
-	-- XtAddWorkProc
-	function Xt_Add_Work_Proc
-		    (Proc : in Xt_Work_Proc; Client_Data : in Xt_Pointer)
-		    return Xt_Work_Proc_Id;
-
-	-- XtRemoveWorkProc
-	procedure Xt_Remove_Work_Proc (Id : in Xt_Work_Proc_Id);
+--	-- XtAppAddWorkProc
+--	function Xt_App_Add_Work_Proc
+--		    (App_Context : in Xt_App_Context;
+--		     Proc : in Xt_Work_Proc;
+--		     Client_Data : in Xt_Pointer) return Xt_Work_Proc_Id;
+--
+--	-- XtAddWorkProc
+--	function Xt_Add_Work_Proc
+--		    (Proc : in Xt_Work_Proc; Client_Data : in Xt_Pointer)
+--		    return Xt_Work_Proc_Id;
+--
+--	-- XtRemoveWorkProc
+--	procedure Xt_Remove_Work_Proc (Id : in Xt_Work_Proc_Id);
 
 	-- XtAddEventHandler
 	procedure Xt_Add_Event_Handler (W : in Widget;

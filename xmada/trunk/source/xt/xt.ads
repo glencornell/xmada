@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rostel.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rostel.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -168,6 +168,12 @@ package Xt is
 
    Null_Xt_Destructor : constant Xt_Destructor;
 
+   type Xt_Work_Proc_Id is new Interfaces.C.unsigned_long;
+
+   type Xt_Work_Proc is
+     access function
+      (Closure : in Xt_Pointer)
+         return Xt_Boolean;
 
    type Xt_Cache_Type is new Interfaces.C.int;
 
@@ -211,6 +217,7 @@ private
    pragma Convention (C, Xt_Destructor);
    pragma Convention (C, Xt_Language_Proc);
    pragma Convention (C, Xt_Type_Converter);
+   pragma Convention (C, Xt_Work_Proc);
 
    Null_Xt_Callback_Proc : constant Xt_Callback_Proc := null;
    Null_Xt_Destructor    : constant Xt_Destructor    := null;

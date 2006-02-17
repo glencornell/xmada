@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rostel.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rostel.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -51,8 +51,24 @@ package Xt.Event_Management is
 
    procedure Xt_App_Main_Loop (App_Context : in Xt_App_Context);
 
+   function Xt_App_Add_Work_Proc
+    (App_Context : in Xt_App_Context;
+     Proc        : in Xt_Work_Proc;
+     Closure     : in Xt_Pointer := Null_Xt_Pointer)
+       return Xt_Work_Proc_Id;
+
+   procedure Xt_Remove_Work_Proc (Id : in Xt_Work_Proc_Id);
+
+   --  Obsolete and deprecated stuff
+
+   function Xt_Add_Work_Proc (Proc        : in Xt_Work_Proc;
+                              Closure     : in Xt_Pointer := Null_Xt_Pointer)
+     return Xt_Work_Proc_Id;
 
 private
+
+   pragma Import (C, Xt_Add_Work_Proc, "XtAddWorkProc");
+   pragma Import (C, Xt_Remove_Work_Proc, "XtRemoveWorkProc");
 
    pragma Inline (Xt_Dispatch_Event);
 
