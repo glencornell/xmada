@@ -64,6 +64,14 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Literal_Identifier
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Literal_Identifier (Node : in Node_Id) return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Resource_Name_String
    --!    <Purpose>
    --!    <Exceptions>
@@ -82,20 +90,21 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Resource_Class_Name_String
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Class_Name_String (Node : in Node_Id;
+                                             Name : in Name_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Resource_Name_String
    --!    <Purpose>
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Resource_Name_String (Node : in Node_Id;
                                        Name : in Name_Id);
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Type_Identifier
-   --!    <Purpose>
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Type_Identifier (Node : in Node_Id) return Name_Id;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -108,20 +117,20 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Literal_Identifier
-   --!    <Purpose>
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Literal_Identifier (Node : in Node_Id) return Name_Id;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
    --!    <Unit> Set_Literal_Identifier
    --!    <Purpose>
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Literal_Identifier (Node  : in Node_Id;
                                      Value : in Name_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Type_Identifier
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Type_Identifier (Node : in Node_Id) return Name_Id;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

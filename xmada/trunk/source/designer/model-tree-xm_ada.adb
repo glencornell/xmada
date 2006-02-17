@@ -42,8 +42,11 @@ with GNAT.Table;
 
 with Model.Allocations;
 with Model.Names;
+with Model.Tree.Lists;
 
 package body Model.Tree.Xm_Ada is
+
+   use Model.Tree.Lists;
 
    type Annotation_Kinds is
     (Annotation_Empty,
@@ -248,6 +251,23 @@ package body Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Resource_Class_Name_String
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Class_Name_String (Node : in Node_Id;
+                                             Name : in Name_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Resource_Class_Name_String := Name;
+   end Set_Resource_Class_Name_String;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Resource_Name_String
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -255,7 +275,12 @@ package body Model.Tree.Xm_Ada is
                                        Name : in Name_Id)
    is
    begin
-      null;
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Resource_Specification);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Resource_Name_String := Name;
    end Set_Resource_Name_String;
 
    ---------------------------------------------------------------------------
