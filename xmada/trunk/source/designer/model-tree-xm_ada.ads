@@ -90,6 +90,38 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Package_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Package_Name (Node : in Node_Id; Name : in String_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Type_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Type_Name (Node : in Node_Id; Name : in String_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Package_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Package_Name (Node : in Node_Id) return String_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Type_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Type_Name (Node : in Node_Id) return String_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_In_Record_Name
    --!    <Purpose>
    --!    <Exceptions>
