@@ -226,15 +226,21 @@ package body Designer.Properties_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
+      Kind : Node_Kinds;
+
    begin
       if Selected_Item /= Null_Node then
         Hide (Annotation_Table.Table (Selected_Item).Properties_Editor);
         Selected_Item := Null_Node;
       end if;
 
-      if Node = Null_Node
-        or else Node_Kind (Node) /= Node_Widget_Instance
-      then
+      if Node = Null_Node then
+         return;
+      end if;
+
+      Kind := Node_Kind (Node);
+
+      if Kind /= Node_Widget_Instance and Kind /= Node_Component_Class then
          return;
       end if;
 

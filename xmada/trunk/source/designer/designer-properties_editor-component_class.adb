@@ -38,12 +38,93 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Xm;
+with Xm.Resource_Management;
+with Xm_Form;
+with Xm_Label_Gadget;
+with Xm_String_Defs;
+with Xm_Text_Field;
+with Xt.Ancillary_Types;
+with Xt.Callbacks;
+with Xt.Composite_Management;
+with Xt.Instance_Management;
+with Xt.Resource_Management;
+
+with Designer.Main_Window;
+with Model.Queries;
+with Model.Tree;
+with Model.Names;
 
 package body Designer.Properties_Editor.Component_Class is
 
    use Model;
+   use Model.Queries;
+   use Model.Tree;
+   use Model.Names;
+   use Xm;
+   use Xm.Resource_Management;
+   use Xm_Form;
+   use Xm_Label_Gadget;
+   use Xm_String_Defs;
+   use Xm_Text_Field;
    use Xt;
    use Xt.Ancillary_Types;
+   use Xt.Callbacks;
+   use Xt.Composite_Management;
+   use Xt.Instance_Management;
+   use Xt.Resource_Management;
+
+   package Callbacks is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Class_Name_Changed
+      --!    <Purpose> Подпрограмма обратного вызова изменении имени класса.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Class_Name_Changed (The_Widget : in Widget;
+                                       Closure    : in Xt_Pointer;
+                                       Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Class_Name_Changed);
+
+   end Callbacks;
+
+   package body Callbacks is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Class_Name_Changed
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Class_Name_Changed (The_Widget : in Widget;
+                                       Closure    : in Xt_Pointer;
+                                       Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Name : Name_Id;
+         Node : Node_Id;
+         Args : Xt_Arg_List (0 .. 0);
+
+      begin
+         --  Получаем значение текущего узла.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         pragma Assert (Node /= Null_Node);
+
+         Name := Enter (Xm_Text_Field_Get_String_Wcs (The_Widget));
+         Set_Name (Node, Name);
+         Main_Window.Update_Item (Node);
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Class_Name_Changed", E);
+      end On_Class_Name_Changed;
+
+   end Callbacks;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -55,15 +136,38 @@ package body Designer.Properties_Editor.Component_Class is
                     Node     : in Model.Node_Id)
      return Node_Properties_Editor_Access
    is
-      pragma Unreferenced (Parent);
-      pragma Unreferenced (Arg_List);
-      --  XXX будет использовано при реализации.
-
-      Result : constant Node_Properties_Editor_Access
+      Args    : Xt_Arg_List (0 .. 6);
+      Result  : constant Component_Class_Properties_Editor_Access
         := new Component_Class_Properties_Editor (Node);
+      Element : Widget;
 
    begin
-      return Result;
+      Result.Form := Xm_Create_Managed_Form (Parent, "subform", Arg_List);
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Position);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Position, Xt_Arg_Val (50));
+      Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
+      Element := Xm_Create_Managed_Text_Field
+                  (Result.Form, "class_name", Args (0 .. 3));
+      Xm_Text_Field_Set_String_Wcs (Element, Name_Image (Node));
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Class_Name_Changed'Access);
+      Xt_Add_Callback (Element,
+                       Xm_N_Losing_Focus_Callback,
+                       Callbacks.On_Class_Name_Changed'Access);
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Element);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (3), Xm_N_Right_Widget, Element);
+      Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Element);
+      Element  := Xm_Create_Managed_Label_Gadget
+                   (Result.Form, "name", Args (0 .. 6));
+      return Node_Properties_Editor_Access (Result);
    end Create;
 
    ---------------------------------------------------------------------------
@@ -72,8 +176,10 @@ package body Designer.Properties_Editor.Component_Class is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Finalize (Object : in out Component_Class_Properties_Editor) is
+      pragma Assert (Object.Form /= Null_Widget);
+
    begin
-      null;
+     Xt_Destroy_Widget (Object.Form);
    end Finalize;
 
    ---------------------------------------------------------------------------
@@ -82,8 +188,10 @@ package body Designer.Properties_Editor.Component_Class is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Hide (Object : access Component_Class_Properties_Editor) is
+      pragma Assert (Object.Form /= Null_Widget);
+
    begin
-      null;
+      Xt_Unmanage_Child (Object.Form);
    end Hide;
 
    ---------------------------------------------------------------------------
@@ -103,8 +211,10 @@ package body Designer.Properties_Editor.Component_Class is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Show (Object : access Component_Class_Properties_Editor) is
+      pragma Assert (Object.Form /= Null_Widget);
+
    begin
-      null;
+      Xt_Manage_Child (Object.Form);
    end Show;
 
    ---------------------------------------------------------------------------
