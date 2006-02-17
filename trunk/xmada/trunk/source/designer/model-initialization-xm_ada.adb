@@ -38,15 +38,31 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Model.Tree.Xm_Ada;
 with Model.Names;
+with Model.Tree;
+with Model.Tree.Lists;
+with Model.Tree.Xm_Ada;
 with Model.Xt_Motif;
+
+with Ada.Characters.Handling;
+with Ada.Strings.Wide_Unbounded;
 
 package body Model.Initialization.Xm_Ada is
 
+   use Model.Tree.Lists;
+   use Model.Names;
+   use Model.Tree;
    use Model.Tree.Xm_Ada;
    use Model.Xt_Motif;
-   use Model.Names;
+
+    ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Resource_Names
+   --!    <Purpose> Производит задание типов ресурсов для соответсвующих 
+   --! классов узла Node_Widget_Set.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Resource_Names (Node : in Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -335,6 +351,117 @@ package body Model.Initialization.Xm_Ada is
       Set_Type_Identifier
        (Xt_Motif_Show_Arrows_Resource_Type,
         Enter ("Xm.Xm_Show_Arrows"));
+
+      Set_Resource_Names (Model.Xt_Motif.Xt_Motif_Widget_Set);
    end Initialize;
+
+   procedure Set_Resource_Names (Node : in Node_Id) 
+   is 
+      function Create_Resource_Name (Label_String : in Wide_String) 
+        return Wide_String 
+      is 
+	 Created_String      : Wide_String
+	   :=  Label_String (Label_String'First .. Label_String'First + 1) 
+	                     & "_String_Defs."
+	                     & Label_String 
+			      (Label_String'First .. Label_String'First + 1) 
+	                     & "_"
+	                     & Label_String (Label_String'First + 2)
+	                     & "_"
+	                     & Ada.Characters.Handling.To_Wide_Character 
+                              (Ada.Characters.Handling.To_Upper 
+                               (Ada.Characters.Handling.To_Character 
+                                (Label_String (Label_String'First + 3))));
+
+      begin
+         if Label_String'Length > 4 then
+	    declare 
+               Suffix              : 
+	        Ada.Strings.Wide_Unbounded.Unbounded_Wide_String 
+	         := Ada.Strings.Wide_Unbounded.To_Unbounded_Wide_String 
+	           (Label_String 
+		    (Label_String'First + 4 .. Label_String'Last));
+               Current_Char_Number : Integer := 1;
+
+            begin
+               while Current_Char_Number 
+	         /= Ada.Strings.Wide_Unbounded.Length (Suffix) loop
+	          if Ada.Characters.Handling.Is_Upper 
+	           (Ada.Characters.Handling.To_Character 
+	            (Ada.Strings.Wide_Unbounded.Element 
+	             (Suffix, Current_Char_Number))) 
+	          then
+	             Ada.Strings.Wide_Unbounded.Insert 
+	              (Suffix, Current_Char_Number, "_");
+     	             Current_Char_Number := Current_Char_Number + 1;
+	          end if;
+
+	          Current_Char_Number := Current_Char_Number + 1;
+	       end loop;
+
+	       return Created_String 
+	         & Ada.Strings.Wide_Unbounded.To_Wide_String (Suffix);
+            end;
+         end if;
+
+         return Created_String;
+      end Create_Resource_Name;
+ 
+      procedure Set_Resource_Name (Res_List : in List_Id) 
+      is
+         Current_Resource : Node_Id;
+      begin
+         if Res_List = Null_List then
+            return;
+         end if;
+
+	 Current_Resource := First (Res_List);
+
+	 while Current_Resource /= Null_Node loop
+
+            declare
+	       Resource_Label_String : Wide_String
+	         := Create_Resource_Name
+		  (Model.Names.Image
+	           (Resource_Name
+		    (Current_Resource)));
+
+               Class_Label_String : Wide_String
+	         := Create_Resource_Name
+		  (Model.Names.Image
+	           (Resource_Class_Name
+		    (Current_Resource)));
+
+            begin
+               Set_Resource_Class_Name_String
+	        (Current_Resource,
+                 Model.Names.Enter (Resource_Label_String));
+               Set_Resource_Class_Name_String
+	        (Current_Resource,
+                 Model.Names.Enter (Class_Label_String));
+	   end;
+
+	   Current_Resource := Next (Current_Resource);
+	 end loop;
+      end Set_Resource_Name;
+
+      Current_Class : Node_Id;
+
+   begin
+      pragma Assert (Node_Kind (Node) = Node_Widget_Set);
+
+      if Node = Null_Node then
+         return;
+      end if;
+
+      if Widget_Classes (Node) /= Null_List then
+	 Current_Class := First (Widget_Classes (Node));
+
+         while Current_Class /= Null_Node loop
+            Set_Resource_Name (Resources (Current_Class));
+	    Current_Class := Next (Current_Class);
+	 end loop;
+      end if;
+   end Set_Resource_Names;
 
 end Model.Initialization.Xm_Ada;
