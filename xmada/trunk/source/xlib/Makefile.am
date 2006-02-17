@@ -4,8 +4,6 @@ SUBDIRS=extensions
 
 alidir = $(includedir)/xmada
 
-ADACOMPILER = ../../support/adacompiler
-
 ADA_SPECS_WITH_BODY = \
 	xlib.ads \
 	xlib-atoms.ads \

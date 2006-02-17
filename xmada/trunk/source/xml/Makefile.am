@@ -2,8 +2,6 @@ include ../../support/Makefile.common
 
 alidir = $(includedir)/xmada
 
-ADACOMPILER = ../../support/adacompiler
-
 ADAFLAGS = -I$(srcdir)/../xlib -I$(srcdir)/../xt -I$(srcdir)/../xm
 
 ADA_SPECS_WITH_BODY = \
