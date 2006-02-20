@@ -233,12 +233,13 @@ package body Designer.Properties_Editor.Component_Class is
                     Node     : in Model.Node_Id)
      return Node_Properties_Editor_Access
    is
-      Args    : Xt_Arg_List (0 .. 6);
-      Result  : constant Component_Class_Properties_Editor_Access
+      Args      : Xt_Arg_List (0 .. 6);
+      Result    : constant Component_Class_Properties_Editor_Access
         := new Component_Class_Properties_Editor (Node);
-      Element : Widget;
-      Form    : Widget;
-      Label   : Widget;
+      Element   : Widget;
+      Form      : Widget;
+      Label     : Widget;
+      Alignment : Alignment_Widget_List (1 .. 3);
 
    begin
       Result.Form := Xm_Create_Managed_Form (Parent, "subform", Arg_List);
@@ -265,6 +266,8 @@ package body Designer.Properties_Editor.Component_Class is
       Xt_Add_Callback (Element,
                        Xm_N_Losing_Focus_Callback,
                        Callbacks.On_Class_Name_Changed'Access);
+      Alignment (1).L_Widget := Label;
+      Alignment (1).R_Widget := Element;
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
       Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Element);
@@ -302,6 +305,8 @@ package body Designer.Properties_Editor.Component_Class is
       Xt_Add_Callback (Element,
                        Xm_N_Losing_Focus_Callback,
                        Callbacks.On_Package_Name_Activate'Access);
+      Alignment (2).L_Widget := Label;
+      Alignment (2).R_Widget := Element;
 
       --  Поле ввода имени записи.
 
@@ -340,6 +345,10 @@ package body Designer.Properties_Editor.Component_Class is
       Xt_Add_Callback (Element,
                        Xm_N_Losing_Focus_Callback,
                        Callbacks.On_Record_Name_Activate'Access);
+      Alignment (3).L_Widget := Label;
+      Alignment (3).R_Widget := Element;
+
+      Do_Alignment (Alignment);
 
       return Node_Properties_Editor_Access (Result);
    end Create;
