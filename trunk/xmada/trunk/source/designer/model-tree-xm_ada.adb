@@ -245,7 +245,7 @@ package body Model.Tree.Xm_Ada is
       First : constant Node_Id := Annotation_Table.Last + 1;
 
    begin
-      if Node_Table.Last > First then
+      if Node_Table.Last >= First then
          Annotation_Table.Set_Last (Node_Table.Last);
 
          for J in First .. Annotation_Table.Last loop
@@ -291,7 +291,6 @@ package body Model.Tree.Xm_Ada is
             end case;
          end loop;
       end if;
-
    end Relocate_Annotation_Table;
 
    ---------------------------------------------------------------------------
