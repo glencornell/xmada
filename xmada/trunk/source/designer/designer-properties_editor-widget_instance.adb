@@ -2395,7 +2395,10 @@ package body Designer.Properties_Editor.Widget_Instance is
                           := Resource_Value (Current);
 
                      begin
-                        if Value /= Null_Node then
+                        if Value /= Null_Node
+                          and Annotation_Table.Table (Current).Value
+                            /= Null_Widget
+                        then
                            Xt_Set_Arg (Args (0),
                                        Xm_N_Menu_History,
                                        Get_Button (Value));
