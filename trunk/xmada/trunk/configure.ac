@@ -52,5 +52,8 @@ AC_OUTPUT([
 	xmada-config
 ])
 
-chmod +x support/adacompiler
-chmod +x support/run_designer
+for f in support/adacompiler support/run_desiger; do
+    if test -f $f; then
+        chmod +x $f
+    fi
+done

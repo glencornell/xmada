@@ -3,20 +3,53 @@ ARCHIVEDATE="-`date +%Y%m%d`"
 ARHIVEVERSION=0.3w
 ARCHIVE=../xmada-$ARHIVEVERSION$ARCHIVEDATE.tar
 TMP=xmada-$ARHIVEVERSION$ARCHIVEDATE
+XTMP=xmada-tmp
 
-./support/reconfig
+##  Создание копии файлов во временном каталоге.
+
+rm -rf $XTMP
+mkdir $XTMP
+
+(tar cf - -T MANIFEST) | (cd $XTMP && tar xf -)
+
+##  Корректировка списка автоматически создаваемых файлов (исключение файлов,
+##  используемых для внутренних нужд и не входящих в дистрибутив.
+
+(
+    cd $XTMP
+    sed -n -e '0,/AC_OUTPUT/p' configure.ac
+    for f in `sed -n -e '0,/AC_OUTPUT/!p' configure.ac | sed -n -e '/^])$/,$!p'`
+    do
+        grep "$f" ../MANIFEST >/dev/null && echo "	$f"
+    done
+    sed -n -e '/^])$/,$p' configure.ac
+) >> $XTMP/configure.ac.tmp
+
+mv $XTMP/configure.ac.tmp $XTMP/configure.ac
+
+##  Настройка среды сборки AutoTools.
+
+(cd $XTMP && ../support/reconfig)
+
+##  Копирование файлов в каталог дистрибутива и замещение ссылок файлами.
 
 rm -rf $TMP
 mkdir $TMP
-(tar cf - -T MANIFEST) | (cd $TMP && tar xf -)
+(cd $XTMP && tar cf - -T ../MANIFEST) | (cd $TMP && tar xf -)
 
-(cd $TMP && \
- for f in `find -type l | grep -v aclocal.m4`; do \
-   rm -f $f; 
-   cp -p ../$f $f; \
- done)
+(
+    cd $TMP && \
+    for f in `find -type l | grep -v aclocal.m4`; do \
+        rm -f $f; \
+        cp -p ../$f $f; \
+    done
+)
+
+##  Подготовка файла архива.
 
 tar cf $ARCHIVE $TMP
 gzip -9f $ARCHIVE
 
-(cd $TMP && ./configure && make) && rm -rf $TMP
+##  Проверка полученного дистрибутива.
+
+(cd $TMP && ./configure && make) && rm -rf $TMP $XTMP
