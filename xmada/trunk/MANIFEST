@@ -45,6 +45,7 @@ source/designer/designer-tree_editor.ads
 source/designer/designer-visual_editor.adb
 source/designer/designer-visual_editor.ads
 source/designer/designer.ads
+source/designer/designer.in
 source/designer/generator-application_resources.adb
 source/designer/generator-application_resources.ads
 source/designer/generator-prototype-component_class.adb
