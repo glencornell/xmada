@@ -143,9 +143,10 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.tree_show.skipAdjust: TRUE
 *main_window.horizontal_paned.tree_show.arrowDirection: ARROW_LEFT
 
-!!  Окно дизайна интерфейса
+!!  Окно дизайна интерфейса (визуального редактора)
 
 *main_window*vertical_paned.paneMaximum: 16383
+*main_window*vertical_paned.scrolled.scrollingPolicy: AUTOMATIC
 *main_window*vertical_paned*drawing.background: white
 
 !!  Окно диагностических сообщений
