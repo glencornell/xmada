@@ -43,7 +43,7 @@ with Ada.Characters.Handling;
 
 with Xt.Event_Management;
 with Xt.Initializers;
-with Xt_Session_Shell;
+with Xt_Application_Shell;
 
 with Designer.Operations;
 with Designer.Main_Window;
@@ -54,7 +54,7 @@ procedure Designer.Driver is
    use Xt;
    use Xt.Event_Management;
    use Xt.Initializers;
-   use Xt_Session_Shell;
+   use Xt_Application_Shell;
 
    App_Context : Xt_App_Context;
    App_Shell   : Widget;
@@ -62,7 +62,7 @@ procedure Designer.Driver is
 begin
    Xt_Set_Language_Proc;
    Xt_Open_Application (App_Shell, App_Context, "XmAdaDesigner",
-                        The_Widget_Class => Session_Shell_Widget_Class);
+                        The_Widget_Class => Application_Shell_Widget_Class);
    Designer.Main_Window.Initialize (App_Shell);
 
    --  Если в командной строке указано имя файла проекта, то открываем этот
