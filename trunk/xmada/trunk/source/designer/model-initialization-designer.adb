@@ -292,14 +292,15 @@ package body Model.Initialization.Designer is
        (Xt_Motif_File_Selection_Box_Widget_Class,
         Xm_File_Selection_Box.Xm_Create_File_Selection_Box'Access);
 --   Xt_Motif_File_Selection_Dialog_Widget_Class
---  in Xt      Xt_Motif_Form_Widget_Class
 --   Xt_Motif_Form_Dialog_Widget_Class
       Set_Convenience_Create_Function
        (Xt_Motif_Form_Widget_Class,
         Xm_Form.Xm_Create_Form'Access);
+      Set_Is_Set_Initial_Size (Xt_Motif_Form_Widget_Class, True);
       Set_Convenience_Create_Function
        (Xt_Motif_Frame_Widget_Class,
         Xm_Frame.Xm_Create_Frame'Access);
+      Set_Is_Set_Initial_Size (Xt_Motif_Frame_Widget_Class, True);
       Set_Convenience_Create_Function
        (Xt_Motif_Icon_Gadget_Widget_Class,
         Xm_Icon_Gadget.Xm_Create_Icon_Gadget'Access);
@@ -316,6 +317,7 @@ package body Model.Initialization.Designer is
       Set_Convenience_Create_Function
        (Xt_Motif_Main_Window_Widget_Class,
         Xm_Main_Window.Xm_Create_Main_Window'Access);
+      Set_Is_Set_Initial_Size (Xt_Motif_Main_Window_Widget_Class, True);
       Set_Convenience_Create_Function
        (Xt_Motif_Message_Box_Widget_Class,
         Xm_Message_Box.Xm_Create_Message_Box'Access);
