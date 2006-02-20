@@ -1253,9 +1253,10 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure Add_Ada_Names (Parent : in Widget) is
-         Form  : Widget;
-         Args  : Xt_Arg_List (0 .. 5);
-         Label : Widget;
+         Form      : Widget;
+         Args      : Xt_Arg_List (0 .. 5);
+         Label     : Widget;
+         Alignment : Alignment_Widget_List (1 .. 2);
 
       begin
          Form := Xm_Create_Managed_Form (Parent, "form");
@@ -1280,6 +1281,10 @@ package body Designer.Properties_Editor.Widget_Instance is
          Xt_Add_Callback (Annotation_Table.Table (Node).Create_In_Record,
                           Xm_N_Value_Changed_Callback,
                           Callbacks.On_Create_In_Record_Changed'Access);
+
+         Alignment (1).L_Widget := Label;
+         Alignment (1).R_Widget :=
+           Annotation_Table.Table (Node).Create_In_Record;
 
          --  Поле ввода имени элемента.
 
@@ -1308,6 +1313,10 @@ package body Designer.Properties_Editor.Widget_Instance is
                           Xm_N_Losing_Focus_Callback,
                           Callbacks.On_In_Record_Name_Activate'Access);
 
+         Alignment (2).L_Widget := Label;
+         Alignment (2).R_Widget :=
+           Annotation_Table.Table (Node).In_Record_Name;
+
          Xm_Toggle_Button_Gadget_Set_State
           (Annotation_Table.Table (Node).Create_In_Record,
            Create_In_Record (Node),
@@ -1318,6 +1327,8 @@ package body Designer.Properties_Editor.Widget_Instance is
              (Annotation_Table.Table (Node).In_Record_Name,
               Image (In_Record_Name (Node)));
          end if;
+
+         Do_Alignment (Alignment);
       end Add_Ada_Names;
 
       ------------------------------------------------------------------------
@@ -1576,7 +1587,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure Add_Resource_List (Parent : in Widget; List : in List_Id) is
-         Aux : Node_Id;
+         Aux       : Node_Id;
 
       begin
          --  Заполнение ограничений.
@@ -1585,60 +1596,26 @@ package body Designer.Properties_Editor.Widget_Instance is
             return;
          end if;
 
-         Aux := First (List);
-
-         while Aux /= Null_Node loop
-            Add_Resource (Parent, Aux);
-            --  Создание свойств ресурса.
-
-            Aux := Next (Aux);
-         end loop;
-
-         --  Выравнивание полей ввода значений по вертикали. Выравнивание
-         --  осуществляется с помощью вычисления значения ресурса
-         --  XmNleftOffset виджета ввода данных на основании значения ширины
-         --  виджета максимально широкого имени ресурса и ширины виджета
-         --  текущего имени ресурса.
-
          declare
-            Max_Width : Dimension := 0;
-            Value     : Dimension;
-            Args      : Xt_Arg_List (0 .. 0);
-            SArgs     : Xt_Arg_List (0 .. 0);
+            J         : Positive;
+            Alignment : Alignment_Widget_List (1 .. Length (List));
 
          begin
-            Xt_Set_Arg (Args (0), Xm_N_Width, Value'Address);
-
             Aux := First (List);
+            J   := 1;
 
             while Aux /= Null_Node loop
-               Xt_Get_Values
-                (Annotation_Table.Table (Aux).Name, Args (0 .. 0));
+               Add_Resource (Parent, Aux);
+               --  Создание свойств ресурса.
 
-               if Value > Max_Width then
-                  Max_Width := Value;
-               end if;
-
-               Aux := Next (Aux);
-            end loop;
-
-            Aux := First (List);
-
-            while Aux /= Null_Node loop
-               if Annotation_Table.Table (Aux).Value /= Null_Widget then
-                  Xt_Get_Values
-                   (Annotation_Table.Table (Aux).Name, Args (0 .. 0));
-
-                  Xt_Set_Arg
-                   (SArgs (0),
-                    Xm_N_Left_Offset,
-                    Xt_Arg_Val (Max_Width - Value));
-                  Xt_Set_Values
-                   (Annotation_Table.Table (Aux).Value, SArgs (0 .. 0));
-               end if;
+               Alignment (J).L_Widget := Annotation_Table.Table (Aux).Name;
+               Alignment (J).R_Widget := Annotation_Table.Table (Aux).Value;
 
                Aux := Next (Aux);
+               J   := J + 1;
             end loop;
+
+            Do_Alignment (Alignment);
          end;
       end Add_Resource_List;
 

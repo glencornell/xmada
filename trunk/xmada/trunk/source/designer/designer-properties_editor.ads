@@ -115,6 +115,21 @@ package Designer.Properties_Editor is
    procedure Reinitialize;
 
 private
+   type Alignment_Widgets is record
+     L_Widget : Xt.Widget;
+     R_Widget : Xt.Widget;
+   end record;
+
+   type Alignment_Widget_List is array (Positive range <>)
+     of Alignment_Widgets;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Do_Alignment
+   --!    <Purpose> функция производит "выравнивание" виджетов в столбце.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Do_Alignment (List : in Alignment_Widget_List);
 
    type Node_Properties_Editor (Node : Model.Node_Id) is
      abstract new Ada.Finalization.Limited_Controlled with null record;

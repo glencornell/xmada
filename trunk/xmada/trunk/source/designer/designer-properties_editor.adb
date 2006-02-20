@@ -42,6 +42,8 @@ with Ada.Unchecked_Deallocation;
 with GNAT.Table;
 
 with Xt.Ancillary_Types;
+with Xt.Resource_Management;
+with Xm_String_Defs;
 
 with Designer.Properties_Editor.Component_Class;
 with Designer.Properties_Editor.Widget_Instance;
@@ -53,8 +55,10 @@ package body Designer.Properties_Editor is
 
    use Model;
    use Model.Tree;
+   use Xm_String_Defs;
    use Xt;
    use Xt.Ancillary_Types;
+   use Xt.Resource_Management;
 
    procedure Free is
      new Ada.Unchecked_Deallocation (Node_Properties_Editor'Class,
@@ -114,6 +118,50 @@ package body Designer.Properties_Editor is
    begin
       null;
    end Delete_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Do_Alignment
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Do_Alignment (List : in Alignment_Widget_List) is
+      Max_Width : Dimension := 0;
+      Value     : Dimension;
+      Args      : Xt_Arg_List (0 .. 0);
+      SArgs     : Xt_Arg_List (0 .. 0);
+
+   begin
+      --  Выравнивание полей ввода значений по вертикали. Выравнивание
+      --  осуществляется с помощью вычисления значения ресурса
+      --  XmNleftOffset виджета ввода данных на основании значения ширины
+      --  виджета максимально широкого имени ресурса и ширины виджета
+      --  текущего имени ресурса.
+
+      Xt_Set_Arg (Args (0), Xm_N_Width, Value'Address);
+
+      for J in List'Range loop
+         Xt_Get_Values
+            (List (J).L_Widget, Args (0 .. 0));
+
+         if Value > Max_Width then
+            Max_Width := Value;
+         end if;
+      end loop;
+
+      for J in List'Range loop
+         if List (J).R_Widget /= Null_Widget then
+            Xt_Get_Values
+               (List (J).L_Widget, Args (0 .. 0));
+
+            Xt_Set_Arg
+               (SArgs (0),
+               Xm_N_Left_Offset,
+               Xt_Arg_Val (Max_Width - Value));
+            Xt_Set_Values
+               (List (J).R_Widget, SArgs (0 .. 0));
+         end if;
+      end loop;
+   end Do_Alignment;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
