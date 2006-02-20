@@ -39,6 +39,7 @@ AC_OUTPUT([
 	Makefile
 	source/Makefile
 	source/designer/Makefile
+	source/designer/designer
 	source/xlib/Makefile
 	source/xlib/extensions/Makefile
 	source/xlib/extensions/input/Makefile

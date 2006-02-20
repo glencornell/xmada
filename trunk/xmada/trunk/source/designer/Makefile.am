@@ -24,13 +24,23 @@ LIBS = -L/usr/X11R6/lib \
 	-L$(top_builddir)/source/xm/.libs \
 	-lXm -lXt -lxmadaxlib -lxmadaxt -lxmadaxm -lgmem
 
+##  Установка LINK в true подавляет вызов редактора связей libtool.
+LINK = true
+
 BARGS = $(STD_BARGS)
 ADALFLAGS = $(LIBS)
 
 CLEANFILES += *.ali *.o XmAdaDesigner b~designer-driver.ad[sb] designer
 
+bin_PROGRAMS = compiler designer
+libexec_PROGRAMS = designer-driver
+designer_SOURCES = designer.in
+designer_driver_SOURCES = designer-driver.ads
+compiler_SOURCES = compiler.ads
+data_DATA = XmAdaDesigner
+
 all: XmAdaDesigner
-	gnatmake $(DESIGNER_ADAFLAGS) designer-driver.adb -o designer -bargs $(BARGS) -largs $(ADALFLAGS)
+	gnatmake $(DESIGNER_ADAFLAGS) designer-driver.adb -o designer-driver -bargs $(BARGS) -largs $(ADALFLAGS)
 	gnatmake $(COMPILER_ADAFLAGS) compiler-driver.adb -o compiler -bargs $(BARGS)
 
 XmAdaDesigner:
