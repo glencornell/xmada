@@ -187,7 +187,7 @@ package body Designer.Visual_Editor is
    --!    <Purpose> Создание виджета на визуальном редакторе.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Create_Widget (Node : in Node_Id; Manage : in Boolean := True);
+   procedure Create_Widget (Node : in Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -706,15 +706,7 @@ package body Designer.Visual_Editor is
          for J in Widget_Instances_Order_Table.First
                     .. Widget_Instances_Order_Table.Last
          loop
-            Create_Widget (Widget_Instances_Order_Table.Table (J), False);
-         end loop;
-
-         for J in reverse Widget_Instances_Order_Table.First
-                    .. Widget_Instances_Order_Table.Last
-         loop
-            Xt_Manage_Child
-             (Annotation_Table.Table
-               (Widget_Instances_Order_Table.Table (J)).Widget);
+            Create_Widget (Widget_Instances_Order_Table.Table (J));
          end loop;
       end if;
 
@@ -726,7 +718,7 @@ package body Designer.Visual_Editor is
    --!    <Unit> Create_Widget
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Create_Widget (Node : in Node_Id; Manage : in Boolean := True) is
+   procedure Create_Widget (Node : in Node_Id) is
       Parent : Widget;
       Args   : Xt_Arg_List (0 .. 1);
 
@@ -749,9 +741,7 @@ package body Designer.Visual_Editor is
             & Make_Set_Arg_List (Constraint_Resources (Node))
             & Args);
 
-      if Manage then
-         Xt_Manage_Child (Annotation_Table.Table (Node).Widget);
-      end if;
+      Xt_Manage_Child (Annotation_Table.Table (Node).Widget);
    end Create_Widget;
 
    ---------------------------------------------------------------------------
