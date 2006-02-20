@@ -48,7 +48,9 @@ AC_OUTPUT([
 	source/xm/Makefile
 	source/xml/Makefile
 	support/adacompiler
+	support/run_designer
 	xmada-config
 ])
 
 chmod +x support/adacompiler
+chmod +x support/run_designer
