@@ -52,14 +52,17 @@ with Xt.Resource_Management;
 
 with Designer.Main_Window;
 with Model.Queries;
-with Model.Tree;
+with Model.Tree.Xm_Ada;
 with Model.Names;
+with Model.Strings;
 
 package body Designer.Properties_Editor.Component_Class is
 
    use Model;
    use Model.Queries;
+   use Model.Strings;
    use Model.Tree;
+   use Model.Tree.Xm_Ada;
    use Model.Names;
    use Xm;
    use Xm.Resource_Management;
@@ -85,6 +88,30 @@ package body Designer.Properties_Editor.Component_Class is
                                        Closure    : in Xt_Pointer;
                                        Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Class_Name_Changed);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Package_Name_Activate
+      --!    <Purpose> Подпрограмма обратного вызова
+      --! при изменении имени пакета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Package_Name_Activate (The_Widget : in Widget;
+                                          Closure    : in Xt_Pointer;
+                                          Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Package_Name_Activate);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Record_Name_Activate
+      --!    <Purpose> Подпрограмма обратного вызова
+      --! при изменении имени записи.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Record_Name_Activate (The_Widget : in Widget;
+                                         Closure    : in Xt_Pointer;
+                                         Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Record_Name_Activate);
 
    end Callbacks;
 
@@ -124,6 +151,76 @@ package body Designer.Properties_Editor.Component_Class is
              ("On_Class_Name_Changed", E);
       end On_Class_Name_Changed;
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Package_Name_Activate
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Package_Name_Activate (The_Widget : in Widget;
+                                          Closure    : in Xt_Pointer;
+                                          Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Node : Node_Id;
+         Args : Xt_Arg_List (0 .. 0);
+         Name : constant Wide_String
+           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+         --  TODO необходимо реализовать проверку
+         --  на допустимость идентификатора имени.
+
+      begin
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         pragma Assert (Node /= Null_Node);
+         pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+         Set_Package_Name (Node, Store (Name));
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Package_Name_Activate", E);
+      end On_Package_Name_Activate;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Record_Name_Activate
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Record_Name_Activate (The_Widget : in Widget;
+                                         Closure    : in Xt_Pointer;
+                                         Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Node : Node_Id;
+         Args : Xt_Arg_List (0 .. 0);
+         Name : constant Wide_String
+           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+         --  TODO необходимо реализовать проверку
+         --  на допустимость идентификатора имени.
+
+      begin
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         pragma Assert (Node /= Null_Node);
+         pragma Assert (Node_Kind (Node) = Node_Component_Class);
+
+         Set_Type_Name (Node, Store (Name));
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Record_Name_Activate", E);
+      end On_Record_Name_Activate;
+
    end Callbacks;
 
    ---------------------------------------------------------------------------
@@ -140,16 +237,27 @@ package body Designer.Properties_Editor.Component_Class is
       Result  : constant Component_Class_Properties_Editor_Access
         := new Component_Class_Properties_Editor (Node);
       Element : Widget;
+      Form    : Widget;
+      Label   : Widget;
 
    begin
       Result.Form := Xm_Create_Managed_Form (Parent, "subform", Arg_List);
 
+      Form := Xm_Create_Managed_Form (Result.Form, "form");
+
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Position);
-      Xt_Set_Arg (Args (2), Xm_N_Right_Position, Xt_Arg_Val (50));
+      Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Label  := Xm_Create_Managed_Label_Gadget
+                   (Form, "name", Args (0 .. 2));
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (2), Xm_N_Left_Widget, Label);
       Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
       Element := Xm_Create_Managed_Text_Field
-                  (Result.Form, "class_name", Args (0 .. 3));
+                  (Form, "class_name", Args (0 .. 3));
+
       Xm_Text_Field_Set_String_Wcs (Element, Name_Image (Node));
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
@@ -158,15 +266,81 @@ package body Designer.Properties_Editor.Component_Class is
                        Xm_N_Losing_Focus_Callback,
                        Callbacks.On_Class_Name_Changed'Access);
 
-      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
       Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Element);
-      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Args (3), Xm_N_Right_Widget, Element);
-      Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Element);
-      Element  := Xm_Create_Managed_Label_Gadget
-                   (Result.Form, "name", Args (0 .. 6));
+      Form := Xm_Create_Managed_Form (Result.Form, "form", Args (0 .. 1));
+
+      --  Создание поля "Имя пакета".
+
+      Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Label := Xm_Create_Managed_Label_Gadget
+               (Form, "package_name", Args (0 .. 2));
+
+      Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Left_Widget, Label);
+      Xt_Set_Arg (Args (2), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (4), Xm_N_User_Data, Xt_Arg_Val (Node));
+      Element :=
+        Xm_Create_Managed_Text_Field (Form,
+                                      "package_name_text",
+                                      Args (0 .. 4));
+
+      --  Если не задано имя тип, по умолчанию используется имя компонента,
+      --  с "s" на конце.
+
+      if Package_Name (Node) = Null_String then
+         Xm_Text_Field_Set_String_Wcs (Element, Name_Image (Node) & "s");
+         Set_Package_Name (Node, Store (Name_Image (Node) & "s"));
+      end if;
+
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Package_Name_Activate'Access);
+      Xt_Add_Callback (Element,
+                       Xm_N_Losing_Focus_Callback,
+                       Callbacks.On_Package_Name_Activate'Access);
+
+      --  Поле ввода имени записи.
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Element);
+      Form := Xm_Create_Managed_Form (Result.Form, "form", Args (0 .. 1));
+
+      Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Label := Xm_Create_Managed_Label_Gadget
+               (Form, "record_name", Args (0 .. 2));
+
+      Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Left_Widget, Label);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (3), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (5), Xm_N_User_Data, Xt_Arg_Val (Node));
+      Element :=
+      Xm_Create_Managed_Text_Field (Form,
+                                    "record_name_text",
+                                    Args (0 .. 5));
+
+      --  Если не задано имя типа, то используется по умолчанию
+      --  имя компонента.
+
+      if Type_Name (Node) = Null_String then
+         Xm_Text_Field_Set_String_Wcs (Element, Name_Image (Node));
+         Set_Package_Name (Node, Store (Name_Image (Node)));
+      end if;
+
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Record_Name_Activate'Access);
+      Xt_Add_Callback (Element,
+                       Xm_N_Losing_Focus_Callback,
+                       Callbacks.On_Record_Name_Activate'Access);
+
       return Node_Properties_Editor_Access (Result);
    end Create;
 

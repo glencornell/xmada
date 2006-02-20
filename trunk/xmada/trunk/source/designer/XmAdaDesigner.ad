@@ -92,7 +92,9 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.properties_form.height: 700
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
-*main_window.horizontal_paned.properties_form.subform.name.labelString: Name
+*main_window.horizontal_paned.properties_form.subform.form.name.labelString: Name
+*main_window.horizontal_paned.properties_form.subform.form.package_name.labelString: Package name
+*main_window.horizontal_paned.properties_form.subform.form.record_name.labelString: Record name
 *main_window.horizontal_paned.properties_form.subform.manage_after_create.labelString: Manage after create
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.packing: PACK_COLUMN
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.orientation: VERTICAL
