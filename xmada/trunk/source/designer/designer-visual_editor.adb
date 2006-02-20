@@ -244,7 +244,9 @@ package body Designer.Visual_Editor is
    --! Для пустого списка возвращает пустой список параметров виджета.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Make_Set_Arg_List (List : in List_Id) return Xt_Arg_List;
+   function Make_Set_Arg_List (List             : in List_Id;
+                               Set_Initial_Size : in Boolean := False)
+     return Xt_Arg_List;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -737,7 +739,8 @@ package body Designer.Visual_Editor is
         Convenience_Create_Function (Class (Node))
          (Parent,
           Ada.Characters.Handling.To_String (Name_Image (Node)),
-          Make_Set_Arg_List (Resources (Node))
+          Make_Set_Arg_List (Resources (Node),
+                             Is_Set_Initial_Size (Class (Node)))
             & Make_Set_Arg_List (Constraint_Resources (Node))
             & Args);
 
@@ -1057,16 +1060,43 @@ package body Designer.Visual_Editor is
    --!    <Unit> Make_Set_Arg_List
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Make_Set_Arg_List (List : in List_Id) return Xt_Arg_List is
+   function Make_Set_Arg_List (List             : in List_Id;
+                               Set_Initial_Size : in Boolean := False)
+     return Xt_Arg_List
+   is
    begin
       if List = Null_List then
-         return Xt_Arg_List'(1 .. 0 => (Interfaces.C.Strings.Null_Ptr, 0));
+         if Set_Initial_Size then
+            declare
+               Args : Xt_Arg_List (0 .. 1);
+
+            begin
+               Xt_Set_Arg (Args (0), Xm_N_Width, Xt_Arg_Val (100));
+               Xt_Set_Arg (Args (1), Xm_N_Height, Xt_Arg_Val (100));
+
+               return Args;
+            end;
+
+         else
+            return Null_Xt_Arg_List;
+         end if;
       end if;
 
       declare
-         Aux      : Node_Id := First (List);
-         Args     : Xt_Arg_List (0 .. Length (List));
-         Next_Arg : Natural := 0;
+         Aux            : Node_Id := First (List);
+         Args           : Xt_Arg_List (0 .. Length (List) + 1);
+         --  Два дополнительных аргумента предназначены для задания значения
+         --  ресурсов width и height если установлен Set_Initial_Size.
+
+         Next_Arg       : Natural := 0;
+         Width_Present  : Boolean := False;
+         Height_Present : Boolean := False;
+         --  Признаки наличия значений ширины и высоты в формируемом списке
+         --  аргументов.
+
+         Width_Name     : constant Name_Id := Find ("width");
+         Height_Name    : constant Name_Id := Find ("height");
+         --  Номера имён ресурсов ширины и высоты.
 
       begin
          while Aux /= Null_Node loop
@@ -1094,6 +1124,17 @@ package body Designer.Visual_Editor is
                         Next_Arg := Next_Arg + 1;
 
                      when Type_Dimension =>
+                        if Internal_Resource_Name
+                            (Resource_Specification (Aux)) = Width_Name
+                        then
+                           Width_Present := True;
+
+                        elsif Internal_Resource_Name
+                            (Resource_Specification (Aux)) = Height_Name
+                        then
+                           Height_Present := True;
+                        end if;
+
                         Xt_Set_Arg
                          (Args (Next_Arg),
                           Annotation_Table.Table (Aux).Name,
@@ -1169,6 +1210,22 @@ package body Designer.Visual_Editor is
 
             Aux := Next (Aux);
          end loop;
+
+         --  Если была затребована установка значений ширины и высоты, но
+         --  в сформированном списке ресурсов эти значения не были заданы,
+         --  то дополняем список ресурсов.
+
+         if Set_Initial_Size then
+            if not Width_Present then
+               Xt_Set_Arg (Args (Next_Arg), Xm_N_Width, Xt_Arg_Val (100));
+               Next_Arg := Next_Arg + 1;
+            end if;
+
+            if not Height_Present then
+               Xt_Set_Arg (Args (Next_Arg), Xm_N_Height, Xt_Arg_Val (100));
+               Next_Arg := Next_Arg + 1;
+            end if;
+         end if;
 
          return Args (0 .. Next_Arg - 1);
       end;

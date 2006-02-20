@@ -78,6 +78,9 @@ package Model.Tree.Designer is
    procedure Set_Representation_Type (Node  : in Node_Id;
                                       Value : in Representation_Types);
 
+   function Is_Set_Initial_Size (Node : in Node_Id) return Boolean;
+   procedure Set_Is_Set_Initial_Size (Node : in Node_Id; Value : in Boolean);
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize

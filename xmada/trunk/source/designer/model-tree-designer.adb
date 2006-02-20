@@ -87,6 +87,11 @@ package body Model.Tree.Designer is
 
          when Annotation_Widget_Class =>
             Convenience_Create_Function : Convenience_Create;
+            --  Указатель на подпрограмму создания экземпляра виджета.
+
+            Is_Set_Initial_Size         : Boolean;
+            --  При отсутствии дочерних виджетов создаваемый виджет имеет
+            --  размер 1x1 и необходимо принудительно задать его размер.
 
          when Annotation_Widget_Instance =>
             All_Resources            : List_Id;
@@ -197,6 +202,21 @@ package body Model.Tree.Designer is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Is_Set_Initial_Size
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Set_Initial_Size (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Is_Set_Initial_Size;
+   end Is_Set_Initial_Size;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -212,7 +232,8 @@ package body Model.Tree.Designer is
                when Node_Widget_Class =>
                   Annotation_Table.Table (J) :=
                    (Kind                        => Annotation_Widget_Class,
-                    Convenience_Create_Function => null);
+                    Convenience_Create_Function => null,
+                    Is_Set_Initial_Size         => False);
 
                when Node_Widget_Instance =>
                   Annotation_Table.Table (J) :=
@@ -368,6 +389,21 @@ package body Model.Tree.Designer is
 
       Annotation_Table.Table (Node).Is_Changed := Value;
    end Set_Is_Changed;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Is_Set_Initial_Size
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Is_Set_Initial_Size (Node : in Node_Id; Value : in Boolean) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Is_Set_Initial_Size := Value;
+   end Set_Is_Set_Initial_Size;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
