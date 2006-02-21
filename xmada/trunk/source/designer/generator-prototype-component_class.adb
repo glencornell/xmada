@@ -54,6 +54,8 @@ with Model.Widget_Instances_Ordering;
 
 package body Generator.Prototype.Component_Class is
 
+   use Ada.Characters.Handling;
+   use Ada.Strings.Wide_Unbounded;
    use Ada.Wide_Text_IO;
    use Model;
    use Model.Tree;
@@ -135,190 +137,165 @@ package body Generator.Prototype.Component_Class is
       procedure Generate_Package (File : File_Type;
                                   Package_Name : Wide_String)
       is
-         Context_Text : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
-
       begin
-         Append_Package_Name (Model.Names.Enter ("Xm"));
-         Append_Package_Name (Model.Names.Enter ("Xm_Form"));
-         Append_Package_Name (Model.Names.Enter ("Xm_Label"));
-         Append_Package_Name (Model.Names.Enter ("Xm_Message_Box"));
-         Append_Package_Name (Model.Names.Enter ("Xm_Message_Box"));
-         Append_Package_Name (Model.Names.Enter ("Xm_Push_Button"));
-         Append_Package_Name (Model.Names.Enter ("Xm.Resource_Management"));
-         Append_Package_Name (Model.Names.Enter ("Xm_String_Defs"));
-         Append_Package_Name (Model.Names.Enter ("Xm_Text"));
-         Append_Package_Name (Model.Names.Enter ("Xt"));
-         Append_Package_Name (Model.Names.Enter ("Xt.Ancillary_Types"));
-         Append_Package_Name (Model.Names.Enter ("Xt.Composite_Management"));
-         Append_Package_Name (Model.Names.Enter ("Xt.Resource_Management"));
-
-         Sort_Package_Names;
-
          --  Генерируем контекст.
 
-         for J in Package_Names.First .. Package_Names.Last loop
-            Ada.Strings.Wide_Unbounded.Append
-             (Context_Text,
-              "with "
-                & Model.Names.Image (Package_Names.Table (J))
-                & ";");
-            Ada.Strings.Wide_Unbounded.Append
-             (Context_Text,
-              Ada.Characters.Handling.To_Wide_Character (ASCII.LF));
-         end loop;
+         declare
+            Context : Unbounded_Wide_String;
 
-         Put (File,
-              Ada.Strings.Wide_Unbounded.To_Wide_String (Context_Text));
+         begin
+            Append_Package_Name (Model.Names.Enter ("Xm"));
+            Append_Package_Name (Model.Names.Enter ("Xm_String_Defs"));
+            Append_Package_Name (Model.Names.Enter ("Xt"));
+            Append_Package_Name (Model.Names.Enter ("Xt.Ancillary_Types"));
+            Append_Package_Name (Model.Names.Enter ("Xt.Composite_Management"));
+            Append_Package_Name (Model.Names.Enter ("Xt.Resource_Management"));
+            Append_Package_Name (Model.Names.Enter ("Xm.Resource_Management"));
 
-         New_Line (File);
+            --  XXX Здесь необходимо пройти по таблице виджетов и
+            --  XXX сформировать список подключаемых модулей для
+            --  XXX используемых классов виджетов.
+
+            Append_Package_Name (Model.Names.Enter ("Xm_Form"));
+            Append_Package_Name (Model.Names.Enter ("Xm_Label"));
+            Append_Package_Name (Model.Names.Enter ("Xm_Message_Box"));
+            Append_Package_Name (Model.Names.Enter ("Xm_Push_Button"));
+            Append_Package_Name (Model.Names.Enter ("Xm_Text"));
+
+            Sort_Package_Names;
+
+            for J in Package_Names.First .. Package_Names.Last loop
+               Append (Context,
+                 "with " & Model.Names.Image (Package_Names.Table (J)) & ";");
+               Append (Context, To_Wide_Character (ASCII.LF));
+            end loop;
+
+            Put (File, To_Wide_String (Context));
+            New_Line (File);
+
+         end;
 
          --  Генерируем раздел спецификации пакета.
 
-         Put_Line (File => File,
-                   Item => "package " & Package_Name & "s is");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "   type " & Package_Name & " is limited private;");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "   type " & Package_Name & "_Access is access all "
-                           & Package_Name & ";");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "   package Constructors is");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "      function Create (Parent : in Xt.Widget)");
-         Put_Line (File => File,
-                   Item => "        return " & Package_Name & "_Access;");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "   end Constructors;");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "private");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "   type " & Package_Name & " is limited record");
+         begin
+            Put_Line (File, "package " & Package_Name & "s is");
+            New_Line (File);
+            Put_Line (File, "   type " & Package_Name
+                            & " is limited private;");
+            New_Line (File);
+            Put_Line (File, "   type " & Package_Name
+                            & "_Access is access all " & Package_Name & ";");
+            New_Line (File);
+            Put_Line (File, "   package Constructors is");
+            New_Line (File);
+            Put_Line (File, "      function Create (Parent : in Xt.Widget)");
+            Put_Line (File, "        return " & Package_Name & "_Access;");
+            New_Line (File);
+            Put_Line (File, "   end Constructors;");
+            New_Line (File);
+            Put_Line (File, "private");
+            New_Line (File);
+            Put_Line (File, "   type " & Package_Name & " is limited record");
 
-         if Widgets.Last >= Widgets.First then
-            for J in Widgets.First ..  Widgets.Last loop
-               Put_Line (File, "      "
-                 & Model.Queries.Name_Image (Widgets.Table (J))
-                 & " : Xt.Widget;");
-            end loop;
+            if Widgets.Last >= Widgets.First then
+               for J in Widgets.First ..  Widgets.Last loop
+                  Put_Line (File, "      "
+                    & Model.Queries.Name_Image (Widgets.Table (J))
+                    & " : Xt.Widget;");
+               end loop;
 
-         else
-            Put_Line (File => File,
-                      Item => "      null;");
-         end if;
+            else
+               Put_Line (File, "      null;");
+            end if;
 
-         Put_Line (File => File,
-                   Item => "   end record;");
-         Put_Line (File => File,
-                   Item => "end " & Package_Name & "s;");
-
-         New_Line (File);
+            Put_Line (File, "   end record;");
+            Put_Line (File, "end " & Package_Name & "s;");
+            New_Line (File);
+         end;
 
          --  Генерируем тело пакета.
 
-         Put_Line (File => File,
-                   Item => "package body " & Package_Name & "s is");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "   package CallBacks is");
-         Put_Line (File => File,
-                   Item => "   end CallBacks;");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "   package body CallBacks is");
-         Put_Line (File => File,
-                   Item => "   end CallBacks;");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "   package body Constructors is");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "      function Create (Parent : in Xt.Widget)");
-         Put_Line (File => File,
-                   Item => "        return " & Package_Name & "_Access");
-         Put_Line (File => File,
-                   Item => "      is");
-         Put_Line (File => File,
-                   Item => "         Result : "
-                           & Package_Name & "_Access := new " &
-                           Package_Name & ";");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "      begin");
+         begin
+            Put_Line (File, "package body " & Package_Name & "s is");
+            New_Line (File);
+            Put_Line (File, "   package CallBacks is");
+            Put_Line (File, "   end CallBacks;");
+            New_Line (File);
+            Put_Line (File, "   package body CallBacks is");
+            Put_Line (File, "   end CallBacks;");
+            New_Line (File);
+            Put_Line (File, "   package body Constructors is");
+            New_Line (File);
+            Put_Line (File, "      function Create (Parent : in Xt.Widget)");
+            Put_Line (File, "        return " & Package_Name & "_Access");
+            Put_Line (File, "      is");
+            Put_Line (File, "         Result : " & Package_Name & "_Access");
+            Put_Line (File, "           := new " & Package_Name & ";");
+            New_Line (File);
+            Put_Line (File, "      begin");
 
-         --  Генерируем создание виджетов.
+            --  Генерируем создание виджетов.
 
-         for J in Widgets.First .. Widgets.Last loop
-            Generate_Widget_Creation (File, Widgets.Table (J));
-         end loop;
+            for J in Widgets.First .. Widgets.Last loop
+               Generate_Widget_Creation (File, Widgets.Table (J));
+            end loop;
 
-         --  Генерируем создание отложенных ресурсов
-         --  и берем виджет на управление.
+            --  Генерируем создание отложенных ресурсов
+            --  и берем виджет на управление.
 
-         for J in reverse Widgets.First .. Widgets.Last loop
-            declare
-               N : constant Node_Id := Widgets.Table (J);
+            for J in reverse Widgets.First .. Widgets.Last loop
+               declare
+                  N     : constant Node_Id := Widgets.Table (J);
+                  First : constant Natural := Postponed_Resources.First;
+                  Last  : constant Natural := Postponed_Resources.Last;
 
-            begin
-               for K in Postponed_Resources.First .. Postponed_Resources.Last
-               loop
-                  declare
-                     R : constant Node_Id := Postponed_Resources.Table (K);
+               begin
+                  for K in First .. Last loop
+                     declare
+                        R : constant Node_Id := Postponed_Resources.Table (K);
 
-                  begin
-                     if Parent_Node (R) = N then
-                        Put_Line (File, "         declare");
-                        Put_Line (File,
-                                  "            Args : "
-                                  & "Xt.Ancillary_Types.Xt_Arg_List (1 .. 1"
-                                  & ");");
-                        New_Line (File);
+                     begin
+                        if Parent_Node (R) = N then
+                           Put_Line (File, "         declare");
+                           Put_Line (File,
+                                     "            Args : "
+                                     & "Xt.Ancillary_Types.Xt_Arg_List (1 .. 1"
+                                     & ");");
+                           New_Line (File);
 
-                        Put_Line (File,
-                                  "         begin");
+                           Put_Line (File, "         begin");
 
-                        Generate_Resource (File, R, J);
-                        Put_Line (File,
-                                  "            "
-                                  & "Xt.Resource_Management.Xt_Set_Values "
-                                  & "(Result."
-                                  & Model.Queries.Name_Image (N)
-                                  & ", Args);");
-                        New_Line (File);
-                        Put_Line (File,
-                                  "         end;");
-                        New_Line (File);
-                     end if;
-                  end;
-               end loop;
+                           Generate_Resource (File, R, J);
+                           Put_Line (File,
+                                     "            "
+                                     & "Xt.Resource_Management.Xt_Set_Values "
+                                     & "(Result."
+                                     & Model.Queries.Name_Image (N)
+                                     & ", Args);");
+                           New_Line (File);
+                           Put_Line (File, "         end;");
+                           New_Line (File);
+                        end if;
+                     end;
+                  end loop;
 
-               Put_Line (File,
-                         "         "
-                         & "Xt.Composite_Management.Xt_Manage_Child ("
-                         & "Result."
-                         & Model.Queries.Name_Image (N)
-                         & ");");
-               New_Line (File);
-            end;
-         end loop;
+                  Put_Line (File,
+                            "         "
+                            & "Xt.Composite_Management.Xt_Manage_Child ("
+                            & "Result."
+                            & Model.Queries.Name_Image (N)
+                            & ");");
+                  New_Line (File);
+               end;
+            end loop;
 
-         Put_Line (File => File,
-                   Item => "         return Result;");
-         Put_Line (File => File,
-                   Item => "      end Create;");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "   end Constructors;");
-         New_Line (File);
-         Put_Line (File => File,
-                   Item => "end " & Package_Name & "s;");
-
+            Put_Line (File, "         return Result;");
+            Put_Line (File, "      end Create;");
+            New_Line (File);
+            Put_Line (File, "   end Constructors;");
+            New_Line (File);
+            Put_Line (File, "end " & Package_Name & "s;");
+         end;
       end Generate_Package;
 
       ------------------------------------------------------------------------
