@@ -38,6 +38,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Characters.Handling;
+with Ada.Strings.Wide_Unbounded;
 with Ada.Wide_Text_IO;
 
 with GNAT.Table;
@@ -87,6 +89,8 @@ package body Generator.Prototype.Component_Class is
       package Widgets renames Widget_Instances_Order_Table;
       --  Таблица виджетов, отсортированных по времени создания.
 
+      procedure Append_Package_Name (Value : in Name_Id);
+
       procedure Generate_Package (File : File_Type;
                                   Package_Name : Wide_String);
 
@@ -100,6 +104,29 @@ package body Generator.Prototype.Component_Class is
 
       function Resource_Value_String (Node : in Node_Id) return Wide_String;
 
+      procedure Sort_Package_Names;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Append_Package_Name
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Append_Package_Name (Value : in Name_Id) is
+         Is_Found : Boolean := False;
+
+      begin
+         for J in Package_Names.First .. Package_Names.Last loop
+            if Package_Names.Table (J) = Value then
+               Is_Found := True;
+               exit;
+            end if;
+         end loop;
+
+         if not Is_Found then
+            Package_Names.Append (Value);
+         end if;
+      end Append_Package_Name;
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Generate_Package
@@ -108,29 +135,45 @@ package body Generator.Prototype.Component_Class is
       procedure Generate_Package (File : File_Type;
                                   Package_Name : Wide_String)
       is
+         Context_Text : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+
       begin
-         --    generation of spec
-         Package_Names.Append (Model.Names.Enter ("with Xm"));
-         Package_Names.Append (Model.Names.Enter ("with Xm_Form"));
-         Package_Names.Append (Model.Names.Enter ("with Xm_Label"));
-         Package_Names.Append (Model.Names.Enter ("with Xm_Message_Box"));
-         Package_Names.Append (Model.Names.Enter ("with Xm_Push_Button"));
-         Package_Names.Append (Model.Names.Enter
-           ("with Xm.Resource_Management"));
-         Package_Names.Append (Model.Names.Enter ("with Xm_String_Defs"));
-         Package_Names.Append (Model.Names.Enter ("with Xm_Text"));
-         Package_Names.Append (Model.Names.Enter ("with Xt"));
-         Package_Names.Append (Model.Names.Enter ("with Xt.Ancillary_Types"));
-         Package_Names.Append (Model.Names.Enter
-           ("with Xt.Composite_Management"));
-         Package_Names.Append (Model.Names.Enter
-           ("with Xt.Resource_Management"));
+         Append_Package_Name (Model.Names.Enter ("Xm"));
+         Append_Package_Name (Model.Names.Enter ("Xm_Form"));
+         Append_Package_Name (Model.Names.Enter ("Xm_Label"));
+         Append_Package_Name (Model.Names.Enter ("Xm_Message_Box"));
+         Append_Package_Name (Model.Names.Enter ("Xm_Message_Box"));
+         Append_Package_Name (Model.Names.Enter ("Xm_Push_Button"));
+         Append_Package_Name (Model.Names.Enter ("Xm.Resource_Management"));
+         Append_Package_Name (Model.Names.Enter ("Xm_String_Defs"));
+         Append_Package_Name (Model.Names.Enter ("Xm_Text"));
+         Append_Package_Name (Model.Names.Enter ("Xt"));
+         Append_Package_Name (Model.Names.Enter ("Xt.Ancillary_Types"));
+         Append_Package_Name (Model.Names.Enter ("Xt.Composite_Management"));
+         Append_Package_Name (Model.Names.Enter ("Xt.Resource_Management"));
+
+         Sort_Package_Names;
+
+         --  Генерируем контекст.
 
          for J in Package_Names.First .. Package_Names.Last loop
-            Put_Line (File, Model.Names.Image (Package_Names.Table (J)) & ";");
+            Ada.Strings.Wide_Unbounded.Append
+             (Context_Text,
+              "with "
+                & Model.Names.Image (Package_Names.Table (J))
+                & ";");
+            Ada.Strings.Wide_Unbounded.Append
+             (Context_Text,
+              Ada.Characters.Handling.To_Wide_Character (ASCII.LF));
          end loop;
 
+         Put (File,
+              Ada.Strings.Wide_Unbounded.To_Wide_String (Context_Text));
+
          New_Line (File);
+
+         --  Генерируем раздел спецификации пакета.
+
          Put_Line (File => File,
                    Item => "package " & Package_Name & "s is");
          New_Line (File);
@@ -176,7 +219,8 @@ package body Generator.Prototype.Component_Class is
                    Item => "end " & Package_Name & "s;");
 
          New_Line (File);
-   --    generation of body
+
+         --  Генерируем тело пакета.
 
          Put_Line (File => File,
                    Item => "package body " & Package_Name & "s is");
@@ -553,6 +597,36 @@ package body Generator.Prototype.Component_Class is
                raise Program_Error;
          end case;
       end Resource_Value_String;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Sort_Package_Names
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Sort_Package_Names is
+      begin
+         for J1 in Package_Names.First .. Package_Names.Last loop
+            for J2 in J1 + 1 .. Package_Names.Last loop
+               declare
+                  Str1 : constant Wide_String
+                    := Model.Names.Image (Package_Names.Table (J1));
+                  Str2 : constant Wide_String
+                    := Model.Names.Image (Package_Names.Table (J2));
+
+               begin
+                  if Str1 > Str2 then
+                     declare
+                        Temp : constant Name_Id := Package_Names.Table (J2);
+
+                     begin
+                        Package_Names.Set_Item (J2, Package_Names.Table (J1));
+                        Package_Names.Set_Item (J1, Temp);
+                     end;
+                  end if;
+               end;
+            end loop;
+         end loop;
+      end Sort_Package_Names;
 
       File : File_Type;
 
