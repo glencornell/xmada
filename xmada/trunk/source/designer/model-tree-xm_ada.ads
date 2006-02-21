@@ -56,6 +56,15 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Convenience_Create_Function_Package_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Convenience_Create_Function_Package_Name (Node : in Node_Id) 
+     return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Initialize
    --!    <Purpose> Производит начальную инициализацию внутренних структур.
    --! При повторном вызове осуществляет освобождение используемых ресурсов
@@ -170,6 +179,15 @@ package Model.Tree.Xm_Ada is
                                                    Name : in Name_Id);
 
    ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Convenience_Create_Function_Package_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Convenience_Create_Function_Package_Name (Node : in Node_Id;
+                                                           Name : in Name_Id);
+
+  ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Resource_Class_Name_String
    --!    <Purpose>
