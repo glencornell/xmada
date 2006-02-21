@@ -607,6 +607,7 @@ package body Generator.Prototype.Component_Class is
       File : File_Type;
 
    begin
+      Package_Names.Init;
       Postponed_Resources.Init;
 
       Create (File => File,
@@ -617,6 +618,7 @@ package body Generator.Prototype.Component_Class is
       Close (File);
 
       Postponed_Resources.Free;
+      Package_Names.Free;
    end Generate;
 
 end Generator.Prototype.Component_Class;
