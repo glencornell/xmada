@@ -39,6 +39,7 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Model.Tree.Lists;
+with Model.Tree.Xm_Ada;
 
 package body Model.Tree is
 
@@ -270,6 +271,7 @@ package body Model.Tree is
    procedure Initialize is
    begin
       Node_Table.Init;
+      Model.Tree.Xm_Ada.Initialize;
    end Initialize;
 
    ---------------------------------------------------------------------------
@@ -519,6 +521,7 @@ package body Model.Tree is
       end case;
    end Is_Resource_Class_Value;
 
+   
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Name
@@ -765,14 +768,19 @@ package body Model.Tree is
       pragma Assert (Node_Kind (Node) = Node_Widget_Class
                        or else Node_Kind (Node) = Node_Widget_Instance);
 
+ --     Ada.Text_IO.Put_Line ("First");
+
       case Node_Kind (Node) is
          when Node_Widget_Class =>
+ --     Ada.Text_IO.Put_Line ("WC_Resources");
             return Node_Table.Table (Node).WC_Resources;
 
          when Node_Widget_Instance =>
+ --     Ada.Text_IO.Put_Line ("WI_Resources");
             return Node_Table.Table (Node).WI_Resources;
 
          when others =>
+ --     Ada.Text_IO.Put_Line ("others");
             raise Program_Error;
       end case;
    end Resources;
