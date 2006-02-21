@@ -305,6 +305,31 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Menu_Mapped
+      --!    <Purpose> Подпрограмма обратного вызова при
+      --! активации пункта меню.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Menu_Mapped (The_Widget : in Widget;
+                                Closure    : in Xt_Pointer;
+                                Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Menu_Mapped);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Menu_Unmapped
+      --!    <Purpose> Подпрограмма обратного вызова при
+      --! деактивации пункта меню.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Menu_Unmapped (The_Widget : in Widget;
+                                  Closure    : in Xt_Pointer;
+                                  Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Menu_Unmapped);
+
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Menu_Entry
       --!    <Purpose> Подпрограмма обратного вызова
       --!    <Exceptions>
@@ -753,6 +778,90 @@ package body Designer.Properties_Editor.Widget_Instance is
             Designer.Main_Window.Put_Exception_In_Callback
              ("On_Menu_Entry", E);
       end On_Menu_Entry;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Menu_Mapped
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Menu_Mapped (The_Widget : in Widget;
+                                Closure    : in Xt_Pointer;
+                                Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Node   : Node_Id;
+         Args   : Xt_Arg_List (0 .. 0);
+         Button : Widget;
+
+      begin
+          --  Получаем ресурс, содрержащий меню.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (Xm_Get_Posted_From_Widget (The_Widget),
+                        Args (0 .. 0));
+         --  Проверяем, что это не пустой виджет.
+
+         pragma Assert (Node /= Null_Node);
+
+         --  Прячем злемент в меню (до закрытия самого меню).
+
+         Button := Get_Button (Parent_Node (Node));
+
+         if Button /= Null_Widget then
+            Xt_Unmanage_Child (Button);
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Menu_Mapped", E);
+      end On_Menu_Mapped;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Menu_Unmapped
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Menu_Unmapped (The_Widget : in Widget;
+                                  Closure    : in Xt_Pointer;
+                                  Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Node   : Node_Id;
+         Args   : Xt_Arg_List (0 .. 0);
+         Button : Widget;
+
+      begin
+          --  Получаем ресурс, содрержащий меню.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (Xm_Get_Posted_From_Widget (The_Widget),
+                        Args (0 .. 0));
+
+         --  Проверяем, что это не пустой виджет.
+
+         pragma Assert (Node /= Null_Node);
+         pragma Assert (Get_Button (Parent_Node (Node)) /= Null_Widget);
+
+         --  Отображаем злемент в меню (до закрытия самого меню).
+
+         Button := Get_Button (Parent_Node (Node));
+
+         if Button /= Null_Widget then
+            Xt_Manage_Child (Button);
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Menu_Unmapped", E);
+      end On_Menu_Unmapped;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -1954,6 +2063,12 @@ package body Designer.Properties_Editor.Widget_Instance is
                Xt_Add_Callback (Menu,
                                 Xm_N_Entry_Callback,
                                 Callbacks.On_Menu_Entry'Access);
+               Xt_Add_Callback (Menu,
+                                Xm_N_Map_Callback,
+                                Callbacks.On_Menu_Mapped'Access);
+               Xt_Add_Callback (Menu,
+                                Xm_N_Unmap_Callback,
+                                Callbacks.On_Menu_Unmapped'Access);
 
                --  Добавляем в меню ссылку на "пустой" виджет.
 
