@@ -208,6 +208,117 @@ package body Model.Initialization.Xm_Ada is
        (Xt_Motif_Toggle_Button_Widget_Class,
         Enter ("Xm_Toggle_Button.Xm_Create_Toggle_Button"));
 
+      --  Инициализация имен пакетов создаваемых классов виджетов
+
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Arrow_Button_Gadget_Widget_Class,
+        Enter ("Xm_Arrow_Button_Gadget"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Arrow_Button_Widget_Class,
+        Enter ("Xm_Arrow_Button"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Bulletin_Board_Widget_Class,
+        Enter ("Xm_Bulletin_Board"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Cascade_Button_Gadget_Widget_Class,
+        Enter ("Xm_Cascade_Button_Gadget"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Cascade_Button_Widget_Class,
+        Enter ("Xm_Cascade_Button"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Combo_Box_Widget_Class,
+        Enter ("Xm_Combo_Box"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Command_Widget_Class,
+        Enter ("Xm_Command"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Container_Widget_Class,
+        Enter ("Xm_Container"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Drawing_Area_Widget_Class,
+        Enter ("Xm_Drawing_Area"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Drawn_Button_Widget_Class,
+        Enter ("Xm_Drawn_Button"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_File_Selection_Box_Widget_Class,
+        Enter ("Xm_File_Selection_Box"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Form_Widget_Class,
+        Enter ("Xm_Form"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Frame_Widget_Class,
+        Enter ("Xm_Frame"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Icon_Gadget_Widget_Class,
+        Enter ("Xm_Icon_Gadget"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Label_Gadget_Widget_Class,
+        Enter ("Xm_Label_Gadget"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Label_Widget_Class,
+        Enter ("Xm_Label"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_List_Widget_Class,
+        Enter ("Xm_List"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Main_Window_Widget_Class,
+        Enter ("Xm_Main_Window"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Message_Box_Widget_Class,
+        Enter ("Xm_Message_Box"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Notebook_Widget_Class,
+        Enter ("Xm_Notebook"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Paned_Window_Widget_Class,
+        Enter ("Xm_Paned_Window"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Push_Button_Gadget_Widget_Class,
+        Enter ("Xm_Push_Button_Gadget"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Push_Button_Widget_Class,
+        Enter ("Xm_Push_Button"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Row_Column_Widget_Class,
+        Enter ("Xm_Row_Column"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Scale_Widget_Class,
+        Enter ("Xm_Scale"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Scroll_Bar_Widget_Class,
+        Enter ("Xm_Scroll_Bar"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Scrolled_Window_Widget_Class,
+        Enter ("Xm_Scrolled_Window"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Selection_Box_Widget_Class,
+        Enter ("Xm_Selection_Box"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Separator_Gadget_Widget_Class,
+        Enter ("Xm_Separator_Gadget"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Separator_Widget_Class,
+        Enter ("Xm_Separator"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Simple_Spin_Box_Widget_Class,
+        Enter ("Xm_Simple_Spin_Box"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Spin_Box_Widget_Class,
+        Enter ("Xm_Spin_Box"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Text_Field_Widget_Class,
+        Enter ("Xm_Text_Field"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Text_Widget_Class,
+        Enter ("Xm_Text"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Toggle_Button_Gadget_Widget_Class,
+        Enter ("Xm_Toggle_Button_Gadget"));
+      Set_Convenience_Create_Function_Package_Name
+       (Xt_Motif_Toggle_Button_Widget_Class,
+        Enter ("Xm_Toggle_Button"));
+
       --  Инициализация типов ресурсов
 
       Set_Type_Identifier
@@ -374,7 +485,7 @@ package body Model.Initialization.Xm_Ada is
       Set_Enumeration_Resource_Value
        (Xt_Motif_Alignment_Resource_Type,
         Enter ("ALIGNMENT_CENTER"),
-        Enter ("Xm.Xm_Alignment_Сenter"), 
+        Enter ("Xm.Xm_Alignment_Center"), 
         True);
       Set_Enumeration_Resource_Value
        (Xt_Motif_Alignment_Resource_Type,
@@ -554,7 +665,7 @@ package body Model.Initialization.Xm_Ada is
       Set_Enumeration_Resource_Value
        (Xt_Motif_Child_Horizontal_Alignment_Resource_Type,
         Enter ("ALIGNMENT_CENTER"),
-        Enter ("Xm.Xm_Alignment_Сenter"), 
+        Enter ("Xm.Xm_Alignment_Center"), 
         True);
       Set_Enumeration_Resource_Value
        (Xt_Motif_Child_Horizontal_Alignment_Resource_Type,

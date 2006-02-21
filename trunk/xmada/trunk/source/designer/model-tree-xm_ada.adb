@@ -64,6 +64,7 @@ package body Model.Tree.Xm_Ada is
 
          when Annotation_Widget_Class =>
             Create_Function_Name : Name_Id;
+            Create_Package_Name  : Name_Id;
 
          when Annotation_Widget_Instance =>
              Create_In_Record  : Boolean;
@@ -168,6 +169,24 @@ package body Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Convenience_Create_Function_Package_Name
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Convenience_Create_Function_Package_Name (Node : in Node_Id) 
+     return Name_Id
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Create_Package_Name;
+   end Convenience_Create_Function_Package_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_In_Record
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -254,7 +273,8 @@ package body Model.Tree.Xm_Ada is
                when Node_Widget_Class =>
                   Annotation_Table.Table (J) :=
                    (Kind                 => Annotation_Widget_Class,
-                    Create_Function_Name => Null_Name);
+                    Create_Function_Name => Null_Name,
+                    Create_Package_Name  => Null_Name);
 
                 when Node_Resource_Specification =>
                   Annotation_Table.Table (J) :=
@@ -342,6 +362,23 @@ package body Model.Tree.Xm_Ada is
 
       Annotation_Table.Table (Node).Create_Function_Name := Name;
    end Set_Convenience_Create_Function_Name;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Convenience_Create_Function_Package_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Convenience_Create_Function_Package_Name (Node : in Node_Id;
+                                                           Name : in Name_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Create_Package_Name := Name;
+   end Set_Convenience_Create_Function_Package_Name;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
