@@ -152,15 +152,20 @@ package body Generator.Prototype.Component_Class is
             Append_Package_Name (Model.Names.Enter ("Xt.Resource_Management"));
             Append_Package_Name (Model.Names.Enter ("Xm.Resource_Management"));
 
-            --  XXX Здесь необходимо пройти по таблице виджетов и
-            --  XXX сформировать список подключаемых модулей для
-            --  XXX используемых классов виджетов.
+            --  Проходим по таблице виджетов и
+            --  формируем список подключаемых модулей для
+            --  используемых классов виджетов.
 
-            Append_Package_Name (Model.Names.Enter ("Xm_Form"));
-            Append_Package_Name (Model.Names.Enter ("Xm_Label"));
-            Append_Package_Name (Model.Names.Enter ("Xm_Message_Box"));
-            Append_Package_Name (Model.Names.Enter ("Xm_Push_Button"));
-            Append_Package_Name (Model.Names.Enter ("Xm_Text"));
+            for J in Widgets.First .. Widgets.Last loop
+               declare
+                  Id : constant Name_Id
+                    := Convenience_Create_Function_Package_Name
+                        (Class (Widgets.Table (J)));
+
+               begin
+                  Append_Package_Name (Id);
+               end;
+            end loop;
 
             Sort_Package_Names;
 
