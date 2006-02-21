@@ -203,6 +203,7 @@ package body Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    procedure Initialize is
    begin
+      Annotation_Table.Free;
       Annotation_Table.Init;
    end Initialize;
 
