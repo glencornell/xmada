@@ -499,6 +499,11 @@ package body Generator.Prototype.Component_Class is
             end;
          end if;
 
+         --  Generate:
+         --    Result.<widget>
+         --      := Xm_XXX.Xm_Create_XXX
+         --          (<parent>, <widget>[, Args]);
+
          Put_Line (File => File,
                    Item => "            Result."
                      & Model.Queries.Name_Image (Widget));
