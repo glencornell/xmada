@@ -46,7 +46,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Convenience_Create_Function_Name
-   --!    <Purpose>
+   --!    <Purpose> Возвращает имя функции (вместе с именем пакета),
+   --! используемой для создания виджета.
+   --! Аргумент Node должен иметь тип Node_Widget_Class.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Convenience_Create_Function_Name (Node : in Node_Id)
@@ -65,7 +67,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Literal_Identifier
-   --!    <Purpose>
+   --!    <Purpose> Возвращает символьное представление значения для
+   --! перечислимых типов.
+   --! Аргумент Node должен иметь тип Node_Enumeratuon_Value_Specification.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Literal_Identifier (Node : in Node_Id) return Name_Id;
@@ -82,7 +86,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Resource_Name_String
-   --!    <Purpose>
+   --!    <Purpose> Возвращает символьное имя ресурса для подстановки в
+   --! функцию Xt_Set_Arg.
+   --! Аргумент Node должет иметь тип Node_Resource_Specification.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Resource_Name_String (Node : in Node_Id)
@@ -155,7 +161,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Convenience_Create_Function_Name
-   --!    <Purpose>
+   --!    <Purpose> Устанавливает имя функции (вместе с именем пакета),
+   --! используемой для создания виджета.
+   --! Аргумент Node должен иметь тип Node_Widget_Class.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Convenience_Create_Function_Name (Node : in Node_Id;
@@ -173,7 +181,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Resource_Name_String
-   --!    <Purpose>
+   --!    <Purpose> Устанавливает символьное имя ресурса для подстановки в
+   --! функцию Xt_Set_Arg.
+   --! Аргумент Node должет иметь тип Node_Resource_Specification.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Resource_Name_String (Node : in Node_Id;
@@ -191,7 +201,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Literal_Identifier
-   --!    <Purpose>
+   --!    <Purpose> Устанавливает символьное представление значения для
+   --! перечислимых типов.
+   --! Аргумент Node должен иметь тип Node_Enumeratuon_Value_Specification.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Literal_Identifier (Node  : in Node_Id;
