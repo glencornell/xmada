@@ -563,9 +563,8 @@ package body Generator.Prototype.Component_Class is
                  & Model.Queries.Name_Image (Resource_Value (Node));
 
             when Node_Enumeration_Resource_Value =>
-               return "Xm.Xm_Attach_Widget";
---             return Model.Names.Image
---                     (Literal_Identifier (Resource_Value (Node)));
+               return Model.Names.Image
+                       (Literal_Identifier (Resource_Value (Node)));
 
             when others =>
                Ada.Wide_Text_IO.Put_Line
