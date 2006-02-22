@@ -119,14 +119,6 @@ package body Designer.Palette is
           Table_Initial        => Model.Allocations.Node_Table_Initial,
           Table_Increment      => Model.Allocations.Node_Table_Increment);
 
-   -------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Create_Widget_Instance
-   --!    <Purpose>
-   --!    <Exceptions>
-   -------------------------------------------------------------------------
-   procedure Create_Widget_Instance (Class  : in Model.Node_Id);
-
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> On_Button_Activate
@@ -162,21 +154,23 @@ package body Designer.Palette is
    --!    <Unit> Create_Widget_Instance
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Create_Widget_Instance (Class  : in Model.Node_Id) is
+   procedure Create_Widget_Instance (Class  : in Model.Node_Id;
+                                     Parent : in Model.Node_Id)
+   is
       Node          : Node_Id;
       Children_List : List_Id;
 
    begin
       Node := Model.Utilities.Create_Widget_Instance (Class);
 
-      if Node_Kind (Selected_Item) = Node_Component_Class then
-         Set_Root (Selected_Item, Node);
+      if Node_Kind (Parent) = Node_Component_Class then
+         Set_Root (Parent, Node);
       else
-         Children_List := Children (Selected_Item);
+         Children_List := Children (Parent);
 
          if Children_List = Null_List then
             Children_List := New_List;
-            Set_Children (Selected_Item, Children_List);
+            Set_Children (Parent, Children_List);
          end if;
 
         Append (Children_List, Node);
@@ -393,13 +387,13 @@ package body Designer.Palette is
       pragma Unreferenced (Closure);
       pragma Unreferenced (Call_Data);
 
-      Node : Xt_Arg_Val;
+      Node : Node_Id;
       Args : Xt_Arg_List (0 .. 0);
    begin
       if Selected_Item /= Null_Node then
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
          Xt_Get_Values (The_Widget, Args (0 .. 0));
-         Create_Widget_Instance (Node_Id (Node));
+         Create_Widget_Instance (Node, Selected_Item);
       end if;
 
    exception
