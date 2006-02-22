@@ -45,6 +45,15 @@ package Model.Tree.Xm_Ada is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Argument_Package_Name
+   --!    <Purpose> Получает имя пакета, определяющего функцию установки 
+   --! задаваемого типа ресурса в качестве аргумента.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Argument_Package_Name (Node : in Node_Id) return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Convenience_Create_Function_Name
    --!    <Purpose> Возвращает имя функции (вместе с именем пакета),
    --! используемой для создания виджета.
@@ -102,6 +111,15 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    function Resource_Name_String (Node : in Node_Id)
      return Name_Id;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Argument_Package_Name
+   --!    <Purpose> Устанавливает имя пакета, определяющего функцию установки 
+   --! задаваемого типа ресурса в качестве аргумента.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Argument_Package_Name (Node : in Node_Id; Name : in Name_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -252,12 +270,5 @@ package Model.Tree.Xm_Ada is
    procedure Set_Use_Qualified_Expression (Node : in Node_Id;
                                            Value : in Boolean);
 
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Argument_Package_Name
-   --!    <Purpose>
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Argument_Package_Name (Node : in Node_Id) return Name_Id;
-
+   
 end Model.Tree.Xm_Ada;

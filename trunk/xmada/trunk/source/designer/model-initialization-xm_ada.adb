@@ -1203,7 +1203,230 @@ package body Model.Initialization.Xm_Ada is
         Enter ("Xm.Xm_Min_Side"), 
         False);
 
-        Set_Resource_Names (Model.Xt_Motif.Xt_Motif_Widget_Set);
+      --  Инициализация пакетов, содержащих функции задания ресурсов.
+      
+      Set_Argument_Package_Name
+       (Xt_Motif_Alignment_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Arrow_Direction_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Arrow_Layout_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Arrow_Orientation_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Arrow_Sensitivity_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Attachment_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+  --     Set_Argument_Package_Name
+  --     (Xt_Motif_Audible_Warning_Resource_Type ,
+  --      Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Auto_Drag_Model_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Automatic_Selection_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Binding_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Child_Horizontal_Alignment_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Child_Placement_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Frame_Child_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Child_Vertical_Alignment_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Combo_Box_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Command_Window_Location_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Default_Button_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+ --     Set_Argument_Package_Name
+ --      (Xt_Motif_Delete_Response_Resource_Type,
+ --       Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Dialog_Style_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Dialog_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Edit_Mode_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Toggle_Indicator_On_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Indicator_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+  --    Set_Argument_Package_Name
+  --     (Xt_Motif_Input_Policy_Resource_Type,
+  --     Enter ("Xm.Resource_Management"));
+  --    Set_Argument_Package_Name
+  --     (Xt_Motif_Keyboard_Focus_Policy_Resource_Type,
+  --      Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Label_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Layout_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Container_Line_Style_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Match_Behavior_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Multi_Click_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Navigation_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Notebook_Child_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Orientation_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Outline_Button_Policy_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Outline_State_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Packing_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Position_Mode_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+   --   Set_Argument_Package_Name
+   --    (Xt_Motif_Position_Type_Resource_Type,
+   --     Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Primary_Ownership_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Processing_Direction_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+--      Set_Argument_Package_Name
+--       (Xt_Motif_Resize_Policy_Resource_Type,
+--        Enter ("Xm.Resource_Management"));
+--      Set_Argument_Package_Name
+--       (Xt_Motif_Row_Column_Type_Resource_Type,
+--        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Scroll_Bar_Display_Policy_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+--      Set_Argument_Package_Name
+--       (Xt_Motif_Scroll_Bar_Placement_Resource_Type,
+--        Enter ("Xm.Resource_Management"));
+--     Set_Argument_Package_Name
+--       (Xt_Motif_Scrolled_Window_Child_Type_Resource_Type,
+--        Enter ("Xm.Resource_Management"));
+--      Set_Argument_Package_Name
+--       (Xt_Motif_Scrolling_Policy_Resource_Type,
+--        Enter ("Xm.Resource_Management"));
+--      Set_Argument_Package_Name
+--       (Xt_Motif_Selection_Policy_Resource_Type,
+--        Enter ("Xm.Resource_Management"));
+--      Set_Argument_Package_Name
+--       (Xt_Motif_Selection_Technique_Resource_Type,
+--        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Separator_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Shadow_Type_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Show_Arrows_Resource_Type,
+        Enter ("Xm.Resource_Management"));
+
+      Set_Argument_Package_Name
+       (Xt_Motif_Accelerator_Table_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_C_Int_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_C_Short_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Colormap_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Dimension_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Dynamic_Pixmap_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Horizontal_Dimension_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Horizontal_Int_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Horizontal_Position_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Menu_Widget_Reference_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Pixel_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Pixmap_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Position_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Screen_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Select_Color_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Translation_Table_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Vertical_Dimension_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Vertical_Int_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Vertical_Position_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Widget_Reference_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Xm_String_Resource_Type,
+        Enter ("Xt.Resource_Management"));
+
+      Set_Resource_Names (Model.Xt_Motif.Xt_Motif_Widget_Set);
    end Initialize;
 
    ---------------------------------------------------------------------------

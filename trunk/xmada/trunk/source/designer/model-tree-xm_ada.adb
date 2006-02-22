@@ -54,7 +54,9 @@ package body Model.Tree.Xm_Ada is
      Annotation_Component_Class,
      Annotation_Resource_Specification,
      Annotation_Enumeration_Value_Specification,
-     Annotation_Enumerated_Resource_Type);
+     Annotation_Enumerated_Resource_Type,
+     Annotation_Predefined_Resource_Type,
+     Annotation_Widget_Reference_Resource_Type);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
@@ -85,13 +87,25 @@ package body Model.Tree.Xm_Ada is
             Type_Identifier : Name_Id;
             --  Уникальный идентификатор типа ресурса.
 
+            Enumerated_Argument_Package_Name : Name_Id;
+            --  Имя пакета, содержащего функции задания ресурсов данного типа.
+
+         when Annotation_Predefined_Resource_Type =>
+            Predefined_Argument_Package_Name : Name_Id;
+            --  Имя пакета, содержащего функции задания ресурсов данного типа.
+
+         when Annotation_Widget_Reference_Resource_Type =>
+            Widget_Reference_Argument_Package_Name : Name_Id;
+            --  Имя пакета, содержащего функции задания ресурсов данного типа.
+
          when Annotation_Component_Class =>
             Package_Name : String_Id;
             --  Имя пакета, в котором будет содержаться компонент.
 
             Type_Name    : String_Id;
             --  Название типа, в которов будут храниться виджеты.
-      end case;
+
+         end case;
    end record;
 
    package Annotation_Table is
@@ -117,37 +131,32 @@ package body Model.Tree.Xm_Ada is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    function Argument_Package_Name (Node : in Node_Id) return Name_Id is
-   begin
-      Ada.Wide_Text_IO.Put_Line
-       (Node_Kinds'Wide_Image (Node_Kind (Node))
-        & " - "
-        & Model.Names.Image (Name (Node)));
-
+   begin 
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type
         or else Node_Kind (Node) = Node_Predefined_Resource_Type
         or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
 
-      declare
-         Type_Name : constant Wide_String
-           := Model.Names.Image (Name (Node));
+      Relocate_Annotation_Table;
 
-      begin
-         if Type_Name = "XmRAttachment" then
-            return Model.Names.Enter ("Xm.Resource_Management");
+      case Node_Kind (Node) is
+         when Node_Enumerated_Resource_Type =>
+            return 
+	      Annotation_Table.Table (Node).Enumerated_Argument_Package_Name;
 
-         elsif Type_Name = "XmRHorizontalDimension" then
-            return Model.Names.Enter ("Xt.Resource_Management");
+         when Node_Predefined_Resource_Type =>
+            return 
+	      Annotation_Table.Table (Node).Predefined_Argument_Package_Name;
 
-         elsif Type_Name = "XmRVerticalDimension" then
-            return Model.Names.Enter ("Xt.Resource_Management");
+         when Node_Widget_Reference_Resource_Type =>
+            return 
+	      Annotation_Table.Table (Node).
+               Widget_Reference_Argument_Package_Name;
 
-         elsif Type_Name = "XmRWidget" then
-            return Model.Names.Enter ("Xt.Resource_Management");
+         when others =>
+            return Null_Name;
+      end case;
 
-         else
-            raise Program_Error;
-         end if;
-      end;
    end Argument_Package_Name;
 
    ---------------------------------------------------------------------------
@@ -292,8 +301,21 @@ package body Model.Tree.Xm_Ada is
 
                when Node_Enumerated_Resource_Type =>
                   Annotation_Table.Table (J) :=
-                   (Kind            => Annotation_Enumerated_Resource_Type,
-                    Type_Identifier => Null_Name);
+                   (Kind                 => Annotation_Enumerated_Resource_Type,
+                    Type_Identifier      => Null_Name,
+		    Enumerated_Argument_Package_Name => Null_Name);
+
+               when Node_Widget_Reference_Resource_Type =>
+                  Annotation_Table.Table (J) :=
+                   (Kind                                   => 
+                     Annotation_Widget_Reference_Resource_Type,
+		    Widget_Reference_Argument_Package_Name => Null_Name);
+
+               when Node_Predefined_Resource_Type =>
+                  Annotation_Table.Table (J) :=
+                   (Kind                             => 
+                     Annotation_Predefined_Resource_Type,
+		    Predefined_Argument_Package_Name => Null_Name);
 
                when Node_Widget_Instance =>
                   Annotation_Table.Table (J) :=
@@ -345,6 +367,41 @@ package body Model.Tree.Xm_Ada is
 
       return Annotation_Table.Table (Node).Resource_Name_String;
    end Resource_Name_String;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Argument_Package_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Argument_Package_Name (Node : in Node_Id; Name : in Name_Id)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type
+        or else Node_Kind (Node) = Node_Predefined_Resource_Type
+        or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
+
+      Relocate_Annotation_Table;
+
+      case Node_Kind (Node) is
+         when Node_Enumerated_Resource_Type =>
+	    Annotation_Table.Table (Node).Enumerated_Argument_Package_Name
+              := Name;
+
+         when Node_Predefined_Resource_Type =>
+            Annotation_Table.Table (Node).Predefined_Argument_Package_Name 
+              := Name;
+
+         when Node_Widget_Reference_Resource_Type =>
+            Annotation_Table.Table (Node).
+             Widget_Reference_Argument_Package_Name
+              := Name;
+
+         when others =>
+            null;
+      end case;
+
+   end Set_Argument_Package_Name;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
