@@ -47,6 +47,7 @@ with GNAT.Table;
 with Model.Allocations;
 with Model.Names;
 with Model.Queries;
+with Model.Strings;
 with Model.Tree;
 with Model.Tree.Lists;
 with Model.Tree.Xm_Ada;
@@ -618,7 +619,20 @@ package body Generator.Prototype.Component_Class is
               Mode => Out_File,
               Name => "test.ada");
       Find_Widget_Instances_Order (Root (Node));
-      Generate_Package (File, Model.Queries.Name_Image (Node));
+
+      declare
+         Package_Name : constant String_Id
+           := Model.Tree.Xm_Ada.Package_Name (Node);
+
+      begin
+         if Package_Name = Null_String then
+            Generate_Package (File, Model.Queries.Name_Image (Node));
+
+         else
+            Generate_Package (File, Model.Strings.Image (Package_Name));
+         end if;
+      end;
+
       Close (File);
 
       Postponed_Resources.Free;
