@@ -82,29 +82,6 @@ package body Model.Initialization is
 
    --  Типы ресурсов
 
-   Xt_Motif_Accelerator_Table_Resource_Type          : Node_Id;
-   Xt_Motif_C_Int_Resource_Type                      : Node_Id;
-   Xt_Motif_C_Short_Resource_Type                    : Node_Id;
-   Xt_Motif_Colormap_Resource_Type                   : Node_Id;
-   Xt_Motif_Dimension_Resource_Type                  : Node_Id;
-   Xt_Motif_Dynamic_Pixmap_Resource_Type             : Node_Id;
-   Xt_Motif_Horizontal_Dimension_Resource_Type       : Node_Id;
-   Xt_Motif_Horizontal_Int_Resource_Type             : Node_Id;
-   Xt_Motif_Horizontal_Position_Resource_Type        : Node_Id;
-   Xt_Motif_Menu_Widget_Reference_Resource_Type      : Node_Id;
-   Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type  : Node_Id;
-   Xt_Motif_Pixel_Resource_Type                      : Node_Id;
-   Xt_Motif_Pixmap_Resource_Type                     : Node_Id;
-   Xt_Motif_Position_Resource_Type                   : Node_Id;
-   Xt_Motif_Screen_Resource_Type                     : Node_Id;
-   Xt_Motif_Select_Color_Resource_Type               : Node_Id;
-   Xt_Motif_Translation_Table_Resource_Type          : Node_Id;
-   Xt_Motif_Vertical_Dimension_Resource_Type         : Node_Id;
-   Xt_Motif_Vertical_Int_Resource_Type               : Node_Id;
-   Xt_Motif_Vertical_Position_Resource_Type          : Node_Id;
-   Xt_Motif_Widget_Reference_Resource_Type           : Node_Id;
-   Xt_Motif_Xm_String_Resource_Type                  : Node_Id;
-
    Types   : List_Id;
    Classes : List_Id;
 
