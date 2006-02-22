@@ -78,6 +78,7 @@ package body Model.Tools is
 
    Class_Name_Attr     : XML_Tools.Name_Id;
    Is_Class_Attr       : XML_Tools.Name_Id;
+   Is_Explotable_Attr  : XML_Tools.Name_Id;
    Is_Fallback_Attr    : XML_Tools.Name_Id;
    Is_Hardcoded_Attr   : XML_Tools.Name_Id;
    Is_Managed_Attr     : XML_Tools.Name_Id;
@@ -154,6 +155,7 @@ package body Model.Tools is
 
       Class_Name_Attr         := XML_Tools.Names.Store ("classname");
       Is_Class_Attr           := XML_Tools.Names.Store ("isClass");
+      Is_Explotable_Attr      := XML_Tools.Names.Store ("isExplotable");
       Is_Fallback_Attr        := XML_Tools.Names.Store ("isFallback");
       Is_Hardcoded_Attr       := XML_Tools.Names.Store ("isHardcoded");
       Is_Managed_Attr         := XML_Tools.Names.Store ("isManaged");
@@ -452,6 +454,10 @@ package body Model.Tools is
            Class_Name_Attr,
            XML_Tools.Strings.Store
             (Model.Names.Image (Name (Class (Widget_Instance)))));
+
+         if not Xm_Ada.Create_In_Record (Widget_Instance) then
+            Attributes.Create_Attribute (Tag, Is_Explotable_Attr, No_Value);
+         end if;
 
          if Is_Managed (Widget_Instance) then
             Attributes.Create_Attribute (Tag, Is_Managed_Attr, Yes_Value);
@@ -1237,6 +1243,20 @@ package body Model.Tools is
 
                elsif Attributes.Name (A) = Class_Name_Attr then
                   Set_Class (Widget_Instance, Find (Attributes.Value (A)));
+
+               elsif Attributes.Name (A) = Is_Explotable_Attr then
+                  if Attributes.Value (A) = No_Value then
+                     Xm_Ada.Set_Create_In_Record (Widget_Instance, False);
+
+                  elsif Attributes.Value (A) = Yes_Value then
+                     Xm_Ada.Set_Create_In_Record (Widget_Instance, True);
+
+                  else
+                     Error_Message ("Invalid value of the "
+                       & "'ismanaged' attribute: "
+                       & XML_Tools.Strings.Image (Attributes.Value (A)));
+                     raise Program_Error;
+                  end if;
 
                elsif Attributes.Name (A) = Is_Managed_Attr then
                   if Attributes.Value (A) = No_Value then

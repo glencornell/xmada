@@ -204,9 +204,11 @@ package body Generator.Prototype.Component_Class is
 
             if Widgets.Last >= Widgets.First then
                for J in Widgets.First ..  Widgets.Last loop
-                  Put_Line (File, "      "
-                    & Variable_Widget_Name_Image (Widgets.Table (J))
-                    & " : Xt.Widget;");
+                  if Xm_Ada.Create_In_Record (Widgets.Table (J)) then
+                     Put_Line (File, "      "
+                       & Variable_Widget_Name_Image (Widgets.Table (J))
+                       & " : Xt.Widget;");
+                  end if;
                end loop;
 
             else
@@ -283,14 +285,6 @@ package body Generator.Prototype.Component_Class is
                         end if;
                      end;
                   end loop;
-
-                  Put_Line (File,
-                            "         "
-                            & "Xt.Composite_Management.Xt_Manage_Child ("
-                            & "Result."
-                            & Variable_Widget_Name_Image (N)
-                            & ");");
-                  New_Line (File);
                end;
             end loop;
 
@@ -486,8 +480,15 @@ package body Generator.Prototype.Component_Class is
             New_Line (File);
          end if;
 
-         Put_Line (File,
-                   "         begin");
+         if not Create_In_Record (Widget) then
+            Put_Line (File, "         declare");
+            Put_Line (File, "            "
+                            & Variable_Widget_Name_Image (Widget)
+                            & " : Xt.Widget;");
+            New_line (File);
+         end if;
+
+         Put_Line (File, "         begin");
 
          if Hardcoded_Counter > 0 then
             declare
@@ -509,9 +510,14 @@ package body Generator.Prototype.Component_Class is
          --      := Xm_XXX.Xm_Create_XXX
          --          (<parent>, <widget>[, Args]);
 
-         Put_Line (File,
-                   "            Result."
-                   & Variable_Widget_Name_Image (Widget));
+         if Create_In_Record (Widget) then
+            Put_Line (File, "            Result."
+                            & Variable_Widget_Name_Image (Widget));
+
+         else
+            Put_Line (File, "            "
+                            & Variable_Widget_Name_Image (Widget));
+         end if;
          Put_Line
           (File,
            "              := "
@@ -537,8 +543,15 @@ package body Generator.Prototype.Component_Class is
             Put_Line (File, """);");
          end if;
 
-         Put_Line (File,
-                   "         end;");
+         New_Line (File);
+         Put (File, "            "
+                    & "Xt.Composite_Management.Xt_Manage_Child (");
+         if Create_In_Record (Widget) then
+            Put (File, "Result.");
+         end if;
+         Put (File, Variable_Widget_Name_Image (Widget));
+         Put_Line (File, ");");
+         Put_Line (File, "         end;");
          New_Line (File);
 
       end Generate_Widget_Creation;
