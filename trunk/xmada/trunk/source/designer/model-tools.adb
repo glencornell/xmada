@@ -85,6 +85,7 @@ package body Model.Tools is
    Package_Name_Attr   : XML_Tools.Name_Id;
    Type_Name_Attr      : XML_Tools.Name_Id;
    Value_Attr          : XML_Tools.Name_Id;
+   Variable_Name_Attr  : XML_Tools.Name_Id;
 
    No_Value            : XML_Tools.String_Id;
    Yes_Value           : XML_Tools.String_Id;
@@ -160,6 +161,7 @@ package body Model.Tools is
       Package_Name_Attr       := XML_Tools.Names.Store ("packageName");
       Type_Name_Attr          := XML_Tools.Names.Store ("typeName");
       Value_Attr              := XML_Tools.Names.Store ("value");
+      Variable_Name_Attr      := XML_Tools.Names.Store ("variableName");
 
       No_Value                := XML_Tools.Strings.Store ("no");
       Yes_Value               := XML_Tools.Strings.Store ("yes");
@@ -453,6 +455,15 @@ package body Model.Tools is
 
          if Is_Managed (Widget_Instance) then
             Attributes.Create_Attribute (Tag, Is_Managed_Attr, Yes_Value);
+         end if;
+
+         if Xm_Ada.In_Record_Name (Widget_Instance) /= Null_String then
+            Attributes.Create_Attribute
+             (Tag,
+              Variable_Name_Attr,
+              XML_Tools.Strings.Store
+               (Model.Strings.Image
+                 (Xm_Ada.In_Record_Name (Widget_Instance))));
          end if;
 
          --  Создаем список ресурсов виджета.
@@ -1240,6 +1251,12 @@ package body Model.Tools is
                        & XML_Tools.Strings.Image (Attributes.Value (A)));
                      raise Program_Error;
                   end if;
+
+               elsif Attributes.Name (A) = Variable_Name_Attr then
+                  Xm_Ada.Set_In_Record_Name
+                   (Widget_Instance,
+                    Model.Strings.Store
+                     (XML_Tools.Strings.Image (Attributes.Value (A))));
 
                else
                   Error_Message ("Unknown attribute name: "
