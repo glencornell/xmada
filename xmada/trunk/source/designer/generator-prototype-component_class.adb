@@ -110,6 +110,9 @@ package body Generator.Prototype.Component_Class is
 
       procedure Sort_Package_Names;
 
+      function Variable_Widget_Name_Image (Node : in Node_Id)
+        return Wide_String;
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Append_Package_Name
@@ -202,7 +205,7 @@ package body Generator.Prototype.Component_Class is
             if Widgets.Last >= Widgets.First then
                for J in Widgets.First ..  Widgets.Last loop
                   Put_Line (File, "      "
-                    & Model.Queries.Name_Image (Widgets.Table (J))
+                    & Variable_Widget_Name_Image (Widgets.Table (J))
                     & " : Xt.Widget;");
                end loop;
 
@@ -272,7 +275,7 @@ package body Generator.Prototype.Component_Class is
                                      "            "
                                      & "Xt.Resource_Management.Xt_Set_Values "
                                      & "(Result."
-                                     & Model.Queries.Name_Image (N)
+                                     & Variable_Widget_Name_Image (N)
                                      & ", Args);");
                            New_Line (File);
                            Put_Line (File, "         end;");
@@ -285,7 +288,7 @@ package body Generator.Prototype.Component_Class is
                             "         "
                             & "Xt.Composite_Management.Xt_Manage_Child ("
                             & "Result."
-                            & Model.Queries.Name_Image (N)
+                            & Variable_Widget_Name_Image (N)
                             & ");");
                   New_Line (File);
                end;
@@ -506,14 +509,14 @@ package body Generator.Prototype.Component_Class is
          --      := Xm_XXX.Xm_Create_XXX
          --          (<parent>, <widget>[, Args]);
 
-         Put_Line (File => File,
-                   Item => "            Result."
-                     & Model.Queries.Name_Image (Widget));
+         Put_Line (File,
+                   "            Result."
+                   & Variable_Widget_Name_Image (Widget));
          Put_Line
-          (File => File,
-           Item => "              := "
-             & Model.Names.Image (Convenience_Create_Function_Name
-                (Class (Widget))));
+          (File,
+           "              := "
+             & Model.Names.Image
+                (Convenience_Create_Function_Name (Class (Widget))));
 
          if Node_Kind (Parent_Node (Widget)) = Node_Component_Class then
             Put (File, "                  (Parent");
@@ -521,7 +524,7 @@ package body Generator.Prototype.Component_Class is
          else
             Put (File,
                  "                  (Result."
-                 & Model.Queries.Name_Image (Parent_Node (Widget)));
+                 & Variable_Widget_Name_Image (Parent_Node (Widget)));
          end if;
 
          Put (File, ", """
@@ -567,7 +570,7 @@ package body Generator.Prototype.Component_Class is
 
             when Node_Widget_Reference_Resource_Value =>
                return "Result."
-                 & Model.Queries.Name_Image (Resource_Value (Node));
+                 & Variable_Widget_Name_Image (Resource_Value (Node));
 
             when Node_Enumeration_Resource_Value =>
                return Model.Names.Image
@@ -610,6 +613,24 @@ package body Generator.Prototype.Component_Class is
             end loop;
          end loop;
       end Sort_Package_Names;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Variable_Widget_Name_Image
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function Variable_Widget_Name_Image (Node : in Node_Id)
+        return Wide_String
+      is
+         pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
+
+      begin
+         if Xm_Ada.In_Record_Name (Node) = Null_String then
+            return Model.Queries.Name_Image (Node);
+         end if;
+
+         return Model.Strings.Image (Xm_Ada.In_Record_Name (Node));
+      end Variable_Widget_Name_Image;
 
       File : File_Type;
 
