@@ -95,7 +95,8 @@ package body Generator.Prototype.Component_Class is
       procedure Append_Package_Name (Value : in Name_Id);
 
       procedure Generate_Package (File : File_Type;
-                                  Package_Name : Wide_String);
+                                  Package_Name : Wide_String;
+                                  Type_Name : Wide_String);
 
       procedure Generate_Resource (File     : in File_Type;
                                    Resource : in Node_Id;
@@ -136,7 +137,8 @@ package body Generator.Prototype.Component_Class is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure Generate_Package (File : File_Type;
-                                  Package_Name : Wide_String)
+                                  Package_Name : Wide_String;
+                                  Type_Name : Wide_String)
       is
       begin
          --  Генерируем контекст.
@@ -180,22 +182,22 @@ package body Generator.Prototype.Component_Class is
          begin
             Put_Line (File, "package " & Package_Name & "s is");
             New_Line (File);
-            Put_Line (File, "   type " & Package_Name
+            Put_Line (File, "   type " & Type_Name
                             & " is limited private;");
             New_Line (File);
-            Put_Line (File, "   type " & Package_Name
-                            & "_Access is access all " & Package_Name & ";");
+            Put_Line (File, "   type " & Type_Name
+                            & "_Access is access all " & Type_Name & ";");
             New_Line (File);
             Put_Line (File, "   package Constructors is");
             New_Line (File);
             Put_Line (File, "      function Create (Parent : in Xt.Widget)");
-            Put_Line (File, "        return " & Package_Name & "_Access;");
+            Put_Line (File, "        return " & Type_Name & "_Access;");
             New_Line (File);
             Put_Line (File, "   end Constructors;");
             New_Line (File);
             Put_Line (File, "private");
             New_Line (File);
-            Put_Line (File, "   type " & Package_Name & " is limited record");
+            Put_Line (File, "   type " & Type_Name & " is limited record");
 
             if Widgets.Last >= Widgets.First then
                for J in Widgets.First ..  Widgets.Last loop
@@ -227,10 +229,10 @@ package body Generator.Prototype.Component_Class is
             Put_Line (File, "   package body Constructors is");
             New_Line (File);
             Put_Line (File, "      function Create (Parent : in Xt.Widget)");
-            Put_Line (File, "        return " & Package_Name & "_Access");
+            Put_Line (File, "        return " & Type_Name & "_Access");
             Put_Line (File, "      is");
-            Put_Line (File, "         Result : " & Package_Name & "_Access");
-            Put_Line (File, "           := new " & Package_Name & ";");
+            Put_Line (File, "         Result : " & Type_Name & "_Access");
+            Put_Line (File, "           := new " & Type_Name & ";");
             New_Line (File);
             Put_Line (File, "      begin");
 
@@ -621,16 +623,22 @@ package body Generator.Prototype.Component_Class is
       Find_Widget_Instances_Order (Root (Node));
 
       declare
-         Package_Name : constant String_Id
-           := Model.Tree.Xm_Ada.Package_Name (Node);
+         Package_Name : String_Id := Xm_Ada.Package_Name (Node);
+         Type_Name    : String_Id := Xm_Ada.Type_Name (Node);
 
       begin
          if Package_Name = Null_String then
-            Generate_Package (File, Model.Queries.Name_Image (Node));
-
-         else
-            Generate_Package (File, Model.Strings.Image (Package_Name));
+            Package_Name
+              := Model.Strings.Store (Model.Queries.Name_Image (Node));
          end if;
+
+         if Type_Name = Null_String then
+            Type_Name := Package_Name;
+         end if;
+
+         Generate_Package (File,
+                           Model.Strings.Image (Package_Name),
+                           Model.Strings.Image (Type_Name));
       end;
 
       Close (File);
