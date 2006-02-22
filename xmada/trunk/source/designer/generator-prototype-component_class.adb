@@ -140,9 +140,6 @@ package body Generator.Prototype.Component_Class is
       begin
          --  Генерируем контекст.
 
-         declare
-            Context : Unbounded_Wide_String;
-
          begin
             Append_Package_Name (Model.Names.Enter ("Xm"));
             Append_Package_Name (Model.Names.Enter ("Xm_String_Defs"));
@@ -170,14 +167,11 @@ package body Generator.Prototype.Component_Class is
             Sort_Package_Names;
 
             for J in Package_Names.First .. Package_Names.Last loop
-               Append (Context,
+               Put_Line (File,
                  "with " & Model.Names.Image (Package_Names.Table (J)) & ";");
-               Append (Context, To_Wide_Character (ASCII.LF));
             end loop;
 
-            Put (File, To_Wide_String (Context));
             New_Line (File);
-
          end;
 
          --  Генерируем раздел спецификации пакета.
