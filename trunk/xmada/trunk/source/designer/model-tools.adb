@@ -54,6 +54,7 @@ with Model.Names;
 with Model.Strings;
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
+with Model.Tree.Xm_Ada;
 with Model.Queries;
 with Model.Utilities;
 
@@ -81,6 +82,7 @@ package body Model.Tools is
    Is_Hardcoded_Attr   : XML_Tools.Name_Id;
    Is_Managed_Attr     : XML_Tools.Name_Id;
    Name_Attr           : XML_Tools.Name_Id;
+   Package_Name_Attr   : XML_Tools.Name_Id;
    Value_Attr          : XML_Tools.Name_Id;
 
    No_Value            : XML_Tools.String_Id;
@@ -154,6 +156,7 @@ package body Model.Tools is
       Is_Hardcoded_Attr       := XML_Tools.Names.Store ("isHardcoded");
       Is_Managed_Attr         := XML_Tools.Names.Store ("isManaged");
       Name_Attr               := XML_Tools.Names.Store ("name");
+      Package_Name_Attr       := XML_Tools.Names.Store ("packageName");
       Value_Attr              := XML_Tools.Names.Store ("value");
 
       No_Value                := XML_Tools.Strings.Store ("no");
@@ -257,6 +260,14 @@ package body Model.Tools is
            Name_Attr,
            XML_Tools.Strings.Store
             (Model.Names.Image (Name (Component_Class))));
+
+         if Xm_Ada.Package_Name (Component_Class) /= Null_String then
+            Attributes.Create_Attribute
+             (Tag,
+              Package_Name_Attr,
+              XML_Tools.Strings.Store
+               (Model.Strings.Image (Xm_Ada.Package_Name (Component_Class))));
+         end if;
 
          --  Создаем Widget_Instance.
 
@@ -851,6 +862,12 @@ package body Model.Tools is
                   Set_Name (Component_Class,
                             Enter (XML_Tools.Strings.Image
                                     (Attributes.Value (A))));
+
+               elsif Attributes.Name (A) = Package_Name_Attr then
+                  Model.Tree.Xm_Ada.Set_Package_Name
+                   (Component_Class,
+                    Model.Strings.Store
+                     (XML_Tools.Strings.Image (Attributes.Value (A))));
 
                else
                   Error_Message ("Unknown attribute name: "
