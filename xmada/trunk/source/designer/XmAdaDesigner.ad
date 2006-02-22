@@ -143,6 +143,10 @@ XmAda maintained by TechnoServ A/S\n\
 !!*main_window*horizontal_paned*tree_form*notebook*popup_menu*.popupEnabled: POPUP_AUTOMATIC_RECURSIVE
 *main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree.translations: #override \
  <Key>osfDelete : XmAdaDesignerTreeEditorOnDelete()
+*main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree*popup_menu.shells_submenu.labelString: Shells
+*main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree*popup_menu.primitives_submenu.labelString: Primitives
+*main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree*popup_menu.managers_submenu.labelString: Managers
+*main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree*popup_menu.gadgets_submenu.labelString: Gadgets
 *main_window.horizontal_paned.tree_form*notebook.project.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.tree_form*notebook.project.labelString: Project
 *main_window.horizontal_paned.tree_show.skipAdjust: TRUE

@@ -48,9 +48,9 @@ with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Translation_Management;
 with Xt.Utilities;
-with Xm.Menu_Management;
 with Xm.Resource_Management;
 with Xm.Strings;
+with Xm_Cascade_Button_Gadget;
 with Xm_Container;
 with Xm_Icon_Gadget;
 with Xm_Notebook;
@@ -61,16 +61,21 @@ with Xm_String_Defs;
 
 with Designer.Main_Window;
 with Designer.Model_Utilities;
+with Designer.Palette;
 with Model.Allocations;
 with Model.Queries;
-with Model.Tree;
+with Model.Tree.Lists;
 
 package body Designer.Tree_Editor is
 
+   use Designer.Palette;
    use Model;
    use Model.Allocations;
    use Model.Queries;
    use Model.Tree;
+   use Model.Tree.Lists;
+   use Xt;
+   use Xt.Ancillary_Types;
    use Xt.Callbacks;
    use Xt.Composite_Management;
    use Xt.Instance_Management;
@@ -78,9 +83,9 @@ package body Designer.Tree_Editor is
    use Xt.Translation_Management;
    use Xt.Utilities;
    use Xm;
-   use Xm.Menu_Management;
    use Xm.Resource_Management;
    use Xm.Strings;
+   use Xm_Cascade_Button_Gadget;
    use Xm_Container;
    use Xm_Icon_Gadget;
    use Xm_Notebook;
@@ -88,8 +93,6 @@ package body Designer.Tree_Editor is
    use Xm_Row_Column;
    use Xm_Scrolled_Window;
    use Xm_String_Defs;
-   use Xt;
-   use Xt.Ancillary_Types;
 
    --  Для каждого узла создаётся (по запросу) свой собственный редактор
    --  дерева. Уже созданные редакторы свойств сохраняются в таблице
@@ -125,9 +128,25 @@ package body Designer.Tree_Editor is
             WI_Component_Tree_Icon : Widget;
             --  Иконка в дереве класса компонент.
 
-         when Annotation_Project | Annotation_Application =>
+         when Annotation_Application     =>
+            NA_Project_Tree_Icon   : Widget;
+            --  Иконка в дереве проекта.
+
+         when Annotation_Project         =>
             NP_Project_Tree_Icon   : Widget;
             --  Иконка в дереве проекта.
+
+            Primitives_Submenu     : Widget;
+            --  Всплывающее меню примитивов.
+
+            Gadgets_Submenu        : Widget;
+            --  Всплывающее меню гаджетов.
+
+            Managers_Submenu       : Widget;
+            --  Всплывающее меню менеджеров.
+
+            Shells_Submenu         : Widget;
+            --  Всплывающее меню оболочек.
 
          when Annotation_Empty =>
             null;
@@ -145,6 +164,38 @@ package body Designer.Tree_Editor is
 
    Actions : Xt_Action_List (0 .. 0);
    Menu    : Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Primitives_Submenu
+   --!    <Purpose> Возвращает виджет меню, содержащего примитивы.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Primitives_Submenu (Node : in Node_Id) return Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Gadgets_Submenu
+   --!    <Purpose> Возвращает виджет меню, содержащего гаджеты.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Gadgets_Submenu (Node : in Node_Id) return Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Managers_Submenu
+   --!    <Purpose> Возвращает виджет меню, содержащего менеджеры.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Managers_Submenu (Node : in Node_Id) return Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Shells_Submenu
+   --!    <Purpose> Возвращает виджет меню, содержащего оболочки.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Shells_Submenu (Node : in Node_Id) return Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -229,15 +280,38 @@ package body Designer.Tree_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Popup
+      --!    <Unit> On_Popup_Component
       --!    <Purpose> Подпрограмма обратного вызова при выборе элемента
       --! из всплывающего меню.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure On_Popup (The_Widget : in Widget;
-                          Closure    : in Xt_Pointer;
-                          Call_Data  : in Xt_Pointer);
-      pragma Convention (C, On_Popup);
+      procedure On_Popup_Component (The_Widget : in Widget;
+                                    Closure    : in Xt_Pointer;
+                                    Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Popup_Component);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Insert_Widget
+      --!    <Purpose> Подпрограмма обратного вызова при добавлении виджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Insert_Widget (The_Widget : in Widget;
+                                        Closure    : in Xt_Pointer;
+                                        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Popup_Insert_Widget);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Notebook
+      --!    <Purpose> Подпрограмма обратного вызова при выборе элемента
+      --! из всплывающего меню.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Notebook (The_Widget : in Widget;
+                                   Closure    : in Xt_Pointer;
+                                   Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Popup_Notebook);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -353,12 +427,73 @@ package body Designer.Tree_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Popup
+      --!    <Unit> On_Popup_Component
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure On_Popup (The_Widget : in Widget;
-                          Closure    : in Xt_Pointer;
-                          Call_Data  : in Xt_Pointer)
+      procedure On_Popup_Component (The_Widget : in Widget;
+                                    Closure    : in Xt_Pointer;
+                                    Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Data : Xm_Popup_Handler_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+     --    if Selected_Item = Null_Node then
+            Data.Post_It := Xt_False;
+     --    end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Popup_Component", E);
+      end On_Popup_Component;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Insert_Widget
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Insert_Widget (The_Widget : in Widget;
+                                        Closure    : in Xt_Pointer;
+                                        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Node   : Node_Id;
+         Number : Integer;
+         Args   : Xt_Arg_List (0 .. 0);
+
+      begin
+         --  Получаем узел класса виджета,
+         --  экземпляр которого необходимо создать.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         if Selected_Item /= Null_Node then
+            Create_Widget_Instance (Node, Selected_Item);
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Popup_Insert_Widget", E);
+      end On_Popup_Insert_Widget;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Notebook
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Notebook (The_Widget : in Widget;
+                                   Closure    : in Xt_Pointer;
+                                   Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
@@ -384,8 +519,9 @@ package body Designer.Tree_Editor is
 
       exception
          when E : others =>
-            Designer.Main_Window.Put_Exception_In_Callback ("On_Popup", E);
-      end On_Popup;
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Popup_Notebook", E);
+      end On_Popup_Notebook;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -560,6 +696,18 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Gadgets_Submenu
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Gadgets_Submenu (Node : in Node_Id) return Widget is
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+   begin
+      return Annotation_Table.Table (Node).Gadgets_Submenu;
+   end Gadgets_Submenu;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -634,6 +782,8 @@ package body Designer.Tree_Editor is
          Args       : Xt_Arg_List (0 .. 2);
          Component  : Widget;
          Name       : Xm_String;
+         Menu       : Widget;
+         Project    : constant Node_Id := Enclosing_Project (Node);
 
       begin
          --  Добавляется вкладка "component tree" содержащая элемент
@@ -655,6 +805,9 @@ package body Designer.Tree_Editor is
          Xt_Add_Callback (Window,
                           Xm_N_Selection_Callback,
                           Callbacks.On_Select'Access);
+         Xt_Add_Callback (Window,
+                          Xm_N_Popup_Handler_Callback,
+                          Callbacks.On_Popup_Component'Access);
 
          Name := Xm_String_Generate (Name_Image (Node));
 
@@ -668,7 +821,36 @@ package body Designer.Tree_Editor is
          Xt_Unmanage_Child (Button);
 
          Xm_String_Free (Name);
+
+         --  Создаем меню со списком виджетов для создания виджетов.
+         Xt_Set_Arg
+          (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
+         Menu := Xm_Create_Popup_Menu (Window, "popup_menu", Args (0 .. 0));
+
+         Xt_Set_Arg
+          (Args (0), Xm_N_Sub_Menu_Id, Primitives_Submenu (Project));
+         Component := Xm_Create_Managed_Cascade_Button_Gadget
+                       (Menu, "primitives_submenu", Args (0 .. 0));
+
+         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Gadgets_Submenu (Project));
+         Component := Xm_Create_Managed_Cascade_Button_Gadget
+                       (Menu, "gadgets_submenu", Args (0 .. 0));
+
+         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Managers_Submenu (Project));
+         Component := Xm_Create_Managed_Cascade_Button_Gadget
+                       (Menu, "managers_submenu", Args (0 .. 0));
+
+         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Shells_Submenu (Project));
+         Component := Xm_Create_Managed_Cascade_Button_Gadget
+                       (Menu, "shells_submenu", Args (0 .. 0));
       end Create_Tab;
+
+      Args                 : Xt_Arg_List (0 .. 1);
+      Item                 : Widget;
+      Name                 : Xm_String;
+      Sets                 : Node_Id
+        := First (Imported_Widget_Sets (Enclosing_Project (Node)));
+      Current_Widget_Class : Node_Id;
 
    begin
       Relocate_Annotation_Table (Node);
@@ -713,7 +895,7 @@ package body Designer.Tree_Editor is
 --  XXX        Xt_Set_Values (Notebook, Args (0 .. 0));
             end;
          when Node_Application     =>
-            Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
+            Annotation_Table.Table (Node).NA_Project_Tree_Icon :=
               Create_Item_Icon
                (Node,
                 Project_Container,
@@ -723,25 +905,94 @@ package body Designer.Tree_Editor is
             Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
               Create_Item_Icon (Node, Project_Container);
 
-            declare
-               Args : Xt_Arg_List (0 .. 0);
+            --  Разрешаем использовать мышь для вызова всплывающего окна.
+            --  Создаем само всплывающее меню, в котором будет отображаться
+            --  список открытых компонентов и звдем обработчик для всплыва-
+            --  ющего меню.
 
-            begin
-               --  Разрешаем использовать мышь для вызова всплывающего окна.
-               --  Создаем само всплывающее меню, в котором будет отображаться
-               --  список открытых компонентов и звдем обработчик для всплыва-
-               --  ющего меню.
+            Xt_Set_Arg
+             (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
+            Menu := Xm_Create_Popup_Menu
+                     (Notebook, "popup_menu", Args (0 .. 0));
+            --  Добавляем всплывающее меню.
 
-               Xt_Set_Arg
-                (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
-               Menu := Xm_Create_Popup_Menu
-                        (Notebook, "popup_menu", Args (0 .. 0));
-               --  Добавляем всплывающее меню.
-            end;
+            Annotation_Table.Table (Node).Primitives_Submenu :=
+              Xm_Create_Pulldown_Menu (Notebook, "sub_menu");
+            Annotation_Table.Table (Node).Gadgets_Submenu    :=
+              Xm_Create_Pulldown_Menu (Notebook, "sub_menu");
+            Annotation_Table.Table (Node).Managers_Submenu   :=
+              Xm_Create_Pulldown_Menu (Notebook, "sub_menu");
+            Annotation_Table.Table (Node).Shells_Submenu     :=
+              Xm_Create_Pulldown_Menu (Notebook, "sub_menu");
+
+            while Sets /= Null_Node loop
+
+               Current_Widget_Class := First (Widget_Classes (Sets));
+
+               while Current_Widget_Class /= Null_Node loop
+                  if not Is_Meta_Class (Current_Widget_Class) then
+                     Name := Xm_String_Generate
+                              (Name_Image (Current_Widget_Class));
+                     Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+                     Xt_Set_Arg (Args (1),
+                                 Xm_N_User_Data,
+                                 Xt_Arg_Val (Current_Widget_Class));
+
+                     if Is_Primitive (Current_Widget_Class) then
+                        Item := Primitives_Submenu (Node);
+
+                     elsif Is_Gadget (Current_Widget_Class) then
+                        Item := Gadgets_Submenu (Node);
+
+                     elsif Is_Manager (Current_Widget_Class) then
+                        Item := Managers_Submenu (Node);
+
+                     elsif Is_Shell (Current_Widget_Class) then
+                        Item := Shells_Submenu (Node);
+                     end if;
+
+                     Item := Xm_Create_Managed_Push_Button_Gadget
+                              (Item, "item", Args (0 .. 1));
+                     Xt_Add_Callback (Item,
+                                      Xm_N_Activate_Callback,
+                                      Callbacks.On_Popup_Insert_Widget'Access);
+                     Xm_String_Free (Name);
+                  end if;
+
+                  Current_Widget_Class := Next (Current_Widget_Class);
+               end loop;
+
+               Sets := Next (Sets);
+            end loop;
+
          when others                =>
             null;
       end case;
    end Insert_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Managers_Submenu
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Managers_Submenu (Node : in Node_Id) return Widget is
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+   begin
+      return Annotation_Table.Table (Node).Managers_Submenu;
+   end Managers_Submenu;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Primitives_Submenu
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Primitives_Submenu (Node : in Node_Id) return Widget is
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+   begin
+      return Annotation_Table.Table (Node).Primitives_Submenu;
+   end Primitives_Submenu;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -762,7 +1013,7 @@ package body Designer.Tree_Editor is
             return Annotation_Table.Table (Node).NP_Project_Tree_Icon;
 
          when Annotation_Application =>
-            return Annotation_Table.Table (Node).NP_Project_Tree_Icon;
+            return Annotation_Table.Table (Node).NA_Project_Tree_Icon;
 
          when Annotation_Component_Class =>
             return Annotation_Table.Table (Node).CC_Project_Tree_Icon;
@@ -819,8 +1070,15 @@ package body Designer.Tree_Editor is
 
       for J in Annotation_Table.First .. Annotation_Table.Last loop
          case Annotation_Table.Table (J).Kind is
-            when Annotation_Project | Annotation_Application =>
+            when Annotation_Application =>
                Destroy_Widget (Project_Tree_Icon (J));
+
+            when Annotation_Project     =>
+               Destroy_Widget (Project_Tree_Icon (J));
+               Destroy_Widget (Primitives_Submenu (J));
+               Destroy_Widget (Gadgets_Submenu (J));
+               Destroy_Widget (Managers_Submenu (J));
+               Destroy_Widget (Shells_Submenu (J));
 
             when Annotation_Component_Class =>
                Destroy_Widget (Project_Tree_Icon (J));
@@ -871,12 +1129,16 @@ package body Designer.Tree_Editor is
            when Node_Application     =>
               Annotation_Table.Table (J) :=
                (Kind                 => Annotation_Application,
-                NP_Project_Tree_Icon => Null_Widget);
+                NA_Project_Tree_Icon => Null_Widget);
 
            when Node_Project         =>
               Annotation_Table.Table (J) :=
                (Kind                 => Annotation_Project,
-                NP_Project_Tree_Icon => Null_Widget);
+                NP_Project_Tree_Icon => Null_Widget,
+                Primitives_Submenu   => Null_Widget,
+                Gadgets_Submenu      => Null_Widget,
+                Managers_Submenu     => Null_Widget,
+                Shells_Submenu       => Null_Widget);
 
            when Node_Component_Class =>
               Annotation_Table.Table (J) :=
@@ -975,7 +1237,7 @@ package body Designer.Tree_Editor is
                      Xt_Add_Callback
                       (Annotation_Table.Table (Selected_Item).Button,
                        Xm_N_Activate_Callback,
-                       Callbacks.On_Popup'Access);
+                       Callbacks.On_Popup_Notebook'Access);
 
                      Xm_String_Free (Name);
                   end;
@@ -1006,6 +1268,18 @@ package body Designer.Tree_Editor is
          end case;
       end if;
    end Select_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Shells_Submenu
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Shells_Submenu (Node : in Node_Id) return Widget is
+      pragma Assert (Node_Kind (Node) = Node_Project);
+
+   begin
+      return Annotation_Table.Table (Node).Shells_Submenu;
+   end Shells_Submenu;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

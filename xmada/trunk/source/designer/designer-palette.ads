@@ -46,6 +46,15 @@ with Model;
 
 package Designer.Palette is
 
+   -------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Widget_Instance
+   --!    <Purpose> Создает экземпляр виджета заданного класса.
+   --!    <Exceptions>
+   -------------------------------------------------------------------------
+   procedure Create_Widget_Instance (Class  : in Model.Node_Id;
+                                     Parent : in Model.Node_Id);
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Select_Item
