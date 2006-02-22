@@ -138,6 +138,9 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.tree_form.tree_hide.arrowDirection: ARROW_RIGHT
 *main_window.horizontal_paned.tree_form.tree_label.labelString: Tree editor
 *main_window.horizontal_paned.tree_form*notebook.component.notebookChildType: MINOR_TAB
+
+!! -- XXX  почему-то не работает. Се   Сейчас вшито в программу наглухо.
+!!*main_window*horizontal_paned*tree_form*notebook*popup_menu*.popupEnabled: POPUP_AUTOMATIC_RECURSIVE
 *main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree.translations: #override \
  <Key>osfDelete : XmAdaDesignerTreeEditorOnDelete()
 *main_window.horizontal_paned.tree_form*notebook.project.notebookChildType: MINOR_TAB

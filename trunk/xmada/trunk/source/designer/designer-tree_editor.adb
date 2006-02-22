@@ -48,12 +48,14 @@ with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Translation_Management;
 with Xt.Utilities;
+with Xm.Menu_Management;
 with Xm.Resource_Management;
 with Xm.Strings;
 with Xm_Container;
 with Xm_Icon_Gadget;
 with Xm_Notebook;
 with Xm_Push_Button_Gadget;
+with Xm_Row_Column;
 with Xm_Scrolled_Window;
 with Xm_String_Defs;
 
@@ -76,12 +78,14 @@ package body Designer.Tree_Editor is
    use Xt.Translation_Management;
    use Xt.Utilities;
    use Xm;
+   use Xm.Menu_Management;
    use Xm.Resource_Management;
    use Xm.Strings;
    use Xm_Container;
    use Xm_Icon_Gadget;
    use Xm_Notebook;
    use Xm_Push_Button_Gadget;
+   use Xm_Row_Column;
    use Xm_Scrolled_Window;
    use Xm_String_Defs;
    use Xt;
@@ -114,6 +118,9 @@ package body Designer.Tree_Editor is
             Component_Tab          : Widget;
             --  Закладка страницы класса компонент.
 
+            Button                 : Widget;
+            --  Кнопка в всплывающем меню.
+
          when Annotation_Widget_Instance =>
             WI_Component_Tree_Icon : Widget;
             --  Иконка в дереве класса компонент.
@@ -137,6 +144,7 @@ package body Designer.Tree_Editor is
            Table_Increment      => Model.Allocations.Node_Table_Increment);
 
    Actions : Xt_Action_List (0 .. 0);
+   Menu    : Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -221,6 +229,18 @@ package body Designer.Tree_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Popup
+      --!    <Purpose> Подпрограмма обратного вызова при выборе элемента
+      --! из всплывающего меню.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Popup (The_Widget : in Widget;
+                          Closure    : in Xt_Pointer;
+                          Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Popup);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Select
       --!    <Purpose> Подпрограмма обратного вызова при выделении виджета.
       --!    <Exceptions>
@@ -260,7 +280,7 @@ package body Designer.Tree_Editor is
 
       begin
          if Data.Selected_Items = null
-         or Integer (Data .Selected_Item_Count) /= 1 then
+         or Integer (Data.Selected_Item_Count) /= 1 then
             return;
 
          else
@@ -309,6 +329,7 @@ package body Designer.Tree_Editor is
                            Params     : in System.Address;
                            Num_Params : in Cardinal)
       is
+         pragma Unreferenced (The_Widget);
          pragma Unreferenced (Event);
          pragma Unreferenced (Params);
          pragma Unreferenced (Num_Params);
@@ -329,6 +350,42 @@ package body Designer.Tree_Editor is
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback ("On_Delete", E);
       end On_Delete;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Popup (The_Widget : in Widget;
+                          Closure    : in Xt_Pointer;
+                          Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Node   : Node_Id;
+         Number : Integer;
+         Args   : Xt_Arg_List (0 .. 0);
+
+      begin
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         --  Выделяем выбранный узел.
+         --  Получаем номер вклаки, и делаем ее активной.
+
+         Xt_Set_Arg (Args (0), Xm_N_Page_Number, Number'Address);
+         Xt_Get_Values (Component_Tab (Node), Args (0 .. 0));
+
+         Xt_Set_Arg
+            (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (Number));
+         Xt_Set_Values (Notebook, Args (0 .. 0));
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback ("On_Popup", E);
+      end On_Popup;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -666,6 +723,21 @@ package body Designer.Tree_Editor is
             Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
               Create_Item_Icon (Node, Project_Container);
 
+            declare
+               Args : Xt_Arg_List (0 .. 0);
+
+            begin
+               --  Разрешаем использовать мышь для вызова всплывающего окна.
+               --  Создаем само всплывающее меню, в котором будет отображаться
+               --  список открытых компонентов и звдем обработчик для всплыва-
+               --  ющего меню.
+
+               Xt_Set_Arg
+                (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
+               Menu := Xm_Create_Popup_Menu
+                        (Notebook, "popup_menu", Args (0 .. 0));
+               --  Добавляем всплывающее меню.
+            end;
          when others                =>
             null;
       end case;
@@ -771,6 +843,10 @@ package body Designer.Tree_Editor is
 
       Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (0));
       Xt_Set_Values (Notebook, Args (0 .. 0));
+
+      if Menu /= Null_Widget then
+         Xt_Destroy_Widget (Menu);
+      end if;
    end Reinitialize;
 
    ---------------------------------------------------------------------------
@@ -808,7 +884,8 @@ package body Designer.Tree_Editor is
                 CC_Project_Tree_Icon   => Null_Widget,
                 CC_Component_Tree_Icon => Null_Widget,
                 Component_Container    => Null_Widget,
-                Component_Tab          => Null_Widget);
+                Component_Tab          => Null_Widget,
+                Button                 => Null_Widget);
 
            when Node_Widget_Instance =>
                Annotation_Table.Table (J) :=
@@ -877,6 +954,32 @@ package body Designer.Tree_Editor is
                Xt_Manage_Child
                 (Component_Tab (Enclosing_Component_Class (Selected_Item)));
                --  Передаем закладку страницы на управление.
+
+               --  Добавляем название компонента в сплывающее меню.
+
+               if Node_Kind (Selected_Item) = Node_Component_Class
+                 and then
+                  Annotation_Table.Table (Selected_Item).Button = Null_Widget
+               then
+                  declare
+                     Name : constant Xm_String
+                       := Xm_String_Generate (Name_Image (Node));
+
+                  begin
+                     Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+                     Xt_Set_Arg
+                       (Args (1), Xm_N_User_Data, Xt_Arg_Val (Node));
+                     Annotation_Table.Table (Selected_Item).Button :=
+                       Xm_Create_Managed_Push_Button_Gadget
+                        (Menu, "menu_item", Args (0 .. 1));
+                     Xt_Add_Callback
+                      (Annotation_Table.Table (Selected_Item).Button,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Popup'Access);
+
+                     Xm_String_Free (Name);
+                  end;
+               end if;
 
             when Node_Project | Node_Application =>
                null;
