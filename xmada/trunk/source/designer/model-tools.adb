@@ -83,6 +83,7 @@ package body Model.Tools is
    Is_Managed_Attr     : XML_Tools.Name_Id;
    Name_Attr           : XML_Tools.Name_Id;
    Package_Name_Attr   : XML_Tools.Name_Id;
+   Type_Name_Attr      : XML_Tools.Name_Id;
    Value_Attr          : XML_Tools.Name_Id;
 
    No_Value            : XML_Tools.String_Id;
@@ -157,6 +158,7 @@ package body Model.Tools is
       Is_Managed_Attr         := XML_Tools.Names.Store ("isManaged");
       Name_Attr               := XML_Tools.Names.Store ("name");
       Package_Name_Attr       := XML_Tools.Names.Store ("packageName");
+      Type_Name_Attr          := XML_Tools.Names.Store ("typeName");
       Value_Attr              := XML_Tools.Names.Store ("value");
 
       No_Value                := XML_Tools.Strings.Store ("no");
@@ -267,6 +269,14 @@ package body Model.Tools is
               Package_Name_Attr,
               XML_Tools.Strings.Store
                (Model.Strings.Image (Xm_Ada.Package_Name (Component_Class))));
+         end if;
+
+         if Xm_Ada.Type_Name (Component_Class) /= Null_String then
+            Attributes.Create_Attribute
+             (Tag,
+              Type_Name_Attr,
+              XML_Tools.Strings.Store
+               (Model.Strings.Image (Xm_Ada.Type_Name (Component_Class))));
          end if;
 
          --  Создаем Widget_Instance.
@@ -865,6 +875,12 @@ package body Model.Tools is
 
                elsif Attributes.Name (A) = Package_Name_Attr then
                   Model.Tree.Xm_Ada.Set_Package_Name
+                   (Component_Class,
+                    Model.Strings.Store
+                     (XML_Tools.Strings.Image (Attributes.Value (A))));
+
+               elsif Attributes.Name (A) = Type_Name_Attr then
+                  Model.Tree.Xm_Ada.Set_Type_Name
                    (Component_Class,
                     Model.Strings.Store
                      (XML_Tools.Strings.Image (Attributes.Value (A))));
