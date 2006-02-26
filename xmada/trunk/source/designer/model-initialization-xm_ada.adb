@@ -475,6 +475,10 @@ package body Model.Initialization.Xm_Ada is
        (Xt_Motif_Show_Arrows_Resource_Type,
         Enter ("Xm.Xm_Show_Arrows"));
 
+ --     Set_Type_Identifier
+ --      (Xt_Motif_Pixel_Resource_Type,
+ --       Enter ("Xlib.XmPixel"));
+
       --  Инициализация значений типов ресурсов
 
       Set_Enumeration_Resource_Value
@@ -1422,9 +1426,9 @@ package body Model.Initialization.Xm_Ada is
       Set_Argument_Package_Name
        (Xt_Motif_Widget_Reference_Resource_Type,
         Enter ("Xt.Resource_Management"));
- --     Set_Argument_Package_Name
- --      (Xt_Motif_Xm_String_Resource_Type,
- --       Enter ("Xt.Resource_Management"));
+      Set_Argument_Package_Name
+       (Xt_Motif_Xm_String_Resource_Type,
+        Enter ("Xt.Resource_Management"));
 
       Set_Resource_Names (Model.Xt_Motif.Xt_Motif_Widget_Set);
    end Initialize;
