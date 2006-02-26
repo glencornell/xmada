@@ -554,7 +554,10 @@ package body Generator.Prototype.Component_Class is
          end if;
 
          if not Create_In_Record (Widget) then
-            Put_Line (File, "         declare");
+            if Hardcoded_Counter = 0 then
+               Put_Line (File, "         declare");
+            end if;
+
             Put_Line (File, "            "
                             & Variable_Widget_Name_Image (Widget)
                             & " : Xt.Widget;");
