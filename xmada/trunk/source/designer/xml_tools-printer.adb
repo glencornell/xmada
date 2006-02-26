@@ -78,10 +78,10 @@ package body XML_Tools.Printer is
                     Element : in Element_Id)
    is
    begin
-      Set_Col (File, Indent);
-
       case Kind (Element) is
          when A_Tag =>
+            Set_Col (File, Indent);
+
             Put (File, '<' & Image (Name (Element)));
 
             declare
@@ -108,10 +108,10 @@ package body XML_Tools.Printer is
             end;
 
             if Child (Element) = Null_Element_Id then
-               Put (File, "/>");
+               Put_Line (File, "/>");
 
             else
-               Put (File, '>');
+               Put_Line (File, ">");
 
                Indent := Indent + 1;
 
@@ -132,9 +132,23 @@ package body XML_Tools.Printer is
                Put (File, "</" & Image (Name (Element)) & '>');
             end if;
 
-
          when A_String =>
-            Put_Line (File, Image (Value (Element)));
+            declare
+               Str   : constant Wide_String := Image (Value (Element));
+               Start : Natural := Str'First;
+
+            begin
+               loop
+                  exit when Start > Str'Last;
+                  exit when Str (Start) /= ' ';
+
+                  Start := Start + 1;
+               end loop;
+
+               if Str (Start .. Str'Last)'Length > 0 then
+                  Put_Line (File, Str (Start .. Str'Last));
+               end if;
+            end;
       end case;
    end Print;
 
