@@ -38,6 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Model.Names;
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
 
@@ -45,6 +46,7 @@ with Designer.Main_Window;
 package body Designer.Model_Utilities is
 
    use Model;
+   use Model.Names;
    use Model.Tree;
    use Model.Tree.Constructors;
    use Model.Tree.Lists;
@@ -115,6 +117,23 @@ package body Designer.Model_Utilities is
       --  Удаляем потомков.
 
       case Node_Kind (Node) is
+         when Node_Application     =>
+            List := Component_Classes (Node);
+
+            if List /= Null_List then
+               Current := First (List);
+
+               while Current /= Null_Node loop
+                  Delete_Node (Current);
+
+                  Current := Next (Current);
+               end loop;
+
+               Free (List);
+            end if;
+
+            Set_Component_Classes (Node, Null_List);
+
          when Node_Widget_Instance =>
             List := Children (Node);
 
@@ -147,7 +166,7 @@ package body Designer.Model_Utilities is
 
       if Parent /= Null_Node then
          case Node_Kind (Parent) is
-            when Node_Widget_Instance  =>
+            when Node_Widget_Instance | Node_Project  =>
                Remove (Node);
 
             when  Node_Component_Class =>
@@ -182,5 +201,28 @@ package body Designer.Model_Utilities is
 
       return Aux;
    end Find_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> New_Name
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function New_Name (Prefix : in Wide_String) return Name_Id is
+   begin
+      for J in Positive'Range loop
+         declare
+            Suffix : constant Wide_String := Positive'Wide_Image (J);
+            Name   : constant Wide_String
+              := Prefix & Suffix (Suffix'First + 1 .. Suffix'Last);
+
+         begin
+            if Find (Name) = Null_Name then
+               return Enter (Name);
+            end if;
+         end;
+      end loop;
+
+      raise Program_Error;
+   end New_Name;
 
 end Designer.Model_Utilities;

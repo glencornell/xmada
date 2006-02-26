@@ -62,6 +62,32 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.main_menu*debug.labelString: Debug
 *main_window.main_menu*debug_menu*dump_tree.labelString: Dump project model tree
 *main_window.main_menu*debug_menu*tables_statistics.labelString: Internal tables statistics
+*main_window.main_menu*project.labelString: Project
+*main_window.main_menu*project.mnemonic: P
+*main_window.main_menu*project_menu.new_application.labelString: New application
+*main_window.main_menu*project_menu.new_application.mnemonic: N
+
+!!  придумать акселератор.
+!!*main_window.main_menu*project_menu.new_application.acceleratorText: Ctrl-A
+!!*main_window.main_menu*project_menu.new_application.accelerator:Ctrl<Key>A
+*main_window.main_menu*project_menu.new_component.labelString: New component
+*main_window.main_menu*project_menu.new_component.mnemonic: c
+
+!!  придумать акселератор.
+!!*main_window.main_menu*project_menu.new_component.acceleratorText: Ctrl-C
+!!*main_window.main_menu*project_menu.new_component.accelerator:Ctrl<Key>C
+*main_window.main_menu*project_menu.delete_application.labelString: Delete application
+*main_window.main_menu*project_menu.delete_application.mnemonic: D
+
+!!  придумать акселератор.
+!!*main_window.main_menu*project_menu.delete_application.acceleratorText: Ctrl-D
+!!*main_window.main_menu*project_menu.delete_application.accelerator:Ctrl<Key>D
+*main_window.main_menu*project_menu.delete_component.labelString: Delete component
+*main_window.main_menu*project_menu.delete_component.mnemonic: e
+
+!!  придумать акселератор.
+!!*main_window.main_menu*project_menu.delete_component.acceleratorText: Ctrl-E
+!!*main_window.main_menu*project_menu.delete_component.accelerator:Ctrl<Key>E
 *main_window.main_menu*help.labelString: Help
 *main_window.main_menu*help.mnemonic: H
 *main_window.main_menu*help_menu.about.labelString: About ...
@@ -149,6 +175,10 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree*popup_menu.gadgets_submenu.labelString: Gadgets
 *main_window.horizontal_paned.tree_form*notebook.project.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.tree_form*notebook.project.labelString: Project
+*main_window.horizontal_paned.tree_form*notebook.scrolled*project_tree*project_popup_menu.delete_application.labelString: Delete application
+*main_window.horizontal_paned.tree_form*notebook.scrolled*project_tree*project_popup_menu.delete_component.labelString: Delete component
+*main_window.horizontal_paned.tree_form*notebook.scrolled*project_tree*project_popup_menu.new_application.labelString: New application
+*main_window.horizontal_paned.tree_form*notebook.scrolled*project_tree*project_popup_menu.new_component.labelString: New component
 *main_window.horizontal_paned.tree_show.skipAdjust: TRUE
 *main_window.horizontal_paned.tree_show.arrowDirection: ARROW_LEFT
 

@@ -75,4 +75,13 @@ package Designer.Model_Utilities is
    ---------------------------------------------------------------------------
    procedure Delete_Node (Node : in Model.Node_Id);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> New_Name
+   --!    <Purpose> Создаёт уникальное имя имеющее указанный префикс и
+   --! сгенерированный численный суффикс.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function New_Name (Prefix : in Wide_String) return Model.Name_Id;
+
 end Designer.Model_Utilities;
