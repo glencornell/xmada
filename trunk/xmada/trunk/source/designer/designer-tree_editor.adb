@@ -442,9 +442,13 @@ package body Designer.Tree_Editor is
            := To_Callback_Struct_Access (Call_Data);
 
       begin
-     --    if Selected_Item = Null_Node then
+         --  ХХХ эта функция не работает из-за глюка в Motif.
+         --  но она должна отключать всплывающее меню
+         --  если нет выделенного объекта.
+
+         if Selected_Item = Null_Node then
             Data.Post_It := Xt_False;
-     --    end if;
+         end if;
 
       exception
          when E : others =>
