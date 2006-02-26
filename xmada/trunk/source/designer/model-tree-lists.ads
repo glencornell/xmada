@@ -63,4 +63,6 @@ package Model.Tree.Lists is
 
    procedure Set_Parent_Node (List : in List_Id; Value : in Node_Id);
 
+   procedure Free (List : in List_Id);
+
 end Model.Tree.Lists;

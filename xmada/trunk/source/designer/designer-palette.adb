@@ -59,9 +59,11 @@ with Model.Tree.Lists;
 with Model.Utilities;
 
 with Designer.Main_Window;
+with Designer.Model_Utilities;
 
 package body Designer.Palette is
 
+   use Designer.Model_Utilities;
    use Model;
    use Model.Names;
    use Model.Tree;
@@ -139,15 +141,6 @@ package body Designer.Palette is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Relocate_Annotation_Table (Node : in Node_Id);
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> New_Name
-   --!    <Purpose> Создаёт уникальное имя имеющее указанный префикс и
-   --! сгенерированный численный суффикс.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function New_Name (Prefix : in Wide_String) return Name_Id;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -351,29 +344,6 @@ package body Designer.Palette is
             raise Program_Error;
       end case;
    end Insert_Item;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> New_Name
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function New_Name (Prefix : in Wide_String) return Name_Id is
-   begin
-      for J in Positive'Range loop
-         declare
-            Suffix : constant Wide_String := Positive'Wide_Image (J);
-            Name   : constant Wide_String
-              := Prefix & Suffix (Suffix'First + 1 .. Suffix'Last);
-
-         begin
-            if Find (Name) = Null_Name then
-               return Enter (Name);
-            end if;
-         end;
-      end loop;
-
-      raise Program_Error;
-   end New_Name;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

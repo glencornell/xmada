@@ -102,6 +102,32 @@ package body Model.Tree.Lists is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Free
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Free (List : in List_Id) is
+      pragma Assert (List in List_Table.First .. List_Table.Last);
+
+      Current : Node_Id := List_Table.Table (List).First;
+      Old     : Node_Id;
+
+   begin
+      while Current /= Null_Node loop
+         Old     := Current;
+         Current := Node_Table.Table (Current).Next;
+
+         Node_Table.Table (Old).List     := Null_List;
+         Node_Table.Table (Old).Previous := Null_Node;
+         Node_Table.Table (Old).Next     := Null_Node;
+      end loop;
+
+      List_Table.Table (List).First  := Null_Node;
+      List_Table.Table (List).Last   := Null_Node;
+      List_Table.Table (List).Parent := Null_Node;
+   end Free;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Insert_Before
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------

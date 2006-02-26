@@ -61,6 +61,7 @@ with Xm_String_Defs;
 
 with Designer.Main_Window;
 with Designer.Model_Utilities;
+with Designer.Operations;
 with Designer.Palette;
 with Model.Allocations;
 with Model.Queries;
@@ -68,6 +69,8 @@ with Model.Tree.Lists;
 
 package body Designer.Tree_Editor is
 
+   use Designer.Model_Utilities;
+   use Designer.Operations;
    use Designer.Palette;
    use Model;
    use Model.Allocations;
@@ -165,6 +168,17 @@ package body Designer.Tree_Editor is
    Actions      : Xt_Action_List (0 .. 0);
    Menu         : Widget;
    Project_Node : Node_Id;
+
+   --  Элементы всплывающего меню на вкладке project
+
+   New_Component      : Widget := Null_Widget;
+   Delete_Component   : Widget := Null_Widget;
+   Delete_Application : Widget := Null_Widget;
+
+   Xm_C_New_Application    : constant := 1;
+   Xm_C_New_Component      : constant := 2;
+   Xm_C_Delete_Application : constant := 3;
+   Xm_C_Delete_Component   : constant := 4;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -316,6 +330,30 @@ package body Designer.Tree_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Popup_Project
+      --!    <Purpose> Подпрограмма обратного вызова при выборе элемента
+      --! из всплывающего меню.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Project (The_Widget : in Widget;
+                                  Closure    : in Xt_Pointer;
+                                  Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Popup_Project);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Project_Activate
+      --!    <Purpose> Подпрограмма обратного вызова при активации
+      --! элемента меню.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Project_Activate (The_Widget : in Widget;
+                                           Closure    : in Xt_Pointer;
+                                           Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Popup_Project_Activate);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Select
       --!    <Purpose> Подпрограмма обратного вызова при выделении виджета.
       --!    <Exceptions>
@@ -439,7 +477,7 @@ package body Designer.Tree_Editor is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
-         Data : Xm_Popup_Handler_Callback_Struct_Access
+         Data : constant Xm_Popup_Handler_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
 
       begin
@@ -471,7 +509,6 @@ package body Designer.Tree_Editor is
          --  Данные переменные не используются.
 
          Node   : Node_Id;
-         Number : Integer;
          Args   : Xt_Arg_List (0 .. 0);
 
       begin
@@ -527,6 +564,115 @@ package body Designer.Tree_Editor is
             Designer.Main_Window.Put_Exception_In_Callback
              ("On_Popup_Notebook", E);
       end On_Popup_Notebook;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Project
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Project (The_Widget : in Widget;
+                                  Closure    : in Xt_Pointer;
+                                  Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Data : constant Xm_Popup_Handler_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+         --  ХХХ эта функция не работает из-за глюка в Motif.
+         --  но она должна отключать всплывающее меню
+         --  если нет выделенного объекта.
+
+         if Selected_Item = Null_Node then
+            Data.Post_It := Xt_False;
+
+         else
+            case Node_Kind (Selected_Item) is
+               when Node_Application     =>
+                  Xt_Manage_Child (New_Component);
+                  Xt_Manage_Child (Delete_Application);
+                  Xt_Unmanage_Child (Delete_Component);
+
+               when Node_Component_Class =>
+                  Xt_Unmanage_Child (New_Component);
+                  Xt_Unmanage_Child (Delete_Application);
+                  Xt_Manage_Child (Delete_Component);
+
+               when Node_Project         =>
+                  Xt_Unmanage_Child (New_Component);
+                  Xt_Unmanage_Child (Delete_Application);
+                  Xt_Unmanage_Child (Delete_Component);
+
+               when others               =>
+                  Xt_Unmanage_Child (New_Component);
+                  Xt_Unmanage_Child (Delete_Application);
+                  Xt_Unmanage_Child (Delete_Component);
+
+            end case;
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Popup_Project", E);
+      end On_Popup_Project;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Project_Activate
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Project_Activate (The_Widget : in Widget;
+                                           Closure    : in Xt_Pointer;
+                                           Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Element : Integer := 0;
+         Args    : Xt_Arg_List (0 .. 0);
+         Data    : constant Xm_Row_Column_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Element'Address);
+         Xt_Get_Values (Data.Widget, Args (0 .. 0));
+
+         if Element = Xm_C_New_Application then
+            Operations.New_Application (Project_Node);
+
+         else
+            if Selected_Item = Null_Node then
+               return;
+            end if;
+
+            if Element = Xm_C_New_Component then
+               if Node_Kind (Selected_Item) = Node_Application then
+                  Operations.New_Component (Selected_Item);
+               end if;
+
+            elsif Element = Xm_C_Delete_Application then
+               if Node_Kind (Selected_Item) = Node_Application then
+                  Delete_Node (Selected_Item);
+               end if;
+
+            elsif Element = Xm_C_Delete_Component then
+               if Node_Kind (Selected_Item) = Node_Component_Class then
+                  Delete_Node (Selected_Item);
+               end if;
+            end if;
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Popup_Project_Activate", E);
+      end On_Popup_Project_Activate;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -722,6 +868,7 @@ package body Designer.Tree_Editor is
       Args     : Xt_Arg_List (0 .. Arg_List'Length);
       Scrolled : Widget;
       Button   : Widget;
+      Menu     : Widget;
 
    begin
       --  Добавляем реакцию на кнопку delete.
@@ -758,8 +905,46 @@ package body Designer.Tree_Editor is
       Xt_Add_Callback (Project_Container,
                        Xm_N_Selection_Callback,
                        Callbacks.On_Select'Access);
+      Xt_Add_Callback (Project_Container,
+                       Xm_N_Popup_Handler_Callback,
+                       Callbacks.On_Popup_Project'Access);
 
       Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "project");
+
+      --  Добавляем всплывающее меню, отображающееся на вкладке project.
+      --  меню содержит следующие пункты:
+      --  - добавить проект
+      --  - добавить компонент
+      --  - удалить проект
+      --  - удалить компонент
+
+      Xt_Set_Arg
+       (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
+      Menu := Xm_Create_Popup_Menu
+               (Project_Container, "project_popup_menu", Args (0 .. 0));
+      Xt_Add_Callback (Menu,
+                       Xm_N_Entry_Callback,
+                       Callbacks.On_Popup_Project_Activate'Access);
+
+      Xt_Set_Arg
+       (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_New_Application));
+      Button := Xm_Create_Managed_Push_Button_Gadget
+                 (Menu, "new_application", Args (0 .. 0));
+
+      Xt_Set_Arg
+       (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_New_Component));
+      New_Component := Xm_Create_Managed_Push_Button_Gadget
+                        (Menu, "new_component", Args (0 .. 0));
+
+      Xt_Set_Arg
+       (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_Delete_Component));
+      Delete_Component := Xm_Create_Managed_Push_Button_Gadget
+                           (Menu, "delete_component", Args (0 .. 0));
+
+      Xt_Set_Arg
+       (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_Delete_Application));
+      Delete_Application := Xm_Create_Managed_Push_Button_Gadget
+                             (Menu, "delete_application", Args (0 .. 0));
 
    end Initialize;
 

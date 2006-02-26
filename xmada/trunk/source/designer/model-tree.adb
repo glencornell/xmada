@@ -521,7 +521,7 @@ package body Model.Tree is
       end case;
    end Is_Resource_Class_Value;
 
-   
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Name
@@ -979,7 +979,10 @@ package body Model.Tree is
       pragma Assert (Node_Kind (Node) = Node_Application);
 
       Node_Table.Table (Node).Component_Classes := Value;
-      Set_Parent_Node (Value, Node);
+
+      if Value /= Null_List then
+         Set_Parent_Node (Value, Node);
+      end if;
    end Set_Component_Classes;
 
    ---------------------------------------------------------------------------

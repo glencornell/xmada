@@ -39,6 +39,7 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Designer.Main_Window;
+with Designer.Model_Utilities;
 with Generator.Application_Resources;
 with Generator.Prototype.Component_Class;
 with Model.Initialization.Designer;
@@ -51,6 +52,7 @@ with Model.Xt_Motif;
 
 package body Designer.Operations is
 
+   use Designer.Model_Utilities;
    use Model;
    use Model.Names;
    use Model.Tree;
@@ -158,13 +160,67 @@ package body Designer.Operations is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> New_Application
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure New_Application (Project : in Node_Id)
+   is
+      pragma Assert (Project /= Null_Node);
+      pragma Assert (Node_Kind (Project) = Node_Project);
+
+      Application : Node_Id;
+      List        : List_Id;
+
+   begin
+      --  Создание узла приложения и добавление его в состав проекта.
+
+      Application := Create_Application;
+      Set_Application_Class_Name (Application, New_Name ("Application"));
+
+      List := New_List;
+      Append (List, Application);
+      Set_Applications (Project, List);
+      Main_Window.Insert_Item (Application);
+
+      New_Component (Application);
+      --  Создаем новый компонент в приложении.
+
+   end New_Application;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> New_Component
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure New_Component (Application : in Node_Id)
+   is
+      pragma Assert (Application /= Null_Node);
+      pragma Assert (Node_Kind (Application) = Node_Application);
+
+      Component : Node_Id;
+      List      : List_Id;
+
+   begin
+      --  Создание компонента приложения и добавление его в состав приложения.
+
+      Component := Create_Component_Class;
+      Set_Name (Component, New_Name ("Component"));
+
+      List := New_List;
+      Append (List, Component);
+      Set_Component_Classes (Application, List);
+      Main_Window.Insert_Item (Component);
+   end New_Component;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> New_Project
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure New_Project is
+      List        : List_Id;
       Application : Node_Id;
       Component   : Node_Id;
-      List        : List_Id;
 
    begin
       Initialize;
@@ -180,19 +236,15 @@ package body Designer.Operations is
       Append (List, Xt_Motif_Widget_Set);
       Set_Imported_Widget_Sets (Project, List);
 
-      --  Создание узла приложения и добавление его в состав проекта.
-
       Application := Create_Application;
-      Set_Application_Class_Name (Application, Enter ("Application1"));
+      Set_Application_Class_Name (Application, New_Name ("Application"));
 
       List := New_List;
       Append (List, Application);
       Set_Applications (Project, List);
 
-      --  Создание компонента приложения и добавление его в состав приложения.
-
       Component := Create_Component_Class;
-      Set_Name (Component, Enter ("Component1"));
+      Set_Name (Component, New_Name ("Component"));
 
       List := New_List;
       Append (List, Component);

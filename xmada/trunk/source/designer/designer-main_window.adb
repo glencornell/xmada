@@ -70,14 +70,19 @@ with Xm_Row_Column;
 with Xm_String_Defs;
 with Xm_Text;
 
+with Designer.Model_Utilities;
 with Designer.Operations.Debug;
 with Designer.Palette;
 with Designer.Properties_Editor;
 with Designer.Tree_Editor;
 with Designer.Visual_Editor;
+with Model.Tree;
 
 package body Designer.Main_Window is
 
+   use Designer.Model_Utilities;
+   use Model;
+   use Model.Tree;
    use Xm;
    use Xm.Class_Management;
    use Xm.Resource_Management;
@@ -105,7 +110,18 @@ package body Designer.Main_Window is
    use Xt.Resource_Management;
    use Xt.Utilities;
 
+   Selected_Item : Node_Id;
+   Project_Node  : Node_Id;
+
    About_Dialog : Widget;
+   New_Component_Item      : Widget;
+   Delete_Application_Item : Widget;
+   Delete_Component_Item   : Widget;
+
+   Xm_C_New_Application    : constant := 1;
+   Xm_C_New_Component      : constant := 2;
+   Xm_C_Delete_Application : constant := 3;
+   Xm_C_Delete_Component   : constant := 4;
 
    function To_Closure is new Ada.Unchecked_Conversion (Widget, Xt_Pointer);
 
@@ -159,6 +175,18 @@ package body Designer.Main_Window is
                          Closure    : in Xt_Pointer;
                          Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Open);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Project_Activate
+      --!    <Purpose> Подпрограмма обратного вызова при активации пункта меню
+      --! project.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Project_Activate (The_Widget : in Widget;
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Project_Activate);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -520,6 +548,60 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Project_Activate
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Project_Activate (The_Widget : in Widget;
+                                           Closure    : in Xt_Pointer;
+                                           Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Element : Integer := 0;
+         Args    : Xt_Arg_List (0 .. 0);
+         Data    : constant Xm_Row_Column_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Element'Address);
+         Xt_Get_Values (Data.Widget, Args (0 .. 0));
+
+         if Element = Xm_C_New_Application then
+            Operations.New_Application (Project_Node);
+
+         else
+            if Selected_Item = Null_Node then
+               return;
+            end if;
+
+            if Element = Xm_C_New_Component then
+               if Node_Kind (Selected_Item) = Node_Application then
+                  Operations.New_Component (Selected_Item);
+               end if;
+
+            elsif Element = Xm_C_Delete_Application then
+               if Node_Kind (Selected_Item) = Node_Application then
+                  Delete_Node (Selected_Item);
+               end if;
+
+            elsif Element = Xm_C_Delete_Component then
+               if Node_Kind (Selected_Item) = Node_Component_Class then
+                  Delete_Node (Selected_Item);
+               end if;
+            end if;
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Project_Activate", E);
+      end On_Project_Activate;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Save
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -793,6 +875,42 @@ package body Designer.Main_Window is
       Button :=
         Xm_Create_Managed_Cascade_Button_Gadget (Menu, "debug", Args (0 .. 0));
 
+      --  Меню "Проект".
+
+      Submenu := Xm_Create_Pulldown_Menu (Menu, "project_menu");
+      Xt_Add_Callback (Submenu,
+                       Xm_N_Entry_Callback,
+                       Callbacks.On_Project_Activate'Access);
+
+      Xt_Set_Arg
+       (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_New_Application));
+      Element :=
+        Xm_Create_Managed_Push_Button_Gadget
+         (Submenu, "new_application", Args (0 .. 0));
+
+      Xt_Set_Arg
+       (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_New_Component));
+      New_Component_Item :=
+        Xm_Create_Managed_Push_Button_Gadget
+         (Submenu, "new_component", Args (0 .. 0));
+
+      Xt_Set_Arg
+       (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_Delete_Application));
+      Delete_Application_Item :=
+        Xm_Create_Managed_Push_Button_Gadget
+         (Submenu, "delete_application", Args (0 .. 0));
+
+      Xt_Set_Arg
+       (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_Delete_Component));
+      Delete_Component_Item :=
+        Xm_Create_Managed_Push_Button_Gadget
+         (Submenu, "delete_component", Args (0 .. 0));
+
+      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Submenu);
+      Button :=
+        Xm_Create_Managed_Cascade_Button_Gadget
+         (Menu, "project", Args (0 .. 0));
+
       --  Меню "О программе".
 
       Submenu := Xm_Create_Pulldown_Menu (Menu, "help_menu");
@@ -975,6 +1093,10 @@ package body Designer.Main_Window is
       Designer.Tree_Editor.Insert_Item (Node);
       Designer.Visual_Editor.Insert_Item (Node);
       Designer.Properties_Editor.Insert_Item (Node);
+
+      if Node_Kind (Node) = Node_Project then
+         Project_Node := Node;
+      end if;
    end Insert_Item;
 
    ---------------------------------------------------------------------------
@@ -1042,6 +1164,38 @@ package body Designer.Main_Window is
       Designer.Tree_Editor.Select_Item (Node);
       Designer.Visual_Editor.Select_Item (Node);
       Designer.Properties_Editor.Select_Item (Node);
+
+      Selected_Item := Node;
+
+      if Node = Null_Node then
+         Xt_Set_Sensitive (New_Component_Item,      False);
+         Xt_Set_Sensitive (Delete_Application_Item, False);
+         Xt_Set_Sensitive (Delete_Component_Item,   False);
+
+         return;
+      end if;
+
+      case Node_Kind (Node) is
+         when Node_Project =>
+            Xt_Set_Sensitive (New_Component_Item,      False);
+            Xt_Set_Sensitive (Delete_Application_Item, False);
+            Xt_Set_Sensitive (Delete_Component_Item,   False);
+
+         when Node_Application =>
+            Xt_Set_Sensitive (New_Component_Item,      True);
+            Xt_Set_Sensitive (Delete_Application_Item, True);
+            Xt_Set_Sensitive (Delete_Component_Item,   False);
+
+         when Node_Component_Class =>
+            Xt_Set_Sensitive (New_Component_Item,      False);
+            Xt_Set_Sensitive (Delete_Application_Item, False);
+            Xt_Set_Sensitive (Delete_Component_Item,   True);
+
+         when others =>
+            Xt_Set_Sensitive (New_Component_Item,      False);
+            Xt_Set_Sensitive (Delete_Application_Item, False);
+            Xt_Set_Sensitive (Delete_Component_Item,   False);
+      end case;
    end Select_Item;
 
    ---------------------------------------------------------------------------
