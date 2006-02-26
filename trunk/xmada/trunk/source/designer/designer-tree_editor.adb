@@ -162,8 +162,9 @@ package body Designer.Tree_Editor is
            Table_Initial        => Model.Allocations.Node_Table_Initial,
            Table_Increment      => Model.Allocations.Node_Table_Increment);
 
-   Actions : Xt_Action_List (0 .. 0);
-   Menu    : Widget;
+   Actions      : Xt_Action_List (0 .. 0);
+   Menu         : Widget;
+   Project_Node : Node_Id;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -908,6 +909,7 @@ package body Designer.Tree_Editor is
          when Node_Project          =>
             Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
               Create_Item_Icon (Node, Project_Container);
+            Project_Node := Node;
 
             --  Разрешаем использовать мышь для вызова всплывающего окна.
             --  Создаем само всплывающее меню, в котором будет отображаться
@@ -1170,10 +1172,69 @@ package body Designer.Tree_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
-      List : Xt_Widget_List (0 .. 0);
-      Args : Xt_Arg_List (0 .. 1);
+
+      -------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Get_Sensitive_Indication
+      --!    <Purpose>
+      --!    <Exceptions>
+      -------------------------------------------------------------------------
+      function Get_Sensitive_Indication (Node : in Node_Id)
+        return Boolean;
+
+      -------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Get_Sensitive_Indication
+      --!    <ImplementationNotes>
+      -------------------------------------------------------------------------
+      function Get_Sensitive_Indication (Node  : in Node_Id)
+        return Boolean
+      is
+      begin
+         if Node = Null_Node then
+            return False;
+         end if;
+
+         case Node_Kind (Node) is
+            when Node_Project | Node_Application =>
+               return False;
+
+            when Node_Component_Class =>
+               return Root (Node) = Null_Node;
+
+            when Node_Widget_Instance =>
+               if Is_Shell (Node)
+                    and then Children (Node) /= Null_List
+                    and then Length (Children (Node)) = 1
+               then
+                  return False;
+
+               elsif Is_Primitive (Node) then
+                  return False;
+
+               else
+
+                  return True;
+               end if;
+
+            when others =>
+               return True;
+
+          end case;
+      end Get_Sensitive_Indication;
+
+      List      : Xt_Widget_List (0 .. 0);
+      Args      : Xt_Arg_List (0 .. 1);
+      Sensitive : constant Boolean := Get_Sensitive_Indication (Node);
 
    begin
+      if Project_Node /= Null_Node then
+         Xt_Set_Sensitive (Primitives_Submenu (Project_Node), Sensitive);
+         Xt_Set_Sensitive (Gadgets_Submenu (Project_Node), Sensitive);
+         Xt_Set_Sensitive (Managers_Submenu (Project_Node), Sensitive);
+         Xt_Set_Sensitive (Shells_Submenu (Project_Node), Sensitive);
+      end if;
+
       if Selected_Item /= Null_Node then
          --  Убираем веделение на странице дерева проекта.
 
