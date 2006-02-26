@@ -637,8 +637,10 @@ package body Designer.Tree_Editor is
          Args    : Xt_Arg_List (0 .. 0);
          Data    : constant Xm_Row_Column_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
+         Current : Node_Id;
 
       begin
+         Current := Selected_Item;
 
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Element'Address);
          Xt_Get_Values (Data.Widget, Args (0 .. 0));
@@ -658,12 +660,14 @@ package body Designer.Tree_Editor is
 
             elsif Element = Xm_C_Delete_Application then
                if Node_Kind (Selected_Item) = Node_Application then
-                  Delete_Node (Selected_Item);
+                  Main_Window.Select_Item (Null_Node);
+                  Delete_Node (Current);
                end if;
 
             elsif Element = Xm_C_Delete_Component then
                if Node_Kind (Selected_Item) = Node_Component_Class then
-                  Delete_Node (Selected_Item);
+                  Main_Window.Select_Item (Null_Node);
+                  Delete_Node (Current);
                end if;
             end if;
          end if;

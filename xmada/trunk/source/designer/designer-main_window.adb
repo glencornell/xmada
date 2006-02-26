@@ -563,6 +563,7 @@ package body Designer.Main_Window is
          Args    : Xt_Arg_List (0 .. 0);
          Data    : constant Xm_Row_Column_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
+         Current : constant Node_Id := Selected_Item;
 
       begin
 
@@ -584,12 +585,14 @@ package body Designer.Main_Window is
 
             elsif Element = Xm_C_Delete_Application then
                if Node_Kind (Selected_Item) = Node_Application then
-                  Delete_Node (Selected_Item);
+                  Main_Window.Select_Item (Null_Node);
+                  Delete_Node (Current);
                end if;
 
             elsif Element = Xm_C_Delete_Component then
                if Node_Kind (Selected_Item) = Node_Component_Class then
-                  Delete_Node (Selected_Item);
+                  Main_Window.Select_Item (Null_Node);
+                  Delete_Node (Current);
                end if;
             end if;
          end if;
