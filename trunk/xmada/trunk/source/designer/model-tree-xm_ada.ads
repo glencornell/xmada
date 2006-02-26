@@ -66,7 +66,8 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Convenience_Create_Function_Package_Name
-   --!    <Purpose>
+   --!    <Purpose> Возвращает имя пакета, используемого для создания виджета.
+   --! Аргумент Node должен иметь тип Node_Widget_Class.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Convenience_Create_Function_Package_Name (Node : in Node_Id) 
@@ -95,7 +96,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Resource_Class_Name_String
-   --!    <Purpose>
+   --!    <Purpose> Возвращает символьное имя класса ресурса для 
+   --! подстановки в функцию Xt_Set_Arg.
+   --! Аргумент Node должет иметь тип Node_Resource_Specification.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Resource_Class_Name_String (Node : in Node_Id)
@@ -124,7 +127,8 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Package_Name
-   --!    <Purpose>
+   --!    <Purpose> Устанавливает имя пакета, содержащего задаваемый компонент.
+   --! Аргумент Node должен иметь тип Node_Component_Class.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Package_Name (Node : in Node_Id; Name : in String_Id);
@@ -132,15 +136,16 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Type_Name
-   --!    <Purpose>
+   --!    <Purpose> Устанавливает имя типа для хранения виджетов.
+   --! Аргумент Node должен иметь тип Node_Component_Class.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Type_Name (Node : in Node_Id; Name : in String_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Package_Name
-   --!    <Purpose>
+   --!    <Purpose> Возвращает имя пакета, содержащего задаваемый компонент.
+   --! Аргумент Node должен иметь тип Node_Component_Class.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Package_Name (Node : in Node_Id) return String_Id;
@@ -148,7 +153,8 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Type_Name
-   --!    <Purpose>
+   --!    <Purpose> Возвращает имя типа для хранения виджетов.
+   --! Аргумент Node должен иметь тип Node_Component_Class.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Type_Name (Node : in Node_Id) return String_Id;
@@ -199,7 +205,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Convenience_Create_Function_Package_Name
-   --!    <Purpose>
+   --!    <Purpose> Устанавливает имя пакета, используемого для создания 
+   --! виджета.
+   --! Аргумент Node должен иметь тип Node_Widget_Class.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Convenience_Create_Function_Package_Name (Node : in Node_Id;
@@ -208,7 +216,9 @@ package Model.Tree.Xm_Ada is
   ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Resource_Class_Name_String
-   --!    <Purpose>
+   --!    <Purpose> Устанавливает символьное имя класса ресурса для 
+   --! подстановки в функцию Xt_Set_Arg.
+   --! Аргумент Node должет иметь тип Node_Resource_Specification.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Resource_Class_Name_String (Node : in Node_Id;
@@ -228,7 +238,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Type_Identifier
-   --!    <Purpose>
+   --!    <Purpose> Устанавливает символьное представление имени для
+   --! перечислимых типов.
+   --! Аргумент Node должен иметь тип Node_Enumerated_Resource_Type.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Type_Identifier (Node  : in Node_Id;
@@ -248,7 +260,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Type_Identifier
-   --!    <Purpose>
+   --!    <Purpose> Возвращает символьное представление имени для
+   --! перечислимых типов.
+   --! Аргумент Node должен иметь тип Node_Enumerated_Resource_Type
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Type_Identifier (Node : in Node_Id) return Name_Id;
@@ -256,7 +270,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Use_Qualified_Expression
-   --!    <Purpose>
+   --!    <Purpose> Возвращает признак символьное представление имени для
+   --! перечислимых типов.
+   --! Аргумент Node должен иметь тип Node_Enumerated_Resource_Type
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Use_Qualified_Expression (Node : in Node_Id) return Boolean;
@@ -264,7 +280,9 @@ package Model.Tree.Xm_Ada is
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Set_Use_Qualified_Expression
-   --!    <Purpose>
+   --!    <Purpose> Устанавливает признак символьное представление имени для
+   --! перечислимых типов.
+   --! Аргумент Node должен иметь тип Node_Enumerated_Resource_Type
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Set_Use_Qualified_Expression (Node : in Node_Id;
