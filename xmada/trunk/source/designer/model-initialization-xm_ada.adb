@@ -1422,9 +1422,9 @@ package body Model.Initialization.Xm_Ada is
       Set_Argument_Package_Name
        (Xt_Motif_Widget_Reference_Resource_Type,
         Enter ("Xt.Resource_Management"));
-      Set_Argument_Package_Name
-       (Xt_Motif_Xm_String_Resource_Type,
-        Enter ("Xt.Resource_Management"));
+ --     Set_Argument_Package_Name
+ --      (Xt_Motif_Xm_String_Resource_Type,
+ --       Enter ("Xt.Resource_Management"));
 
       Set_Resource_Names (Model.Xt_Motif.Xt_Motif_Widget_Set);
    end Initialize;
