@@ -1176,7 +1176,13 @@ package body Model.Tools is
                   begin
                      Set_Resource_Value (Resource, S);
                   end;
+
+               elsif Node_Kind (Resource) = Node_Xm_String_Resource_Value then
+                  Set_Resource_Value (Resource, Model.Strings.Store (""));
                end if;
+
+            elsif Node_Kind (Resource) = Node_Xm_String_Resource_Value then
+               Set_Resource_Value (Resource, Model.Strings.Store (""));
             end if;
          end;
 
