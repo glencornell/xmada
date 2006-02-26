@@ -143,6 +143,36 @@ package body Generator.Prototype.Component_Class is
                                   Package_Name : Wide_String;
                                   Type_Name : Wide_String)
       is
+         procedure Process_Resources (Resources : in List_Id);
+
+         ---------------------------------------------------------------------
+         --! <Subprogram>
+         --!    <Unit> Process_Resources
+         --!    <ImplementationNotes>
+         ---------------------------------------------------------------------
+         procedure Process_Resources (Resources : in List_Id) is
+         begin
+            if Resources /= Null_List then
+               declare
+                  Resource : Node_Id := First (Resources);
+
+               begin
+                  while Resource /= Null_Node loop
+                     case Node_Kind (Resource) is
+                        when Node_Xm_String_Resource_Value =>
+                           Append_Package_Name
+                            (Model.Names.Enter ("Xm.Strings"));
+
+                        when others =>
+                           null;
+                     end case;
+
+                     Resource := Next (Resource);
+                  end loop;
+               end;
+            end if;
+         end Process_Resources;
+
       begin
          --  Генерируем контекст.
 
@@ -161,12 +191,16 @@ package body Generator.Prototype.Component_Class is
 
             for J in Widgets.First .. Widgets.Last loop
                declare
-                  Id : constant Name_Id
+                  Widget : constant Node_Id := Widgets.Table (J);
+                  Id     : constant Name_Id
                     := Convenience_Create_Function_Package_Name
-                        (Class (Widgets.Table (J)));
+                        (Class (Widget));
 
                begin
                   Append_Package_Name (Id);
+
+                  Process_Resources (Resources (Widget));
+                  Process_Resources (Constraint_Resources (Widget));
                end;
             end loop;
 
@@ -306,28 +340,67 @@ package body Generator.Prototype.Component_Class is
                                    Resource : in Node_Id;
                                    Index    : in Integer)
       is
-      begin
-         Put_Line (File,
-                   "            "
-                   & Model.Names.Image
-                      (Argument_Package_Name
-                        (Resource_Type (Resource_Specification (Resource))))
-                   & ".Xt_Set_Arg");
-         Put_Line (File,
-                   "             (Args ("
-                   & Integer_Image (Index)
-                   & "),");
+         Specification : constant Node_Id
+           := Resource_Specification (Resource);
+         Is_Xm_String : constant Boolean
+           := Node_Kind (Resource) = Node_Xm_String_Resource_Value;
 
-         Put_Line (File,
-                   "              "
-                   & Model.Names.Image
-                      (Resource_Name_String
-                        (Resource_Specification (Resource)))
-                   & ",");
-         Put_Line (File, "              "
-                   & Resource_Value_String
-                      (Resource)
-                   &");");
+      begin
+         if not Is_Xm_String then
+            Put_Line (File,
+                      "            "
+                      & Model.Names.Image
+                         (Argument_Package_Name
+                           (Resource_Type (Specification)))
+                      & ".Xt_Set_Arg");
+            Put_Line (File,
+                      "             (Args ("
+                      & Integer_Image (Index)
+                      & "),");
+
+            Put_Line (File,
+                      "              "
+                      & Model.Names.Image
+                         (Resource_Name_String (Specification))
+                      & ",");
+            Put_Line (File, "              "
+                      & Resource_Value_String (Resource)
+                      &");");
+
+         else
+            Put_Line (File, "            declare");
+            Put_Line (File, "               Value : constant Xm.Xm_String");
+            Put_Line (File, "                 "
+              & ":= Xm.Strings.Xm_String_Generate");
+            Put_Line (File, "                 "
+              & "    (Wide_String'("
+              & Resource_Value_String (Resource)
+              & "));");
+            New_Line (File);
+            Put_Line (File, "            begin");
+            Put_Line (File,
+                      "               "
+                      & Model.Names.Image
+                         (Argument_Package_Name
+                           (Resource_Type (Specification)))
+                      & ".Xt_Set_Arg");
+            Put_Line (File,
+                      "                (Args ("
+                      & Integer_Image (Index)
+                      & "),");
+
+            Put_Line (File,
+                      "                 "
+                      & Model.Names.Image
+                         (Resource_Name_String (Specification))
+                      & ",");
+            Put_Line (File, "                 Value);");
+            New_Line (File);
+            Put_Line (File, "               "
+              & "Xm.Strings.Xm_String_Free (Value);");
+            Put_Line (File, "            end;");
+         end if;
+
          New_Line (File);
       end Generate_Resource;
 
@@ -576,6 +649,10 @@ package body Generator.Prototype.Component_Class is
       function Resource_Value_String (Node : in Node_Id) return Wide_String is
       begin
          case Node_Kind (Node) is
+            when Node_Enumeration_Resource_Value =>
+               return Model.Names.Image
+                       (Literal_Identifier (Resource_Value (Node)));
+
             when Node_Integer_Resource_Value =>
                return "Xt.Ancillary_Types.Xt_Arg_Val ("
                  & Integer_Image (Resource_Value (Node))
@@ -585,9 +662,8 @@ package body Generator.Prototype.Component_Class is
                return "Result."
                  & Variable_Widget_Name_Image (Resource_Value (Node));
 
-            when Node_Enumeration_Resource_Value =>
-               return Model.Names.Image
-                       (Literal_Identifier (Resource_Value (Node)));
+            when Node_Xm_String_Resource_Value =>
+               return """" & Model.Strings.Image (Resource_Value (Node)) & """";
 
             when others =>
                Ada.Wide_Text_IO.Put_Line
