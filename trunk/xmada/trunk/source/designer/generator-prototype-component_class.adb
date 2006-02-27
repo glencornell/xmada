@@ -39,6 +39,8 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
+with Ada.Characters.Wide_Latin_1;
+with Ada.Strings.Wide_Fixed;
 with Ada.Strings.Wide_Unbounded;
 with Ada.Wide_Text_IO;
 
@@ -162,6 +164,28 @@ package body Generator.Prototype.Component_Class is
                         when Node_Xm_String_Resource_Value =>
                            Append_Package_Name
                             (Model.Names.Enter ("Xm.Strings"));
+
+                           --  Проверка необходимости форматировния
+                           --  длинных строк (или многострочного текста).
+
+                           declare
+                              Str : constant Wide_String
+                                := Model.Strings.Image
+                                    (Resource_Value (Resource));
+
+                              Token : constant Wide_String (1 .. 1)
+                                := (others => Ada.Characters.Wide_Latin_1.LF);
+
+                              Is_Need_Format : constant Boolean
+                                := Ada.Strings.Wide_Fixed.Index
+                                    (Str, Token) > 0;
+                           begin
+                              if Str'Length > 60 or else Is_Need_Format then
+                                 Append_Package_Name
+                                  (Model.Names.Enter
+                                    ("Ada.Characters.Wide_Latin_1"));
+                              end if;
+                           end;
 
                         when others =>
                            null;
@@ -340,6 +364,49 @@ package body Generator.Prototype.Component_Class is
                                    Resource : in Node_Id;
                                    Index    : in Integer)
       is
+         function Format_String_Value (Value : in Wide_String)
+           return Wide_String;
+
+         ---------------------------------------------------------------------
+         --! <Subprogram>
+         --!    <Unit> Format_String_Value
+         --!    <ImplementationNotes>
+         ---------------------------------------------------------------------
+         function Format_String_Value (Value : in Wide_String)
+           return Wide_String
+         is
+            Indent : constant Natural := 22;
+            Res    : Unbounded_Wide_String;
+
+         begin
+            for J in Value'First .. Value'Last loop
+               if Value (J) = Ada.Characters.Wide_Latin_1.LF then
+                  --  Встретили символ перевода строки.
+
+                  declare
+                     Quote_Str : constant Wide_String (1 .. Indent)
+                       := (others => ' ');
+                     Str       : constant Wide_String
+                       := """"
+                          & Ada.Characters.Wide_Latin_1.LF
+                          & Quote_Str & "& Ada.Characters.Wide_Latin_1.LF"
+                          & Ada.Characters.Wide_Latin_1.LF
+                          & Quote_Str & "& """;
+
+                  begin
+                     Append (Res, Str);
+                  end;
+
+               else
+                  --  Обработка всех остальных символов.
+
+                  Append (Res, Value (J));
+               end if;
+            end loop;
+
+            return To_Wide_String (Res);
+         end Format_String_Value;
+
          Specification : constant Node_Id
            := Resource_Specification (Resource);
          Is_Xm_String : constant Boolean
@@ -347,6 +414,8 @@ package body Generator.Prototype.Component_Class is
 
       begin
          if not Is_Xm_String then
+            --  Обработка ресурсов не Xm_String.
+
             Put_Line (File,
                       "            "
                       & Model.Names.Image
@@ -368,13 +437,15 @@ package body Generator.Prototype.Component_Class is
                       &");");
 
          else
+            --  Обработка ресурсов Xm_String.
+
             Put_Line (File, "            declare");
             Put_Line (File, "               Value : constant Xm.Xm_String");
             Put_Line (File, "                 "
               & ":= Xm.Strings.Xm_String_Generate");
             Put_Line (File, "                 "
               & "    (Wide_String'("
-              & Resource_Value_String (Resource)
+              & Format_String_Value (Resource_Value_String (Resource))
               & "));");
             New_Line (File);
             Put_Line (File, "            begin");
