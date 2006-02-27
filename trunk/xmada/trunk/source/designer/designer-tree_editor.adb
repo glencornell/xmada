@@ -48,12 +48,14 @@ with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Translation_Management;
 with Xt.Utilities;
+with Xm.Menu_Management;
 with Xm.Resource_Management;
 with Xm.Strings;
 with Xm_Cascade_Button_Gadget;
 with Xm_Container;
 with Xm_Icon_Gadget;
 with Xm_Notebook;
+with Xm_Push_Button;
 with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
 with Xm_Scrolled_Window;
@@ -86,12 +88,14 @@ package body Designer.Tree_Editor is
    use Xt.Translation_Management;
    use Xt.Utilities;
    use Xm;
+   use Xm.Menu_Management;
    use Xm.Resource_Management;
    use Xm.Strings;
    use Xm_Cascade_Button_Gadget;
    use Xm_Container;
    use Xm_Icon_Gadget;
    use Xm_Notebook;
+   use Xm_Push_Button;
    use Xm_Push_Button_Gadget;
    use Xm_Row_Column;
    use Xm_Scrolled_Window;
@@ -165,9 +169,10 @@ package body Designer.Tree_Editor is
            Table_Initial        => Model.Allocations.Node_Table_Initial,
            Table_Increment      => Model.Allocations.Node_Table_Increment);
 
-   Actions      : Xt_Action_List (0 .. 0);
-   Menu         : Widget;
-   Project_Node : Node_Id;
+   Actions        : Xt_Action_List (0 .. 0);
+   Menu           : Widget;
+   Project_Node   : Node_Id;
+   Project_Tab    : Widget;
 
    --  Элементы всплывающего меню на вкладке project
 
@@ -351,6 +356,18 @@ package body Designer.Tree_Editor is
                                            Closure    : in Xt_Pointer;
                                            Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Popup_Project_Activate);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Project_Map
+      --!    <Purpose> Подпрограмма обратного вызова при отображении
+      --! всплывающего меню на вкладке project.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Project_Map (The_Widget : in Widget;
+                                      Closure    : in Xt_Pointer;
+                                      Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Popup_Project_Map);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -544,16 +561,24 @@ package body Designer.Tree_Editor is
          Node   : Node_Id;
          Number : Integer;
          Args   : Xt_Arg_List (0 .. 0);
+         Tab    : Widget;
 
       begin
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
          Xt_Get_Values (The_Widget, Args (0 .. 0));
 
+         if Node_Kind (Node) = Node_Project then
+            Tab := Project_Tab;
+
+         else
+            Tab := Component_Tab (Node);
+         end if;
+
          --  Выделяем выбранный узел.
          --  Получаем номер вклаки, и делаем ее активной.
 
          Xt_Set_Arg (Args (0), Xm_N_Page_Number, Number'Address);
-         Xt_Get_Values (Component_Tab (Node), Args (0 .. 0));
+         Xt_Get_Values (Tab, Args (0 .. 0));
 
          Xt_Set_Arg
             (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (Number));
@@ -588,30 +613,6 @@ package body Designer.Tree_Editor is
 
          if Selected_Item = Null_Node then
             Data.Post_It := Xt_False;
-
-         else
-            case Node_Kind (Selected_Item) is
-               when Node_Application     =>
-                  Xt_Manage_Child (New_Component);
-                  Xt_Manage_Child (Delete_Application);
-                  Xt_Unmanage_Child (Delete_Component);
-
-               when Node_Component_Class =>
-                  Xt_Unmanage_Child (New_Component);
-                  Xt_Unmanage_Child (Delete_Application);
-                  Xt_Manage_Child (Delete_Component);
-
-               when Node_Project         =>
-                  Xt_Unmanage_Child (New_Component);
-                  Xt_Unmanage_Child (Delete_Application);
-                  Xt_Unmanage_Child (Delete_Component);
-
-               when others               =>
-                  Xt_Unmanage_Child (New_Component);
-                  Xt_Unmanage_Child (Delete_Application);
-                  Xt_Unmanage_Child (Delete_Component);
-
-            end case;
          end if;
 
       exception
@@ -677,6 +678,57 @@ package body Designer.Tree_Editor is
             Designer.Main_Window.Put_Exception_In_Callback
              ("On_Popup_Project_Activate", E);
       end On_Popup_Project_Activate;
+
+      -----------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Project_Map
+      --!    <ImplementationNotes>
+      -----------------------------------------------------------------------
+      procedure On_Popup_Project_Map (The_Widget : in Widget;
+                                      Closure    : in Xt_Pointer;
+                                      Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         if Selected_Item = Null_Node then
+            Xt_Unmanage_Child (New_Component);
+            Xt_Unmanage_Child (Delete_Application);
+            Xt_Unmanage_Child (Delete_Component);
+
+            return;
+         end if;
+
+         case Node_Kind (Selected_Item) is
+            when Node_Application     =>
+               Xt_Manage_Child (New_Component);
+               Xt_Manage_Child (Delete_Application);
+               Xt_Unmanage_Child (Delete_Component);
+
+            when Node_Component_Class =>
+               Xt_Unmanage_Child (New_Component);
+               Xt_Unmanage_Child (Delete_Application);
+               Xt_Manage_Child (Delete_Component);
+
+            when Node_Project         =>
+               Xt_Unmanage_Child (New_Component);
+               Xt_Unmanage_Child (Delete_Application);
+               Xt_Unmanage_Child (Delete_Component);
+
+            when others               =>
+               Xt_Unmanage_Child (New_Component);
+               Xt_Unmanage_Child (Delete_Application);
+               Xt_Unmanage_Child (Delete_Component);
+         end case;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Popup_Project_Map", E);
+      end On_Popup_Project_Map;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -869,10 +921,10 @@ package body Designer.Tree_Editor is
    procedure Initialize (Parent   : in Xt.Widget;
                          Arg_List : in Xt.Ancillary_Types.Xt_Arg_List)
    is
-      Args     : Xt_Arg_List (0 .. Arg_List'Length);
-      Scrolled : Widget;
-      Button   : Widget;
-      Menu     : Widget;
+      Args         : Xt_Arg_List (0 .. Arg_List'Length);
+      Scrolled     : Widget;
+      Button       : Widget;
+      Actions_Menu : Widget;
 
    begin
       --  Добавляем реакцию на кнопку delete.
@@ -913,7 +965,7 @@ package body Designer.Tree_Editor is
                        Xm_N_Popup_Handler_Callback,
                        Callbacks.On_Popup_Project'Access);
 
-      Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "project");
+      Project_Tab := Xm_Create_Managed_Push_Button (Notebook, "project");
 
       --  Добавляем всплывающее меню, отображающееся на вкладке project.
       --  меню содержит следующие пункты:
@@ -924,31 +976,35 @@ package body Designer.Tree_Editor is
 
       Xt_Set_Arg
        (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
-      Menu := Xm_Create_Popup_Menu
+      Actions_Menu := Xm_Create_Popup_Menu
                (Project_Container, "project_popup_menu", Args (0 .. 0));
-      Xt_Add_Callback (Menu,
+      Xt_Add_Callback (Actions_Menu,
                        Xm_N_Entry_Callback,
                        Callbacks.On_Popup_Project_Activate'Access);
+      Xt_Add_Callback (Actions_Menu,
+                       Xm_N_Map_Callback,
+                       Callbacks.On_Popup_Project_Map'Access);
 
       Xt_Set_Arg
        (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_New_Application));
       Button := Xm_Create_Managed_Push_Button_Gadget
-                 (Menu, "new_application", Args (0 .. 0));
+                 (Actions_Menu, "new_application", Args (0 .. 0));
 
       Xt_Set_Arg
        (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_New_Component));
       New_Component := Xm_Create_Managed_Push_Button_Gadget
-                        (Menu, "new_component", Args (0 .. 0));
+                        (Actions_Menu, "new_component", Args (0 .. 0));
 
       Xt_Set_Arg
        (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_Delete_Component));
       Delete_Component := Xm_Create_Managed_Push_Button_Gadget
-                           (Menu, "delete_component", Args (0 .. 0));
+                           (Actions_Menu, "delete_component", Args (0 .. 0));
 
       Xt_Set_Arg
        (Args (0), Xm_N_User_Data, Xt_Arg_Val (Xm_C_Delete_Application));
-      Delete_Application := Xm_Create_Managed_Push_Button_Gadget
-                             (Menu, "delete_application", Args (0 .. 0));
+      Delete_Application :=
+        Xm_Create_Managed_Push_Button_Gadget
+         (Actions_Menu, "delete_application", Args (0 .. 0));
 
    end Initialize;
 
@@ -1010,9 +1066,11 @@ package body Designer.Tree_Editor is
          --  мотиф не назначит необходимые ей ресурсы.
 
          Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
-         Button := Xm_Create_Managed_Push_Button_Gadget
+         Button := Xm_Create_Managed_Push_Button
                     (Notebook, "component", Args (0 .. 0));
+         Xm_Add_To_Post_From_List (Designer.Tree_Editor.Menu, Button);
          Xt_Unmanage_Child (Button);
+
 
          Xm_String_Free (Name);
 
@@ -1096,10 +1154,6 @@ package body Designer.Tree_Editor is
                 Project_Tree_Icon (Parent_Node (Node)));
 
          when Node_Project          =>
-            Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
-              Create_Item_Icon (Node, Project_Container);
-            Project_Node := Node;
-
             --  Разрешаем использовать мышь для вызова всплывающего окна.
             --  Создаем само всплывающее меню, в котором будет отображаться
             --  список открытых компонентов и звдем обработчик для всплыва-
@@ -1107,9 +1161,39 @@ package body Designer.Tree_Editor is
 
             Xt_Set_Arg
              (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
-            Menu := Xm_Create_Popup_Menu
-                     (Notebook, "popup_menu", Args (0 .. 0));
+            Designer.Tree_Editor.Menu :=
+              Xm_Create_Popup_Menu
+               (Project_Container, "popup_menu", Args (0 .. 0));
             --  Добавляем всплывающее меню.
+
+            --  В всплывающее меню добавляем иконку проекта.
+
+            declare
+               Button : Widget;
+               Name   : constant Xm_String
+                 := Xm_String_Generate (Wide_String'("Project"));
+
+            begin
+               Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+               Xt_Set_Arg
+                (Args (1), Xm_N_User_Data, Xt_Arg_Val (Node));
+               Button :=
+                 Xm_Create_Managed_Push_Button_Gadget
+                  (Menu, "menu_item", Args (0 .. 1));
+               Xt_Add_Callback
+                (Button,
+                 Xm_N_Activate_Callback,
+                 Callbacks.On_Popup_Notebook'Access);
+
+               Xm_String_Free (Name);
+            end;
+
+            Xm_Add_To_Post_From_List
+             (Designer.Tree_Editor.Menu, Project_Tab);
+
+            Annotation_Table.Table (Node).NP_Project_Tree_Icon :=
+              Create_Item_Icon (Node, Project_Container);
+            Project_Node := Node;
 
             Annotation_Table.Table (Node).Primitives_Submenu :=
               Xm_Create_Pulldown_Menu (Notebook, "sub_menu");

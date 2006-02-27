@@ -566,7 +566,6 @@ package body Designer.Main_Window is
          Current : constant Node_Id := Selected_Item;
 
       begin
-
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Element'Address);
          Xt_Get_Values (Data.Widget, Args (0 .. 0));
 
