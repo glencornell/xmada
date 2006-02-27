@@ -175,6 +175,8 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree*popup_menu.gadgets_submenu.labelString: Gadgets
 *main_window.horizontal_paned.tree_form*notebook.project.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.tree_form*notebook.project.labelString: Project
+*main_window.horizontal_paned.tree_form*notebook.scrolled*project_tree*popup_menu.close_menu_item.labelString: Close active tab
+*main_window.horizontal_paned.tree_form*notebook.scrolled*project_tree*popup_menu.project_menu_item.labelString: Project
 *main_window.horizontal_paned.tree_form*notebook.scrolled*project_tree*project_popup_menu.delete_application.labelString: Delete application
 *main_window.horizontal_paned.tree_form*notebook.scrolled*project_tree*project_popup_menu.delete_component.labelString: Delete component
 *main_window.horizontal_paned.tree_form*notebook.scrolled*project_tree*project_popup_menu.new_application.labelString: New application
