@@ -380,6 +380,18 @@ package body Designer.Tree_Editor is
                            Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Select);
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Tab_Close
+      --!    <Purpose> Подпрограмма обратного вызова при
+      --! закрытии активной вкладки.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Tab_Close (The_Widget : in Widget;
+                                    Closure    : in Xt_Pointer;
+                                    Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Popup_Tab_Close);
+
    end Callbacks;
 
    Notebook          : Widget;
@@ -730,6 +742,58 @@ package body Designer.Tree_Editor is
              ("On_Popup_Project_Map", E);
       end On_Popup_Project_Map;
 
+      -----------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Popup_Tab_Close
+      --!    <ImplementationNotes>
+      -----------------------------------------------------------------------
+      procedure On_Popup_Tab_Close (The_Widget : in Widget;
+                                    Closure    : in Xt_Pointer;
+                                    Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Number : Xm_Notebook_Page_Number;
+         Args   : Xt_Arg_List (0 .. 0);
+         Info   : Xm_Notebook_Page_Info;
+         Status : Xm_Notebook_Page_Status;
+         Node   : Node_Id;
+
+      begin
+         --  Получаем номер открытой вкладки.
+
+         Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Number'Address);
+         Xt_Get_Values (Notebook, Args (0 .. 0));
+
+         --  Получаем информацию о вкладке, из которой берем виджет
+         --  иконки и вытаскиваем из него ассоциированный с ним узел.
+
+         Xm_Notebook_Get_Page_Info (Notebook, Number, Info, Status);
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (Info.Minor_Tab_Widget, Args (0 .. 0));
+
+         --  Закрываем открытую вкладку.
+
+         if Node_Kind (Node) /= Node_Project then
+            Xt_Unmanage_Child (Component_Tab (Node));
+            Xt_Destroy_Widget (Annotation_Table.Table (Node).Button);
+            Annotation_Table.Table (Node).Button := Null_Widget;
+         end if;
+
+         --  Делаем активной самую первую вкладку.
+
+         Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (0));
+         Xt_Set_Values (Notebook, Args (0 .. 0));
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Popup_Tab_Close", E);
+      end On_Popup_Tab_Close;
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Select
@@ -892,6 +956,7 @@ package body Designer.Tree_Editor is
             Xt_Unmanage_Child (Component_Tree_Icon (Node));
             Xt_Unmanage_Child (Component_Container (Node));
             Xt_Unmanage_Child (Component_Tab (Node));
+            Xt_Unmanage_Child (Annotation_Table.Table (Node).Button);
 
          when Annotation_Widget_Instance =>
             Xt_Unmanage_Child (Component_Tree_Icon (Node));
@@ -1066,8 +1131,9 @@ package body Designer.Tree_Editor is
          --  мотиф не назначит необходимые ей ресурсы.
 
          Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+         Xt_Set_Arg (Args (1), Xm_N_User_Data, Xt_Arg_Val (Node));
          Button := Xm_Create_Managed_Push_Button
-                    (Notebook, "component", Args (0 .. 0));
+                    (Notebook, "component", Args (0 .. 1));
          Xm_Add_To_Post_From_List (Designer.Tree_Editor.Menu, Button);
          Xt_Unmanage_Child (Button);
 
@@ -1154,6 +1220,12 @@ package body Designer.Tree_Editor is
                 Project_Tree_Icon (Parent_Node (Node)));
 
          when Node_Project          =>
+            --  Добавляем на вкладку проекта информацию
+            --  о узле проекта.
+
+            Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (Node));
+            Xt_Set_Values (Project_Tab, Args (0 .. 0));
+
             --  Разрешаем использовать мышь для вызова всплывающего окна.
             --  Создаем само всплывающее меню, в котором будет отображаться
             --  список открытых компонентов и звдем обработчик для всплыва-
@@ -1166,27 +1238,24 @@ package body Designer.Tree_Editor is
                (Project_Container, "popup_menu", Args (0 .. 0));
             --  Добавляем всплывающее меню.
 
+            --  В всплывающее меню добавляем иконку зыкрытия текущей.
+            --  вкладки.
+
+            Item := Xm_Create_Managed_Push_Button_Gadget
+                     (Menu, "close_menu_item");
+            Xt_Add_Callback (Item,
+                             Xm_N_Activate_Callback,
+                             Callbacks.On_Popup_Tab_Close'Access);
+
             --  В всплывающее меню добавляем иконку проекта.
 
-            declare
-               Button : Widget;
-               Name   : constant Xm_String
-                 := Xm_String_Generate (Wide_String'("Project"));
-
-            begin
-               Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
-               Xt_Set_Arg
-                (Args (1), Xm_N_User_Data, Xt_Arg_Val (Node));
-               Button :=
-                 Xm_Create_Managed_Push_Button_Gadget
-                  (Menu, "menu_item", Args (0 .. 1));
-               Xt_Add_Callback
-                (Button,
-                 Xm_N_Activate_Callback,
-                 Callbacks.On_Popup_Notebook'Access);
-
-               Xm_String_Free (Name);
-            end;
+            Xt_Set_Arg
+             (Args (0), Xm_N_User_Data, Xt_Arg_Val (Node));
+            Item := Xm_Create_Managed_Push_Button_Gadget
+                     (Menu, "project_menu_item", Args (0 .. 0));
+            Xt_Add_Callback (Item,
+                             Xm_N_Activate_Callback,
+                             Callbacks.On_Popup_Notebook'Access);
 
             Xm_Add_To_Post_From_List
              (Designer.Tree_Editor.Menu, Project_Tab);
@@ -1316,11 +1385,11 @@ package body Designer.Tree_Editor is
       ------------------------------------------------------------------------
       procedure Destroy_Widget (Value : in Widget);
 
-      -------------------------------------------------------------------------
+      -----------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Destroy_Widget
       --!    <ImplementationNotes>
-      ------------------------------------------------------------------------
+      -----------------------------------------------------------------------
       procedure Destroy_Widget (Value : in Widget) is
       begin
          if Value /= Null_Widget then
@@ -1446,20 +1515,20 @@ package body Designer.Tree_Editor is
    ---------------------------------------------------------------------------
    procedure Select_Item (Node : in Model.Node_Id) is
 
-      -------------------------------------------------------------------------
+      ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Get_Sensitive_Indication
       --!    <Purpose>
       --!    <Exceptions>
-      -------------------------------------------------------------------------
+      ------------------------------------------------------------------------
       function Get_Sensitive_Indication (Node : in Node_Id)
         return Boolean;
 
-      -------------------------------------------------------------------------
+      ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Get_Sensitive_Indication
       --!    <ImplementationNotes>
-      -------------------------------------------------------------------------
+      ------------------------------------------------------------------------
       function Get_Sensitive_Indication (Node  : in Node_Id)
         return Boolean
       is
