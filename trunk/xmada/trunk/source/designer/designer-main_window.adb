@@ -67,6 +67,7 @@ with Xm_Notebook;
 with Xm_Paned_Window;
 with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
+with Xm_Separator_Gadget;
 with Xm_String_Defs;
 with Xm_Text;
 
@@ -100,6 +101,7 @@ package body Designer.Main_Window is
    use Xm_Paned_Window;
    use Xm_Push_Button_Gadget;
    use Xm_Row_Column;
+   use Xm_Separator_Gadget;
    use Xm_String_Defs;
    use Xm_Text;
    use Xt;
@@ -822,6 +824,9 @@ package body Designer.Main_Window is
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Save_As'Access);
+
+      Element :=
+        Xm_Create_Managed_Separator_Gadget (Submenu, "separator");
 
       Element :=
         Xm_Create_Managed_Push_Button_Gadget (Submenu, "quit");

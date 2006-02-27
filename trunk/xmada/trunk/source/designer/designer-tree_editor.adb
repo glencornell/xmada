@@ -59,6 +59,7 @@ with Xm_Push_Button;
 with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
 with Xm_Scrolled_Window;
+with Xm_Separator_Gadget;
 with Xm_String_Defs;
 
 with Designer.Main_Window;
@@ -99,6 +100,7 @@ package body Designer.Tree_Editor is
    use Xm_Push_Button_Gadget;
    use Xm_Row_Column;
    use Xm_Scrolled_Window;
+   use Xm_Separator_Gadget;
    use Xm_String_Defs;
 
    --  Для каждого узла создаётся (по запросу) свой собственный редактор
@@ -1246,6 +1248,8 @@ package body Designer.Tree_Editor is
             Xt_Add_Callback (Item,
                              Xm_N_Activate_Callback,
                              Callbacks.On_Popup_Tab_Close'Access);
+
+            Item := Xm_Create_Managed_Separator_Gadget (Menu, "separator");
 
             --  В всплывающее меню добавляем иконку проекта.
 
