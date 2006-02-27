@@ -475,9 +475,72 @@ package body Model.Initialization.Xm_Ada is
        (Xt_Motif_Show_Arrows_Resource_Type,
         Enter ("Xm.Xm_Show_Arrows"));
 
- --     Set_Type_Identifier
- --      (Xt_Motif_Pixel_Resource_Type,
- --       Enter ("Xlib.XmPixel"));
+      Set_Type_Identifier
+       (Xt_Motif_C_Short_Resource_Type,
+        Enter ("Xt.Short"));  --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_C_Int_Resource_Type,
+        Enter ("Xt.Int"));  --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Position_Resource_Type,
+        Enter ("Xt.Position"));
+      Set_Type_Identifier
+       (Xt_Motif_Dimension_Resource_Type,
+        Enter ("Xt.Dimension"));
+      Set_Type_Identifier
+       (Xt_Motif_Pixel_Resource_Type,
+        Enter ("Xlib.Pixel"));
+      Set_Type_Identifier
+       (Xt_Motif_Pixmap_Resource_Type,
+        Enter ("Xlib.Pixmap"));
+      Set_Type_Identifier
+       (Xt_Motif_Screen_Resource_Type,
+        Enter ("Xlib.Screen"));
+      Set_Type_Identifier
+       (Xt_Motif_Colormap_Resource_Type,
+        Enter ("Xt.Colormap"));  --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Accelerator_Table_Resource_Type,
+        Enter ("Xt.AcceleratorTable"));  --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Translation_Table_Resource_Type,
+        Enter ("Xt.TranslationTable"));  --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Widget_Reference_Resource_Type,
+        Enter ("Xt.Widget"));
+      Set_Type_Identifier
+       (Xt_Motif_Horizontal_Dimension_Resource_Type,
+        Enter ("Xm.Xm_Horizontal_Dimension"));   --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Horizontal_Int_Resource_Type,
+        Enter ("Xm.Xm_Horizontal_Int"));   --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Horizontal_Position_Resource_Type,
+        Enter ("Xm.Xm_Horizontal_Position"));   --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Vertical_Dimension_Resource_Type,
+        Enter ("Xm.Xm_Vertical_Dimension"));   --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Vertical_Int_Resource_Type,
+        Enter ("Xm.Xm_Vertical_Int"));   --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Vertical_Position_Resource_Type,
+        Enter ("Xm.Xm_Vertical_Position"));   --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Select_Color_Resource_Type,
+        Enter ("Xm.Xm_Select_Color"));  --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Dynamic_Pixmap_Resource_Type,
+        Enter ("Xm.Xm_Dynamic_Pixmap"));   --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type,
+        Enter ("Xm.Xm_No_Scaling_Dynamic_Pixmap"));   --  не реализовано
+--      Set_Type_Identifier
+--       (Xt_Motif_Menu_Widget_Reference_Resource_Type,
+--        Enter ("Xm.Xm_Menu_Widget"));   --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Xm_String_Resource_Type,
+        Enter ("Xm.Xm_String"));
 
       --  Инициализация значений типов ресурсов
 
