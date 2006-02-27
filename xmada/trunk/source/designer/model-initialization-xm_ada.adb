@@ -535,9 +535,9 @@ package body Model.Initialization.Xm_Ada is
       Set_Type_Identifier
        (Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type,
         Enter ("Xm.Xm_No_Scaling_Dynamic_Pixmap"));   --  не реализовано
---      Set_Type_Identifier
---       (Xt_Motif_Menu_Widget_Reference_Resource_Type,
---        Enter ("Xm.Xm_Menu_Widget"));   --  не реализовано
+      Set_Type_Identifier
+       (Xt_Motif_Menu_Widget_Reference_Resource_Type,
+        Enter ("Xm.Xm_Menu_Widget"));   --  не реализовано
       Set_Type_Identifier
        (Xt_Motif_Xm_String_Resource_Type,
         Enter ("Xm.Xm_String"));
