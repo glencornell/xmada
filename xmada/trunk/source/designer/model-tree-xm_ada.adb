@@ -38,12 +38,9 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Wide_Text_IO;
-
 with GNAT.Table;
 
 with Model.Allocations;
-with Model.Names;
 
 package body Model.Tree.Xm_Ada is
 
@@ -99,6 +96,9 @@ package body Model.Tree.Xm_Ada is
             --  Имя пакета, содержащего функции задания ресурсов данного типа.
 
          when Annotation_Widget_Reference_Resource_Type =>
+            Widget_Reference_Type_Identifier       : Name_Id;
+            --  Уникальный идентификатор типа ресурса.
+   
             Widget_Reference_Argument_Package_Name : Name_Id;
             --  Имя пакета, содержащего функции задания ресурсов данного типа.
 
@@ -110,6 +110,9 @@ package body Model.Tree.Xm_Ada is
             --  Название типа, в котором будут храниться виджеты.
 
          when Annotation_Xm_String_Resource_Type =>
+            String_Type_Identifier       : Name_Id;
+            --  Уникальный идентификатор типа ресурса.
+
             String_Argument_Package_Name : Name_Id;
             --  Имя пакета, содержащего функции задания ресурсов данного типа.
 
@@ -151,15 +154,15 @@ package body Model.Tree.Xm_Ada is
       case Node_Kind (Node) is
          when Node_Enumerated_Resource_Type =>
             return
-	      Annotation_Table.Table (Node).Enumerated_Argument_Package_Name;
+              Annotation_Table.Table (Node).Enumerated_Argument_Package_Name;
 
          when Node_Predefined_Resource_Type =>
             return
-	      Annotation_Table.Table (Node).Predefined_Argument_Package_Name;
+              Annotation_Table.Table (Node).Predefined_Argument_Package_Name;
 
          when Node_Widget_Reference_Resource_Type =>
             return
-	      Annotation_Table.Table (Node).
+              Annotation_Table.Table (Node).
                Widget_Reference_Argument_Package_Name;
 
          when Node_Xm_String_Resource_Type =>
@@ -315,26 +318,28 @@ package body Model.Tree.Xm_Ada is
                   Annotation_Table.Table (J) :=
                    (Kind                 => Annotation_Enumerated_Resource_Type,
                     Type_Identifier      => Null_Name,
-		    Enumerated_Argument_Package_Name => Null_Name);
+                    Enumerated_Argument_Package_Name => Null_Name);
 
                when Node_Widget_Reference_Resource_Type =>
                   Annotation_Table.Table (J) :=
                    (Kind                                   =>
                      Annotation_Widget_Reference_Resource_Type,
-		    Widget_Reference_Argument_Package_Name => Null_Name);
+                    Widget_Reference_Argument_Package_Name => Null_Name,
+                    Widget_Reference_Type_Identifier       => Null_Name);
 
                when Node_Xm_String_Resource_Type =>
                   Annotation_Table.Table (J) :=
-                   (Kind                                   =>
+                   (Kind                         => 
                      Annotation_Xm_String_Resource_Type,
-		    String_Argument_Package_Name => Null_Name);
+                    String_Argument_Package_Name => Null_Name,
+                    String_Type_Identifier       => Null_Name);
 
                when Node_Predefined_Resource_Type =>
                   Annotation_Table.Table (J) :=
                    (Kind                             =>
                      Annotation_Predefined_Resource_Type,
                     Predefined_Type_Identifier       => Null_Name,
-		    Predefined_Argument_Package_Name => Null_Name);
+                    Predefined_Argument_Package_Name => Null_Name);
 
                when Node_Widget_Instance =>
                   Annotation_Table.Table (J) :=
@@ -405,7 +410,7 @@ package body Model.Tree.Xm_Ada is
 
       case Node_Kind (Node) is
          when Node_Enumerated_Resource_Type =>
-	    Annotation_Table.Table (Node).Enumerated_Argument_Package_Name
+            Annotation_Table.Table (Node).Enumerated_Argument_Package_Name
               := Name;
 
          when Node_Predefined_Resource_Type =>
@@ -567,11 +572,31 @@ package body Model.Tree.Xm_Ada is
    is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
-      pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type);
+      pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type
+        or else Node_Kind (Node) = Node_Predefined_Resource_Type
+        or else Node_Kind (Node) = Node_Xm_String_Resource_Type
+	or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
 
       Relocate_Annotation_Table;
 
-      Annotation_Table.Table (Node).Type_Identifier := Value;
+      case Node_Kind (Node) is
+         when Node_Enumerated_Resource_Type =>
+            Annotation_Table.Table (Node).Type_Identifier := Value;
+
+         when Node_Predefined_Resource_Type =>
+            Annotation_Table.Table (Node).Predefined_Type_Identifier := Value;
+
+         when Node_Xm_String_Resource_Type =>
+            Annotation_Table.Table (Node).String_Type_Identifier := Value;
+
+         when Node_Widget_Reference_Resource_Type =>
+            Annotation_Table.Table (Node).Widget_Reference_Type_Identifier
+              := Value;
+
+         when others =>
+            null;
+      end case;
+ 
    end Set_Type_Identifier;
 
    ---------------------------------------------------------------------------
@@ -615,19 +640,28 @@ package body Model.Tree.Xm_Ada is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
       pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type
-       or else Node_Kind (Node) = Node_Predefined_Resource_Type);
+       or else Node_Kind (Node) = Node_Predefined_Resource_Type
+       or else Node_Kind (Node) = Node_Xm_String_Resource_Type
+       or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type);
 
       Relocate_Annotation_Table;
 
---      return Annotation_Table.Table (Node).Type_Identifier;
       case Node_Kind (Node) is
          when Node_Enumerated_Resource_Type =>
             return
-	      Annotation_Table.Table (Node).Type_Identifier;
+              Annotation_Table.Table (Node).Type_Identifier;
 
          when Node_Predefined_Resource_Type =>
             return
-	      Annotation_Table.Table (Node).Predefined_Type_Identifier;
+              Annotation_Table.Table (Node).Predefined_Type_Identifier;
+
+         when Node_Xm_String_Resource_Type =>
+            return
+              Annotation_Table.Table (Node).String_Type_Identifier;
+
+         when Node_Widget_Reference_Resource_Type =>
+            return
+              Annotation_Table.Table (Node).Widget_Reference_Type_Identifier;
 
          when others =>
             return Null_Name;
@@ -642,7 +676,8 @@ package body Model.Tree.Xm_Ada is
    function Type_Name (Node : in Node_Id) return String_Id is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
-      pragma Assert (Node_Kind (Node) = Node_Component_Class);
+      pragma Assert (Node_Kind (Node) = Node_Component_Class
+       or else Node_Kind (Node) = Node_Predefined_Resource_Type);
 
       Relocate_Annotation_Table;
 
