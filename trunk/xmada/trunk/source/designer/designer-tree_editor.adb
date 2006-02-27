@@ -373,6 +373,17 @@ package body Designer.Tree_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Popup_Project_Tab_Mapped
+      --!    <Purpose> Подпрограмма обратного вызова
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Popup_Project_Tab_Mapped (The_Widget : in Widget;
+                                             Closure    : in Xt_Pointer;
+                                             Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Popup_Project_Tab_Mapped);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Select
       --!    <Purpose> Подпрограмма обратного вызова при выделении виджета.
       --!    <Exceptions>
@@ -746,6 +757,69 @@ package body Designer.Tree_Editor is
 
       -----------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Popup_Project_Tab_Mapped
+      --!    <ImplementationNotes>
+      -----------------------------------------------------------------------
+      procedure On_Popup_Project_Tab_Mapped (The_Widget : in Widget;
+                                             Closure    : in Xt_Pointer;
+                                             Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Item : Widget;
+         Args : Xt_Arg_List (0 .. 0);
+         Node : Node_Id;
+
+      begin
+         --  Удаляем предыдущие пункты меню.
+
+         Item := Xt_Name_To_Widget (Menu, "close_menu_item");
+
+         if Item /= Null_Widget then
+            Xt_Destroy_Widget (Item);
+         end if;
+
+         --  Удаляем сепаратор.
+
+         Item := Xt_Name_To_Widget (Menu, "separator");
+
+         if Item /= Null_Widget then
+            Xt_Destroy_Widget (Item);
+         end if;
+
+         --  Получаем узел, соответсвующий вкладке.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         --  Если курсор над вкладкой project то ее закрывать не надо.
+
+         if Node_Kind (Node) = Node_Project then
+            return;
+         end if;
+
+         --  Добавляем новый сепаратор и пункт закрытия вкладки.
+
+         Item := Xm_Create_Managed_Separator_Gadget (Menu, "separator");
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (Node));
+         Item := Xm_Create_Managed_Push_Button_Gadget
+                  (Menu, "close_menu_item", Args (0 .. 0));
+
+         Xt_Add_Callback (Item,
+                          Xm_N_Activate_Callback,
+                          Callbacks.On_Popup_Tab_Close'Access);
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Popup_Project_Tab_Close", E);
+      end On_Popup_Project_Tab_Mapped;
+
+      -----------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Popup_Tab_Close
       --!    <ImplementationNotes>
       -----------------------------------------------------------------------
@@ -753,37 +827,22 @@ package body Designer.Tree_Editor is
                                     Closure    : in Xt_Pointer;
                                     Call_Data  : in Xt_Pointer)
       is
-         pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
          --  Данные переменные не используются.
 
-         Number : Xm_Notebook_Page_Number;
          Args   : Xt_Arg_List (0 .. 0);
-         Info   : Xm_Notebook_Page_Info;
-         Status : Xm_Notebook_Page_Status;
          Node   : Node_Id;
 
       begin
-         --  Получаем номер открытой вкладки.
-
-         Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Number'Address);
-         Xt_Get_Values (Notebook, Args (0 .. 0));
-
-         --  Получаем информацию о вкладке, из которой берем виджет
-         --  иконки и вытаскиваем из него ассоциированный с ним узел.
-
-         Xm_Notebook_Get_Page_Info (Notebook, Number, Info, Status);
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
-         Xt_Get_Values (Info.Minor_Tab_Widget, Args (0 .. 0));
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
 
          --  Закрываем открытую вкладку.
 
-         if Node_Kind (Node) /= Node_Project then
-            Xt_Unmanage_Child (Component_Tab (Node));
-            Xt_Destroy_Widget (Annotation_Table.Table (Node).Button);
-            Annotation_Table.Table (Node).Button := Null_Widget;
-         end if;
+         Xt_Unmanage_Child (Component_Tab (Node));
+         Xt_Destroy_Widget (Annotation_Table.Table (Node).Button);
+         Annotation_Table.Table (Node).Button := Null_Widget;
 
          --  Делаем активной самую первую вкладку.
 
@@ -1139,6 +1198,9 @@ package body Designer.Tree_Editor is
          Xm_Add_To_Post_From_List (Designer.Tree_Editor.Menu, Button);
          Xt_Unmanage_Child (Button);
 
+         Xt_Add_Callback (Button,
+                          Xm_N_Popup_Handler_Callback,
+                          Callbacks.On_Popup_Project_Tab_Mapped'Access);
 
          Xm_String_Free (Name);
 
@@ -1234,22 +1296,17 @@ package body Designer.Tree_Editor is
             --  ющего меню.
 
             Xt_Set_Arg
-             (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
+             (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic);
             Designer.Tree_Editor.Menu :=
               Xm_Create_Popup_Menu
                (Project_Container, "popup_menu", Args (0 .. 0));
             --  Добавляем всплывающее меню.
 
-            --  В всплывающее меню добавляем иконку зыкрытия текущей.
-            --  вкладки.
+            Xm_Remove_From_Post_From_List (Menu, Project_Container);
 
-            Item := Xm_Create_Managed_Push_Button_Gadget
-                     (Menu, "close_menu_item");
-            Xt_Add_Callback (Item,
-                             Xm_N_Activate_Callback,
-                             Callbacks.On_Popup_Tab_Close'Access);
-
-            Item := Xm_Create_Managed_Separator_Gadget (Menu, "separator");
+            Xt_Add_Callback (Project_Tab,
+                             Xm_N_Popup_Handler_Callback,
+                             Callbacks.On_Popup_Project_Tab_Mapped'Access);
 
             --  В всплывающее меню добавляем иконку проекта.
 
