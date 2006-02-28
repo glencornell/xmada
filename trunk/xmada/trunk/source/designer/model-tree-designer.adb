@@ -53,6 +53,7 @@ package body Model.Tree.Designer is
      Annotation_Colormap_Resource_Value,
      Annotation_Enumerated_Resource_Type,
      Annotation_Enumeration_Resource_Value,
+     Annotation_Enumeration_Value_Specification,
      Annotation_Integer_Resource_Value,
      Annotation_Pixel_Resource_Value,
      Annotation_Pixmap_Resource_Value,
@@ -84,6 +85,9 @@ package body Model.Tree.Designer is
 
          when Annotation_Enumerated_Resource_Type =>
             Representation_Type : Representation_Types;
+
+         when Annotation_Enumeration_Value_Specification =>
+            Representation_Value : Interfaces.C.unsigned_char;
 
          when Annotation_Widget_Class =>
             Convenience_Create_Function : Convenience_Create;
@@ -253,8 +257,15 @@ package body Model.Tree.Designer is
 
                when Node_Enumeration_Resource_Value =>
                   Annotation_Table.Table (J) :=
-                   (Kind       => Annotation_Enumeration_Resource_Value,
-                    Is_Changed => False);
+                   (Kind             =>
+                      Annotation_Enumeration_Resource_Value,
+                    Is_Changed       => False);
+
+               when Node_Enumeration_Value_Specification =>
+                  Annotation_Table.Table (J) :=
+                   (Kind                 =>
+                      Annotation_Enumeration_Value_Specification,
+                    Representation_Value => 0);
 
                when Node_Integer_Resource_Value =>
                   Annotation_Table.Table (J) :=
@@ -314,6 +325,23 @@ package body Model.Tree.Designer is
 
       return Annotation_Table.Table (Node).Representation_Type;
    end Representation_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Representation_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Representation_Value (Node : in Node_Id)
+     return Interfaces.C.unsigned_char
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumeration_Value_Specification);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Representation_Value;
+   end Representation_Value;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -415,11 +443,29 @@ package body Model.Tree.Designer is
    is
    begin
       pragma Assert (Node in Node_Table.First .. Node_Table.Last);
-      pragma Assert (Node_Kind (Node) = Node_Enumerated_Resource_Type);
+      pragma Assert
+       (Node_Kind (Node) = Node_Enumerated_Resource_Type);
 
       Relocate_Annotation_Table;
 
       Annotation_Table.Table (Node).Representation_Type := Value;
    end Set_Representation_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Representation_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Representation_Value (Node  : in Node_Id;
+                                       Value : in Interfaces.C.unsigned_char)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Enumeration_Value_Specification);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Representation_Value := Value;
+   end Set_Representation_Value;
 
 end Model.Tree.Designer;
