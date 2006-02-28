@@ -41,6 +41,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Interfaces.C;
+
 with Xt.Ancillary_Types;
 
 package Model.Tree.Designer is
@@ -80,6 +82,27 @@ package Model.Tree.Designer is
 
    function Is_Set_Initial_Size (Node : in Node_Id) return Boolean;
    procedure Set_Is_Set_Initial_Size (Node : in Node_Id; Value : in Boolean);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Representation_Value
+   --!    <Purpose> Возвращает значение, используемое Xt/Motif для внутреннего
+   --! представления указанной спецификации значения перечислимого типа.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Representation_Value (Node : in Node_Id)
+     return Interfaces.C.unsigned_char;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Representation_Value
+   --!    <Purpose> Устанавливает значение, используемое Xt/Motif для
+   --! внутреннего представления указанной спецификации значения перечислимого
+   --! типа.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Representation_Value (Node  : in Node_Id;
+                                       Value : in Interfaces.C.unsigned_char);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

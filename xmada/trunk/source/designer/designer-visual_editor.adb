@@ -54,7 +54,6 @@ with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Translation_Management;
 with Xt.Utilities;
-with Xm.Representation_Type_Management;
 with Xm.Resource_Management;
 with Xm.Strings;
 with Xm_Drawing_Area;
@@ -83,7 +82,6 @@ package body Designer.Visual_Editor is
    use Model.Utilities;
    use Xlib.Graphic_Output;
    use Xm;
-   use Xm.Representation_Type_Management;
    use Xm.Resource_Management;
    use Xm.Strings;
    use Xm_Drawing_Area;
@@ -517,69 +515,41 @@ package body Designer.Visual_Editor is
      Value                     : in Interfaces.C.unsigned_char)
        return Node_Id
    is
-      use type Interfaces.C.unsigned;
       use type Interfaces.C.unsigned_char;
 
-      C_Image : Interfaces.C.Strings.chars_ptr;
-      C_Value : constant Interfaces.C.unsigned_char := Value;
-
-      From    : constant Xlib.Resource_Manager.Xrm_Value
-        := (Interfaces.C.unsigned_char'Size / System.Storage_Unit,
-            Xlib.X_Pointer (C_Value'Address));
-      To      : constant Xlib.Resource_Manager.Xrm_Value
-        := (C_Image'Size / System.Storage_Unit,
-            Xlib.X_Pointer (C_Image'Address));
+      Aux : Node_Id
+        := First (Value_Specifications (Enumeration_Resource_Type));
 
    begin
-      --  Специальная обработка предопределенного типа Boolean. Тип определён
-      --  в Xt и использовать менеджер представлений Motif для его
-      --  преобразования невозможно.
+      --  Специальная обработка предопределенного типа Boolean. Тип имеет
+      --  значение FALSE если преобразовываемое знаячение равно нулю и TRUE
+      --  в противном случае.
 
       if Internal_Name_Image (Enumeration_Resource_Type) = "Boolean" then
-         if Value = 0 then
-            C_Image := Interfaces.C.Strings.New_String ("FALSE");
+         --  Предполагается, что первый элемент перечисления есть FALSE, а
+         --  второй - TRUE. В случае неравенства преобразуемого значения нулю
+         --  (т.е. TRUE) просто берётся следующий элемент в списке спецификаций
+         --  значений перечислимого типа.
 
-         else
-            C_Image := Interfaces.C.Strings.New_String ("TRUE");
+         if Value /= 0 then
+            Aux := Next (Aux);
          end if;
 
       else
-         if not Xt_Convert_And_Store
-                 (Drawing_Area,
-                  Ada.Characters.Handling.To_String
-                   (Internal_Name_Image (Enumeration_Resource_Type)),
-                  From,
-                  "String",
-                  To)
-         then
-            raise Program_Error;
-         end if;
-      end if;
-
-      declare
-         Image : constant Name_Id
-           := Find
-               (Ada.Characters.Handling.To_Wide_String
-                 (Ada.Characters.Handling.To_Upper
-                   (Interfaces.C.Strings.Value (C_Image))));
-         Aux   : Node_Id
-           := First (Value_Specifications (Enumeration_Resource_Type));
-
-      begin
          while Aux /= Null_Node loop
-            if Internal_Name (Aux) = Image then
+            if Representation_Value (Aux) = Value then
                exit;
             end if;
 
             Aux := Next (Aux);
          end loop;
+      end if;
 
-         if Aux = Null_Node then
-            raise Program_Error;
-         end if;
+      if Aux = Null_Node then
+         raise Program_Error;
+      end if;
 
-         return Aux;
-      end;
+      return Aux;
    end Corresponding_Enumeration_Resource_Value_Specification;
 
    ---------------------------------------------------------------------------
@@ -688,7 +658,11 @@ package body Designer.Visual_Editor is
                       (Enumeration_Resource_Value_Specification))
                  & "' not defined.");
 
-            raise Program_Error;
+            return 0;
+--            raise Program_Error;
+--
+--  XXX Закомментировано временно, для обеспечения возможности запуска
+--  дизайнера с некорректной моделью.
       end case;
    end Corresponding_Value;
 
@@ -1622,30 +1596,18 @@ package body Designer.Visual_Editor is
    ---------------------------------------------------------------------------
    procedure Setup_Reverse_Converters (Types : in List_Id) is
       Aux : Node_Id := First (Types);
-      Id  : Xm_Rep_Type_Id;
+      Val : Node_Id;
 
    begin
       while Aux /= Null_Node loop
          if Node_Kind (Aux) = Node_Enumerated_Resource_Type then
-            begin
-               Id :=
-                 Xm_Rep_Type_Get_Id
-                  (Ada.Characters.Handling.To_String
-                    (Internal_Name_Image (Aux)));
-               Xm_Rep_Type_Add_Reverse (Id);
+            Val := First (Value_Specifications (Aux));
 
-               --  XXX Кроме добавления обратных конверторов здесь желательно
-               --  проверить соответствие состава литералов. Но это уже после
-               --  создания специального модуля проверки соответствия модели
-               --  и среды выполнения.
+            while Val /= Null_Node loop
+               Set_Representation_Value (Val, Corresponding_Value (Val));
 
-            exception
-               when Unknown_Representation_Type_Error =>
-                  Designer.Main_Window.Put_Line
-                   ("Representation type "
-                      & Internal_Name_Image (Aux)
-                      & " is unknown");
-            end;
+               Val := Next (Val);
+            end loop;
          end if;
 
          Aux := Next (Aux);
