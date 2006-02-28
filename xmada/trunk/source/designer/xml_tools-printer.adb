@@ -38,6 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Ada.Strings.Wide_Unbounded;
 with Ada.Wide_Text_IO;
 
 with XML_Tools.Attributes;
@@ -47,6 +48,7 @@ with XML_Tools.Strings;
 
 package body XML_Tools.Printer is
 
+   use Ada.Strings.Wide_Unbounded;
    use Ada.Wide_Text_IO;
    use XML_Tools.Attributes;
    use XML_Tools.Elements;
@@ -58,8 +60,7 @@ package body XML_Tools.Printer is
 
    procedure Print_Xml (File : in Ada.Wide_Text_IO.File_Type);
 
-   Indent : Count;
-
+   Indent : Ada.Wide_Text_IO.Count;
 
    -----------
    -- Print --
@@ -136,6 +137,7 @@ package body XML_Tools.Printer is
             declare
                Str   : constant Wide_String := Image (Value (Element));
                Start : Natural := Str'First;
+               Res   : Unbounded_Wide_String;
 
             begin
                loop
@@ -145,8 +147,21 @@ package body XML_Tools.Printer is
                   Start := Start + 1;
                end loop;
 
-               if Str (Start .. Str'Last)'Length > 0 then
-                  Put_Line (File, Str (Start .. Str'Last));
+               for J in Start .. Str'Last loop
+                  case Str (J) is
+                     when '&' =>
+                        Append (Res, "&amp;");
+
+                     when '<' =>
+                        Append (Res, "&lt;");
+
+                     when others =>
+                        Append (Res, Str (J));
+                  end case;
+               end loop;
+
+               if Length (Res) > 0 then
+                  Put_Line (File, To_Wide_String (Res));
                end if;
             end;
       end case;

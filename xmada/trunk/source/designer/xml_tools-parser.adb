@@ -353,7 +353,6 @@ package body XML_Tools.Parser is
 
                when others =>
                   Slice_First := First;
-                --  First := First + 1;
 
                   if Tag_Parsing then
                      Scan_Name;
@@ -370,7 +369,15 @@ package body XML_Tools.Parser is
       end loop;
    end Scan;
 
+   ---------------
+   -- Scan_Data --
+   ---------------
+
    procedure Scan_Data is
+      Is_Waiting_For_Semicolon : Boolean := False;
+      Special_Symbol           : Wide_String (1 .. 255);
+      Special_Symbol_Last      : Natural := 0;
+
    begin
       String_Last := String_Buffer'First - 1;
 
@@ -392,12 +399,61 @@ package body XML_Tools.Parser is
                when '<' =>
                   exit Outer;
 
-               when others =>
-                  null;
-            end case;
+               when '&' =>
+                  --  Переходим в режим обработки спецсимвола.
 
-            String_Last := String_Last + 1;
-            String_Buffer (String_Last) := Buffer (First);
+                  Is_Waiting_For_Semicolon := True;
+
+               when others =>
+                  if not Is_Waiting_For_Semicolon then
+                     String_Last := String_Last + 1;
+                     String_Buffer (String_Last) := Buffer (First);
+
+                  elsif Buffer (First) /= ';' then
+                     if Special_Symbol_Last = Special_Symbol'Last then
+                        Put_Line
+                         (Standard_Error,
+                          "The XML special character is too long: ""&"
+                            & Special_Symbol & """.");
+                        raise Program_Error;
+                     end if;
+
+                     Special_Symbol_Last := Special_Symbol_Last + 1;
+                     Special_Symbol (Special_Symbol_Last) := Buffer (First);
+
+                  else
+                     --  Конец спецсимвола.
+
+                     String_Last := String_Last + 1;
+
+                     declare
+                        Str : constant Wide_String
+                          := Special_Symbol (1 .. Special_Symbol_Last);
+
+                     begin
+                        --  Полный список спецсимволов можно посмотреть здесь:
+                        --  http://html.manual.ru/book/info/specialchars.php
+
+                        if Str = "amp" then
+                           String_Buffer (String_Last) := '&';
+
+                        elsif Str = "lt" then
+                           String_Buffer (String_Last) := '<';
+
+                        else
+                           Put_Line
+                            (Standard_Error,
+                             "Can't parse unknown XML special symbol: ""&"
+                               & Str & ";"".");
+                           raise Program_Error;
+
+                        end if;
+                     end;
+
+                     Special_Symbol_Last := 0;
+                     Is_Waiting_For_Semicolon := False;
+                  end if;
+            end case;
 
             First := First + 1;
          end loop;
@@ -415,6 +471,10 @@ package body XML_Tools.Parser is
                   Store
                     (String_Buffer (String_Buffer'First .. String_Last)));
    end Scan_Data;
+
+   ---------------
+   -- Scan_Name --
+   ---------------
 
    procedure Scan_Name is
    begin
