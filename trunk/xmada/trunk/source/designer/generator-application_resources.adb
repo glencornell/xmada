@@ -342,8 +342,7 @@ package body Generator.Application_Resources is
    begin
       pragma Assert (Node_Kind (Node) = Node_Application);
 
-      Create (File => Output_File,
-              Name => Filename);
+      Create (Output_File, Out_File, Filename, "wcem=8");
 
       Current_Component := First (Component_Classes (Node));
 
