@@ -801,9 +801,7 @@ package body Generator.Prototype.Component_Class is
       Package_Names.Init;
       Postponed_Resources.Init;
 
-      Create (File => File,
-              Mode => Out_File,
-              Name => "test.ada");
+      Create (File, Out_File, "test.ada", "wcem=8");
       Find_Widget_Instances_Order (Root (Node));
 
       declare

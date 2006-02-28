@@ -153,7 +153,7 @@ package body XML_Tools.Parser is
 
    procedure Parse (File_Name : in Standard.String) is
    begin
-      Open (File, In_File, File_Name, "wcen=8");
+      Open (File, In_File, File_Name, "wcem=8");
 
       --  Начальная инициализация.
 

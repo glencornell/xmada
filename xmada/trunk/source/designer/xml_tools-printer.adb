@@ -160,9 +160,7 @@ package body XML_Tools.Printer is
       File : Ada.Wide_Text_IO.File_Type;
 
    begin
-      Create (File => File,
-              Mode => Out_File,
-              Name => Filename);
+      Create (File, Out_File, Filename, "wcem=8");
       Print_Xml (File);
       Close (File);
     end Print;
