@@ -38,7 +38,6 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Characters.Handling;
 with Ada.Characters.Wide_Latin_1;
 with Ada.Strings.Wide_Fixed;
 with Ada.Strings.Wide_Unbounded;
@@ -57,7 +56,6 @@ with Model.Widget_Instances_Ordering;
 
 package body Generator.Prototype.Component_Class is
 
-   use Ada.Characters.Handling;
    use Ada.Strings.Wide_Unbounded;
    use Ada.Wide_Text_IO;
    use Model;
@@ -420,6 +418,16 @@ package body Generator.Prototype.Component_Class is
                   Append (Res, Value (J));
                   Len := Indent + 3 + 1;
 
+               elsif Value (J) = '"' then
+                  --  Встретили символ двойной кавычки.
+
+                  Append (Res, Value (J));
+
+                  if J /= Value'First and then J /= Value'Last then
+                     Append (Res, """");
+                     Len := Len + 1;
+                  end if;
+
                else
                   --  Обработка всех остальных символов.
 
@@ -631,8 +639,6 @@ package body Generator.Prototype.Component_Class is
             return Res;
          end Separate_Resources;
 
-         Resource          : Node_Id := Null_Node;
-
          Hardcoded_Counter : constant Natural := Separate_Resources (Widget);
          --  Количество ресурсов, устанавливаемых при создании виджета.
 
@@ -655,7 +661,7 @@ package body Generator.Prototype.Component_Class is
             Put_Line (File, "            "
                             & Variable_Widget_Name_Image (Widget)
                             & " : Xt.Widget;");
-            New_line (File);
+            New_Line (File);
          end if;
 
          Put_Line (File, "         begin");
