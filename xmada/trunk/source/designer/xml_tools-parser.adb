@@ -331,34 +331,45 @@ package body XML_Tools.Parser is
                   First := First + 1;
                   Scan_Tag_Begin;
 
-               when '>' =>
-                  First := First + 1;
-                  Token := (Kind => Tag_End);
-
-               when '/' =>
-                  First := First + 1;
-                  Scan_Open_Tag_Close;
-
-               when ''' | '"' =>
-                  First := First + 1;
-                  Scan_String (Buffer (First - 1));
-
-               when '?' =>
-                  First := First + 1;
-                  Scan_PI_End;
-
-               when '=' =>
-                  First := First + 1;
-                  Token := (Kind => Equal);
-
                when others =>
-                  Slice_First := First;
-
-                  if Tag_Parsing then
-                     Scan_Name;
+                  if not Tag_Parsing then
+                     Scan_Data;
 
                   else
-                     Scan_Data;
+                     case Buffer (First) is
+                        when '>' =>
+                           First := First + 1;
+                           Token := (Kind => Tag_End);
+
+                        when '/' =>
+                           First := First + 1;
+                           Scan_Open_Tag_Close;
+
+                        when ''' | '"' =>
+                           First := First + 1;
+                           Scan_String (Buffer (First - 1));
+
+                        when '?' =>
+                           First := First + 1;
+                           Scan_PI_End;
+
+                        when '=' =>
+                           First := First + 1;
+                           Token := (Kind => Equal);
+
+                        when others =>
+                           Slice_First := First;
+
+                           if Tag_Parsing then
+                              Scan_Name;
+
+                           else
+                              raise Program_Error;
+                              --  Сюда вообще не должны попасть.
+                              --  Проверка на всякий случай.
+
+                           end if;
+                     end case;
                   end if;
             end case;
 
