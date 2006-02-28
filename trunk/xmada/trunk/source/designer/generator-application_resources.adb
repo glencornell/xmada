@@ -46,6 +46,7 @@ with Model.Names;
 with Model.Queries;
 with Model.Tree;
 with Model.Tree.Lists;
+with Model.Strings;
 
 package body Generator.Application_Resources is
 
@@ -57,13 +58,22 @@ package body Generator.Application_Resources is
    use Model.Queries;
    use Model.Tree;
    use Model.Tree.Lists;
-
+   use Model.Strings;
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Generate
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Generate (Node : in Node_Id) is
+
+       ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Create_Full_Name_Widget
+      --!    <Purpose>
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      function Create_Full_Name_Widget (Node : in Node_Id)
+        return Wide_String;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -109,6 +119,50 @@ package body Generator.Application_Resources is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> Create_Full_Name_Widget
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function Create_Full_Name_Widget (Node : in Node_Id)
+        return Wide_String
+      is
+    
+         ----------------------------------------------------------------------
+         --! <Subprogram>
+         --!    <Unit> Create_Full_Name_Widget_Function
+         --!    <Purpose>
+         --!    <Exceptions>
+         ----------------------------------------------------------------------
+         function Create_Full_Name_Widget_Function (Node : in Node_Id)
+           return Wide_String;
+
+         ----------------------------------------------------------------------
+         --! <Subprogram>
+         --!    <Unit> Create_Full_Name_Widget_Function
+         --!    <ImplementationNotes>
+         ----------------------------------------------------------------------
+         function Create_Full_Name_Widget_Function (Node : in Node_Id)
+           return Wide_String
+         is
+            Aux : constant Node_Id := Node;
+
+         begin
+            if Node_Kind (Aux) = Node_Component_Class then
+               return "";
+            end if;
+  
+            return 
+               Create_Full_Name_Widget_Function
+                (Parent_Node (Aux)) & "." & Name_Image (Aux);
+         end Create_Full_Name_Widget_Function;    
+      
+         Tmp : constant Wide_String := Create_Full_Name_Widget_Function (Node);
+
+      begin
+         return Tmp (Tmp'First + 1 .. Tmp'Last);
+      end Create_Full_Name_Widget;
+      
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> Generate_Resources
       --!    <Purpose>
       --!    <Exceptions>
@@ -128,15 +182,13 @@ package body Generator.Application_Resources is
 
          while Current_Resource /= Null_Node loop
             case Node_Kind (Current_Resource) is
-               when Node_Enumeration_Resource_Value
-                 | Node_Widget_Reference_Resource_Value  =>
-
+               when Node_Enumeration_Resource_Value =>
                   declare
                      Tmp : constant Node_Id
                        := Resource_Value (Current_Resource);
 
                   begin
-                     if Tmp /= Null_Node then
+                     if Tmp /= Null_Node then 
                         Put_Line
                          (Output_File,
                           Tmp_Path
@@ -145,8 +197,46 @@ package body Generator.Application_Resources is
                            (Resource_Specification
                             (Current_Resource))
                           & " : "
-                          & Internal_Name_Image
+                          & Name_Image
                            (Tmp));
+                     end if;
+                  end;
+
+               when Node_Widget_Reference_Resource_Value  =>
+                  declare
+                     Tmp : constant Node_Id
+                       := Resource_Value (Current_Resource);
+    
+                  begin
+                     if Tmp /= Null_Node then 
+                       Put_Line
+                         (Output_File,
+                          Tmp_Path
+                          & "."
+                          & Internal_Resource_Name_Image
+                           (Resource_Specification
+                            (Current_Resource))
+                          & " : "
+                          & Create_Full_Name_Widget (Tmp));
+                     end if;
+                  end;
+
+               when Node_Xm_String_Resource_Value  =>
+                  declare
+                     Tmp : constant String_Id
+                       :=  (Resource_Value (Current_Resource));
+    
+                  begin
+                     if Tmp /= Null_String then 
+                       Put_Line
+                         (Output_File,
+                          Tmp_Path
+                          & "."
+                          & Internal_Resource_Name_Image
+                           (Resource_Specification
+                            (Current_Resource))
+                          & " : "
+                          & Image (Tmp));
                      end if;
                   end;
 
@@ -172,6 +262,22 @@ package body Generator.Application_Resources is
                       & Tmp_Value
                        (Index .. Tmp_Value'Last));
                   end;
+
+               when Node_Screen_Resource_Value =>
+                  null;
+   
+               when Node_Translation_Data_Resource_Value =>
+                  null;
+
+               when Node_Colormap_Resource_Value =>
+                  null;
+
+               when Node_Pixmap_Resource_Value =>
+                  null;
+
+               when Node_Pixel_Resource_Value =>
+                  null;
+    
                when others =>
                   raise Program_Error;
 
@@ -190,7 +296,6 @@ package body Generator.Application_Resources is
       procedure Generate_Widget_Resources (Widget_Example : in Node_Id;
                                            Output_File    : in File_Type;
                                            Current_Path   : in Wide_String)
-
       is
          Children_List    : constant List_Id := Children (Widget_Example);
          Current_Children : Node_Id;
@@ -199,8 +304,8 @@ package body Generator.Application_Resources is
          declare
             Tmp_Path : constant Wide_String :=
                Current_Path & Image (Name (Widget_Example));
-
          begin
+
             if Resources (Widget_Example) /= Null_List then
                --  Генерация ресурсов виджета.
 
@@ -216,7 +321,7 @@ package body Generator.Application_Resources is
             end if;
 
             if Children_List /= Null_List then
-              Current_Children := First (Children_List);
+               Current_Children := First (Children_List);
 
                while Current_Children /= Null_Node loop
                   Generate_Widget_Resources (Current_Children,
@@ -239,6 +344,7 @@ package body Generator.Application_Resources is
 
       Create (File => Output_File,
               Name => Filename);
+
       Current_Component := First (Component_Classes (Node));
 
       while Current_Component /= Null_Node loop
