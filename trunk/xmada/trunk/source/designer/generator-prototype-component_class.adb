@@ -377,9 +377,12 @@ package body Generator.Prototype.Component_Class is
          is
             Indent : constant Natural := 22;
             Res    : Unbounded_Wide_String;
+            Len    : Natural := Indent;
 
          begin
             for J in Value'First .. Value'Last loop
+               Len := Len + 1;
+
                if Value (J) = Ada.Characters.Wide_Latin_1.LF then
                   --  Встретили символ перевода строки.
 
@@ -396,6 +399,26 @@ package body Generator.Prototype.Component_Class is
                   begin
                      Append (Res, Str);
                   end;
+
+                  Len := Indent + 3;
+
+               elsif Len > 77 then
+                  --  Длина строки больше максимума.
+
+                  declare
+                     Quote_Str : constant Wide_String (1 .. Indent)
+                       := (others => ' ');
+                     Str       : constant Wide_String
+                       := """"
+                          & Ada.Characters.Wide_Latin_1.LF
+                          & Quote_Str & "& """;
+
+                  begin
+                     Append (Res, Str);
+                  end;
+
+                  Append (Res, Value (J));
+                  Len := Indent + 3 + 1;
 
                else
                   --  Обработка всех остальных символов.
@@ -802,6 +825,7 @@ package body Generator.Prototype.Component_Class is
       Postponed_Resources.Init;
 
       Create (File, Out_File, "test.ada", "wcem=8");
+
       Find_Widget_Instances_Order (Root (Node));
 
       declare
