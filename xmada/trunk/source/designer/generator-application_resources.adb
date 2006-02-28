@@ -183,85 +183,92 @@ package body Generator.Application_Resources is
          while Current_Resource /= Null_Node loop
             case Node_Kind (Current_Resource) is
                when Node_Enumeration_Resource_Value =>
-                  declare
-                     Tmp : constant Node_Id
-                       := Resource_Value (Current_Resource);
+                  if not Is_Hardcoded (Current_Resource) then 
+                     declare
+                        Tmp : constant Node_Id
+                          := Resource_Value (Current_Resource);
 
-                  begin
-                     if Tmp /= Null_Node then 
-                        Put_Line
-                         (Output_File,
-                          Tmp_Path
-                          & "."
-                          & Internal_Resource_Name_Image
-                           (Resource_Specification
-                            (Current_Resource))
-                          & " : "
-                          & Name_Image
-                           (Tmp));
-                     end if;
-                  end;
+                     begin
+                        if Tmp /= Null_Node then 
+                           Put_Line
+                            (Output_File,
+                             Tmp_Path
+                             & "."
+                             & Internal_Resource_Name_Image
+                              (Resource_Specification
+                               (Current_Resource))
+                             & " : "
+                             & Name_Image
+                              (Tmp));
+                        end if;
+                     end;
+                  end if;    
 
                when Node_Widget_Reference_Resource_Value  =>
-                  declare
-                     Tmp : constant Node_Id
-                       := Resource_Value (Current_Resource);
+                  if not Is_Hardcoded (Current_Resource) then 
+                     declare
+                        Tmp : constant Node_Id
+                          := Resource_Value (Current_Resource);
     
-                  begin
-                     if Tmp /= Null_Node then 
-                       Put_Line
-                         (Output_File,
-                          Tmp_Path
-                          & "."
-                          & Internal_Resource_Name_Image
-                           (Resource_Specification
-                            (Current_Resource))
-                          & " : "
-                          & Create_Full_Name_Widget (Tmp));
-                     end if;
-                  end;
+                     begin
+                        if Tmp /= Null_Node then 
+                          Put_Line
+                           (Output_File,
+                            Tmp_Path
+                            & "."
+                            & Internal_Resource_Name_Image
+                             (Resource_Specification
+                              (Current_Resource))
+                            & " : "
+                            & Create_Full_Name_Widget (Tmp));
+                        end if;
+                     end;
+                  end if;
 
                when Node_Xm_String_Resource_Value  =>
-                  declare
-                     Tmp : constant String_Id
-                       :=  (Resource_Value (Current_Resource));
+                  if not Is_Hardcoded (Current_Resource) then 
+                     declare
+                        Tmp : constant String_Id
+                          :=  (Resource_Value (Current_Resource));
     
-                  begin
-                     if Tmp /= Null_String then 
-                       Put_Line
-                         (Output_File,
-                          Tmp_Path
-                          & "."
-                          & Internal_Resource_Name_Image
-                           (Resource_Specification
-                            (Current_Resource))
-                          & " : "
-                          & Image (Tmp));
-                     end if;
-                  end;
+                     begin
+                        if Tmp /= Null_String then 
+                          Put_Line
+                           (Output_File,
+                            Tmp_Path
+                            & "."
+                            & Internal_Resource_Name_Image
+                             (Resource_Specification
+                              (Current_Resource))
+                            & " : "
+                            & Image (Tmp));
+                        end if;
+                     end;
+                  end if;
 
                when Node_Integer_Resource_Value =>
+                  if not Is_Hardcoded (Current_Resource) then 
+                     declare
+                        Tmp_Value : constant Wide_String := Integer'Wide_Image
+                         (Resource_Value (Current_Resource));
+                        Index     : Positive := Tmp_Value'First;
 
-                  declare
-                     Tmp_Value : constant Wide_String := Integer'Wide_Image
-                      (Resource_Value (Current_Resource));
-                     Index     : Positive := Tmp_Value'First;
+                     begin
+                        if Tmp_Value (1) = ' ' then
+                           Index := Index + 1;
+                        end if;
 
-                  begin
-                     if Tmp_Value (1) = ' ' then
-                        Index := Index + 1;
-                     end if;
-
-                     Put_Line (Output_File,
-                      Tmp_Path
-                      & "."
-                      & Internal_Resource_Name_Image
-                       (Resource_Specification
-                        (Current_Resource))
-                      & " : "
-                      & Tmp_Value
-                       (Index .. Tmp_Value'Last));
-                  end;
+                        Put_Line (Output_File,
+                         Tmp_Path
+                         & "."
+                         & Internal_Resource_Name_Image
+                          (Resource_Specification
+                           (Current_Resource))
+                         & " : "
+                         & Tmp_Value
+                          (Index .. Tmp_Value'Last));
+                     end;
+                  end if;
 
                when Node_Screen_Resource_Value =>
                   null;
