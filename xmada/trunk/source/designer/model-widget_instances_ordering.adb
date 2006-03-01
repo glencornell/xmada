@@ -520,7 +520,7 @@ package body Model.Widget_Instances_Ordering is
 
             while Aux /= Null_Node loop
                if Node_Kind (Aux) = Node_Widget_Reference_Resource_Value then
-                  if Parent_Node (Resource_Value (Aux)) = Node then
+                  if Parent_Node (Node_Id'(Resource_Value (Aux))) = Node then
                      if Can_Be_Set_By_Set_Values (Resource_Specification (Aux))
                      then
                         Set_Is_Postponed (Aux, True);
@@ -542,7 +542,7 @@ package body Model.Widget_Instances_Ordering is
 
             while Aux /= Null_Node loop
                if Node_Kind (Aux) = Node_Widget_Reference_Resource_Value then
-                  if Parent_Node (Resource_Value (Aux)) = Node then
+                  if Parent_Node (Node_Id'(Resource_Value (Aux))) = Node then
                      if Can_Be_Set_By_Set_Values (Resource_Specification (Aux))
                      then
                         Set_Is_Postponed (Aux, True);

@@ -93,6 +93,9 @@ package Model.Tree is
      Node_Widget_Instance,
      --  Описание экземпляра виджета.
 
+     Node_Xm_Rendition, 
+     --  Описание элемента таблицы представлений Render_Table.
+
      Node_Integer_Resource_Value,
      --  Значение ресурса, содержащего любую целочисленную величину.
 
@@ -116,7 +119,11 @@ package Model.Tree is
 
      Node_Translation_Data_Resource_Value,
      --  Значение ресурса, содержащего таблицу трансляции.
-
+   
+     Node_Xm_Render_Table_Resource_Value,
+     --  Значение ресурса, содержащего список элементов таблицы представлений
+     --  Render_Table.
+ 
      Node_Xm_String_Resource_Value,
      --  Значение ресурса, содержащего композитную строку.
 
@@ -284,6 +291,9 @@ package Model.Tree is
    function Resource_Value (Node : in Node_Id) return Node_Id;
    procedure Set_Resource_Value (Node : in Node_Id; Value : in Node_Id);
 
+   function Resource_Value (Node : in Node_Id) return List_Id;
+   procedure Set_Resource_Value (Node : in Node_Id; Value : in List_Id);
+
    function Resource_Value (Node : in Node_Id) return String_Id;
    procedure Set_Resource_Value (Node : in Node_Id; Value : in String_Id);
 
@@ -409,10 +419,10 @@ private
             --  Вид предопределённого типа ресурсов.
 
          when Node_Enumeration_Value_Specification =>
-            EVS_Name          : Name_Id;
+            EVS_Name                 : Name_Id;
             --  Имя значения перечислимого типа.
 
-            EVS_Internal_Name : Name_Id;
+            EVS_Internal_Name        : Name_Id;
             --  Имя значения перечислимого типа, используемое Xt для
             --  преобразования во внутреннее значение.
 
@@ -524,6 +534,13 @@ private
             --  Автоматически создаваемые дочерние виджеты.
 
             --  TODO Список обратных связей (кто зависит от этого виджета).
+
+         when Node_Xm_Rendition =>
+            XR_Name      : Name_Id;
+            --  Имя узла.
+
+            XR_Resources : List_Id;
+            --  Описание обычных ресурсов класса.
 
          when Node_Enumerated_Resource_Type =>
             --  Data_Type_Name (Name)  -- ??? Связка?
@@ -736,6 +753,25 @@ private
             XSRT_Internal_Name    : Name_Id;
             --  Внутреннее имя типа ресурса, используемое Xt для преобразований
             --  типов ресурсов.
+
+         when Node_Xm_Render_Table_Resource_Value =>
+            XRTRV_Is_Resource_Class_Value : Boolean;
+            --  Признак значения класса ресурса (а не ресурса).
+
+            XRTRV_Resource_Value          : List_Id;
+            --  Целочисленное значение ресурса.
+
+            XRTRV_Is_Hardcoded            : Boolean;
+            --  Признак необходимости жесткой фиксации значения ресурса
+            --  в генерируемом коде программы. В противном случае значение
+            --  ресурса по возможности будет сохраняться в файле ресурсов.
+
+            XRTRV_Is_Fallback             : Boolean;
+            --  Признак необходимости занесения значения ресурса в список
+            --  ресурсов отката приложения.
+
+            XRTRV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
 
          when Node_Xm_String_Resource_Value =>
             XSRV_Resource_Specification  : Node_Id;
