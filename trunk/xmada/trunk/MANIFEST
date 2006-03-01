@@ -14,6 +14,8 @@ source/designer/compiler-driver.ads
 source/designer/compiler.ads
 source/designer/debug/designer-operations-debug.adb
 source/designer/debug/designer-operations-debug.ads
+source/designer/debug/designer-main_window-traceback.adb
+source/designer/debug/designer-main_window-traceback.ads
 source/designer/debug/model-debug-designer.adb
 source/designer/debug/model-debug-designer.ads
 source/designer/debug/model-debug.adb

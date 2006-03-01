@@ -37,20 +37,21 @@ dnl or after except whitespace! This section
 dnl is edited automatically by make_distrib.
 
 AC_OUTPUT([
-   Makefile
-   source/Makefile
-   source/designer/Makefile
-   source/designer/designer
-   source/xlib/Makefile
-   source/xlib/extensions/Makefile
-   source/xlib/extensions/input/Makefile
-   source/xlib/extensions/print/Makefile
-   source/xt/Makefile
-   source/xm/Makefile
-   source/xml/Makefile
-   support/adacompiler
-   support/run_designer
-   xmada-config
+	Makefile
+	source/Makefile
+	source/designer/Makefile
+	source/designer/designer
+	source/designer/designer-setup.adb
+	source/xlib/Makefile
+	source/xlib/extensions/Makefile
+	source/xlib/extensions/input/Makefile
+	source/xlib/extensions/print/Makefile
+	source/xt/Makefile
+	source/xm/Makefile
+	source/xml/Makefile
+	support/adacompiler
+	support/run_designer
+	xmada-config
 ])
 
 for f in support/adacompiler support/run_desiger; do
