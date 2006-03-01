@@ -32,6 +32,25 @@ else
 fi
 rm -f conftest*])
 
+dnl Usage: AM_TRY_GNATMAKE(filename, content, success, failure)
+dnl Compile an Ada program and report its success or failure
+
+AC_DEFUN(AM_TRY_GNATMAKE,
+[AC_REQUIRE([AM_PROG_GNATMAKE])
+mkdir conftest
+cat > conftest/[$1] <<EOF
+[$2]
+EOF
+ac_try="cd conftest && $GNATMAKE -c $1 > /dev/null 2>../conftest.out"
+if AC_TRY_EVAL(ac_try); then
+  ifelse([$3], , :, [rm -rf conftest*
+  $3])
+else
+  ifelse([$4], , :, [ rm -rf conftest*
+  $4])
+fi
+rm -f conftest*])
+
 dnl Usage: AM_PROG_WORKING_ADA
 dnl Try to compile a simple Ada program to test the compiler installation
 dnl (especially the standard libraries such as Ada.Text_IO)
@@ -158,6 +177,25 @@ HAVE_GNAT_SOCKETS_COPY="--  "])
 ADA=$OLDADA
 AC_SUBST(MISS_GNAT_SOCKETS_COPY)dnl
 AC_SUBST(HAVE_GNAT_SOCKETS_COPY)])
+
+dnl Usage: AM_HAS_GNAT_SYMBOLIC_TRACEBACK
+dnl Determine whether GNAT.Traceback.Symbolic has a Copy operation.
+
+AC_DEFUN(AM_HAS_GNAT_SYMBOLIC_TRACEBACK,
+[AC_REQUIRE([AM_PROG_GNATMAKE])
+AC_MSG_CHECKING([whether you have GNAT.Traceback.Symbolic])
+AM_TRY_GNATMAKE([check.adb],
+[with GNAT.Traceback.Symbolic;
+procedure Check is
+begin
+   null;
+end Check;
+], [AC_MSG_RESULT(yes)
+MISS_GNAT_SYMBOLIC_TRACEBACK="--  "],
+[AC_MSG_RESULT(no)
+HAVE_GNAT_SYMBOLIC_TRACEBACK="--  "])
+AC_SUBST(MISS_GNAT_SYMBOLIC_TRACEBACK)dnl
+AC_SUBST(HAVE_GNAT_SYMBOLIC_TRACEBACK)])
 
 dnl Usage: AM_HAS_GNAT_OS_LIB_CLOSE_WITH_STATUS
 dnl Determine whether GNAT.OS_Lib has a Close operation with status report.
