@@ -41,7 +41,7 @@ mkdir conftest
 cat > conftest/[$1] <<EOF
 [$2]
 EOF
-ac_try="cd conftest && $GNATMAKE -c $1 > /dev/null 2>../conftest.out"
+ac_try="cd conftest && $GNATMAKE $1 > /dev/null 2>../conftest.out"
 if AC_TRY_EVAL(ac_try); then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
