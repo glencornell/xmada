@@ -585,7 +585,9 @@ package body Generator.Prototype.Component_Class is
 
                   begin
                      while Resource /= Null_Node loop
-                        if not Is_Postponed_Resource (Resource) then
+                        if not Is_Postponed_Resource (Resource)
+                          and then Is_Hardcoded (Resource)
+                        then
                            Res := Res + 1;
                         end if;
 
@@ -648,7 +650,10 @@ package body Generator.Prototype.Component_Class is
                while Resource /= Null_Node loop
                   Counter := Counter + 1;
 
-                  if Node_Kind (Resource) = Node_Xm_String_Resource_Value then
+                  if Is_Hardcoded (Resource)
+                    and then
+                     Node_Kind (Resource) = Node_Xm_String_Resource_Value
+                  then
                      --  Обработка ресурсов Xm_String.
 
                      Put_Line (File, "            "
@@ -739,7 +744,10 @@ package body Generator.Prototype.Component_Class is
                while Resource /= Null_Node loop
                   Counter := Counter + 1;
 
-                  if Node_Kind (Resource) = Node_Xm_String_Resource_Value then
+                  if Is_Hardcoded (Resource)
+                    and then
+                     Node_Kind (Resource) = Node_Xm_String_Resource_Value
+                  then
                      --  Обработка ресурсов Xm_String.
 
                      Put_Line (File, "            "
