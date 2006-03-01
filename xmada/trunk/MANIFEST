@@ -42,6 +42,8 @@ source/designer/designer-properties_editor-widget_instance.adb
 source/designer/designer-properties_editor-widget_instance.ads
 source/designer/designer-properties_editor.adb
 source/designer/designer-properties_editor.ads
+source/designer/designer-setup.adb.in
+source/designer/designer-setup.ads
 source/designer/designer-tree_editor.adb
 source/designer/designer-tree_editor.ads
 source/designer/designer-visual_editor.adb
