@@ -220,7 +220,7 @@ package body Generator.Application_Resources is
                              (Resource_Specification
                               (Current_Resource))
                             & " : "
-                            & Create_Full_Name_Widget (Tmp));
+                            & Name_Image (Tmp));
                         end if;
                      end;
                   end if;
