@@ -77,7 +77,11 @@ package Model.Tree is
 
      Node_Enumerated_Resource_Type,
      --  Описание перечислимого типа ресурса.
-
+     
+     Node_Xm_Render_Table_Resource_Type,
+     --  Описание типа ресурса, содержащего список элементов таблицы 
+     --  представлений Xm_Render_Table.
+     
      Node_Xm_String_Resource_Type,
      --  Описание типа ресурса со значением композитной строки.
 
@@ -122,7 +126,7 @@ package Model.Tree is
    
      Node_Xm_Render_Table_Resource_Value,
      --  Значение ресурса, содержащего список элементов таблицы представлений
-     --  Render_Table.
+     --  Xm_Render_Table.
  
      Node_Xm_String_Resource_Value,
      --  Значение ресурса, содержащего композитную строку.
@@ -751,6 +755,14 @@ private
             --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
 
             XSRT_Internal_Name    : Name_Id;
+            --  Внутреннее имя типа ресурса, используемое Xt для преобразований
+            --  типов ресурсов.
+
+         when Node_Xm_Render_Table_Resource_Type =>
+            XRTRV_Name             : Name_Id;
+            --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
+
+            XRTRV_Internal_Name    : Name_Id;
             --  Внутреннее имя типа ресурса, используемое Xt для преобразований
             --  типов ресурсов.
 
