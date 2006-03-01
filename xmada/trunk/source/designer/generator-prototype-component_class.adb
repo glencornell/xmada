@@ -239,7 +239,7 @@ package body Generator.Prototype.Component_Class is
          --  Генерируем раздел спецификации пакета.
 
          begin
-            Put_Line (File, "package " & Package_Name & "s is");
+            Put_Line (File, "package " & Package_Name & " is");
             New_Line (File);
             Put_Line (File, "   type " & Type_Name
                             & " is limited private;");
@@ -272,14 +272,14 @@ package body Generator.Prototype.Component_Class is
             end if;
 
             Put_Line (File, "   end record;");
-            Put_Line (File, "end " & Package_Name & "s;");
+            Put_Line (File, "end " & Package_Name & ";");
             New_Line (File);
          end;
 
          --  Генерируем тело пакета.
 
          begin
-            Put_Line (File, "package body " & Package_Name & "s is");
+            Put_Line (File, "package body " & Package_Name & " is");
             New_Line (File);
             Put_Line (File, "   package CallBacks is");
             Put_Line (File, "   end CallBacks;");
@@ -349,7 +349,7 @@ package body Generator.Prototype.Component_Class is
             New_Line (File);
             Put_Line (File, "   end Constructors;");
             New_Line (File);
-            Put_Line (File, "end " & Package_Name & "s;");
+            Put_Line (File, "end " & Package_Name & ";");
          end;
       end Generate_Package;
 
@@ -885,12 +885,17 @@ package body Generator.Prototype.Component_Class is
 
       begin
          if Package_Name = Null_String then
+            --  Значение по умолчанию.
+
             Package_Name
-              := Model.Strings.Store (Model.Queries.Name_Image (Node));
+              := Model.Strings.Store (Model.Queries.Name_Image (Node) & "s");
          end if;
 
          if Type_Name = Null_String then
-            Type_Name := Package_Name;
+            --  Значение по умолчанию.
+
+            Type_Name
+              := Model.Strings.Store (Model.Queries.Name_Image (Node));
          end if;
 
          Generate_Package (File,
