@@ -47,6 +47,10 @@ with Xt_Application_Shell;
 
 with Designer.Operations;
 with Designer.Main_Window;
+with Designer.Setup;
+pragma Warnings (Off, Designer.Setup);
+--  Подключается для включения в состав дизайнера дополнительных необязательных
+--  функций.
 
 procedure Designer.Driver is
 

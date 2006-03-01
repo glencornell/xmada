@@ -127,4 +127,18 @@ package Designer.Main_Window is
    ---------------------------------------------------------------------------
    procedure Reinitialize;
 
+private
+
+   --  Интерфейс для подключения внешней подпрограммы выделения из исключения
+   --  информации о стеке обратного вызова и преобразования этой информации
+   --  в символьный вид. Переопределяется на этапе предисполнения тела пакета
+   --  Designer.Main_Window.Traceback, если последний был включён в программу
+   --  при сборке.
+
+   type Symbolic_Traceback is
+     access function (X : in Ada.Exceptions.Exception_Occurrence)
+       return Wide_String;
+
+   Symbolic_Traceback_Hook : Symbolic_Traceback := null;
+
 end Designer.Main_Window;
