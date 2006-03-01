@@ -362,8 +362,56 @@ package body Generator.Prototype.Component_Class is
                                    Resource : in Node_Id;
                                    Index    : in Integer)
       is
+         Specification : constant Node_Id
+           := Resource_Specification (Resource);
+         Is_Xm_String : constant Boolean
+           := Node_Kind (Resource) = Node_Xm_String_Resource_Value;
+
+      begin
+         Put_Line (File,
+                   "            "
+                   & Model.Names.Image
+                      (Argument_Package_Name
+                        (Resource_Type (Specification)))
+                   & ".Xt_Set_Arg");
+
+         Put_Line (File,
+                   "             (Args ("
+                   & Integer_Image (Index)
+                   & "),");
+
+         Put_Line (File,
+                   "              "
+                   & Model.Names.Image
+                      (Resource_Name_String (Specification))
+                   & ",");
+
+         if Is_Xm_String then
+            Put (File, "              Value" & Integer_Image (Index));
+
+         else
+            Put (File, "              " & Resource_Value_String (Resource));
+         end if;
+
+         Put_Line (File, ");");
+         New_Line (File);
+      end Generate_Resource;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Generate_Widget_Creation
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Generate_Widget_Creation (File : File_Type; Widget : Node_Id)
+      is
          function Format_String_Value (Value : in Wide_String)
            return Wide_String;
+
+         function Generate_Resources (Resources : in List_Id;
+                                      Counter   : in Natural)
+           return Natural;
+
+         function Separate_Resources (Widget : in Node_Id) return Natural;
 
          ---------------------------------------------------------------------
          --! <Subprogram>
@@ -373,7 +421,7 @@ package body Generator.Prototype.Component_Class is
          function Format_String_Value (Value : in Wide_String)
            return Wide_String
          is
-            Indent : constant Natural := 22;
+            Indent : constant Natural := 19;
             Res    : Unbounded_Wide_String;
             Len    : Natural := Indent;
 
@@ -437,87 +485,6 @@ package body Generator.Prototype.Component_Class is
 
             return To_Wide_String (Res);
          end Format_String_Value;
-
-         Specification : constant Node_Id
-           := Resource_Specification (Resource);
-         Is_Xm_String : constant Boolean
-           := Node_Kind (Resource) = Node_Xm_String_Resource_Value;
-
-      begin
-         if not Is_Xm_String then
-            --  Обработка ресурсов не Xm_String.
-
-            Put_Line (File,
-                      "            "
-                      & Model.Names.Image
-                         (Argument_Package_Name
-                           (Resource_Type (Specification)))
-                      & ".Xt_Set_Arg");
-            Put_Line (File,
-                      "             (Args ("
-                      & Integer_Image (Index)
-                      & "),");
-
-            Put_Line (File,
-                      "              "
-                      & Model.Names.Image
-                         (Resource_Name_String (Specification))
-                      & ",");
-            Put_Line (File, "              "
-                      & Resource_Value_String (Resource)
-                      &");");
-
-         else
-            --  Обработка ресурсов Xm_String.
-
-            Put_Line (File, "            declare");
-            Put_Line (File, "               Value : constant Xm.Xm_String");
-            Put_Line (File, "                 "
-              & ":= Xm.Strings.Xm_String_Generate");
-            Put_Line (File, "                 "
-              & "    (Wide_String'("
-              & Format_String_Value (Resource_Value_String (Resource))
-              & "));");
-            New_Line (File);
-            Put_Line (File, "            begin");
-            Put_Line (File,
-                      "               "
-                      & Model.Names.Image
-                         (Argument_Package_Name
-                           (Resource_Type (Specification)))
-                      & ".Xt_Set_Arg");
-            Put_Line (File,
-                      "                (Args ("
-                      & Integer_Image (Index)
-                      & "),");
-
-            Put_Line (File,
-                      "                 "
-                      & Model.Names.Image
-                         (Resource_Name_String (Specification))
-                      & ",");
-            Put_Line (File, "                 Value);");
-            New_Line (File);
-            Put_Line (File, "               "
-              & "Xm.Strings.Xm_String_Free (Value);");
-            Put_Line (File, "            end;");
-         end if;
-
-         New_Line (File);
-      end Generate_Resource;
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
-      --!    <Unit> Generate_Widget_Creation
-      --!    <ImplementationNotes>
-      ------------------------------------------------------------------------
-      procedure Generate_Widget_Creation (File : File_Type; Widget : Node_Id)
-      is
-         function Separate_Resources (Widget : in Node_Id) return Natural;
-
-         function Generate_Resources (Resources : in List_Id;
-                                      Counter   : in Natural)
-           return Natural;
 
          ---------------------------------------------------------------------
          --! <Subprogram>
@@ -643,6 +610,8 @@ package body Generator.Prototype.Component_Class is
          --  Количество ресурсов, устанавливаемых при создании виджета.
 
       begin
+         --  Объявление массива ресурсов, если они есть.
+
          if Hardcoded_Counter > 0 then
             Put_Line (File, "         declare");
             Put_Line (File,
@@ -652,6 +621,9 @@ package body Generator.Prototype.Component_Class is
                       & ");");
             New_Line (File);
          end if;
+
+         --  Объявление временного виджета, если виджет не используется
+         --  в типе компонента.
 
          if not Create_In_Record (Widget) then
             if Hardcoded_Counter = 0 then
@@ -664,7 +636,41 @@ package body Generator.Prototype.Component_Class is
             New_Line (File);
          end if;
 
+         --  Объявление переменных типа Xm_String для установки
+         --  значений строковых ресурсов.
+
+         if Resources (Widget) /= Null_List then
+            declare
+               Resource : Node_Id := First (Resources (Widget));
+               Counter  : Integer := 0;
+
+            begin
+               while Resource /= Null_Node loop
+                  Counter := Counter + 1;
+
+                  if Node_Kind (Resource) = Node_Xm_String_Resource_Value then
+                     --  Обработка ресурсов Xm_String.
+
+                     Put_Line (File, "            "
+                       & "Value" & Integer_Image (Counter)
+                       & " : constant Xm.Xm_String");
+                     Put_Line (File, "              "
+                       & ":= Xm.Strings.Xm_String_Generate");
+                     Put_Line (File, "              "
+                       & "    (Wide_String'("
+                       & Format_String_Value (Resource_Value_String (Resource))
+                       & "));");
+                     New_Line (File);
+                  end if;
+
+                  Resource := Next (Resource);
+               end loop;
+            end;
+         end if;
+
          Put_Line (File, "         begin");
+
+         --  Установка значений ресурсов.
 
          if Hardcoded_Counter > 0 then
             declare
@@ -681,7 +687,7 @@ package body Generator.Prototype.Component_Class is
             end;
          end if;
 
-         --  Generate:
+         --  Создание виджета в формате:
          --    Result.<widget>
          --      := Xm_XXX.Xm_Create_XXX
          --          (<parent>, <widget>[, Args]);
@@ -694,6 +700,7 @@ package body Generator.Prototype.Component_Class is
             Put_Line (File, "            "
                             & Variable_Widget_Name_Image (Widget));
          end if;
+
          Put_Line
           (File,
            "              := "
@@ -720,6 +727,35 @@ package body Generator.Prototype.Component_Class is
          end if;
 
          New_Line (File);
+
+         --  Освобождение памяти переменных типа Xm_String.
+
+         if Resources (Widget) /= Null_List then
+            declare
+               Resource : Node_Id := First (Resources (Widget));
+               Counter  : Integer := 0;
+
+            begin
+               while Resource /= Null_Node loop
+                  Counter := Counter + 1;
+
+                  if Node_Kind (Resource) = Node_Xm_String_Resource_Value then
+                     --  Обработка ресурсов Xm_String.
+
+                     Put_Line (File, "            "
+                       & "Xm.Strings.Xm_String_Free (Value"
+                       & Integer_Image (Counter)
+                       & ");");
+                     New_Line (File);
+                  end if;
+
+                  Resource := Next (Resource);
+               end loop;
+            end;
+         end if;
+
+         --  Взятие управления над дочерними виджетами.
+
          Put (File, "            "
                     & "Xt.Composite_Management.Xt_Manage_Child (");
          if Create_In_Record (Widget) then
@@ -727,6 +763,7 @@ package body Generator.Prototype.Component_Class is
          end if;
          Put (File, Variable_Widget_Name_Image (Widget));
          Put_Line (File, ");");
+
          Put_Line (File, "         end;");
          New_Line (File);
 
