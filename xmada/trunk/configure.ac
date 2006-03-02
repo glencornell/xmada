@@ -3,7 +3,6 @@ AC_CONFIG_SRCDIR(source/xlib/xlib.ads)
 AC_CONFIG_AUX_DIR(support)
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE
-AM_MAINTAINER_MODE
 
 XMADA_MAJOR_VERSION=0
 XMADA_MINOR_VERSION=3
@@ -19,12 +18,55 @@ AC_SUBST(XMADAXTLIBVERSIONINFO)
 AC_SUBST(XMADAXMLIBVERSIONINFO)
 AC_SUBST(XMADAXMLLIBVERSIONINFO)
 
-AM_PROG_WORKING_ADA
-AM_CROSS_PROG_WORKING_ADA
 AM_ENABLE_SHARED(yes)
 AM_ENABLE_STATIC(yes)
 AM_PROG_LIBTOOL
+
+##  Поиск всех необходимых бибилотек X Window, X Toolkit Intrinsics и Motif.
+AC_PATH_X
+if test "$x_includes" != "" ; then
+    CFLAGS="$CFLAGS -I$x_includes"
+fi
+if test "$x_libraries" != "" ; then
+    LIBS="-L$x_libraries $LIBS"
+    XMADACONFIGLIBPATHS="-L$x_libraries"
+fi
+
+AC_CHECK_LIB(X11, XCreateGC)
+AC_CHECK_LIB(Xt, XtMalloc)
+
+DX_PATH_XM
+if test "$xm_includes" != "" ; then
+    CFLAGS="$CFLAGS -I$xm_includes"
+fi
+if test "$xm_libraries" != "" ; then
+    LIBS="-L$xm_libraries $LIBS"
+    if test "$XMADACONFIGLIBPATHS" != "-L$xm_libraries"; then
+        XMADACONFIGLIBPATHS="-L$xm_libraries $XMADACONFIGLIBPATHS"
+    fi
+fi
+
+AC_CHECK_LIB(Xm, XmGetDestination)
+
+##  Поиск наличия библиотеки Microline.
+
+AC_CHECK_LIB(XmL, XmLCreateGrid,
+[AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIBXML))
+ LIBS="-L$x_libraries $LIBS"
+ MISS_LIBXML="--  "
+],
+[HAVE_LIBXML="--  "])
+AC_SUBST(HAVE_LIBXML)
+AC_SUBST(MISS_LIBXML)
+ 
+AM_CONDITIONAL(HAVE_LIBXML, [test "x$HAVE_LIBXML" = "x"])
+AC_SUBST(XMADACONFIGLIBPATHS)
+
+AM_PROG_WORKING_ADA
+AM_CROSS_PROG_WORKING_ADA
 AM_HAS_GNAT_SYMBOLIC_TRACEBACK
+
+AM_MAINTAINER_MODE
 
 AC_SUBST(SED)
 

@@ -5,6 +5,8 @@ dnl Set xm_includes and/or xm_libraries.
 dnl  -------------------------------------------------------------
 AC_DEFUN(DX_PATH_XM,
 [
+AC_MSG_CHECKING([for Motif])
+
 AC_ARG_WITH(motif-includes, [  --with-motif-includes   set path for motif includes (default none)],[with_motif_includes=$withval], [with_motif_includes=''])
 if test "$with_motif_includes" != "yes" && test -z "$with_motif_includes"
 then
@@ -126,5 +128,7 @@ dnl Don't even attempt the hair of trying to link an X program!
     fi
   done
 done])
+
+AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 ])
 
