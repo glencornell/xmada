@@ -1,0 +1,227 @@
+<?xml version = '1.0' encoding = 'UTF8' ?>
+<Project name = 'XmAda Calculator Demo'>
+ <Application classname = 'XmAdaCalculator'>
+  <ComponentClass name = 'MainWindow' packageName = 'Main_Windows' typeName = 'Main_Window'>
+   <WidgetInstance name = 'XmForm1' classname = 'XmForm' isManaged = 'yes'>
+    <WidgetInstance name = 'indicator' classname = 'XmTextField' isManaged = 'yes' variableName = 'XmTextField1'>
+     <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_FORM'/>
+     <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_FORM'/>
+     <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_FORM'/>
+    </WidgetInstance>
+    <WidgetInstance name = 'keypad' classname = 'XmForm' isManaged = 'yes'>
+     <Resource name = 'fractionBase' isClass = 'no' value = '4'/>
+     <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_FORM'/>
+     <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_FORM'/>
+     <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_FORM'/>
+     <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_WIDGET'/>
+     <ConstraintResource name = 'topWidget' isClass = 'no' value = 'XmForm1.indicator'/>
+     <WidgetInstance name = 'digit1' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+1
+      </Resource>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '1'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'digit2' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+2
+      </Resource>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '1'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'digit3' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+3
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '0'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'plusOperation' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
++
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '4'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '0'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'digit4' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+4
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '0'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '1'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'digit5' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+5
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '1'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'digit6' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+6
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '1'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'minusOperation' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+-
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '4'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '1'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'digit7' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+7
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '0'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '2'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'digit8' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+8
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '2'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'digit9' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+9
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '2'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'multiplyOperation' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+*
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '4'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '2'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'decimalDot' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+,
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '4'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '0'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '3'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'digit0' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+0
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '4'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '1'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '2'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'evaluateOperation' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+=
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '4'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '2'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '3'/>
+     </WidgetInstance>
+     <WidgetInstance name = 'divideOperation' classname = 'XmPushButton' isExplotable = 'no' isManaged = 'yes'>
+      <Resource name = 'labelString' isClass = 'no'>
+/
+      </Resource>
+      <ConstraintResource name = 'bottomAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'bottomPosition' isClass = 'no' value = '4'/>
+      <ConstraintResource name = 'topAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'topPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'leftAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'leftPosition' isClass = 'no' value = '3'/>
+      <ConstraintResource name = 'rightAttachment' isClass = 'no' value = 'ATTACH_POSITION'/>
+      <ConstraintResource name = 'rightPosition' isClass = 'no' value = '4'/>
+     </WidgetInstance>
+    </WidgetInstance>
+   </WidgetInstance>
+  </ComponentClass>
+ </Application>
+</Project>
