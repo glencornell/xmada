@@ -4,6 +4,10 @@ NEWS.ru
 aclocal.m4
 configure
 configure.ac
+examples/calculator/Makefile.am
+examples/calculator/Makefile.in
+examples/calculator/calculator.xml
+examples/calculator/xm_ada_calculator.adb
 source/Makefile.am
 source/Makefile.in
 source/designer/Makefile.am
