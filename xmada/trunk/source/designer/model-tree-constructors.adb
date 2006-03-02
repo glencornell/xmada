@@ -456,6 +456,47 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Xm_Render_Table_Resource_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Xm_Render_Table_Resource_Type return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                => Node_Xm_Render_Table_Resource_Type,
+         Parent              => Null_Node,
+         List                => Null_List,
+         Previous            => Null_Node,
+         Next                => Null_Node,
+         XRTRV_Name          => Null_Name,
+         XRTRV_Internal_Name => Null_Name));
+
+      return Node_Table.Last;
+   end Create_Xm_Render_Table_Resource_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Xm_Render_Table_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Xm_Render_Table_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                          => Node_Xm_Render_Table_Resource_Value,
+         Parent                        => Null_Node,
+         List                          => Null_List,
+         Previous                      => Null_Node,
+         Next                          => Null_Node,
+         XRTRV_Resource_Value          => Null_List,
+         XRTRV_Is_Resource_Class_Value => False,
+         XRTRV_Is_Hardcoded            => False,
+         XRTRV_Is_Fallback             => False,
+         XRTRV_Is_Postponed            => False));
+
+      return Node_Table.Last;
+   end Create_Xm_Render_Table_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Xm_String_Resource_Type
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
