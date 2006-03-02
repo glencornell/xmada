@@ -7,7 +7,7 @@ includedir="@includedir@"
 libdir="@libdir@"
 
 xmada_dir="-I${includedir}/xmada"
-xmada_lib="-L${libdir} -lxmadaxm -lxmadaxt -lxmadaxlib -lXm -lXt"
+xmada_lib="-L${libdir} @XMADACONFIGLIBPATHS@ -lxmadaxm -lxmadaxt -lxmadaxlib -lXm -lXt"
 
 MAJOR=@XMADA_MAJOR_VERSION@
 MINOR=@XMADA_MINOR_VERSION@
