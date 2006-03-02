@@ -22,13 +22,17 @@ LIBS = -L/usr/X11R6/lib \
 	-L$(top_builddir)/source/xlib/.libs \
 	-L$(top_builddir)/source/xt/.libs \
 	-L$(top_builddir)/source/xm/.libs \
-	-lXm -lXt -lxmadaxlib -lxmadaxt -lxmadaxm -lgmem
+	-lXm -lXt -lxmadaxlib -lxmadaxt -lxmadaxm
 
 if HAVE_LIBXML
 DESIGNER_ADAFLAGS += \
 	-I$(top_srcdir)/source/xml \
 	-I$(top_builddir)/source/xml
 #LIBS += -L$(top_builddir)/source/xml/.libs -lXmL -lxmadaxml
+endif
+
+if MAINTAINER_MODE
+LIBS += -lgmem
 endif
 
 ##  Установка LINK в true подавляет вызов редактора связей libtool.
