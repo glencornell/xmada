@@ -920,9 +920,10 @@ package body Designer.Tree_Editor is
                               Parent    : in Widget := Null_Widget)
      return Widget
    is
-      Str  : Xm_String;
-      Args : Xt_Arg_List (0 .. 3);
-      Icon : Widget;
+      Str        : Xm_String;
+      Args       : Xt_Arg_List (0 .. 3);
+      Icon       : Widget;
+      Class_Name : Xm_String_List (0 .. 0);
 
    begin
       --  У приложения нет своего имени, но есть имя класса приложения.
@@ -944,13 +945,24 @@ package body Designer.Tree_Editor is
       if Parent /= Null_Widget then
          Xt_Set_Arg (Args (3), Xm_N_Entry_Parent, Parent);
          Icon :=
-           Xm_Create_Managed_Icon_Gadget (Container, "item", Args (0 .. 3));
+           Xm_Create_Icon_Gadget (Container, "item", Args (0 .. 3));
 
       else
          Icon :=
-           Xm_Create_Managed_Icon_Gadget (Container, "item", Args (0 .. 2));
+           Xm_Create_Icon_Gadget (Container, "item", Args (0 .. 2));
       end if;
 
+      --  Задаем дополнительную информацию о названии класса виджета.
+
+      if Node_Kind (Node) = Node_Widget_Instance then
+         Class_Name (0) := Xm_String_Generate (Name_Image (Class (Node)));
+         Xt_Set_Arg (Args (0), Xm_N_Detail_Count, Xt_Arg_Val (1));
+         Xt_Set_Arg (Args (1), Xm_N_Detail, Class_Name'Address);
+         Xt_Set_Values (Icon, Args (0 .. 1));
+         Xm_String_Free (Class_Name (0));
+      end if;
+
+      Xt_Manage_Child (Icon);
       --  Функция будет вызвана при уничтожении виджета и предназначена для
       --  очиски элемента таблицы Annotation_Table.
 
@@ -1276,7 +1288,7 @@ package body Designer.Tree_Editor is
          Component := Xm_Create_Managed_Scrolled_Window
                        (Notebook, "scrolled", Args (0 .. 0));
 
-         Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Outline);
+         Xt_Set_Arg (Args (0), Xm_N_Layout_Type, Xm_Detail);
          Xt_Set_Arg (Args (1), Xm_N_Automatic_Selection, Xm_No_Auto_Select);
          Xt_Set_Arg (Args (2), Xm_N_Selection_Policy, Xm_Single_Select);
          Window := Xm_Create_Managed_Container
