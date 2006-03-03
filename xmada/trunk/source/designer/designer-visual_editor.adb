@@ -1010,6 +1010,11 @@ package body Designer.Visual_Editor is
                      (Aux).Widget_Reference_Value'Address);
                   Next_Arg := Next_Arg + 1;
 
+               when Node_Xm_Render_Table_Resource_Type =>
+                  null;
+                  --  Получение значения таблицы рендеринга в настоящее время
+                  --  не поддерживается.
+
                when Node_Xm_String_Resource_Type =>
                   Xt_Set_Arg
                    (Args (Next_Arg),
@@ -1168,6 +1173,10 @@ package body Designer.Visual_Editor is
 
                   Next_Arg := Next_Arg + 1;
 
+               when Node_Xm_Render_Table_Resource_Type =>
+                  null;
+                  --  XXX  Не реализовано.
+
                when Node_Xm_String_Resource_Type =>
                   if Resource_Value (Aux) /= Null_String then
                      Xt_Set_Arg
@@ -1295,6 +1304,11 @@ package body Designer.Visual_Editor is
                         Set_Resource_Value (Aux, Node_Id (Node));
                      end if;
                   end;
+
+               when Node_Xm_Render_Table_Resource_Type =>
+                  null;
+		  --  Получение значения таблицы рендеринга в настоящее время
+                  --  не поддерживается.
 
                when Node_Xm_String_Resource_Type =>
                   declare
