@@ -126,8 +126,8 @@ package body Designer.Properties_Editor.Widget_Instance is
      Annotation_Translation_Data_Resource_Value,
      Annotation_Widget_Instance,
      Annotation_Widget_Reference_Resource_Value,
-     Annotation_Xm_String_Resource_Value,
-     Annotation_Xm_Render_Table_Resource_Type);
+     Annotation_Xm_Render_Table_Resource_Value,
+     Annotation_Xm_String_Resource_Value);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
@@ -140,13 +140,15 @@ package body Designer.Properties_Editor.Widget_Instance is
            | Annotation_Screen_Resource_Value
            | Annotation_Translation_Data_Resource_Value
            | Annotation_Widget_Reference_Resource_Value
+           | Annotation_Xm_Render_Table_Resource_Value
            | Annotation_Xm_String_Resource_Value
          =>
             Use_In_Program  : Widget;  --  Кнопка "использовать в программе".
             Hard_Code       : Widget;  --  Кнопка "вшивать в код".
             Fallback        : Widget;  --  Кнопка "ресурс отката".
-            Name            : Widget;  --  Название ресурса
-            Value           : Widget;  --  Значение ресурса
+            Name            : Widget;  --  Название ресурса.
+            Value           : Widget;  --  Значение ресурса.
+            Editor          : Widget;  --  Вызов редактора.
 
          when Annotation_Enumeration_Resource_Type       =>
             RT_Menu : Widget;
@@ -167,14 +169,6 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             Create_In_Record : Widget;  --  Создавать элемент записи.
             In_Record_Name   : Widget;  --  Имя элемента записи.
-
-         when  Annotation_Xm_Render_Table_Resource_Type  =>
-            XRT_Button   : Widget;
-            --  Кнопка открытия диалога задания свойств таблицы Xm_Render_Table.
-
-            XRT_Value : Widget;
-            --  Текстовое поле, содержащее определенные элементы 
-            --  Xm_Render_Table.
 
          when Annotation_Empty                           =>
             null;
@@ -374,7 +368,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                   Closure    : in Xt_Pointer;
                   Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Numeric_Resource_Modify_Verify);
-   
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Numeric_Resource_Value_Changed
@@ -1095,14 +1089,14 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       begin
          null;
-         --  Open (The_Widget);   
+         --  Open (The_Widget);
 
       exception
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback
              ("On_Render_Table_Edit", E);
       end On_Render_Table_Edit;
-      
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Use_In_Program_Changed
@@ -1576,13 +1570,11 @@ package body Designer.Properties_Editor.Widget_Instance is
                Xt_Set_Arg (Args (0), Xm_N_Right_Attachment, Xm_Attach_Form);
                Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
                Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
-
-               Annotation_Table.Table (Node).Value :=
-                 Xm_Create_Managed_Push_Button_Gadget (Form,
-                                                       "renditions_edit",
-                                                       Args (0 .. 2));    
+               Annotation_Table.Table (Node).Editor :=
+                 Xm_Create_Managed_Push_Button_Gadget
+                  (Form, "edit", Args (0 .. 2));
                Xt_Add_Callback
-                (Text,
+                (Annotation_Table.Table (Node).Editor,
                  Xm_N_Activate_Callback,
                  Callbacks.On_Render_Table_Edit'Access);
 
@@ -1593,14 +1585,13 @@ package body Designer.Properties_Editor.Widget_Instance is
                Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Widget);
                Xt_Set_Arg (Args (3),
                            Xm_N_Right_Widget,
-                           Annotation_Table.Table (Node).Value);
+                           Annotation_Table.Table (Node).Editor);
                Xt_Set_Arg (Args (4), Xm_N_Top_Attachment, Xm_Attach_Form);
                Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Form);
 
                Annotation_Table.Table (Node).Value :=
-                 Xm_Create_Managed_Text_Field (Form,
-                                             "resource_renditions",
-                                             Args (0 .. 5));
+                 Xm_Create_Managed_Text_Field
+                  (Form, "resource_renditions", Args (0 .. 5));
 
             when Node_Enumerated_Resource_Type =>
                Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
@@ -1610,9 +1601,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                Xt_Set_Arg (Args (2), Xm_N_Sub_Menu_Id, Get_Menu (Res_Type));
                Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
                Annotation_Table.Table (Node).Value :=
-                 Xm_Create_Managed_Option_Menu (Form,
-                                                "resource_value",
-                                                Args (0 .. 3));
+                 Xm_Create_Managed_Option_Menu
+                  (Form, "resource_value", Args (0 .. 3));
 
             when Node_Predefined_Resource_Type  =>
                case Type_Kind (Res_Type) is
@@ -1640,9 +1630,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                                  Xm_N_User_Data,
                                  Xt_Arg_Val (Node));
                      Annotation_Table.Table (Node).Value :=
-                       Xm_Create_Managed_Simple_Spin_Box (Form,
-                                                          "resource_numeric",
-                                                          Args (0 .. 5));
+                       Xm_Create_Managed_Simple_Spin_Box
+                        (Form, "resource_numeric", Args (0 .. 5));
 
                      Xt_Set_Arg (Args (0), Xm_N_Text_Field, Text'Address);
                      Xt_Get_Values (Annotation_Table.Table (Node).Value,
@@ -2240,7 +2229,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
-                 Value          => Null_Widget);
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when Node_Enumerated_Resource_Type =>
                Annotation_Table.Table (J) :=
@@ -2254,7 +2244,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
-                 Value          => Null_Widget);
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when Node_Enumeration_Value_Specification =>
                Annotation_Table.Table (J) :=
@@ -2268,7 +2259,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
-                 Value          => Null_Widget);
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when Node_Pixel_Resource_Value =>
                Annotation_Table.Table (J) :=
@@ -2277,7 +2269,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
-                 Value          => Null_Widget);
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when Node_Pixmap_Resource_Value =>
                Annotation_Table.Table (J) :=
@@ -2286,7 +2279,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
-                 Value          => Null_Widget);
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when Node_Screen_Resource_Value =>
                Annotation_Table.Table (J) :=
@@ -2295,7 +2289,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
-                 Value          => Null_Widget);
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when Node_Translation_Data_Resource_Value =>
                Annotation_Table.Table (J) :=
@@ -2304,7 +2299,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
-                 Value          => Null_Widget);
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when Node_Widget_Reference_Resource_Value =>
                Annotation_Table.Table (J) :=
@@ -2313,7 +2309,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
-                 Value          => Null_Widget);
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when Node_Widget_Instance                 =>
                Annotation_Table.Table (J) :=
@@ -2323,11 +2320,15 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Create_In_Record => Null_Widget,
                  In_Record_Name   => Null_Widget);
 
-            when Node_Xm_Render_Table_Resource_Type   =>
+            when Node_Xm_Render_Table_Resource_Value =>
                Annotation_Table.Table (J) :=
-                (Kind             => Annotation_Xm_Render_Table_Resource_Type,
-                 XRT_Button       => Null_Widget,
-                 XRT_Value        => Null_Widget);
+                (Kind           => Annotation_Xm_Render_Table_Resource_Value,
+                 Use_In_Program => Null_Widget,
+                 Hard_Code      => Null_Widget,
+                 Fallback       => Null_Widget,
+                 Name           => Null_Widget,
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when Node_Xm_String_Resource_Value =>
                Annotation_Table.Table (J) :=
@@ -2336,7 +2337,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                  Hard_Code      => Null_Widget,
                  Fallback       => Null_Widget,
                  Name           => Null_Widget,
-                 Value          => Null_Widget);
+                 Value          => Null_Widget,
+                 Editor         => Null_Widget);
 
             when others =>
                Annotation_Table.Table (J) := (Kind => Annotation_Empty);
@@ -2579,6 +2581,10 @@ package body Designer.Properties_Editor.Widget_Instance is
                              Args (0 .. 0));
                         end if;
                      end;
+
+                  when Node_Xm_Render_Table_Resource_Type =>
+                     null;
+                     --  XXX Не реализовано.
 
                   when Node_Xm_String_Resource_Type      =>
                      Xm_Text_Field_Set_String_Wcs

@@ -762,14 +762,17 @@ private
             --  типов ресурсов.
 
          when Node_Xm_Render_Table_Resource_Type =>
-            XRTRV_Name             : Name_Id;
+            XRTRT_Name             : Name_Id;
             --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
 
-            XRTRV_Internal_Name    : Name_Id;
+            XRTRT_Internal_Name    : Name_Id;
             --  Внутреннее имя типа ресурса, используемое Xt для преобразований
             --  типов ресурсов.
 
          when Node_Xm_Render_Table_Resource_Value =>
+            XRTRV_Resource_Specification  : Node_Id;
+            --  Ссылка на спецификацию ресурса.
+
             XRTRV_Is_Resource_Class_Value : Boolean;
             --  Признак значения класса ресурса (а не ресурса).
 

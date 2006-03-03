@@ -143,6 +143,7 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.marginHeight: 0
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.marginWidth: 0
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.spacing: 0
+*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.edit.labelString: ...
 *main_window.horizontal_paned.properties_form.subform.notebook.ada.labelString: Ada
 *main_window.horizontal_paned.properties_form.subform.notebook.ada.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.subform.notebook.resources.labelString: Resources
