@@ -61,25 +61,6 @@ package body Model.Initialization is
 
    procedure Create_Widget_Classes;
 
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Merge_Inherited_Resources
-   --!    <Purpose> Производит дополнение списков ресурсов и ресурсов
-   --! ограничений класса отсутствующими ресурсами суперкласса.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Merge_Inherited_Resources (Class : in Node_Id);
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Merge_Inherited_Resources
-   --!    <Purpose> Производит дополнение первого списка отсутствующими
-   --! ресурсами из второго списка.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Merge_Inherited_Resources (Own_Resources         : in List_Id;
-                                        Super_Class_Resources : in List_Id);
-
    --  Типы ресурсов
 
    Types   : List_Id;
@@ -2439,10 +2420,6 @@ package body Model.Initialization is
 --      Xt_Motif__Widget_Class : Node_Id;
 --      Xt_Motif__Widget_Class : Node_Id;
 --      Xt_Motif__Widget_Class : Node_Id;
---      Xt_Motif__Widget_Class : Node_Id;
---      Xt_Motif__Widget_Class : Node_Id;
---      Xt_Motif__Widget_Class : Node_Id;
---      Xt_Motif__Widget_Class : Node_Id;
 
    --  Классы виджетов Xt.
 
@@ -2478,7 +2455,6 @@ package body Model.Initialization is
 --   Xt_Motif_Working_Dialog_Widget_Class        : Node_Id;
 
    begin
-
       ------------------------------------------------------------------------
       --  Xt Toolkit Intrinsics Core Widget Classes
       ------------------------------------------------------------------------
@@ -8599,6 +8575,7 @@ package body Model.Initialization is
 --      Append (Classes, Xt_Motif_Warning_Dialog_Widget_Class);
 --      Append (Classes, Xt_Motif_Working_Dialog_Widget_Class);
 --      Append (Classes, );
+
    end Create_Widget_Classes;
 
    ---------------------------------------------------------------------------
@@ -8620,8 +8597,19 @@ package body Model.Initialization is
       Create_Widget_Classes;
 
       Xt_Motif_Widget_Set := Create_Widget_Set;
+      Set_Name (Xt_Motif_Widget_Set, Enter ("Motif"));
+
       Set_Resource_Types (Xt_Motif_Widget_Set, Types);
       Set_Widget_Classes (Xt_Motif_Widget_Set, Classes);
+
+      Known_Widget_Sets := New_List;
+      Append (Known_Widget_Sets, Xt_Motif_Widget_Set);
+
+      --  Инициализация компонентов microline.
+
+      if Microline_Initialize_Hook /= null then
+         Microline_Initialize_Hook.all;
+      end if;
    end Initialize;
 
    ---------------------------------------------------------------------------

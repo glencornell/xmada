@@ -54,6 +54,7 @@ package Model.Xt_Motif is
    Xt_Motif_Widget_Set             : Node_Id;
 
    --  Классы виджетов, используемые различными компонентами.
+   Known_Widget_Sets               : List_Id := Null_List;
 
    Xt_Motif_Shell_Widget_Class     : Node_Id;
 

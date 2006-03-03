@@ -1343,16 +1343,12 @@ package body Model.Tools is
 
       Project              : constant Node_Id := Create_Project;
       Applications         : constant List_Id := New_List;
-      Imported_Widget_Sets : constant List_Id := New_List;
 
       Root : constant Element_Id := 1;
 
    begin
       Set_Applications (Project, Applications);
-      Set_Imported_Widget_Sets (Project, Imported_Widget_Sets);
-
-      Append (Imported_Widget_Sets, Model.Xt_Motif.Xt_Motif_Widget_Set);
-
+      Set_Imported_Widget_Sets (Project, Xt_Motif.Known_Widget_Sets);
 
       if Elements.Name (Root) /= Project_Tag then
          Error_Message ("The root tag must be <Project> instead "

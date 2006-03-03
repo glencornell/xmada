@@ -76,12 +76,10 @@ with Xm_Toggle_Button;
 with Xm_Toggle_Button_Gadget;
 
 with Model.Tree.Designer;
-with Model.Xt_Motif;
 
 package body Model.Initialization.Designer is
 
    use Model.Tree.Designer;
-   use Model.Xt_Motif;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -378,6 +376,10 @@ package body Model.Initialization.Designer is
       Set_Convenience_Create_Function
        (Xt_Motif_Toggle_Button_Widget_Class,
         Xm_Toggle_Button.Xm_Create_Toggle_Button'Access);
+
+      if Microline_Initialize_Designer_Hook /= null then
+         Microline_Initialize_Designer_Hook.all;
+      end if;
    end Initialize;
 
 end Model.Initialization.Designer;

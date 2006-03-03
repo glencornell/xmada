@@ -302,7 +302,7 @@ package body Model.Tree is
 
          when Node_Widget_Reference_Resource_Type =>
             return Node_Table.Table (Node).WRRT_Internal_Name;
- 
+
          when Node_Xm_Render_Table_Resource_Type =>
             return Node_Table.Table (Node).XRTRV_Internal_Name;
 
@@ -556,6 +556,7 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Enumerated_Resource_Type
           or else Node_Kind (Node) = Node_Project
           or else Node_Kind (Node) = Node_Widget_Class
+          or else Node_Kind (Node) = Node_Widget_Set
           or else Node_Kind (Node) = Node_Widget_Instance
           or else Node_Kind (Node) = Node_Predefined_Resource_Type
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type
@@ -582,6 +583,9 @@ package body Model.Tree is
 
          when Node_Widget_Class =>
             return Node_Table.Table (Node).WC_Name;
+
+         when Node_Widget_Set =>
+            return Node_Table.Table (Node).WS_Name;
 
          when Node_Widget_Instance =>
             return Node_Table.Table (Node).WI_Name;
@@ -1350,6 +1354,7 @@ package body Model.Tree is
           or else Node_Kind (Node) = Node_Predefined_Resource_Type
           or else Node_Kind (Node) = Node_Project
           or else Node_Kind (Node) = Node_Widget_Class
+          or else Node_Kind (Node) = Node_Widget_Set
           or else Node_Kind (Node) = Node_Widget_Instance
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Type
           or else Node_Kind (Node) = Node_Xm_Render_Table_Resource_Type
@@ -1374,6 +1379,9 @@ package body Model.Tree is
 
          when Node_Widget_Class =>
             Node_Table.Table (Node).WC_Name := Value;
+
+         when Node_Widget_Set =>
+            Node_Table.Table (Node).WS_Name := Value;
 
          when Node_Widget_Instance =>
             Node_Table.Table (Node).WI_Name := Value;

@@ -77,11 +77,11 @@ package Model.Tree is
 
      Node_Enumerated_Resource_Type,
      --  Описание перечислимого типа ресурса.
-     
+
      Node_Xm_Render_Table_Resource_Type,
-     --  Описание типа ресурса, содержащего список элементов таблицы 
+     --  Описание типа ресурса, содержащего список элементов таблицы
      --  представлений Xm_Render_Table.
-     
+
      Node_Xm_String_Resource_Type,
      --  Описание типа ресурса со значением композитной строки.
 
@@ -97,7 +97,7 @@ package Model.Tree is
      Node_Widget_Instance,
      --  Описание экземпляра виджета.
 
-     Node_Xm_Rendition, 
+     Node_Xm_Rendition,
      --  Описание элемента таблицы представлений Render_Table.
 
      Node_Integer_Resource_Value,
@@ -123,11 +123,11 @@ package Model.Tree is
 
      Node_Translation_Data_Resource_Value,
      --  Значение ресурса, содержащего таблицу трансляции.
-   
+
      Node_Xm_Render_Table_Resource_Value,
      --  Значение ресурса, содержащего список элементов таблицы представлений
      --  Xm_Render_Table.
- 
+
      Node_Xm_String_Resource_Value,
      --  Значение ресурса, содержащего композитную строку.
 
@@ -410,6 +410,9 @@ private
 
             Widget_Classes : List_Id;
             --  Классы виджетов.
+
+            WS_Name        : Name_Id;
+            --  Имя набора виджетов.
 
          when Node_Predefined_Resource_Type =>
             PRT_Name          : Name_Id;

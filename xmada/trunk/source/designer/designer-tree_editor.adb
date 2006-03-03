@@ -69,6 +69,7 @@ with Designer.Palette;
 with Model.Allocations;
 with Model.Queries;
 with Model.Tree.Lists;
+with Model.Xt_Motif;
 
 package body Designer.Tree_Editor is
 
@@ -145,18 +146,6 @@ package body Designer.Tree_Editor is
             NP_Project_Tree_Icon   : Widget;
             --  Иконка в дереве проекта.
 
-            Primitives_Submenu     : Widget;
-            --  Всплывающее меню примитивов.
-
-            Gadgets_Submenu        : Widget;
-            --  Всплывающее меню гаджетов.
-
-            Managers_Submenu       : Widget;
-            --  Всплывающее меню менеджеров.
-
-            Shells_Submenu         : Widget;
-            --  Всплывающее меню оболочек.
-
          when Annotation_Empty =>
             null;
       end case;
@@ -171,10 +160,11 @@ package body Designer.Tree_Editor is
            Table_Initial        => Model.Allocations.Node_Table_Initial,
            Table_Increment      => Model.Allocations.Node_Table_Increment);
 
-   Actions        : Xt_Action_List (0 .. 0);
-   Menu           : Widget;
-   Project_Node   : Node_Id;
-   Project_Tab    : Widget;
+   Actions         : Xt_Action_List (0 .. 0);
+   Menu            : Widget;
+   Widget_Set_Menu : Widget;
+   Project_Node    : Node_Id;
+   Project_Tab     : Widget;
 
    --  Элементы всплывающего меню на вкладке project
 
@@ -186,38 +176,6 @@ package body Designer.Tree_Editor is
    Xm_C_New_Component      : constant := 2;
    Xm_C_Delete_Application : constant := 3;
    Xm_C_Delete_Component   : constant := 4;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Primitives_Submenu
-   --!    <Purpose> Возвращает виджет меню, содержащего примитивы.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Primitives_Submenu (Node : in Node_Id) return Widget;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Gadgets_Submenu
-   --!    <Purpose> Возвращает виджет меню, содержащего гаджеты.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Gadgets_Submenu (Node : in Node_Id) return Widget;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Managers_Submenu
-   --!    <Purpose> Возвращает виджет меню, содержащего менеджеры.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Managers_Submenu (Node : in Node_Id) return Widget;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Shells_Submenu
-   --!    <Purpose> Возвращает виджет меню, содержащего оболочки.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Shells_Submenu (Node : in Node_Id) return Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -1029,18 +987,6 @@ package body Designer.Tree_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Gadgets_Submenu
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Gadgets_Submenu (Node : in Node_Id) return Widget is
-      pragma Assert (Node_Kind (Node) = Node_Project);
-
-   begin
-      return Annotation_Table.Table (Node).Gadgets_Submenu;
-   end Gadgets_Submenu;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -1143,11 +1089,174 @@ package body Designer.Tree_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> Add_Motif_Widget_Set
+      --!    <Purpose> Добавляет в меню пункты для набора виджетов motif.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Add_Motif_Widget_Set;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Add_Not_Motif_Widget_Set
+      --!    <Purpose> Добавляет в меню пункты для набора виджетов motif.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Add_Not_Motif_Widget_Set (Widget_Set : in Node_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> Create_Tab
       --!    <Purpose> функция создает вкладку компонента.
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure Create_Tab (Window : out Widget; Button : out Widget);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Add_Motif_Widget_Set
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Add_Motif_Widget_Set is
+         Primitives_Submenu   : Widget;
+         Gadgets_Submenu      : Widget;
+         Managers_Submenu     : Widget;
+         Shells_Submenu       : Widget;
+         Item                 : Widget;
+         Current_Widget_Class : Node_Id;
+         Args                 : Xt_Arg_List (0 .. 1);
+         Name                 : Xm_String;
+
+      begin
+         --  Создаем подменю для каждого класса виджетов.
+
+         Primitives_Submenu :=
+           Xm_Create_Pulldown_Menu (Widget_Set_Menu, "sub_menu");
+         Gadgets_Submenu    :=
+           Xm_Create_Pulldown_Menu (Widget_Set_Menu, "sub_menu");
+         Managers_Submenu   :=
+           Xm_Create_Pulldown_Menu (Widget_Set_Menu, "sub_menu");
+         Shells_Submenu     :=
+           Xm_Create_Pulldown_Menu (Widget_Set_Menu, "sub_menu");
+
+         --  Добавляем созданные подменю в всплывающее меню наборов виджетов.
+
+         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Primitives_Submenu);
+         Item := Xm_Create_Managed_Cascade_Button_Gadget (Widget_Set_Menu,
+                                                          "primitives_submenu",
+                                                          Args (0 .. 0));
+         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Gadgets_Submenu);
+         Item := Xm_Create_Managed_Cascade_Button_Gadget (Widget_Set_Menu,
+                                                          "gadgets_submenu",
+                                                          Args (0 .. 0));
+         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Managers_Submenu);
+         Item := Xm_Create_Managed_Cascade_Button_Gadget (Widget_Set_Menu,
+                                                          "managers_submenu",
+                                                          Args (0 .. 0));
+         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Shells_Submenu);
+         Item := Xm_Create_Managed_Cascade_Button_Gadget (Widget_Set_Menu,
+                                                          "shells_submenu",
+                                                          Args (0 .. 0));
+
+         --  Просматриваем все классы виджетов.
+
+         Current_Widget_Class :=
+           First (Widget_Classes (Xt_Motif.Xt_Motif_Widget_Set));
+
+         while Current_Widget_Class /= Null_Node loop
+            if not Is_Meta_Class (Current_Widget_Class) then
+
+               --  Если виджет на метакласс, то добавляем его в
+               --  соответствующее подменю.
+
+               Name := Xm_String_Generate
+                        (Name_Image (Current_Widget_Class));
+               Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+               Xt_Set_Arg (Args (1),
+                           Xm_N_User_Data,
+                           Xt_Arg_Val (Current_Widget_Class));
+
+               Item := Null_Widget;
+
+               if Is_Primitive (Current_Widget_Class) then
+                  Item := Primitives_Submenu;
+
+               elsif Is_Gadget (Current_Widget_Class) then
+                  Item := Gadgets_Submenu;
+
+               elsif Is_Manager (Current_Widget_Class) then
+                  Item := Managers_Submenu;
+
+               elsif Is_Shell (Current_Widget_Class) then
+                  Item := Shells_Submenu;
+               end if;
+
+               Item := Xm_Create_Managed_Push_Button_Gadget
+                        (Item, "item", Args (0 .. 1));
+               Xt_Add_Callback (Item,
+                                Xm_N_Activate_Callback,
+                                Callbacks.On_Popup_Insert_Widget'Access);
+               Xm_String_Free (Name);
+            end if;
+
+            Current_Widget_Class := Next (Current_Widget_Class);
+         end loop;
+      end Add_Motif_Widget_Set;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Add_Motif_Widget_Set
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Add_Not_Motif_Widget_Set (Widget_Set : in Node_Id) is
+         Other_Submenu        : Widget;
+         Item                 : Widget;
+         Args                 : Xt_Arg_List (0 .. 1);
+         Name                 : Xm_String;
+         Current_Widget_Class : Node_Id;
+
+      begin
+         Other_Submenu :=
+           Xm_Create_Pulldown_Menu (Widget_Set_Menu, "sub_menu");
+
+         --  Добавляем созданные подменю в всплывающее меню наборов виджетов.
+
+         Name := Xm_String_Generate (Name_Image (Widget_Set));
+
+         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Other_Submenu);
+         Xt_Set_Arg (Args (1), Xm_N_Label_String, Name);
+
+         Item := Xm_Create_Managed_Cascade_Button_Gadget (Widget_Set_Menu,
+                                                          "primitives_submenu",
+                                                          Args (0 .. 1));
+         Xm_String_Free (Name);
+
+         --  Просматриваем все классы виджетов.
+
+         Current_Widget_Class := First (Widget_Classes (Widget_Set));
+         while Current_Widget_Class /= Null_Node loop
+            if not Is_Meta_Class (Current_Widget_Class) then
+
+               --  Если виджет на метакласс, то добавляем его в
+               --  соответствующее подменю.
+
+               Name := Xm_String_Generate
+                        (Name_Image (Current_Widget_Class));
+               Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+               Xt_Set_Arg (Args (1),
+                           Xm_N_User_Data,
+                           Xt_Arg_Val (Current_Widget_Class));
+
+               Item := Xm_Create_Managed_Push_Button_Gadget
+                        (Other_Submenu, "item", Args (0 .. 1));
+               Xt_Add_Callback (Item,
+                                Xm_N_Activate_Callback,
+                                Callbacks.On_Popup_Insert_Widget'Access);
+               Xm_String_Free (Name);
+            end if;
+
+            Current_Widget_Class := Next (Current_Widget_Class);
+         end loop;
+      end Add_Not_Motif_Widget_Set;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -1158,8 +1267,6 @@ package body Designer.Tree_Editor is
          Args       : Xt_Arg_List (0 .. 2);
          Component  : Widget;
          Name       : Xm_String;
-         Menu       : Widget;
-         Project    : constant Node_Id := Enclosing_Project (Node);
 
       begin
          --  Добавляется вкладка "component tree" содержащая элемент
@@ -1201,38 +1308,16 @@ package body Designer.Tree_Editor is
          Xt_Add_Callback (Button,
                           Xm_N_Popup_Handler_Callback,
                           Callbacks.On_Popup_Project_Tab_Mapped'Access);
-
          Xm_String_Free (Name);
 
-         --  Создаем меню со списком виджетов для создания виджетов.
-         Xt_Set_Arg
-          (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
-         Menu := Xm_Create_Popup_Menu (Window, "popup_menu", Args (0 .. 0));
-
-         Xt_Set_Arg
-          (Args (0), Xm_N_Sub_Menu_Id, Primitives_Submenu (Project));
-         Component := Xm_Create_Managed_Cascade_Button_Gadget
-                       (Menu, "primitives_submenu", Args (0 .. 0));
-
-         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Gadgets_Submenu (Project));
-         Component := Xm_Create_Managed_Cascade_Button_Gadget
-                       (Menu, "gadgets_submenu", Args (0 .. 0));
-
-         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Managers_Submenu (Project));
-         Component := Xm_Create_Managed_Cascade_Button_Gadget
-                       (Menu, "managers_submenu", Args (0 .. 0));
-
-         Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Shells_Submenu (Project));
-         Component := Xm_Create_Managed_Cascade_Button_Gadget
-                       (Menu, "shells_submenu", Args (0 .. 0));
+         Xm_Add_To_Post_From_List (Widget_Set_Menu, Window);
+         --  Добавляем к контейнеру всплывающее меню.
       end Create_Tab;
 
       Args                 : Xt_Arg_List (0 .. 1);
       Item                 : Widget;
-      Name                 : Xm_String;
-      Sets                 : Node_Id
+      Widget_Sets          : Node_Id
         := First (Imported_Widget_Sets (Enclosing_Project (Node)));
-      Current_Widget_Class : Node_Id;
 
    begin
       Relocate_Annotation_Table (Node);
@@ -1325,83 +1410,26 @@ package body Designer.Tree_Editor is
               Create_Item_Icon (Node, Project_Container);
             Project_Node := Node;
 
-            Annotation_Table.Table (Node).Primitives_Submenu :=
-              Xm_Create_Pulldown_Menu (Notebook, "sub_menu");
-            Annotation_Table.Table (Node).Gadgets_Submenu    :=
-              Xm_Create_Pulldown_Menu (Notebook, "sub_menu");
-            Annotation_Table.Table (Node).Managers_Submenu   :=
-              Xm_Create_Pulldown_Menu (Notebook, "sub_menu");
-            Annotation_Table.Table (Node).Shells_Submenu     :=
-              Xm_Create_Pulldown_Menu (Notebook, "sub_menu");
+            Xt_Set_Arg
+             (Args (0), Xm_N_Popup_Enabled, Xm_Popup_Automatic_Recursive);
+            Widget_Set_Menu := Xm_Create_Popup_Menu (Project_Container,
+                                                     "popup_menu",
+                                                     Args (0 .. 0));
 
-            while Sets /= Null_Node loop
+            while Widget_Sets /= Null_Node loop
+               if Widget_Sets = Xt_Motif.Xt_Motif_Widget_Set then
+                  Add_Motif_Widget_Set;
+               else
+                  Add_Not_Motif_Widget_Set (Widget_Sets);
+               end if;
 
-               Current_Widget_Class := First (Widget_Classes (Sets));
-
-               while Current_Widget_Class /= Null_Node loop
-                  if not Is_Meta_Class (Current_Widget_Class) then
-                     Name := Xm_String_Generate
-                              (Name_Image (Current_Widget_Class));
-                     Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
-                     Xt_Set_Arg (Args (1),
-                                 Xm_N_User_Data,
-                                 Xt_Arg_Val (Current_Widget_Class));
-
-                     if Is_Primitive (Current_Widget_Class) then
-                        Item := Primitives_Submenu (Node);
-
-                     elsif Is_Gadget (Current_Widget_Class) then
-                        Item := Gadgets_Submenu (Node);
-
-                     elsif Is_Manager (Current_Widget_Class) then
-                        Item := Managers_Submenu (Node);
-
-                     elsif Is_Shell (Current_Widget_Class) then
-                        Item := Shells_Submenu (Node);
-                     end if;
-
-                     Item := Xm_Create_Managed_Push_Button_Gadget
-                              (Item, "item", Args (0 .. 1));
-                     Xt_Add_Callback (Item,
-                                      Xm_N_Activate_Callback,
-                                      Callbacks.On_Popup_Insert_Widget'Access);
-                     Xm_String_Free (Name);
-                  end if;
-
-                  Current_Widget_Class := Next (Current_Widget_Class);
-               end loop;
-
-               Sets := Next (Sets);
+               Widget_Sets := Next (Widget_Sets);
             end loop;
 
          when others                =>
             null;
       end case;
    end Insert_Item;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Managers_Submenu
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Managers_Submenu (Node : in Node_Id) return Widget is
-      pragma Assert (Node_Kind (Node) = Node_Project);
-
-   begin
-      return Annotation_Table.Table (Node).Managers_Submenu;
-   end Managers_Submenu;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Primitives_Submenu
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Primitives_Submenu (Node : in Node_Id) return Widget is
-      pragma Assert (Node_Kind (Node) = Node_Project);
-
-   begin
-      return Annotation_Table.Table (Node).Primitives_Submenu;
-   end Primitives_Submenu;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -1484,10 +1512,6 @@ package body Designer.Tree_Editor is
 
             when Annotation_Project     =>
                Destroy_Widget (Project_Tree_Icon (J));
-               Destroy_Widget (Primitives_Submenu (J));
-               Destroy_Widget (Gadgets_Submenu (J));
-               Destroy_Widget (Managers_Submenu (J));
-               Destroy_Widget (Shells_Submenu (J));
 
             when Annotation_Component_Class =>
                Destroy_Widget (Project_Tree_Icon (J));
@@ -1513,6 +1537,10 @@ package body Designer.Tree_Editor is
 
       if Menu /= Null_Widget then
          Xt_Destroy_Widget (Menu);
+      end if;
+
+      if Widget_Set_Menu /= Null_Widget then
+         Xt_Destroy_Widget (Widget_Set_Menu);
       end if;
    end Reinitialize;
 
@@ -1543,11 +1571,7 @@ package body Designer.Tree_Editor is
            when Node_Project         =>
               Annotation_Table.Table (J) :=
                (Kind                 => Annotation_Project,
-                NP_Project_Tree_Icon => Null_Widget,
-                Primitives_Submenu   => Null_Widget,
-                Gadgets_Submenu      => Null_Widget,
-                Managers_Submenu     => Null_Widget,
-                Shells_Submenu       => Null_Widget);
+                NP_Project_Tree_Icon => Null_Widget);
 
            when Node_Component_Class =>
               Annotation_Table.Table (J) :=
@@ -1631,11 +1655,8 @@ package body Designer.Tree_Editor is
       Sensitive : constant Boolean := Get_Sensitive_Indication (Node);
 
    begin
-      if Project_Node /= Null_Node then
-         Xt_Set_Sensitive (Primitives_Submenu (Project_Node), Sensitive);
-         Xt_Set_Sensitive (Gadgets_Submenu (Project_Node), Sensitive);
-         Xt_Set_Sensitive (Managers_Submenu (Project_Node), Sensitive);
-         Xt_Set_Sensitive (Shells_Submenu (Project_Node), Sensitive);
+      if Widget_Set_Menu /= Null_Widget then
+         Xt_Set_Sensitive (Widget_Set_Menu, Sensitive);
       end if;
 
       if Selected_Item /= Null_Node then
@@ -1736,18 +1757,6 @@ package body Designer.Tree_Editor is
          end case;
       end if;
    end Select_Item;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Shells_Submenu
-   --!    <ImplementationNotes>
-   ---------------------------------------------------------------------------
-   function Shells_Submenu (Node : in Node_Id) return Widget is
-      pragma Assert (Node_Kind (Node) = Node_Project);
-
-   begin
-      return Annotation_Table.Table (Node).Shells_Submenu;
-   end Shells_Submenu;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

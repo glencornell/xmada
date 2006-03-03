@@ -48,15 +48,16 @@ with Xt.Resource_Management;
 with Xt.Utilities;
 with Xm.Resource_Management;
 with Xm.Strings;
+with Xm_Notebook;
 with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
 with Xm_String_Defs;
 
 with Model.Allocations;
-with Model.Names;
 with Model.Queries;
 with Model.Tree.Lists;
 with Model.Utilities;
+with Model.Xt_Motif;
 
 with Designer.Main_Window;
 with Designer.Model_Utilities;
@@ -65,7 +66,6 @@ package body Designer.Palette is
 
    use Designer.Model_Utilities;
    use Model;
-   use Model.Names;
    use Model.Tree;
    use Model.Tree.Lists;
    use Model.Queries;
@@ -73,6 +73,7 @@ package body Designer.Palette is
    use Xm.Resource_Management;
    use Xm_String_Defs;
    use Xm.Strings;
+   use Xm_Notebook;
    use Xm_Row_Column;
    use Xm_Push_Button_Gadget;
    use Xt;
@@ -199,14 +200,197 @@ package body Designer.Palette is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Insert_Item (Node : in Model.Node_Id) is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Add_Motif_Widget_Set
+      --!    <Purpose> функция добавляет на палитру компоненты Motif.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Add_Motif_Widget_Set;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Add_Motif_Widget_Set
+      --!    <Purpose> функция добавляет на палитру компоненты
+      --! сторонних производителей.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Add_Not_Motif_Widget_Set (Widget_Set : in Node_Id);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Add_Motif_Widget_Set
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Add_Motif_Widget_Set is
+         Current_Widget_Class : Node_Id;
+         Str                  : Xm_String;
+         Args                 : Xt_Arg_List (0 .. 5);
+
+      begin
+
+         Annotation_Table.Table (Node).Primitives_Page :=
+           Xm_Create_Managed_Row_Column (Palette_Notebook, "palette_page");
+
+         Annotation_Table.Table (Node).Primitives_Tab :=
+           Xm_Create_Managed_Push_Button_Gadget
+            (Palette_Notebook, "primitives");
+
+         Annotation_Table.Table (Node).Managers_Page :=
+           Xm_Create_Managed_Row_Column
+            (Palette_Notebook, "palette_page");
+
+         Annotation_Table.Table (Node).Managers_Tab :=
+           Xm_Create_Managed_Push_Button_Gadget
+            (Palette_Notebook, "managers");
+
+         Annotation_Table.Table (Node).Gadgets_Page :=
+           Xm_Create_Managed_Row_Column
+            (Palette_Notebook, "palette_page");
+
+         Annotation_Table.Table (Node).Gadgets_Tab :=
+           Xm_Create_Managed_Push_Button_Gadget
+            (Palette_Notebook, "gadgets");
+
+         Annotation_Table.Table (Node).Shells_Page :=
+           Xm_Create_Managed_Row_Column
+            (Palette_Notebook, "palette_page");
+
+         Annotation_Table.Table (Node).Shells_Tab :=
+           Xm_Create_Managed_Push_Button_Gadget
+            (Palette_Notebook, "shells");
+
+         Current_Widget_Class :=
+           First (Widget_Classes (Xt_Motif.Xt_Motif_Widget_Set));
+
+         while Current_Widget_Class /= Null_Node loop
+            if not Is_Meta_Class (Current_Widget_Class) then
+               Relocate_Annotation_Table (Current_Widget_Class);
+
+               Str := Xm_String_Generate (Name_Image (Current_Widget_Class));
+
+               Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
+               Xt_Set_Arg (Args (1),
+                           Xm_N_User_Data,
+                           Xt_Arg_Val (Current_Widget_Class));
+
+               if Is_Primitive (Current_Widget_Class) then
+                  Annotation_Table.Table (Current_Widget_Class).Button :=
+                    Xm_Create_Managed_Push_Button_Gadget
+                     (Annotation_Table.Table (Node).Primitives_Page,
+                      "callbacks",
+                      Args (0 .. 1));
+
+               elsif Is_Gadget (Current_Widget_Class) then
+                  Annotation_Table.Table (Current_Widget_Class).Button :=
+                    Xm_Create_Managed_Push_Button_Gadget
+                     (Annotation_Table.Table (Node).Gadgets_Page,
+                      "callbacks",
+                      Args (0 .. 1));
+
+               elsif Is_Manager (Current_Widget_Class) then
+                  Annotation_Table.Table (Current_Widget_Class).Button :=
+                    Xm_Create_Managed_Push_Button_Gadget
+                     (Annotation_Table.Table (Node).Managers_Page,
+                      "callbacks",
+                      Args (0 .. 1));
+
+               elsif Is_Shell (Current_Widget_Class) then
+                  Annotation_Table.Table (Current_Widget_Class).Button :=
+                    Xm_Create_Managed_Push_Button_Gadget
+                     (Annotation_Table.Table (Node).Shells_Page,
+                      "callbacks",
+                      Args (0 .. 1));
+               end if;
+
+               Xm_String_Free (Str);
+
+               Xt_Set_Sensitive
+                (Annotation_Table.Table (Current_Widget_Class).Button,
+                 False);
+               Xt_Add_Callback
+                (Annotation_Table.Table (Current_Widget_Class).Button,
+                 Xm_N_Activate_Callback,
+                 On_Button_Activate'Access);
+            end if;
+
+            Current_Widget_Class := Next (Current_Widget_Class);
+         end loop;
+      end Add_Motif_Widget_Set;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Add_Not_Motif_Widget_Set
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Add_Not_Motif_Widget_Set (Widget_Set : Node_Id) is
+         Current_Widget_Class : Node_Id;
+         Str                  : Xm_String;
+         Args                 : Xt_Arg_List (0 .. 5);
+         Page                 : Widget;
+         Tab                  : Widget;
+
+      begin
+         --  Создаем новую вкладку на палитре.
+
+         Page := Xm_Create_Managed_Row_Column (Palette_Notebook,
+                                               "palette_page");
+         Tab :=  Xm_Create_Managed_Push_Button_Gadget (Palette_Notebook,
+                                                       "others");
+
+         --  Задаем новой вкладке имя, соответствующее текущему набору
+         --  виджетов.
+
+         Str := Xm_String_Generate (Name_Image (Widget_Set));
+         Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
+         Xt_Set_Values (Tab, Args (0 .. 0));
+         Xm_String_Free (Str);
+
+         --  добавляем на вкладку кнопочки компонентов.
+
+         Current_Widget_Class := First (Widget_Classes (Widget_Set));
+
+         while Current_Widget_Class /= Null_Node loop
+            if not Is_Meta_Class (Current_Widget_Class) then
+               Relocate_Annotation_Table (Current_Widget_Class);
+
+               Str := Xm_String_Generate (Name_Image (Current_Widget_Class));
+
+               --  Задаем имя нового компонента.
+
+               Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
+               Xt_Set_Arg (Args (1),
+                           Xm_N_User_Data,
+                           Xt_Arg_Val (Current_Widget_Class));
+
+               --  создаем на вкладке конопку с заданым именем.
+
+               Annotation_Table.Table (Current_Widget_Class).Button :=
+                 Xm_Create_Managed_Push_Button_Gadget (Page,
+                                                       "callbacks",
+                                                       Args (0 .. 1));
+
+               Xm_String_Free (Str);
+
+               Xt_Set_Sensitive
+                (Annotation_Table.Table (Current_Widget_Class).Button,
+                 False);
+               Xt_Add_Callback
+                (Annotation_Table.Table (Current_Widget_Class).Button,
+                 Xm_N_Activate_Callback,
+                 On_Button_Activate'Access);
+            end if;
+
+            Current_Widget_Class := Next (Current_Widget_Class);
+         end loop;
+      end Add_Not_Motif_Widget_Set;
+
    begin
       case Node_Kind (Node) is
          when Node_Project =>
             declare
                Current_Widget_Set   : Node_Id;
-               Current_Widget_Class : Node_Id;
                Args                 : Xt_Arg_List (0 .. 1);
-               Str                  : Xm_String;
                Page_Number          : Integer;
 
             begin
@@ -216,113 +400,24 @@ package body Designer.Palette is
                Relocate_Annotation_Table (Node);
                Current_Widget_Set := First (Imported_Widget_Sets (Node));
 
-               Annotation_Table.Table (Node).Primitives_Page :=
-                 Xm_Create_Managed_Row_Column
-                  (Palette_Notebook, "palette_page");
-
-               Annotation_Table.Table (Node).Primitives_Tab :=
-                 Xm_Create_Managed_Push_Button_Gadget
-                  (Palette_Notebook, "primitives");
-
-               Xt_Set_Arg (Args (0), Xm_N_Page_Number, Page_Number'Address);
-               Xt_Get_Values
-                (Annotation_Table.Table (Node).Primitives_Tab,
-                 Args (0 .. 0));
-
-               Annotation_Table.Table (Node).Managers_Page :=
-                 Xm_Create_Managed_Row_Column
-                  (Palette_Notebook, "palette_page");
-
-               Annotation_Table.Table (Node).Managers_Tab :=
-                 Xm_Create_Managed_Push_Button_Gadget
-                  (Palette_Notebook, "managers");
-
-               Annotation_Table.Table (Node).Gadgets_Page :=
-                 Xm_Create_Managed_Row_Column
-                  (Palette_Notebook, "palette_page");
-
-               Annotation_Table.Table (Node).Gadgets_Tab :=
-                 Xm_Create_Managed_Push_Button_Gadget
-                  (Palette_Notebook, "gadgets");
-
-               Annotation_Table.Table (Node).Shells_Page :=
-                 Xm_Create_Managed_Row_Column
-                  (Palette_Notebook, "palette_page");
-
-               Annotation_Table.Table (Node).Shells_Tab :=
-                 Xm_Create_Managed_Push_Button_Gadget
-                  (Palette_Notebook, "shells");
-
                while Current_Widget_Set /= Null_Node loop
                   --  Построение кнопки для каждого класса виджета.
 
-                  Current_Widget_Class :=
-                    First (Widget_Classes (Current_Widget_Set));
+                  if Current_Widget_Set = Xt_Motif.Xt_Motif_Widget_Set then
+                     Add_Motif_Widget_Set;
 
-                  while Current_Widget_Class /= Null_Node loop
-                     if not Is_Meta_Class (Current_Widget_Class) then
-                        Relocate_Annotation_Table (Current_Widget_Class);
-
-                        Str :=
-                          Xm_String_Generate
-                           (Name_Image (Current_Widget_Class));
-
-                        Xt_Set_Arg (Args (0), Xm_N_Label_String, Str);
-                        Xt_Set_Arg
-                         (Args (1),
-                          Xm_N_User_Data,
-                          Xt_Arg_Val (Current_Widget_Class));
-
-                        if Is_Primitive (Current_Widget_Class) then
-                           Annotation_Table.Table
-                            (Current_Widget_Class).Button :=
-                              Xm_Create_Managed_Push_Button_Gadget
-                               (Annotation_Table.Table (Node).Primitives_Page,
-                                "callbacks",
-                                Args (0 .. 1));
-
-                        elsif Is_Gadget (Current_Widget_Class) then
-                           Annotation_Table.Table
-                            (Current_Widget_Class).Button :=
-                              Xm_Create_Managed_Push_Button_Gadget
-                               (Annotation_Table.Table (Node).Gadgets_Page,
-                                "callbacks",
-                                Args (0 .. 1));
-
-                        elsif Is_Manager (Current_Widget_Class) then
-                           Annotation_Table.Table
-                            (Current_Widget_Class).Button :=
-                              Xm_Create_Managed_Push_Button_Gadget
-                               (Annotation_Table.Table (Node).Managers_Page,
-                                "callbacks",
-                                Args (0 .. 1));
-
-                        elsif Is_Shell (Current_Widget_Class) then
-                           Annotation_Table.Table
-                            (Current_Widget_Class).Button :=
-                              Xm_Create_Managed_Push_Button_Gadget
-                               (Annotation_Table.Table (Node).Shells_Page,
-                                "callbacks",
-                                Args (0 .. 1));
-                        end if;
-
-                        Xm_String_Free (Str);
-
-                        Xt_Set_Sensitive
-                         (Annotation_Table.Table (Current_Widget_Class).Button,
-                          False);
-                        Xt_Add_Callback
-                         (Annotation_Table.Table (Current_Widget_Class).Button,
-                          Xm_N_Activate_Callback,
-                          On_Button_Activate'Access);
-                     end if;
-
-                     Current_Widget_Class := Next (Current_Widget_Class);
-                  end loop;
+                  else
+                     Add_Not_Motif_Widget_Set (Current_Widget_Set);
+                  end if;
 
                   Current_Widget_Set := Next (Current_Widget_Set);
                end loop;
 
+               --  Делаем активной вкладку примитивов.
+
+               Xt_Set_Arg (Args (0), Xm_N_Page_Number, Page_Number'Address);
+               Xt_Get_Values (Annotation_Table.Table (Node).Primitives_Tab,
+                              Args (0 .. 0));
                Xt_Set_Arg
                 (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (Page_Number));
                Xt_Set_Values (Palette_Notebook, Args (0 .. 0));
@@ -378,6 +473,12 @@ package body Designer.Palette is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Reinitialize is
+      First     : Xm_Notebook_Page_Number;
+      Last      : Xm_Notebook_Page_Number;
+      Args      : Xt_Arg_List (0 .. 2);
+      Page_Info : Xm_Notebook_Page_Info;
+      Status    : Xm_Notebook_Page_Status;
+
    begin
       for J in Annotation_Table.First .. Annotation_Table.Last loop
          case Annotation_Table.Table (J).Kind is
@@ -423,6 +524,34 @@ package body Designer.Palette is
             when Annotation_Empty                                           =>
                null;
          end case;
+      end loop;
+
+      --  Удаляем с ноутбука все оставшиеся вкладки.
+
+      --  Получаем диапазон вкладок на ноутбуке.
+
+      Xt_Set_Arg (Args (0), Xm_N_First_Page_Number, First'Address);
+      Xt_Set_Arg (Args (1), Xm_N_Last_Page_Number, Last'Address);
+      Xt_Get_Values (Palette_Notebook, Args (0 .. 1));
+
+      for J in First .. Last loop
+         Xm_Notebook_Get_Page_Info (Palette_Notebook, J, Page_Info, Status);
+
+         if Page_Info.Page_Widget /= Null_Widget then
+            Xt_Destroy_Widget (Page_Info.Page_Widget);
+         end if;
+
+         if Page_Info.Status_Area_Widget /= Null_Widget then
+            Xt_Destroy_Widget (Page_Info.Status_Area_Widget);
+         end if;
+
+         if Page_Info.Major_Tab_Widget /= Null_Widget then
+            Xt_Destroy_Widget (Page_Info.Major_Tab_Widget);
+         end if;
+
+         if Page_Info.Minor_Tab_Widget /= Null_Widget then
+            Xt_Destroy_Widget (Page_Info.Minor_Tab_Widget);
+         end if;
       end loop;
 
       Annotation_Table.Init;

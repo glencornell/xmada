@@ -30,35 +30,18 @@
 --!
 --! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
 --!
---! <Unit> Model.Initialization.Designer
+--! <Unit> Model.Initialization.Xm_Ada.Microline
 --! <Purpose>
---!   Пакет содержит подпрограмму начальной инициализации расширения дизайнера
---! для внутренних структур данных модели.
+--!   Пакет содержит подпрограмму формирования начальных данных о связке
+--! XmAda.
 --!
 --! <Effects>
---!   Вызов подпрограмм этого пакета должен производиться только после вызова
---! подпрограмм родительского пакета. При нарушении этого условия поведение
---! программы не предсказуемо.
---!
 --! <Perfomance>
 ------------------------------------------------------------------------------
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+package Model.Initialization.Xm_Ada.Microline is
+   pragma Elaborate_Body;
 
-package Model.Initialization.Designer is
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Initialize
-   --!    <Purpose>
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Initialize;
-
-private
-
-   type Microline_Initialize_Designer is access procedure;
-
-      Microline_Initialize_Designer_Hook : Microline_Initialize := null;
-end Model.Initialization.Designer;
+end Model.Initialization.Xm_Ada.Microline;
