@@ -169,6 +169,8 @@ XmAda maintained by TechnoServ A/S\n\
 
 !! -- XXX  почему-то не работает. Се   Сейчас вшито в программу наглухо.
 !!*main_window*horizontal_paned*tree_form*notebook*popup_menu*.popupEnabled: POPUP_AUTOMATIC_RECURSIVE
+*main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree.detailColumnHeading: Widget name\,Class name
+*main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree.detailColumnHeadingCount: 2
 *main_window.horizontal_paned.tree_form*notebook.scrolled*component_tree.translations: #override \
  <Key>osfDelete : XmAdaDesignerTreeEditorOnDelete()
 *main_window.horizontal_paned.tree_form*notebook.project.notebookChildType: MINOR_TAB
