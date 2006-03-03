@@ -126,7 +126,8 @@ package body Designer.Properties_Editor.Widget_Instance is
      Annotation_Translation_Data_Resource_Value,
      Annotation_Widget_Instance,
      Annotation_Widget_Reference_Resource_Value,
-     Annotation_Xm_String_Resource_Value);
+     Annotation_Xm_String_Resource_Value,
+     Annotation_Xm_Render_Table_Resource_Type);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
@@ -166,6 +167,15 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             Create_In_Record : Widget;  --  Создавать элемент записи.
             In_Record_Name   : Widget;  --  Имя элемента записи.
+
+         when  Annotation_Xm_Render_Table_Resource_Type  =>
+            XRT_Button   : Widget;
+            --  Кнопка открытия диалога задания свойств таблицы Xm_Render_Table.
+
+            XRT_Value : Widget;
+            --  Текстовое поле, содержащее определенные элементы 
+            --  Xm_Render_Table.
+
          when Annotation_Empty                           =>
             null;
       end case;
@@ -354,6 +364,19 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Numeric_Resource_Modify_Verify
+      --!    <Purpose> Подпрограмма обратного вызова при изменении значения
+      --! spinBox-а.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Numeric_Resource_Modify_Verify
+                 (The_Widget : in Widget;
+                  Closure    : in Xt_Pointer;
+                  Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Numeric_Resource_Modify_Verify);
+   
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Numeric_Resource_Value_Changed
       --!    <Purpose> Подпрограмма обратного вызова при изменении
       --! значения поля.
@@ -367,16 +390,16 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Numeric_Resource_Modify_Verify
-      --!    <Purpose> Подпрограмма обратного вызова при изменении значения
-      --! spinBox-а.
+      --!    <Unit> On_Render_Table_Edit
+      --!    <Purpose> Подпрограмма обратного вызова при изменении
+      --! значения поля Render_Table.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure On_Numeric_Resource_Modify_Verify
+      procedure On_Render_Table_Edit
                  (The_Widget : in Widget;
                   Closure    : in Xt_Pointer;
                   Call_Data  : in Xt_Pointer);
-      pragma Convention (C, On_Numeric_Resource_Modify_Verify);
+      pragma Convention (C, On_Render_Table_Edit);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -957,10 +980,9 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <Unit> On_Numeric_Resource_Modify_Verify
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure On_Numeric_Resource_Modify_Verify
-                 (The_Widget : in Widget;
-                  Closure    : in Xt_Pointer;
-                  Call_Data  : in Xt_Pointer)
+      procedure On_Numeric_Resource_Modify_Verify (The_Widget : in Widget;
+                                                   Closure    : in Xt_Pointer;
+                                                   Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (The_Widget);
@@ -1007,10 +1029,9 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <Unit> On_Numeric_Resource_Value_Changed
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure On_Numeric_Resource_Value_Changed
-                 (The_Widget : in Widget;
-                  Closure    : in Xt_Pointer;
-                  Call_Data  : in Xt_Pointer)
+      procedure On_Numeric_Resource_Value_Changed (The_Widget : in Widget;
+                                                   Closure    : in Xt_Pointer;
+                                                   Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
@@ -1059,6 +1080,29 @@ package body Designer.Properties_Editor.Widget_Instance is
              ("On_Numeric_Resource_Value_Changed", E);
       end On_Numeric_Resource_Value_Changed;
 
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Render_Table_Edit
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Render_Table_Edit (The_Widget : in Widget;
+                                      Closure    : in Xt_Pointer;
+                                      Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+
+      begin
+         null;
+         --  Open (The_Widget);   
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Render_Table_Edit", E);
+      end On_Render_Table_Edit;
+      
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> On_Use_In_Program_Changed
@@ -1528,6 +1572,36 @@ package body Designer.Properties_Editor.Widget_Instance is
          --  Создание поля "значение ресурса".
 
          case Node_Kind (Res_Type) is
+            when Node_Xm_Render_Table_Resource_Type  =>
+               Xt_Set_Arg (Args (0), Xm_N_Right_Attachment, Xm_Attach_Form);
+               Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
+               Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+
+               Annotation_Table.Table (Node).Value :=
+                 Xm_Create_Managed_Push_Button_Gadget (Form,
+                                                       "renditions_edit",
+                                                       Args (0 .. 2));    
+               Xt_Add_Callback
+                (Text,
+                 Xm_N_Activate_Callback,
+                 Callbacks.On_Render_Table_Edit'Access);
+
+               Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
+               Xt_Set_Arg (Args (1),
+                           Xm_N_Left_Widget,
+                           Annotation_Table.Table (Node).Name);
+               Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Widget);
+               Xt_Set_Arg (Args (3),
+                           Xm_N_Right_Widget,
+                           Annotation_Table.Table (Node).Value);
+               Xt_Set_Arg (Args (4), Xm_N_Top_Attachment, Xm_Attach_Form);
+               Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+
+               Annotation_Table.Table (Node).Value :=
+                 Xm_Create_Managed_Text_Field (Form,
+                                             "resource_renditions",
+                                             Args (0 .. 5));
+
             when Node_Enumerated_Resource_Type =>
                Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
                Xt_Set_Arg (Args (1),
@@ -2248,6 +2322,12 @@ package body Designer.Properties_Editor.Widget_Instance is
                  WI_Button        => Null_Widget,
                  Create_In_Record => Null_Widget,
                  In_Record_Name   => Null_Widget);
+
+            when Node_Xm_Render_Table_Resource_Type   =>
+               Annotation_Table.Table (J) :=
+                (Kind             => Annotation_Xm_Render_Table_Resource_Type,
+                 XRT_Button       => Null_Widget,
+                 XRT_Value        => Null_Widget);
 
             when Node_Xm_String_Resource_Value =>
                Annotation_Table.Table (J) :=

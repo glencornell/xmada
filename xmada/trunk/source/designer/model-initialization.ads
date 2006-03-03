@@ -131,7 +131,8 @@ private
    Xt_Motif_Vertical_Position_Resource_Type          : Node_Id;
    Xt_Motif_Widget_Reference_Resource_Type           : Node_Id;
    Xt_Motif_Xm_String_Resource_Type                  : Node_Id;
-
+   Xt_Motif_Xm_Render_Table_Resource_Type            : Node_Id; 
+ 
    --  Классы виджетов Xt/Motif.
 
    Xt_Motif_Arrow_Button_Gadget_Widget_Class   : Node_Id;
