@@ -30,23 +30,24 @@
 --!
 --! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
 --!
---! <Unit> Model.Initialization.Designer
---! <Purpose>
---!   Пакет содержит подпрограмму начальной инициализации расширения дизайнера
---! для внутренних структур данных модели.
---!
---! <Effects>
---!   Вызов подпрограмм этого пакета должен производиться только после вызова
---! подпрограмм родительского пакета. При нарушении этого условия поведение
---! программы не предсказуемо.
---!
---! <Perfomance>
+--! <Unit> Mode.Initialization.Designer.Microline
+--! <ImplementationNotes>
+--! <PortabilityIssues>
+--! <AnticipatedChanges>
 ------------------------------------------------------------------------------
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with XmL_Grid;
 
-package Model.Initialization.Designer is
+with Model.Initialization.Microline;
+with Model.Tree.Designer;
+
+package body Model.Initialization.Designer.Microline is
+
+   use XmL_Grid;
+   use Model.Initialization.Microline;
+   use Model.Tree.Designer;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -56,9 +57,27 @@ package Model.Initialization.Designer is
    ---------------------------------------------------------------------------
    procedure Initialize;
 
-private
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Initialize
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Initialize is
+   begin
+--      Set_Convenience_Create_Function
+--       (Xt_Motif_Folder_Widget_Class,
+--        XmL_Folder.XmL_Create_Folder'Access);
+--      Set_Convenience_Create_Function
+--       (Xt_Motif_Progress_Widget_Class,
+--        XmL_Progress.XmL_Create_Progress'Access);
+--      Set_Convenience_Create_Function
+--       (Xt_Motif_Tree_Widget_Class,
+--        XmL_Tree.XmL_Create_Tree'Access);
+      Set_Convenience_Create_Function
+       (Xt_Motif_Grid_Widget_Class,
+        XmL_Grid.XmL_Create_Grid'Access);
+   end Initialize;
 
-   type Microline_Initialize_Designer is access procedure;
-
-      Microline_Initialize_Designer_Hook : Microline_Initialize := null;
-end Model.Initialization.Designer;
+begin
+   Microline_Initialize_Designer_Hook := Initialize'Access;
+end Model.Initialization.Designer.Microline;

@@ -45,20 +45,9 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-
-package Model.Initialization.Designer is
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Initialize
-   --!    <Purpose>
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   procedure Initialize;
+package Model.Initialization.Designer.Microline is
+   pragma Elaborate_Body;
 
 private
 
-   type Microline_Initialize_Designer is access procedure;
-
-      Microline_Initialize_Designer_Hook : Microline_Initialize := null;
-end Model.Initialization.Designer;
+end Model.Initialization.Designer.Microline;

@@ -52,4 +52,10 @@ package Model.Initialization.Xm_Ada is
    ---------------------------------------------------------------------------
    procedure Initialize;
 
+private
+
+   type Microline_Initialize_Xm_Ada is access procedure;
+
+   Microline_Initialize_Xm_Ada_Hook : Microline_Initialize := null;
+
 end Model.Initialization.Xm_Ada;

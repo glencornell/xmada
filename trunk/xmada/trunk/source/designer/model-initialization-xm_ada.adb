@@ -1494,6 +1494,10 @@ package body Model.Initialization.Xm_Ada is
         Enter ("Xt.Resource_Management"));
 
       Set_Resource_Names (Model.Xt_Motif.Xt_Motif_Widget_Set);
+
+      if Microline_Initialize_Xm_Ada_Hook /= null then
+         Microline_Initialize_Xm_Ada_Hook.all;
+      end if;
    end Initialize;
 
    ---------------------------------------------------------------------------

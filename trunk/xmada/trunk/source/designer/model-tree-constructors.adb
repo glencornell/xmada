@@ -449,7 +449,8 @@ package body Model.Tree.Constructors is
                           Previous       => Null_Node,
                           Next           => Null_Node,
                           Resource_Types => Null_List,
-                          Widget_Classes => Null_List));
+                          Widget_Classes => Null_List,
+                          WS_Name        => Null_Name));
 
       return Node_Table.Last;
    end Create_Widget_Set;

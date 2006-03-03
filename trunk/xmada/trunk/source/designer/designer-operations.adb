@@ -218,9 +218,9 @@ package body Designer.Operations is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure New_Project is
-      List        : List_Id;
       Application : Node_Id;
       Component   : Node_Id;
+      List        : List_Id;
 
    begin
       Initialize;
@@ -232,9 +232,7 @@ package body Designer.Operations is
       Set_Name (Project, Enter ("Untitled"));
       Set_File_Name (Project, Enter ("untitled.xad"));
 
-      List := New_List;
-      Append (List, Xt_Motif_Widget_Set);
-      Set_Imported_Widget_Sets (Project, List);
+      Set_Imported_Widget_Sets (Project, Xt_Motif.Known_Widget_Sets);
 
       Application := Create_Application;
       Set_Application_Class_Name (Application, New_Name ("Application"));

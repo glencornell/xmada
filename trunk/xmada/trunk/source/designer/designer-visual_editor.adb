@@ -1595,10 +1595,16 @@ package body Designer.Visual_Editor is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Setup_Reverse_Converters (Types : in List_Id) is
-      Aux : Node_Id := First (Types);
+      Aux : Node_Id;
       Val : Node_Id;
 
    begin
+      if Types = Null_List then
+         return;
+      end if;
+
+      Aux := First (Types);
+
       while Aux /= Null_Node loop
          if Node_Kind (Aux) = Node_Enumerated_Resource_Type then
             Val := First (Value_Specifications (Aux));

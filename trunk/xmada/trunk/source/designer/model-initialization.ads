@@ -53,6 +53,24 @@ package Model.Initialization is
    procedure Initialize;
 
 private
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Merge_Inherited_Resources
+   --!    <Purpose> Производит дополнение списков ресурсов и ресурсов
+   --! ограничений класса отсутствующими ресурсами суперкласса.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Merge_Inherited_Resources (Class : in Node_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Merge_Inherited_Resources
+   --!    <Purpose> Производит дополнение первого списка отсутствующими
+   --! ресурсами из второго списка.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Merge_Inherited_Resources (Own_Resources         : in List_Id;
+                                        Super_Class_Resources : in List_Id);
 
    --  Типы ресурсов - перечислений.
 
@@ -184,5 +202,9 @@ private
    Xt_Motif_Text_Widget_Class                  : Node_Id;
    Xt_Motif_Toggle_Button_Gadget_Widget_Class  : Node_Id;
    Xt_Motif_Toggle_Button_Widget_Class         : Node_Id;
+
+   type Microline_Initialize is access procedure;
+
+   Microline_Initialize_Hook : Microline_Initialize := null;
 
 end Model.Initialization;

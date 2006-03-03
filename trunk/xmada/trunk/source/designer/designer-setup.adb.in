@@ -39,6 +39,16 @@
 @HAVE_GNAT_SYMBOLIC_TRACEBACK@with Designer.Main_Window.Traceback;
 @HAVE_GNAT_SYMBOLIC_TRACEBACK@pragma Warnings (Off, Designer.Main_Window.Traceback);
 
+  with Model.Initialization.Microline;
+  pragma Warnings (Off, Model.Initialization.Microline);
+
+  with Model.Initialization.Xm_Ada.Microline;
+  pragma Warnings (Off, Model.Initialization.Xm_Ada.Microline);
+
+  with Model.Initialization.Designer.Microline;
+  pragma Warnings (Off, Model.Initialization.Designer.Microline);
+
+
 package body Designer.Setup is
 
 end Designer.Setup;

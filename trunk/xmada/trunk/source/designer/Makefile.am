@@ -14,7 +14,9 @@ DESIGNER_ADAFLAGS = $(ADAFLAGS) \
 	-I$(top_srcdir)/source/xt \
 	-I$(top_builddir)/source/xt \
 	-I$(top_srcdir)/source/xm \
-	-I$(top_builddir)/source/xm
+	-I$(top_builddir)/source/xm \
+	-I$(top_srcdir)/source/xml \
+	-I$(top_builddir)/source/xml
 
 COMPILER_ADAFLAGS = $(ADAFLAGS)
 
