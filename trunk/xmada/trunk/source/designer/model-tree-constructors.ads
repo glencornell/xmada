@@ -85,6 +85,8 @@ package Model.Tree.Constructors is
    function Create_Xm_Render_Table_Resource_Type return Node_Id;
 
    function Create_Xm_Render_Table_Resource_Value return Node_Id;
+   
+   function Create_Xm_Rendition return Node_Id;
 
    function Create_Xm_String_Resource_Type return Node_Id;
 

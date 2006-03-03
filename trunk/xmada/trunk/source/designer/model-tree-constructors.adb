@@ -497,6 +497,25 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Xm_Rendition
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_Xm_Rendition return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind         => Node_Xm_Rendition,
+         Parent       => Null_Node,
+         List         => Null_List,
+         Previous     => Null_Node,
+         Next         => Null_Node,
+         XR_Name      => Null_Name,
+         XR_Resources => Null_List));
+
+      return Node_Table.Last;
+   end Create_Xm_Rendition ;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Xm_String_Resource_Type
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------

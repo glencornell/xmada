@@ -2395,6 +2395,15 @@ package body Model.Initialization is
       Set_Internal_Name
        (Xt_Motif_Xm_String_Resource_Type, Enter ("XmString"));
 
+      --  XmRenderTable
+
+      Xt_Motif_Xm_Render_Table_Resource_Type := 
+        Create_Xm_Render_Table_Resource_Type;
+      Set_Name
+       (Xt_Motif_Xm_Render_Table_Resource_Type, Enter ("XmRRenderTable"));
+      Set_Internal_Name
+       (Xt_Motif_Xm_Render_Table_Resource_Type, Enter ("XmRenderTable"));
+   
       --  Формирование списка предопределенных типов ресурсов.
 
 --      Append (Types, Xt_Motif__Resource_Type);
@@ -2418,6 +2427,7 @@ package body Model.Initialization is
       Append (Types, Xt_Motif_Vertical_Position_Resource_Type);
       Append (Types, Xt_Motif_Widget_Reference_Resource_Type);
       Append (Types, Xt_Motif_Xm_String_Resource_Type);
+      Append (Types, Xt_Motif_Xm_Render_Table_Resource_Type);
    end Create_Predefined_Resource_Types;
 
    ---------------------------------------------------------------------------
