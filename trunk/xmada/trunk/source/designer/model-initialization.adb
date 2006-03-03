@@ -2378,13 +2378,13 @@ package body Model.Initialization is
 
       --  XmRenderTable
 
-      Xt_Motif_Xm_Render_Table_Resource_Type := 
+      Xt_Motif_Xm_Render_Table_Resource_Type :=
         Create_Xm_Render_Table_Resource_Type;
       Set_Name
        (Xt_Motif_Xm_Render_Table_Resource_Type, Enter ("XmRRenderTable"));
       Set_Internal_Name
        (Xt_Motif_Xm_Render_Table_Resource_Type, Enter ("XmRenderTable"));
-   
+
       --  Формирование списка предопределенных типов ресурсов.
 
 --      Append (Types, Xt_Motif__Resource_Type);
@@ -2421,7 +2421,7 @@ package body Model.Initialization is
 --      Xt_Motif__Widget_Class : Node_Id;
 --      Xt_Motif__Widget_Class : Node_Id;
 
-   --  Классы виджетов Xt.
+      --  Классы виджетов Xt.
 
       Xt_Motif_Application_Shell_Widget_Class : Node_Id;
       Xt_Motif_Composite_Widget_Class         : Node_Id;
@@ -3352,7 +3352,6 @@ package body Model.Initialization is
          --  TODO XmNfontList
          --  TODO XmNmnemonic
          --  TODO XmNmnemonicCharSet
-         --  TODO XmNrenderTable
          --  TODO XmNstringDirection
 
          Resource := Create_Resource_Specification;
@@ -3503,6 +3502,17 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCRecomputeSize"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("RecomputeSize"));
          Set_Resource_Type (Resource, Xt_Motif_Boolean_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrenderTable"));
+         Set_Internal_Resource_Name (Resource, Enter ("renderTable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCRenderTable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("RenderTable"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_Render_Table_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -3937,7 +3947,6 @@ package body Model.Initialization is
          --  TODO XmNitemCount
          --  TODO XmNitems
          --  TODO XmNlistSizePolicy
-         --  TODO XmNrenderTable
          --  TODO XmNselectedItemCount
          --  TODO XmNselectedItems
          --  TODO XmNselectedPositionCount
@@ -4047,6 +4056,17 @@ package body Model.Initialization is
           (Resource, Enter ("PrimaryOwnership"));
          Set_Resource_Type
           (Resource, Xt_Motif_Primary_Ownership_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrenderTable"));
+         Set_Internal_Resource_Name (Resource, Enter ("renderTable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCRenderTable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("RenderTable"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_Render_Table_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -4367,7 +4387,6 @@ package body Model.Initialization is
          --  TODO XmNselectionArrayCount
 
          --  TODO XmNfontList
-         --  TODO XmNrenderTable
 
          --  TODO XmNactivateCallback
          --  TODO XmNdestinationCallback
@@ -4517,6 +4536,17 @@ package body Model.Initialization is
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrenderTable"));
+         Set_Internal_Resource_Name (Resource, Enter ("renderTable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCRenderTable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("RenderTable"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_Render_Table_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNresizeHeight"));
          Set_Internal_Resource_Name (Resource, Enter ("resizeHeight"));
          Set_Resource_Class_Name (Resource, Enter ("XmCResizeHeight"));
@@ -4624,7 +4654,6 @@ package body Model.Initialization is
 
          --  TODO XmNcursorPosition
          --  TODO XmNfontList
-         --  TODO XmNrenderTable
          --  TODO XmNselectionArray
          --  TODO XmNselectionArrayCount
          --  TODO XmNvalue
@@ -4729,6 +4758,17 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCPendingDelete"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("PendingDelete"));
          Set_Resource_Type (Resource, Xt_Motif_Boolean_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrenderTable"));
+         Set_Internal_Resource_Name (Resource, Enter ("renderTable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCRenderTable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("RenderTable"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_Render_Table_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -5025,7 +5065,6 @@ package body Model.Initialization is
          --  TODO XmNfontList
          --  TODO XmNlargeIconMask
          --  TODO XmNlargeIconPixmap
-         --  TODO XmNrenderTable
          --  TODO XmNsmallIconMask
          --  TODO XmNsmallIconPixmap
          --  TODO XmNviewType
@@ -5078,6 +5117,17 @@ package body Model.Initialization is
          Append (Resources, Resource);
 
          Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrenderTable"));
+         Set_Internal_Resource_Name (Resource, Enter ("renderTable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCRenderTable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("RenderTable"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_Render_Table_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
          Set_Resource_Name (Resource, Enter ("XmNspacing"));
          Set_Internal_Resource_Name (Resource, Enter ("spacing"));
          Set_Resource_Class_Name (Resource, Enter ("XmCSpacing"));
@@ -5123,7 +5173,6 @@ package body Model.Initialization is
          --  TODO XmNlabelInsensitivePixmap
          --  TODO XmNmnemonic
          --  TODO XmNmnemonicCharSet
-         --  TODO XmNrenderTable
          --  TODO XmNstringDirection
 
          Resource := Create_Resource_Specification;
@@ -5260,6 +5309,17 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCRecomputeSize"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("RecomputeSize"));
          Set_Resource_Type (Resource, Xt_Motif_Boolean_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrenderTable"));
+         Set_Internal_Resource_Name (Resource, Enter ("renderTable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCRenderTable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("RenderTable"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_Render_Table_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -6569,7 +6629,6 @@ package body Model.Initialization is
          --  TODO XmNitemCount
          --  TODO XmNitems
          --  TODO XmNlist
-         --  TODO XmNrenderTable
          --  TODO XmNselectedItem
          --  TODO XmNselectedPosition
          --  TODO XmNtextField
@@ -6669,6 +6728,17 @@ package body Model.Initialization is
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
          Append (Resources, Resource);
 
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrenderTable"));
+         Set_Internal_Resource_Name (Resource, Enter ("renderTable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCRenderTable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("RenderTable"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_Render_Table_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
 --         Resource := Create_Resource_Specification;
 --         Set_Resource_Name (Resource, Enter (""));
 --         Set_Internal_Resource_Name (Resource, Enter (""));
@@ -6708,7 +6778,6 @@ package body Model.Initialization is
          --  TODO XmNexpandedStatePixmap
          --  TODO XmNfontList
          --  TODO XmNprimaryOwnership
-         --  TODO XmNrenderTable
          --  TODO XmNselectColor
          --  TODO XmNselectedObjects
          --  TODO XmNselectedObjectCount
@@ -6843,6 +6912,17 @@ package body Model.Initialization is
          Set_Internal_Resource_Class_Name (Resource, Enter ("LineStyle"));
          Set_Resource_Type
           (Resource, Xt_Motif_Container_Line_Style_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrenderTable"));
+         Set_Internal_Resource_Name (Resource, Enter ("renderTable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCRenderTable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("RenderTable"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_Render_Table_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
@@ -7784,7 +7864,6 @@ package body Model.Initialization is
          --  TODO XmNeditable
          --  TODO XmNfontList
          --  TODO XmNprocessingDirection
-         --  TODO XmNrenderTable
          --  TODO XmNshowArrows
          --  TODO XmNshowValue
          --  TODO XmNsliderMark
@@ -7849,6 +7928,17 @@ package body Model.Initialization is
          Set_Resource_Class_Name (Resource, Enter ("XmCOrientation"));
          Set_Internal_Resource_Class_Name (Resource, Enter ("Orientation"));
          Set_Resource_Type (Resource, Xt_Motif_Orientation_Resource_Type);
+         Set_Can_Be_Set_At_Creation_Time (Resource, True);
+         Set_Can_Be_Set_By_Set_Values (Resource, True);
+         Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+         Append (Resources, Resource);
+
+         Resource := Create_Resource_Specification;
+         Set_Resource_Name (Resource, Enter ("XmNrenderTable"));
+         Set_Internal_Resource_Name (Resource, Enter ("renderTable"));
+         Set_Resource_Class_Name (Resource, Enter ("XmCRenderTable"));
+         Set_Internal_Resource_Class_Name (Resource, Enter ("RenderTable"));
+         Set_Resource_Type (Resource, Xt_Motif_Xm_Render_Table_Resource_Type);
          Set_Can_Be_Set_At_Creation_Time (Resource, True);
          Set_Can_Be_Set_By_Set_Values (Resource, True);
          Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
