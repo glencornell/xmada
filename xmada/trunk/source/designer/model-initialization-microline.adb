@@ -131,7 +131,7 @@ package body Model.Initialization.Microline is
 
    begin
       Xt_Motif_Folder_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Folder_Widget_Class, Enter ("xmlFolderWidgetClass"));
+      Set_Name (Xt_Motif_Folder_Widget_Class, Enter ("xmlFolder"));
       Set_Super_Class (Xt_Motif_Folder_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
@@ -578,7 +578,7 @@ package body Model.Initialization.Microline is
 
    begin
       Xt_Motif_Grid_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Grid_Widget_Class, Enter ("xmlGridWidgetClass"));
+      Set_Name (Xt_Motif_Grid_Widget_Class, Enter ("xmlGrid"));
       Set_Super_Class (Xt_Motif_Grid_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
@@ -2397,7 +2397,7 @@ package body Model.Initialization.Microline is
 
    begin
       Xt_Motif_Progress_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Progress_Widget_Class, Enter ("xmlProgressWidgetClass"));
+      Set_Name (Xt_Motif_Progress_Widget_Class, Enter ("xmlProgress"));
       Set_Super_Class (Xt_Motif_Progress_Widget_Class,
                        Xt_Motif_Primitive_Widget_Class);
 
@@ -2520,7 +2520,7 @@ package body Model.Initialization.Microline is
 
    begin
       Xt_Motif_Tree_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Tree_Widget_Class, Enter ("xmlTreeWidgetClass"));
+      Set_Name (Xt_Motif_Tree_Widget_Class, Enter ("xmlTree"));
       Set_Super_Class (Xt_Motif_Tree_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
