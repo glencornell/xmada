@@ -909,6 +909,12 @@ package body Designer.Properties_Editor.Widget_Instance is
             Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
             Xt_Get_Values (Xt_Parent (The_Widget), Args (0 .. 0));
 
+            --  Если значение не изменилось, то делать ничего не надо.
+
+            if Resource_Value (Node) = Integer (Pos) then
+               return;
+            end if;
+
             Set_Resource_Value (Node, Integer (Pos));
             Set_Is_Changed (Node, True);
 
@@ -1234,14 +1240,23 @@ package body Designer.Properties_Editor.Widget_Instance is
          Args : Xt_Arg_List (0 .. 0);
          Node : Node_Id;
          Name : String_Id;
+         Text : constant Wide_String
+           := Xm_Text_Field_Get_String_Wcs (The_Widget);
 
       begin
          --  Получаем значение узла, для которого вызвался callback.
 
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+
          Xt_Get_Values (The_Widget, Args (0 .. 0));
 
-         Name := Store (Xm_Text_Field_Get_String_Wcs (The_Widget));
+         --  Если ничего не менялось, то ничего не делаем.
+
+         if Image (Resource_Value (Node)) = Text then
+            return;
+         end if;
+
+         Name := Store (Text);
 
          Set_Resource_Value (Node, Name);
          Set_Is_Changed (Node, True);
