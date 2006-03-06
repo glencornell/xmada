@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rostel.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rostel.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -87,6 +87,7 @@ package body Xm.Resource_Management is
     (The_Widget_Class : in     Widget_Class;
      Secondary_Data   :    out Xm_Secondary_Resource_Data_List_Access)
    is
+
       type Xm_Secondary_Resource_Data_Pointer_Access is
         access all Xm_Secondary_Resource_Data_Pointer;
 
@@ -102,17 +103,70 @@ package body Xm.Resource_Management is
 
       procedure XtFree (Item : in Xm_Secondary_Resource_Data_Pointer);
       pragma Import (C, XtFree, "XtFree");
+
    begin
       Num_Secondary_Data :=
         XmGetSecondaryResourceData (The_Widget_Class, C_Secondary_Data'Access);
+
       if Num_Secondary_Data /= 0 then
          Secondary_Data :=
            new Xm_Secondary_Resource_Data_List'(
                  To_Xm_Secondary_Resource_Data_List
                   (C_Secondary_Data, Natural (Num_Secondary_Data)));
          XtFree (C_Secondary_Data);
+
       else
          Secondary_Data := null;
+      end if;
+   end Xm_Get_Secondary_Resource_Data;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit>
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Xm_Get_Secondary_Resource_Data
+    (The_Widget_Class : in Xt.Widget_Class)
+       return Xm_Secondary_Resource_Data_List
+   is
+
+      type Xm_Secondary_Resource_Data_Pointer_Access is
+        access all Xm_Secondary_Resource_Data_Pointer;
+
+      C_Secondary_Data   : aliased Xm_Secondary_Resource_Data_Pointer;
+      Num_Secondary_Data : Cardinal;
+
+      function XmGetSecondaryResourceData
+       (The_Widget_Class : in Widget_Class;
+        Secondary_Data   : in Xm_Secondary_Resource_Data_Pointer_Access)
+          return Cardinal;
+      pragma Import (C, XmGetSecondaryResourceData,
+                     "XmGetSecondaryResourceData");
+
+      procedure XtFree (Item : in Xm_Secondary_Resource_Data_Pointer);
+      pragma Import (C, XtFree, "XtFree");
+
+   begin
+      Num_Secondary_Data :=
+        XmGetSecondaryResourceData (The_Widget_Class, C_Secondary_Data'Access);
+
+      if Num_Secondary_Data /= 0 then
+         declare
+            Return_Value : constant Xm_Secondary_Resource_Data_List
+              := To_Xm_Secondary_Resource_Data_List
+                  (C_Secondary_Data, Natural (Num_Secondary_Data));
+         begin
+            XtFree (C_Secondary_Data);
+            return Return_Value;
+         end;
+
+      else
+         declare
+            Return_Value : Xm_Secondary_Resource_Data_List (1 .. 0);
+
+         begin
+            return Return_Value;
+         end;
       end if;
    end Xm_Get_Secondary_Resource_Data;
 

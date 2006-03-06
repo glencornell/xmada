@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rostel.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rostel.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -489,6 +489,11 @@ package Xm.Resource_Management is
                          Name  : in     Xt.Xt_Resource_Name_String;
                          Value : in     Xm_Which_Button);
 
+   --  additional functional form
+
+   function Xm_Get_Secondary_Resource_Data
+    (The_Widget_Class : in Xt.Widget_Class)
+       return Xm_Secondary_Resource_Data_List;
 
 private
 
