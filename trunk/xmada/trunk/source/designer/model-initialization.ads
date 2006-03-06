@@ -72,7 +72,7 @@ private
    procedure Merge_Inherited_Resources (Own_Resources         : in List_Id;
                                         Super_Class_Resources : in List_Id);
 
-   --  Типы ресурсов - перечислений.
+   --  Типы ресурсов (перечислений).
 
    Xt_Motif_Alignment_Resource_Type                  : Node_Id;
    Xt_Motif_Arrow_Direction_Resource_Type            : Node_Id;
@@ -80,7 +80,7 @@ private
    Xt_Motif_Arrow_Orientation_Resource_Type          : Node_Id;
    Xt_Motif_Arrow_Sensitivity_Resource_Type          : Node_Id;
    Xt_Motif_Attachment_Resource_Type                 : Node_Id;
---   Xt_Motif_Audible_Warning_Resource_Type            : Node_Id;
+   Xt_Motif_Audible_Warning_Resource_Type            : Node_Id;
    Xt_Motif_Auto_Drag_Model_Resource_Type            : Node_Id;
    Xt_Motif_Automatic_Selection_Resource_Type        : Node_Id;
    Xt_Motif_Binding_Type_Resource_Type               : Node_Id;
@@ -92,13 +92,15 @@ private
    Xt_Motif_Combo_Box_Type_Resource_Type             : Node_Id;
    Xt_Motif_Command_Window_Location_Resource_Type    : Node_Id;
    Xt_Motif_Default_Button_Type_Resource_Type        : Node_Id;
---   Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
+   Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
    Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
    Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
    Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
+   Xt_Motif_Gravity_Resource_Type                    : Node_Id;
    Xt_Motif_Toggle_Indicator_On_Resource_Type        : Node_Id;
    Xt_Motif_Indicator_Type_Resource_Type             : Node_Id;
---   Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
+   Xt_Motif_Initial_State_Resource_Type              : Node_Id;
+   Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
 --   Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
    Xt_Motif_Label_Type_Resource_Type                 : Node_Id;
    Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
@@ -126,6 +128,10 @@ private
    Xt_Motif_Separator_Type_Resource_Type             : Node_Id;
    Xt_Motif_Shadow_Type_Resource_Type                : Node_Id;
    Xt_Motif_Show_Arrows_Resource_Type                : Node_Id;
+   Xt_Motif_Show_Value_Resource_Type                 : Node_Id;
+   Xt_Motif_Slider_Mark_Resource_Type                : Node_Id;
+
+   --  Типы ресурсов (не перечислений).
 
    Xt_Motif_Accelerator_Table_Resource_Type          : Node_Id;
    Xt_Motif_C_Int_Resource_Type                      : Node_Id;
@@ -141,6 +147,7 @@ private
    Xt_Motif_Pixel_Resource_Type                      : Node_Id;
    Xt_Motif_Pixmap_Resource_Type                     : Node_Id;
    Xt_Motif_Position_Resource_Type                   : Node_Id;
+   Xt_Motif_Render_Table_Resource_Type               : Node_Id;
    Xt_Motif_Screen_Resource_Type                     : Node_Id;
    Xt_Motif_Select_Color_Resource_Type               : Node_Id;
    Xt_Motif_Translation_Table_Resource_Type          : Node_Id;
@@ -149,9 +156,21 @@ private
    Xt_Motif_Vertical_Position_Resource_Type          : Node_Id;
    Xt_Motif_Widget_Reference_Resource_Type           : Node_Id;
    Xt_Motif_Xm_String_Resource_Type                  : Node_Id;
-   Xt_Motif_Xm_Render_Table_Resource_Type            : Node_Id; 
- 
+
    --  Классы виджетов Xt/Motif.
+
+   Xt_Motif_Application_Shell_Widget_Class     : Node_Id;
+   Xt_Motif_Composite_Widget_Class             : Node_Id;
+   Xt_Motif_Constraint_Widget_Class            : Node_Id;
+   Xt_Motif_Core_Widget_Class                  : Node_Id;
+   Xt_Motif_Object_Widget_Class                : Node_Id;
+   Xt_Motif_Override_Shell_Widget_Class        : Node_Id;
+   Xt_Motif_Rect_Obj_Widget_Class              : Node_Id;
+   Xt_Motif_Session_Shell_Widget_Class         : Node_Id;
+   Xt_Motif_Top_Level_Shell_Widget_Class       : Node_Id;
+   Xt_Motif_Transient_Shell_Widget_Class       : Node_Id;
+   Xt_Motif_Vendor_Shell_Widget_Class          : Node_Id;
+   Xt_Motif_WM_Shell_Widget_Class              : Node_Id;
 
    Xt_Motif_Arrow_Button_Gadget_Widget_Class   : Node_Id;
    Xt_Motif_Arrow_Button_Widget_Class          : Node_Id;
@@ -162,7 +181,7 @@ private
    Xt_Motif_Combo_Box_Widget_Class             : Node_Id;
    Xt_Motif_Command_Widget_Class               : Node_Id;
    Xt_Motif_Container_Widget_Class             : Node_Id;
---      Xt_Motif_Dialog_Shell_Widget_Class          : Node_Id;
+   Xt_Motif_Dialog_Shell_Widget_Class          : Node_Id;
    Xt_Motif_Drawing_Area_Widget_Class          : Node_Id;
    Xt_Motif_Drawn_Button_Widget_Class          : Node_Id;
 --   Xt_Motif_Error_Dialog_Widget_Class          : Node_Id;
