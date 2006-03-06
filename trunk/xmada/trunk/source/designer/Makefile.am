@@ -2,7 +2,8 @@ include $(top_srcdir)/support/Makefile.common
 
 ADAFLAGS = $(STD_ADAFLAGS) \
 	-I$(srcdir) \
-	-I$(srcdir)/debug
+	-I$(srcdir)/debug \
+	-I$(srcdir)/microline
 
 DESIGNER_ADAFLAGS = $(ADAFLAGS) \
 	-I$(top_srcdir)/source/xlib \
