@@ -245,6 +245,14 @@ package Xm.Internal is
                             Arg_List   : in Xt.Ancillary_Types.Xt_Arg_List
                               := Xt.Ancillary_Types.Null_Xt_Arg_List);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xme_Set_WM_Shell_Title
+   --!    <Purpose>
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Xme_Set_WM_Shell_Title (Title : in Xm.Xm_String;
+                                     Shell : in Xt.Widget);
 
 private
 

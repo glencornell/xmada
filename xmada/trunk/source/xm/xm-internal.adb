@@ -398,15 +398,15 @@ package body Xm.Internal is
          raise Constraint_Error;
       end if;
 
-      Xme_Draw_Indicator (The_Display,
-                          The_Drawable,
-                          The_Graphic_Context,
-                          X,
-                          Y,
-                          Width,
-                          Height,
-                          Margin,
-                          Indicator_Type);
+      XmeDrawIndicator (The_Display,
+                        The_Drawable,
+                        The_Graphic_Context,
+                        X,
+                        Y,
+                        Width,
+                        Height,
+                        Margin,
+                        Indicator_Type);
    end Xme_Draw_Indicator;
 
 
@@ -540,5 +540,14 @@ package body Xm.Internal is
       return XmeGetDefaultRenderTable (The_Widget, Render_Table_Type);
    end Xme_Get_Default_Render_Table;
 
+   procedure Xme_Set_WM_Shell_Title (Title : in Xm.Xm_String;
+                                     Shell : in Xt.Widget)
+   is
+      procedure XmeSetWMShellTitle (Title : in Xm_String;
+                                    Shell : in Xt.Widget);
+      pragma Import (C, XmeSetWMShellTitle, "XmeSetWMShellTitle");
+   begin
+      XmeSetWMShellTitle (Title, Shell);
+   end Xme_Set_WM_Shell_Title;
 
 end Xm.Internal;
