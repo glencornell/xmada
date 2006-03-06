@@ -66,6 +66,7 @@ with Xm_Row_Column;
 
 with Designer.Main_Window;
 with Designer.Model_Utilities;
+with Designer.Render_Table_Editor;
 with Designer.Visual_Editor;
 with Model.Allocations;
 with Model.Names;
@@ -1093,9 +1094,16 @@ package body Designer.Properties_Editor.Widget_Instance is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
 
+         Node : Node_Id;
+         Args : Xt_Arg_List (0 .. 0);
+
       begin
-         null;
-         --  Open (The_Widget);
+         --  Получаем узел ресурса, который поменял значение.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         Designer.Render_Table_Editor.Open (Node);
 
       exception
          when E : others =>
@@ -1585,9 +1593,12 @@ package body Designer.Properties_Editor.Widget_Instance is
                Xt_Set_Arg (Args (0), Xm_N_Right_Attachment, Xm_Attach_Form);
                Xt_Set_Arg (Args (1), Xm_N_Top_Attachment, Xm_Attach_Form);
                Xt_Set_Arg (Args (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+               Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
+
                Annotation_Table.Table (Node).Editor :=
                  Xm_Create_Managed_Push_Button_Gadget
-                  (Form, "edit", Args (0 .. 2));
+                  (Form, "edit", Args (0 .. 3));
+
                Xt_Add_Callback
                 (Annotation_Table.Table (Node).Editor,
                  Xm_N_Activate_Callback,

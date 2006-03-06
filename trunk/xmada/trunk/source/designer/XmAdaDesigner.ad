@@ -31,6 +31,29 @@ Michail Shilov <shilovm@list.ru>\n\n\
 XmAda maintained by TechnoServ A/S\n\
 (email: vgodunko@rostel.ru)
 
+!!  Окно "Редактирование Render_Table".
+
+*renderTableDialog.dialogStyle: DIALOG_FULL_APPLICATION_MODAL
+*renderTableDialog.skipAdjust: TRUE
+*renderTableDialog.allowResize: TRUE
+*renderTableDialog.dialogTitle: Renditions Editor
+*renderTableDialog.cancelLabelString: Close
+*renderTableDialog.defaultButtonType: DIALOG_CANCEL_BUTTON
+*renderTableDialog.okLabelString: OK
+*renderTableDialog.defaultButtonType: DIALOG_OK_BUTTON
+*renderTableDialog.messageAlignment: ALIGNMENT_CENTER
+*renderTableDialog.main_menu.edit.labelString: Edit
+*renderTableDialog.main_menu.renditions_menu.add_new.labelString: New
+*renderTableDialog.main_menu.renditions_menu.delete.labelString: Delete
+*renderTableDialog.top.text_label.labelString: Input some text
+*renderTableDialog.top.notebook.entryAlignment: ALIGNMENT_CENTER
+*renderTableDialog.top.notebook.isAligned: TRUE
+*renderTableDialog.top.notebook.entryVerticallAlignment: ALIGNMENT_CENTER
+*renderTableDialog.top.notebook.packing: PACK_COLUMN
+*renderTableDialog.top.notebook.numRows: 1
+*renderTableDialog.top.notebook.page1.labelString: Untitled
+*renderTableDialog.top.notebook.page1.notebookChildType: MINOR_TAB
+
 !!  Главное окно.
 
 *open_file_dialog.dialogTitle : Open existing file
@@ -144,6 +167,9 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.marginWidth: 0
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.spacing: 0
 *main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.edit.labelString: ...
+*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_renditions.editable: FALSE
+*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_renditions.navigationType: NONE
+*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_renditions.cursorPositionVisible: FALSE
 *main_window.horizontal_paned.properties_form.subform.notebook.ada.labelString: Ada
 *main_window.horizontal_paned.properties_form.subform.notebook.ada.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.subform.notebook.resources.labelString: Resources
