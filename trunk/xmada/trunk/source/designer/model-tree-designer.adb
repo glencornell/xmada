@@ -92,6 +92,10 @@ package body Model.Tree.Designer is
             Representation_Value : Interfaces.C.unsigned_char;
 
          when Annotation_Widget_Class =>
+            Widget_Class                : Xt.Widget_Class;
+            --  Указатель на внутреннюю структуру Xt, описывающую класс
+            --  виджетов.
+
             Convenience_Create_Function : Convenience_Create;
             --  Указатель на подпрограмму создания экземпляра виджета.
 
@@ -239,6 +243,7 @@ package body Model.Tree.Designer is
                when Node_Widget_Class =>
                   Annotation_Table.Table (J) :=
                    (Kind                        => Annotation_Widget_Class,
+                    Widget_Class                => Xt.Null_Widget_Class,
                     Convenience_Create_Function => null,
                     Is_Set_Initial_Size         => False);
 
@@ -476,5 +481,37 @@ package body Model.Tree.Designer is
 
       Annotation_Table.Table (Node).Representation_Value := Value;
    end Set_Representation_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Widget_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Widget_Class (Node  : in Node_Id;
+                               Value : in Xt.Widget_Class)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Widget_Class := Value;
+   end Set_Widget_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Widget_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Widget_Class (Node : in Node_Id) return Xt.Widget_Class is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Widget_Class;
+   end Widget_Class;
 
 end Model.Tree.Designer;
