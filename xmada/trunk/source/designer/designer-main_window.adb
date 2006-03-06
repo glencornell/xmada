@@ -73,6 +73,7 @@ with Designer.Model_Utilities;
 with Designer.Operations.Debug;
 with Designer.Palette;
 with Designer.Properties_Editor;
+with Designer.Render_Table_Editor;
 with Designer.Tree_Editor;
 with Designer.Visual_Editor;
 with Model.Tree;
@@ -731,26 +732,30 @@ package body Designer.Main_Window is
    procedure Initialize (App_Shell : in Xt.Widget) is
       use Callbacks;
 
-      Properties_Form : Widget;
-      Tree_Form       : Widget;
-      Main_Window     : Widget;
-      Args            : Xt_Arg_List (0 .. 6);
-      Palette         : Widget;
-      Paned           : Widget;
-      Menu            : Widget;
-      Paned1          : Widget;
-      Message_Form    : Widget;
-      Button          : Widget;
-      Show_Properties : Widget;
-      Show_Tree       : Widget;
-      Show_Messages   : Widget;
-      Submenu         : Widget;
-      Element         : Widget;
+      Properties_Form   : Widget;
+      Tree_Form         : Widget;
+      Main_Window       : Widget;
+      Args              : Xt_Arg_List (0 .. 6);
+      Palette           : Widget;
+      Paned             : Widget;
+      Menu              : Widget;
+      Paned1            : Widget;
+      Message_Form      : Widget;
+      Button            : Widget;
+      Show_Properties   : Widget;
+      Show_Tree         : Widget;
+      Show_Messages     : Widget;
+      Submenu           : Widget;
+      Element           : Widget;
 
    begin
       --  Создание диалога "О программе".
 
       About_Dialog := Xm_Create_Template_Dialog (App_Shell, "about_dialog");
+
+      --  Создание диалога редактирования элементов Render_Table.
+
+      Designer.Render_Table_Editor.Initialize (App_Shell);
 
       --  Создание диалога открытия файлов.
 
