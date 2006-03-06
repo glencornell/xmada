@@ -40,6 +40,7 @@
 ------------------------------------------------------------------------------
 with Designer.Main_Window;
 with Designer.Model_Utilities;
+with Designer.RTL_Consistency;
 with Generator.Application_Resources;
 with Generator.Prototype.Component_Class;
 with Model.Initialization.Designer;
@@ -156,6 +157,10 @@ package body Designer.Operations is
       Model.Initialization.Designer.Initialize;
       Model.Initialization.Xm_Ada.Initialize;
 
+      --  Проверка соответствия библиотеки времени выполнения и используемой
+      --  модели.
+
+      Designer.RTL_Consistency.Verify (Model.Xt_Motif.Known_Widget_Sets);
    end Initialize;
 
    ---------------------------------------------------------------------------
