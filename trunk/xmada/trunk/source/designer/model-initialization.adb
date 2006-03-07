@@ -2552,6 +2552,140 @@ package body Model.Initialization is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_Renditions_Resources 
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Create_Renditions_Resources is
+      Resources : constant List_Id := New_List;
+      Resource  : Node_Id;
+  
+   begin
+      Xt_Motif_Rendition := Create_Widget_Class;
+      Set_Name (Xt_Motif_Object_Widget_Class, Enter ("XmRendition"));
+
+      Resource := Create_Resource_Specification;
+      Set_Resource_Name (Resource, Enter ("XmNrenditionBackground"));
+      Set_Internal_Resource_Name (Resource, Enter ("renditionBackground"));
+      Set_Resource_Class_Name (Resource, Enter ("XmCrenditionBackground"));
+      Set_Internal_Resource_Class_Name 
+       (Resource, Enter ("RenditionBackground"));
+      Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+      Set_Can_Be_Set_By_Set_Values (Resource, True);
+      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+      Append (Resources, Resource);
+      
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNfont"));
+--      Set_Internal_Resource_Name (Resource, Enter ("font"));
+--      Set_Resource_Class_Name (Resource, Enter ("XmCfont"));
+--      Set_Internal_Resource_Class_Name 
+--       (Resource, Enter ("Font"));
+--      Set_Resource_Type (Resource, Xt_Motif_Pointer_Resource_Type); --  ?
+--      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+    
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNfontName"));
+--      Set_Internal_Resource_Name (Resource, Enter ("fontName"));
+--      Set_Resource_Class_Name (Resource, Enter ("XmCfontName"));
+--      Set_Internal_Resource_Class_Name 
+--       (Resource, Enter ("FontName"));
+--      Set_Resource_Type (Resource, Xt_Motif_Xm_String_Resource_Type); -- ?
+--      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+      
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNfontType"));
+--      Set_Internal_Resource_Name (Resource, Enter ("fontType"));
+--      Set_Resource_Class_Name (Resource, Enter ("XmCfontType"));
+--      Set_Internal_Resource_Class_Name 
+--       (Resource, Enter ("FontType"));
+--      Set_Resource_Type (Resource, Xt_Motif_Font_Type_Resource_Type); -- ?
+--      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+
+      Resource := Create_Resource_Specification;
+      Set_Resource_Name (Resource, Enter ("XmNrenditionForeground"));
+      Set_Internal_Resource_Name (Resource, Enter ("renditionForeground"));
+      Set_Resource_Class_Name (Resource, Enter ("XmCrenditionForeground"));
+      Set_Internal_Resource_Class_Name 
+       (Resource, Enter ("RenditionForeground"));
+      Set_Resource_Type (Resource, Xt_Motif_Pixel_Resource_Type);
+      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+      Set_Can_Be_Set_By_Set_Values (Resource, True);
+      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+      Append (Resources, Resource);
+      
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNloadModel"));
+--      Set_Internal_Resource_Name (Resource, Enter ("loadModel"));
+--      Set_Resource_Class_Name (Resource, Enter ("XmCloadModel"));
+--      Set_Internal_Resource_Class_Name 
+--       (Resource, Enter ("LoadModel"));
+--      Set_Resource_Type (Resource, Xt_Motif_Load_Model_Resource_Type); -- ? char
+--      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+      
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNstrikethruType"));
+--      Set_Internal_Resource_Name (Resource, Enter ("strikethruType"));
+--      Set_Resource_Class_Name (Resource, Enter ("XmCstrikethruType"));
+--      Set_Internal_Resource_Class_Name 
+--       (Resource, Enter ("StrikethruType"));
+--      Set_Resource_Type (Resource, Xt_Motif_Strikethru_Type_Resource_Type); -- ? char
+--      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNtabList"));
+--      Set_Internal_Resource_Name (Resource, Enter ("tabList"));
+--      Set_Resource_Class_Name (Resource, Enter ("XmCtabList"));
+--      Set_Internal_Resource_Class_Name 
+--       (Resource, Enter ("TabList"));
+--      Set_Resource_Type (Resource, Xt_Motif_Tab_List_Resource_Type); 
+--      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+      
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNtag"));
+--      Set_Internal_Resource_Name (Resource, Enter ("tag"));
+--      Set_Resource_Class_Name (Resource, Enter ("XmCtag"));
+--      Set_Internal_Resource_Class_Name 
+--       (Resource, Enter ("Tag"));
+--      Set_Resource_Type (Resource, Xt_Motif_Xm_String_Resource_Type); 
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+      
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNunderlineType"));
+--      Set_Internal_Resource_Name (Resource, Enter ("underlineType"));
+--      Set_Resource_Class_Name (Resource, Enter ("XmCunderlineType"));
+--      Set_Internal_Resource_Class_Name 
+--       (Resource, Enter ("UnderlineType"));
+--      Set_Resource_Type (Resource, Xt_Motif_underlineType_Resource_Type); 
+--      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+
+      Set_Resources (Xt_Motif_Rendition, Resources);
+   end Create_Renditions_Resources;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Widget_Classes
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -9383,6 +9517,7 @@ package body Model.Initialization is
       Create_Predefined_Resource_Types;
       Create_Enumerated_Resource_Types;
       Create_Widget_Classes;
+      Create_Renditions_Resources;
 
       Xt_Motif_Widget_Set := Create_Widget_Set;
       Set_Name (Xt_Motif_Widget_Set, Enter ("Xt/Motif"));
