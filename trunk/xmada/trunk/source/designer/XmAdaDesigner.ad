@@ -31,28 +31,17 @@ Michail Shilov <shilovm@list.ru>\n\n\
 XmAda maintained by TechnoServ A/S\n\
 (email: vgodunko@rostel.ru)
 
-!!  Окно "Редактирование Render_Table".
+!!  Окно "Редактирование свойств XmRenderTable".
 
 *renderTableDialog.dialogStyle: DIALOG_FULL_APPLICATION_MODAL
-*renderTableDialog.skipAdjust: TRUE
-*renderTableDialog.allowResize: TRUE
-*renderTableDialog.dialogTitle: Renditions Editor
-*renderTableDialog.cancelLabelString: Close
-*renderTableDialog.defaultButtonType: DIALOG_CANCEL_BUTTON
+*renderTableDialog.dialogTitle: Render Table Editor
 *renderTableDialog.okLabelString: OK
-*renderTableDialog.defaultButtonType: DIALOG_OK_BUTTON
-*renderTableDialog.messageAlignment: ALIGNMENT_CENTER
+*renderTableDialog.cancelLabelString: Cancel
 *renderTableDialog.main_menu.edit.labelString: Edit
-*renderTableDialog.main_menu.renditions_menu.add_new.labelString: New
+*renderTableDialog.main_menu.renditions_menu.new.labelString: New
 *renderTableDialog.main_menu.renditions_menu.delete.labelString: Delete
-*renderTableDialog.top.text_label.labelString: Input some text
-*renderTableDialog.top.notebook.entryAlignment: ALIGNMENT_CENTER
-*renderTableDialog.top.notebook.isAligned: TRUE
-*renderTableDialog.top.notebook.entryVerticallAlignment: ALIGNMENT_CENTER
-*renderTableDialog.top.notebook.packing: PACK_COLUMN
-*renderTableDialog.top.notebook.numRows: 1
-*renderTableDialog.top.notebook.page1.labelString: Untitled
-*renderTableDialog.top.notebook.page1.notebookChildType: MINOR_TAB
+*renderTableDialog.top.subform.text.labelString: Test text
+*renderTableDialog.top.drawing_area.height: 50
 
 !!  Главное окно.
 
