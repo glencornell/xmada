@@ -103,6 +103,11 @@ package body Model.Tree.Designer is
             --  При отсутствии дочерних виджетов создаваемый виджет имеет
             --  размер 1x1 и необходимо принудительно задать его размер.
 
+            Visual_Editor_Plugin        :
+              Standard.Designer.Visual_Editor.Plugin_Access;
+            --  Ссылка на объект расширения визуального редактора для данного
+            --  класса виджетов.
+
          when Annotation_Widget_Instance =>
             All_Resources            : List_Id;
             --  Список всех ресурсов экземпляра виджета.
@@ -245,7 +250,8 @@ package body Model.Tree.Designer is
                    (Kind                        => Annotation_Widget_Class,
                     Widget_Class                => Xt.Null_Widget_Class,
                     Convenience_Create_Function => null,
-                    Is_Set_Initial_Size         => False);
+                    Is_Set_Initial_Size         => False,
+                    Visual_Editor_Plugin        => null);
 
                when Node_Widget_Instance =>
                   Annotation_Table.Table (J) :=
@@ -484,6 +490,24 @@ package body Model.Tree.Designer is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Set_Visual_Editor_Plugin
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Visual_Editor_Plugin
+    (Node  : in Node_Id;
+     Value : in Standard.Designer.Visual_Editor.Plugin_Access)
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      Annotation_Table.Table (Node).Visual_Editor_Plugin := Value;
+   end Set_Visual_Editor_Plugin;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Widget_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -498,6 +522,23 @@ package body Model.Tree.Designer is
 
       Annotation_Table.Table (Node).Widget_Class := Value;
    end Set_Widget_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Visual_Editor_Plugin
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Visual_Editor_Plugin (Node : in Node_Id)
+     return Standard.Designer.Visual_Editor.Plugin_Access
+   is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Relocate_Annotation_Table;
+
+      return Annotation_Table.Table (Node).Visual_Editor_Plugin;
+   end Visual_Editor_Plugin;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
