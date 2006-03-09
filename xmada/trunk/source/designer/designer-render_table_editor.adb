@@ -35,15 +35,12 @@
 --! <PortabilityIssues>
 --! <AnticipatedChanges>
 ------------------------------------------------------------------------------
---  $Revision: 407 $ $Author: dibala $
---  $Date: 2006-02-26 17:04:02 +0300 (Вск, 26 Фев 2006) $
+--  $Revision$ $Author$
+--  $Date$
 ------------------------------------------------------------------------------
 with Xt.Ancillary_Types;
 with Xt.Callbacks;
 with Xt.Composite_Management;
-with Xt.Event_Management;
-with Xt.Initializers;
-with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Utilities;
 
@@ -60,14 +57,12 @@ with Xm_Row_Column;
 with Xm_String_Defs;
 with Xm_Text_Field;
 
-with Model.Names;
 with Model.Queries;
 with Model.Tree.Lists;
 
 package body Designer.Render_Table_Editor is
 
    use Model;
-   use Model.Names;
    use Model.Tree;
    use Model.Tree.Lists;
    use Model.Queries;
@@ -88,9 +83,6 @@ package body Designer.Render_Table_Editor is
    use Xt.Ancillary_Types;
    use Xt.Callbacks;
    use Xt.Composite_Management;
-   use Xt.Event_Management;
-   use Xt.Initializers;
-   use Xt.Instance_Management;
    use Xt.Resource_Management;
    use Xt.Utilities;
 
@@ -137,15 +129,16 @@ package body Designer.Render_Table_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Save
+      --!    <Unit> On_OK
       --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
-      --! "Сохранить".
+      --! "OK".
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      procedure On_Save (The_Widget : in Widget;
-                         Closure    : in Xt_Pointer;
-                         Call_Data  : in Xt_Pointer);
-      pragma Convention (C, On_Save);
+      procedure On_OK (The_Widget : in Widget;
+                       Closure    : in Xt_Pointer;
+                       Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_OK);
+
    end Callbacks;
 
    package body Callbacks is
@@ -211,38 +204,27 @@ package body Designer.Render_Table_Editor is
          pragma Unreferenced (Call_Data);
          pragma Unreferenced (The_Widget);
 
---         Argl        : Xt_Arg_List (0 .. 0);
---         Page_Number : Positive;
-
       begin
          null;
---         Xt_Set_Arg
---          (Argl (0),
---           Xm_N_Current_Page_Number,
---           Xt_Arg_Val (Page_Number));
-
---         Xt_Get_Values (Notebook, Argl (0 .. 0));
---         Xt_Destroy_Widget (The_Widget);
-
       end On_Delete;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> On_Save
+      --!    <Unit> On_OK
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure On_Save (The_Widget : in Widget;
-                         Closure    : in Xt_Pointer;
-                         Call_Data  : in Xt_Pointer)
+      procedure On_OK (The_Widget : in Widget;
+                       Closure    : in Xt_Pointer;
+                       Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
          pragma Unreferenced (The_Widget);
 
-       begin
+      begin
          null;
          --  Set_Resources
-      end On_Save;
+      end On_OK;
 
    end Callbacks;
 
@@ -255,6 +237,7 @@ package body Designer.Render_Table_Editor is
       Menu_Bar        : Widget;
       Renditions_Menu : Widget;
       Form            : Widget;
+      Subform         : Widget;
       Button          : Widget;
       Page            : Widget;
       Drawing_Area    : Widget;
@@ -265,7 +248,10 @@ package body Designer.Render_Table_Editor is
    begin
       Dialog :=
         Xm_Create_Template_Dialog (Parent, "renderTableDialog");
- 
+      Xt_Add_Callback (Dialog, Xm_N_Ok_Callback, Callbacks.On_OK'Access);
+      Xt_Add_Callback
+       (Dialog, Xm_N_Cancel_Callback, Callbacks.On_Cancel'Access);
+
       --  Формирование структуры главного меню.
 
       Menu_Bar := Xm_Create_Managed_Menu_Bar (Dialog, "main_menu");
@@ -273,30 +259,22 @@ package body Designer.Render_Table_Editor is
       --  Выпадающее меню "Renditions".
 
       Renditions_Menu
-       := Xm_Create_Pulldown_Menu (Menu_Bar, "renditions_menu");
+        := Xm_Create_Pulldown_Menu (Menu_Bar, "renditions_menu");
 
-      Button := Xm_Create_Managed_Push_Button_Gadget
-       (Renditions_Menu, "Add new");
-
+      Button :=
+        Xm_Create_Managed_Push_Button_Gadget (Renditions_Menu, "new");
       Xt_Add_Callback
-       (Button,
-        Xm_N_Activate_Callback,
-        Callbacks.On_Add'Access);
+       (Button, Xm_N_Activate_Callback, Callbacks.On_Add'Access);
 
-      Button := Xm_Create_Managed_Push_Button_Gadget
-       (Renditions_Menu, "Delete");
-
+      Button :=
+        Xm_Create_Managed_Push_Button_Gadget (Renditions_Menu, "delete");
       Xt_Add_Callback
-       (Button,
-        Xm_N_Activate_Callback,
-        Callbacks.On_Delete'Access);
+       (Button, Xm_N_Activate_Callback, Callbacks.On_Delete'Access);
 
       Xt_Set_Arg (Argl (0), Xm_N_Sub_Menu_Id, Renditions_Menu);
       Button :=
         Xm_Create_Managed_Cascade_Button_Gadget
          (Menu_Bar, "edit", Argl (0 .. 0));
-
-      Xt_Manage_Child (Renditions_Menu);
 
       --  Создание блокнота задания свойств Xm_Rendition.
 
@@ -308,7 +286,7 @@ package body Designer.Render_Table_Editor is
       Notebook :=
         Xm_Create_Managed_Notebook (Form, "notebook", Argl (0 .. 2));
 
-      Button := Xt_Name_To_Widget (Notebook, "page_scroller");
+      Button := Xt_Name_To_Widget (Notebook, "PageScroller");
       Xt_Unmanage_Child (Button);
 
       Page := Xm_Create_Managed_Row_Column (Notebook, "rendition_page");
@@ -317,42 +295,42 @@ package body Designer.Render_Table_Editor is
       Xt_Set_Arg (Argl (0), Xm_N_Current_Page_Number, Xt_Arg_Val (0));
       Xt_Set_Values (Notebook, Argl (0 .. 0));
 
-         --  Создание блокнота задания свойств Xm_Rendition.
-
-      Xt_Set_Arg (Argl (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Argl (1), Xm_N_Top_Widget, Notebook);
-      Xt_Set_Arg (Argl (2), Xm_N_Right_Attachment, Xm_Attach_Form);
-      Text_Field :=
-        Xm_Create_Managed_Text_Field (Form, "test_field", Argl (0 .. 2));
+      --  Создание блокнота задания свойств Xm_Rendition.
 
       Xt_Set_Arg (Argl (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
       Xt_Set_Arg (Argl (1), Xm_N_Top_Widget, Notebook);
       Xt_Set_Arg (Argl (2), Xm_N_Left_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Argl (3), Xm_N_Right_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Argl (4), Xm_N_Right_Attachment, Text_Field);
+      Xt_Set_Arg (Argl (3), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Subform := Xm_Create_Managed_Form (Form, "subform", Argl (0 .. 3));
+
+      Xt_Set_Arg (Argl (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Argl (1), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Argl (2), Xm_N_Left_Attachment, Xm_Attach_Form);
       Text_Label :=
-        Xm_Create_Managed_Label_Gadget (Form, "text_label", Argl (0 .. 4));
+        Xm_Create_Managed_Label_Gadget (Subform, "text", Argl (0 .. 2));
+
+      Xt_Set_Arg (Argl (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Argl (1), Xm_N_Left_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Argl (2), Xm_N_Left_Widget, Text_Label);
+      Xt_Set_Arg (Argl (3), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Argl (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Text_Field :=
+        Xm_Create_Managed_Text_Field (Subform, "text_field", Argl (0 .. 4));
 
       Xt_Set_Arg (Argl (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Argl (1), Xm_N_Top_Widget, Text_Field);
+      Xt_Set_Arg (Argl (1), Xm_N_Top_Widget, Subform);
       Xt_Set_Arg (Argl (2), Xm_N_Left_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Argl (3), Xm_N_Right_Attachment, Xm_Attach_Form);
       Drawing_Area :=
-        Xm_Create_Drawing_Area (Form, "drawing_area", Argl (0 .. 3));
+        Xm_Create_Managed_Drawing_Area (Form, "drawing_area", Argl (0 .. 3));
 
       Xt_Manage_Child (Drawing_Area);
 
-      Xt_Add_Callback (Dialog, Xm_N_Ok_Callback, Callbacks.On_Save'Access);
-
-      Xt_Add_Callback 
-       (Dialog, 
-        Xm_N_Cancel_Callback, 
-        Callbacks.On_Cancel'Access);
-
-      Xt_Unmanage_Child (Notebook);
-      Xt_Manage_Child (Notebook);
+--      Xt_Unmanage_Child (Notebook);
+--      Xt_Manage_Child (Notebook);
+--
    end Initialize;
-      
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Open
@@ -360,9 +338,9 @@ package body Designer.Render_Table_Editor is
    ---------------------------------------------------------------------------
    procedure Open (Resource : in Model.Node_Id) is
    begin
-      pragma
-        Assert (Node_Kind (Resource) = Node_Xm_Render_Table_Resource_Value);
-    
+      pragma Assert
+              (Node_Kind (Resource) = Node_Xm_Render_Table_Resource_Value);
+
       if Resource_Value (Resource) /= Null_List then
          declare
             Current_Rendition : Node_Id;
@@ -374,13 +352,10 @@ package body Designer.Render_Table_Editor is
             Current_Rendition := First (Resource_Value (Resource));
 
             while Current_Rendition /= Null_Node loop
-               Page := Xm_Create_Managed_Row_Column
-                (Notebook, "rendition_page");
+               Page :=
+                 Xm_Create_Managed_Row_Column (Notebook, "rendition_page");
 
-               Str :=
-                 Xm_String_Generate
-                  (Name_Image (Current_Rendition));
-
+               Str := Xm_String_Generate (Name_Image (Current_Rendition));
                Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
                Xt_Set_Values (Page, Argl (0 .. 0));
                Xm_String_Free (Str);
