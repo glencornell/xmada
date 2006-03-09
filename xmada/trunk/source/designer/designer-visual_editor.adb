@@ -1307,7 +1307,7 @@ package body Designer.Visual_Editor is
 
                when Node_Xm_Render_Table_Resource_Type =>
                   null;
-		  --  Получение значения таблицы рендеринга в настоящее время
+                  --  Получение значения таблицы рендеринга в настоящее время
                   --  не поддерживается.
 
                when Node_Xm_String_Resource_Type =>

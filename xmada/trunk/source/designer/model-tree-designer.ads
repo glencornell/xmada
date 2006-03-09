@@ -45,7 +45,15 @@ with Interfaces.C;
 
 with Xt.Ancillary_Types;
 
+with Designer.Visual_Editor;
+
 package Model.Tree.Designer is
+
+   --  Тип данных, используемый для представления ссылки на подпрограмму
+   --  создания экземпляра класса виджета.
+
+   --  XXX Имеет смысл заменить на подпрограмму с соглашением C для удобства
+   --  подключения классов виджетов "на лету".
 
    type Convenience_Create is
      access function (Parent   : in Xt.Widget;
@@ -107,6 +115,27 @@ package Model.Tree.Designer is
    ---------------------------------------------------------------------------
    procedure Set_Representation_Value (Node  : in Node_Id;
                                        Value : in Interfaces.C.unsigned_char);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Visual_Editor_Plugin
+   --!    <Purpose> Возвращает ссылку на объект расширения визуального
+   --! редактора для указанного класса виджетов.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Visual_Editor_Plugin (Node : in Node_Id)
+     return Standard.Designer.Visual_Editor.Plugin_Access;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Visual_Editor_Plugin
+   --!    <Purpose> Устанавливает ссылку на объект расширения визуального
+   --! редактора для указанного класса виджетов.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Set_Visual_Editor_Plugin
+    (Node  : in Node_Id;
+     Value : in Standard.Designer.Visual_Editor.Plugin_Access);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

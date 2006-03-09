@@ -122,4 +122,18 @@ package Designer.Visual_Editor is
    ---------------------------------------------------------------------------
    procedure Reinitialize;
 
+   --  Тип для описания plugin-а визуального редактора, позволяющего выполнять
+   --  дополнительные действия над экземпляром класса виджета.
+
+   type Abstract_Plugin is abstract tagged limited private;
+
+   type Plugin_Access is access all Abstract_Plugin'Class;
+
+--   function On_Click
+--   function On_Double_Click
+
+private
+
+   type Abstract_Plugin is abstract tagged limited null record;
+
 end Designer.Visual_Editor;
