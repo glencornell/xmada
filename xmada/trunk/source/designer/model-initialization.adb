@@ -2560,7 +2560,7 @@ package body Model.Initialization is
       Resource  : Node_Id;
   
    begin
-      Xt_Motif_Rendition := Create_Widget_Class;
+      Xt_Motif_Rendition_Class := Create_Widget_Class;
       Set_Name (Xt_Motif_Object_Widget_Class, Enter ("XmRendition"));
 
       Resource := Create_Resource_Specification;
@@ -2681,7 +2681,7 @@ package body Model.Initialization is
 --      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --      Append (Resources, Resource);
 
-      Set_Resources (Xt_Motif_Rendition, Resources);
+      Set_Resources (Xt_Motif_Rendition_Class, Resources);
    end Create_Renditions_Resources;
 
    ---------------------------------------------------------------------------

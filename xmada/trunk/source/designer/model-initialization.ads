@@ -221,7 +221,6 @@ private
    Xt_Motif_Text_Widget_Class                  : Node_Id;
    Xt_Motif_Toggle_Button_Gadget_Widget_Class  : Node_Id;
    Xt_Motif_Toggle_Button_Widget_Class         : Node_Id;
-   Xt_Motif_Rendition                          : Node_Id; 
 
    type Microline_Initialize is access procedure;
 

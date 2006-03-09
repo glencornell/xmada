@@ -61,5 +61,6 @@ package Model.Xt_Motif is
    Xt_Motif_Gadget_Widget_Class    : Node_Id;
    Xt_Motif_Manager_Widget_Class   : Node_Id;
    Xt_Motif_Primitive_Widget_Class : Node_Id;
+   Xt_Motif_Rendition_Class        : Node_Id;
 
 end Model.Xt_Motif;
