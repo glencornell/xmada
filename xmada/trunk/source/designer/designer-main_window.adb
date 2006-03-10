@@ -1106,6 +1106,7 @@ package body Designer.Main_Window is
 
       if Node_Kind (Node) = Node_Project then
          Project_Node := Node;
+	 Designer.Render_Table_Editor.Insert_Item (Node);
       end if;
    end Insert_Item;
 

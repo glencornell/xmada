@@ -38,12 +38,15 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Interfaces.C.Wide_Strings;
+
 with Xt.Ancillary_Types;
 with Xt.Callbacks;
 with Xt.Composite_Management;
 with Xt.Resource_Management;
 with Xt.Utilities;
 
+with Xm.Menu_Management;
 with Xm.Resource_Management;
 with Xm.Strings;
 with Xm_Cascade_Button_Gadget;
@@ -56,17 +59,27 @@ with Xm_Push_Button_Gadget;
 with Xm_Row_Column;
 with Xm_String_Defs;
 with Xm_Text_Field;
+with Xm_Toggle_Button_Gadget;
 
+with Designer.Main_Window;
+with Designer.Model_Utilities;
+with Model.Allocations;
 with Model.Queries;
 with Model.Tree.Lists;
+with Model.Xt_Motif;
 
 package body Designer.Render_Table_Editor is
 
+   use Designer.Model_Utilities;
+   use Interfaces.C;
+   use Interfaces.C.Wide_Strings;
    use Model;
+   use Model.Queries;
    use Model.Tree;
    use Model.Tree.Lists;
-   use Model.Queries;
+   use Model.Xt_Motif;
    use Xm;
+   use Xm.Menu_Management;
    use Xm.Resource_Management;
    use Xm.Strings;
    use Xm_Cascade_Button_Gadget;
@@ -79,6 +92,7 @@ package body Designer.Render_Table_Editor is
    use Xm_Row_Column;
    use Xm_Push_Button_Gadget;
    use Xm_Text_Field;
+   use Xm_Toggle_Button_Gadget;
    use Xt;
    use Xt.Ancillary_Types;
    use Xt.Callbacks;
@@ -86,8 +100,11 @@ package body Designer.Render_Table_Editor is
    use Xt.Resource_Management;
    use Xt.Utilities;
 
-   Notebook : Widget;
-   Dialog   : Widget;
+   Notebook     : Widget;
+   Dialog       : Widget;
+   Project_Node : Node_Id;
+   Xm_C_Unset   : constant := 0;
+   Xm_C_Set     : constant := 1;
 
    package Callbacks is
 
@@ -117,6 +134,18 @@ package body Designer.Render_Table_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Create_In_Record_Changed
+      --!    <Purpose> Подпрограмма обратного вызова при изменении состояния
+      --! флага "create_in_record".
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Create_In_Record_Changed (The_Widget : in Widget;
+                                             Closure    : in Xt_Pointer;
+                                             Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Create_In_Record_Changed);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Delete
       --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
       --! меню "Delete rendition".
@@ -126,6 +155,17 @@ package body Designer.Render_Table_Editor is
                            Closure    : in Xt_Pointer;
                            Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_Delete);
+      
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Menu_Entry
+      --!    <Purpose> Подпрограмма обратного вызова
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Menu_Entry (The_Widget : in Widget;
+                               Closure    : in Xt_Pointer;
+                               Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Menu_Entry);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -156,22 +196,8 @@ package body Designer.Render_Table_Editor is
          pragma Unreferenced (Call_Data);
          pragma Unreferenced (The_Widget);
 
-         Str  : Xm_String;
-         Tmp  : constant Wide_String := "Untitled_New";
-         Page : Widget;
-         Argl : Xt_Arg_List (0 .. 0);
-
       begin
-         Page := Xm_Create_Managed_Row_Column (Notebook, "rendition_page");
-
-         Str := Xm_String_Generate (Tmp);
-
-         Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
-         Xt_Set_Values (Page, Argl (0 .. 0));
-         Xm_String_Free (Str);
-
-         Xt_Unmanage_Child (Notebook);
-         Xt_Manage_Child (Notebook);
+         Insert_Item (Project_Node);
       end On_Add;
 
       ------------------------------------------------------------------------
@@ -190,6 +216,52 @@ package body Designer.Render_Table_Editor is
       begin
          Xt_Unmanage_Child (Dialog);
       end On_Cancel;
+      
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Create_In_Record_Changed
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Create_In_Record_Changed (The_Widget : in Widget;
+                                             Closure    : in Xt_Pointer;
+                                             Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Data : constant Xm_Toggle_Button_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+         Node : Node_Id;
+         Args : Xt_Arg_List (0 .. 0);
+
+      begin
+         --  Получаем узел, для которого вызван callback.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         --  При нажатии кнопки утанавливаем признак использования
+         --  в программе переменной и формируем ее имя.
+
+         if Data.Set = Xm_C_Set then
+         --   Set_Create_In_Record (Node, True);
+            null;
+
+         --  При отпускании кнопки запрещаем использование имени переменной
+         --  и убираем имя.
+
+         elsif Data.Set = Xm_C_Unset then
+            null;
+
+         else
+            raise Program_Error;
+         end if;
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Create_In_Record_Changed", E);
+      end On_Create_In_Record_Changed;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -204,9 +276,58 @@ package body Designer.Render_Table_Editor is
          pragma Unreferenced (Call_Data);
          pragma Unreferenced (The_Widget);
 
-      begin
-         null;
+         Page        : Widget;
+         Argl        : Xt_Arg_List (0 .. 0);
+         Page_Number : Positive;
+
+      begin      
+         Xt_Set_Arg (Argl (0), Xm_N_Current_Page_Number, Page_Number'Address);
+         Xt_Get_Values (Notebook, Argl (0 .. 0));  
+
+         Xt_Set_Arg 
+          (Argl (0), 
+           Xm_N_Page_Number, 
+           Xt_Arg_Val (Page_Number));
+         Xt_Set_Values (Notebook, Argl (0 .. 0));
+
+         Xt_Unmanage_Child (Page);  --  ???
       end On_Delete;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Menu_Entry
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Menu_Entry (The_Widget : in Widget;
+                               Closure    : in Xt_Pointer;
+                               Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         --  Данные переменные не используются.
+
+         Args : Xt_Arg_List (0 .. 0);
+         Menu : Node_Id;
+         Node : Node_Id;
+         Data : constant Xm_Row_Column_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+
+      begin
+         --  Получаем выбранный элемент меню.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Menu'Address);
+         Xt_Get_Values (Data.Widget, Args (0 .. 0));
+
+         --  Получаем ресурс, содрержащий меню.
+
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (Xm_Get_Posted_From_Widget (The_Widget),
+                        Args (0 .. 0));
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Menu_Entry", E);
+      end On_Menu_Entry;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -223,7 +344,6 @@ package body Designer.Render_Table_Editor is
 
       begin
          null;
-         --  Set_Resources
       end On_OK;
 
    end Callbacks;
@@ -234,16 +354,15 @@ package body Designer.Render_Table_Editor is
    --!    <ImplementationNotes>
    -------------------------------------------------------------------------
    procedure Initialize (Parent : in Widget) is
-      Menu_Bar        : Widget;
-      Renditions_Menu : Widget;
-      Form            : Widget;
-      Subform         : Widget;
-      Button          : Widget;
-      Page            : Widget;
-      Drawing_Area    : Widget;
-      Text_Label      : Widget;
-      Text_Field      : Widget;
-      Argl            : Xt_Arg_List (0 .. 4);
+      Menu_Bar         : Widget;
+      Renditions_Menu  : Widget;
+      Form             : Widget;
+      Subform          : Widget;
+      Button           : Widget;
+      Drawing_Area     : Widget;
+      Text_Label       : Widget;
+      Text_Field       : Widget;
+      Argl             : Xt_Arg_List (0 .. 5);
 
    begin
       Dialog :=
@@ -261,13 +380,14 @@ package body Designer.Render_Table_Editor is
       Renditions_Menu
         := Xm_Create_Pulldown_Menu (Menu_Bar, "renditions_menu");
 
-      Button :=
-        Xm_Create_Managed_Push_Button_Gadget (Renditions_Menu, "new");
+      Button := Xm_Create_Managed_Push_Button_Gadget
+       (Renditions_Menu, "New");
+
       Xt_Add_Callback
        (Button, Xm_N_Activate_Callback, Callbacks.On_Add'Access);
 
       Button :=
-        Xm_Create_Managed_Push_Button_Gadget (Renditions_Menu, "delete");
+        Xm_Create_Managed_Push_Button_Gadget (Renditions_Menu, "Delete");
       Xt_Add_Callback
        (Button, Xm_N_Activate_Callback, Callbacks.On_Delete'Access);
 
@@ -289,10 +409,7 @@ package body Designer.Render_Table_Editor is
       Button := Xt_Name_To_Widget (Notebook, "PageScroller");
       Xt_Unmanage_Child (Button);
 
-      Page := Xm_Create_Managed_Row_Column (Notebook, "rendition_page");
-      Button := Xm_Create_Managed_Push_Button_Gadget (Notebook, "page1");
-
-      Xt_Set_Arg (Argl (0), Xm_N_Current_Page_Number, Xt_Arg_Val (0));
+      Xt_Set_Arg (Argl (0), Xm_N_Current_Page_Number, Xt_Arg_Val (1));
       Xt_Set_Values (Notebook, Argl (0 .. 0));
 
       --  Создание блокнота задания свойств Xm_Rendition.
@@ -302,6 +419,7 @@ package body Designer.Render_Table_Editor is
       Xt_Set_Arg (Argl (2), Xm_N_Left_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Argl (3), Xm_N_Right_Attachment, Xm_Attach_Form);
       Subform := Xm_Create_Managed_Form (Form, "subform", Argl (0 .. 3));
+      
 
       Xt_Set_Arg (Argl (0), Xm_N_Top_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Argl (1), Xm_N_Bottom_Attachment, Xm_Attach_Form);
@@ -323,41 +441,141 @@ package body Designer.Render_Table_Editor is
       Xt_Set_Arg (Argl (3), Xm_N_Right_Attachment, Xm_Attach_Form);
       Drawing_Area :=
         Xm_Create_Managed_Drawing_Area (Form, "drawing_area", Argl (0 .. 3));
+
    end Initialize;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Insert_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Insert_Item (Resource : in Model.Node_Id) 
+   is
+      Argl             : Xt_Arg_List (0 .. 5);
+      Current_Resource : Node_Id;
+      Current_Value    : Node_Id;
+      Label            : Widget;
+      Menu             : Widget;
+      Str              : Xm_String;
+      Default_Page     : constant Wide_String := "Untitled";
+      Toggle_Button    : Widget;
+      Pulldown_Menu    : Widget; 
+      Page             : Widget;
+      Form             : Widget;
+
+   begin
+      pragma Assert (Node_Kind (Resource) = Node_Project);
+
+      --  Задание ресурсов для узла Node_Xm_Rendition.
+
+      Project_Node := Resource;
+      Page := Xm_Create_Managed_Row_Column (Notebook, "rendition_page");
+      Label := Xm_Create_Managed_Push_Button_Gadget (Notebook, "page1");
+      Str := Xm_String_Generate (Default_Page);
+
+      Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
+      Xt_Set_Values (Label, Argl (0 .. 0));
+      Xm_String_Free (Str);
+      
+      Current_Resource := First (Resources (Xt_Motif_Rendition_Class));
+
+      while Current_Resource /= Null_Node loop
+         Form := Xm_Create_Managed_Form (Page, "notebook_form");
+
+         Xt_Set_Arg (Argl (0), Xm_N_Left_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Argl (1), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Argl (2), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Argl (3), Xm_N_User_Data, Xt_Arg_Val (Resource));
+         Toggle_Button := 
+           Xm_Create_Managed_Toggle_Button_Gadget 
+            (Form, "toggle_button", Argl (0 .. 3));
+
+         Xt_Add_Callback (Toggle_Button,
+                          Xm_N_Value_Changed_Callback,
+                          Callbacks.On_Create_In_Record_Changed'Access);
+
+         Str := 
+           Xm_String_Generate
+            (Internal_Resource_Name_Image (Current_Resource));
+
+         Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
+         Xt_Set_Values (Toggle_Button, Argl (0 .. 0));
+         Xm_String_Free (Str);
+
+         --  Создаем меню.
+         Xt_Set_Arg (Argl (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
+         Xt_Set_Arg (Argl (1), Xm_N_Left_Widget, Toggle_Button); 
+         Xt_Set_Arg (Argl (2), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Argl (3), Xm_N_Top_Attachment, Xm_Attach_Form);
+         Xt_Set_Arg (Argl (4), Xm_N_Right_Attachment, Xm_Attach_Form);
+
+         Menu :=
+           Xm_Create_Option_Menu
+            (Form, "resource_menu", Argl (0 .. 4));
+
+         case Node_Kind (Resource_Type (Current_Resource)) is
+            when Node_Enumerated_Resource_Type =>
+               Pulldown_Menu :=
+                 Xm_Create_Pulldown_Menu 
+                  (Form, "resource_values");
+
+               Xt_Set_Arg (Argl (0), Xm_N_Sub_Menu_Id, Pulldown_Menu); 
+               Xt_Set_Values (Menu, Argl (0 .. 0));
+
+               Xt_Add_Callback (Pulldown_Menu,
+                                Xm_N_Entry_Callback,
+                                Callbacks.On_Menu_Entry'Access);
+
+               Current_Value :=
+                 First (Value_Specifications (Resource_Type (Current_Resource)));
+
+               while Current_Value /= Null_Node loop
+                  Str :=
+                    Xm_String_Generate
+                     (Internal_Name_Image (Current_Value));
+                  Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
+                  Xt_Set_Arg (Argl (1),
+                              Xm_N_User_Data,
+                              Xt_Arg_Val (Resource));
+
+                  Label := Xm_Create_Managed_Push_Button_Gadget
+                    (Pulldown_Menu, "resource_value", Argl (0 .. 1));
+
+                  Xm_String_Free (Str);
+                  Current_Value := Next (Current_Value);
+               end loop;
+
+               Xt_Manage_Child (Menu);
+
+            when Node_Predefined_Resource_Type =>
+               null;
+
+            when others =>
+               null;
+         end case;
+
+         Current_Resource := Next (Current_Resource);
+      end loop;
+
+   end Insert_Item;
+   
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Open
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Open (Resource : in Model.Node_Id) is
+   procedure Open (Resource : in Model.Node_Id) 
+   is
+      Argl : Xt_Arg_List (0 .. 4);
+  
    begin
-      pragma Assert
-              (Node_Kind (Resource) = Node_Xm_Render_Table_Resource_Value);
-
-      if Resource_Value (Resource) /= Null_List then
-         declare
-            Current_Rendition : Node_Id;
-            Page              : Widget;
-            Str               : Xm_String;
-            Argl              : Xt_Arg_List (0 .. 4);
-
-         begin
-            Current_Rendition := First (Resource_Value (Resource));
-
-            while Current_Rendition /= Null_Node loop
-               Page :=
-                 Xm_Create_Managed_Row_Column (Notebook, "rendition_page");
-
-               Str := Xm_String_Generate (Name_Image (Current_Rendition));
-               Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
-               Xt_Set_Values (Page, Argl (0 .. 0));
-               Xm_String_Free (Str);
-
-               Current_Rendition := Next (Current_Rendition);
-            end loop;
-         end;
-      end if;
+      pragma
+        Assert (Node_Kind (Resource) = Node_Xm_Render_Table_Resource_Value);
+      
+      Xt_Set_Arg (Argl (0), Xm_N_Page_Number, Xt_Arg_Val (1));
+      Xt_Set_Arg (Argl (1), Xm_N_First_Page_Number, Xt_Arg_Val (1));
+      Xt_Set_Arg (Argl (2), Xm_N_Last_Page_Number, Xt_Arg_Val (1));
+      Xt_Set_Values (Notebook, Argl (0 .. 2));
 
       Xt_Manage_Child (Dialog);
    end Open;

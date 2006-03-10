@@ -54,6 +54,15 @@ package Designer.Render_Table_Editor is
    --!    <Exceptions>
    -------------------------------------------------------------------------
    procedure Initialize (Parent : in Xt.Widget);
+   
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Insert_Item
+   --!    <Purpose> Заполняет значения ресурсов для узла класса
+   --! Xt_Motif_Rendition_Class.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Insert_Item (Resource : in Model.Node_Id);
       
    -------------------------------------------------------------------------
    --! <Subprogram>

@@ -42,6 +42,12 @@ XmAda maintained by TechnoServ A/S\n\
 *renderTableDialog.main_menu.renditions_menu.delete.labelString: Delete
 *renderTableDialog.top.subform.text.labelString: Test text
 *renderTableDialog.top.drawing_area.height: 50
+*renderTableDialog.top.notebook.rendition_page.notebook_form.entryVerticalAlignment: ALIGNMENT_RIGHT
+*renderTableDialog.top.notebook.rendition_page.notebook_form.packing: PACK_COLUMN
+*renderTableDialog.top.notebook.rendition_page.notebook_form.orientation: HORIZONTAL
+*renderTableDialog.top.notebook.rendition_page.notebook_form.numColumns: 1
+*renderTableDialog.top.notebook.rendition_page.notebook_form.adjustLast: FALSE
+*renderTableDialog.top.notebook.rendition_page.notebook_form.isAligned: TRUE
 
 !!  Главное окно.
 
