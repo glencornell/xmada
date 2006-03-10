@@ -223,3 +223,9 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window*vertical_paned.message_form*message_text.rows: 7
 *main_window*vertical_paned.message_show.skipAdjust: TRUE
 *main_window*vertical_paned.message_show.arrowDirection: ARROW_UP
+
+!!  Виджеты вспомогательного модуля визуального редактора для Microline.
+
+*main_window*vertical_paned*drawing.cell_editor.marginHeight: 1
+*main_window*vertical_paned*drawing.cell_editor.marginWidth: 1
+*main_window*vertical_paned*drawing.cell_editor.shadowThickness: 0

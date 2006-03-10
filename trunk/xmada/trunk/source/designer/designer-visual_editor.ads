@@ -40,7 +40,9 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Xt;
+with Interfaces.C;
+
+with Xt.Ancillary_Types;
 
 with Model;
 
@@ -129,11 +131,57 @@ package Designer.Visual_Editor is
 
    type Plugin_Access is access all Abstract_Plugin'Class;
 
---   function On_Click
---   function On_Double_Click
+   procedure On_Select (Object     : access Abstract_Plugin;
+                        Node       : in     Model.Node_Id;
+                        The_Widget : in     Xt.Widget;
+                        Event      : in     Xt.X_Event)
+     is abstract;
+
+   procedure On_Widget_Create (Object     : access Abstract_Plugin;
+                               Node       : in     Model.Node_Id;
+                               The_Widget : in     Xt.Widget)
+     is abstract;
 
 private
 
    type Abstract_Plugin is abstract tagged limited null record;
+
+   Drawing_Area : Xt.Widget := Xt.Null_Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Make_Set_Arg_List
+   --!    <Purpose> Формирует и возвращает список параметров виджета для
+   --! последующего использования при создании виджета или установки значения.
+   --! Для пустого списка возвращает пустой список параметров виджета.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Make_Set_Arg_List (List             : in Model.List_Id;
+                               Set_Initial_Size : in Boolean := False)
+     return Xt.Ancillary_Types.Xt_Arg_List;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Corresponding_Value
+   --!    <Purpose> Возвращает внутреннее значение перечислимого типа для
+   --! указанной спецификации значения перечислимого типа.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Corresponding_Value
+    (Enumeration_Resource_Value_Specification : in Model.Node_Id)
+       return Interfaces.C.unsigned_char;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Corresponding_Enumeration_Resource_Value_Specification
+   --!    <Purpose> Возвращает узел спецификации значения указанного
+   --! перечислимого типа для указанного внутреннего значения перечислимого
+   --! типа Xt/Motif.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Corresponding_Enumeration_Resource_Value_Specification
+    (Enumeration_Resource_Type : in Model.Node_Id;
+     Value                     : in Interfaces.C.unsigned_char)
+       return Model.Node_Id;
 
 end Designer.Visual_Editor;

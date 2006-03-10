@@ -46,6 +46,8 @@ source/designer/designer-properties_editor-widget_instance.adb
 source/designer/designer-properties_editor-widget_instance.ads
 source/designer/designer-properties_editor.adb
 source/designer/designer-properties_editor.ads
+source/designer/designer-render_table_editor.adb
+source/designer/designer-render_table_editor.ads
 source/designer/designer-rtl_consistency.adb
 source/designer/designer-rtl_consistency.ads
 source/designer/designer-setup.adb.in
@@ -62,12 +64,15 @@ source/designer/generator-prototype-component_class.adb
 source/designer/generator-prototype-component_class.ads
 source/designer/generator-prototype.ads
 source/designer/generator.ads
+source/designer/microline/designer-visual_editor-microline.adb
+source/designer/microline/designer-visual_editor-microline.ads
 source/designer/microline/model-initialization-designer-microline.adb
 source/designer/microline/model-initialization-designer-microline.ads
 source/designer/microline/model-initialization-xm_ada-microline.adb
 source/designer/microline/model-initialization-xm_ada-microline.ads
 source/designer/microline/model-initialization-microline.adb
 source/designer/microline/model-initialization-microline.ads
+source/designer/microline/model-microline.ads
 source/designer/model-allocations.ads
 source/designer/model-initialization-designer.adb
 source/designer/model-initialization-designer.ads

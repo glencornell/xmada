@@ -28,34 +28,29 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Designer.Setup
---! <ImplementationNotes>
---! <PortabilityIssues>
---! <AnticipatedChanges>
+--! <Unit> Designer.Visual_Editor.Micorline
+--! <Purpose>
+--!   Пакет содержит вспомогательный модуль визуального редактора для
+--! обеспечения редактирования экземпляров виджетов из набора Microline.
+--!
+--! <Effects>
+--! <Perfomance>
 ------------------------------------------------------------------------------
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
 
---  Модуль трассировки стека в символьном виде.
+package Designer.Visual_Editor.Microline is
 
-@HAVE_GNAT_SYMBOLIC_TRACEBACK@with Designer.Main_Window.Traceback;
-@HAVE_GNAT_SYMBOLIC_TRACEBACK@pragma Warnings (Off, Designer.Main_Window.Traceback);
+   type Microline_Plugin is new Abstract_Plugin with null record;
 
---  Модули поддержки набора виджетов Microline.
+   procedure On_Select (Object     : access Microline_Plugin;
+                        Node       : in     Model.Node_Id;
+                        The_Widget : in     Xt.Widget;
+                        Event      : in     Xt.X_Event);
 
-@HAVE_LIBXML@with Model.Initialization.Designer.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Model.Initialization.Designer.Microline);
+   procedure On_Widget_Create (Object     : access Microline_Plugin;
+                               Node       : in     Model.Node_Id;
+                               The_Widget : in     Xt.Widget);
 
-@HAVE_LIBXML@with Model.Initialization.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Model.Initialization.Microline);
-
-@HAVE_LIBXML@with Model.Initialization.Xm_Ada.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Model.Initialization.Xm_Ada.Microline);
-
-@HAVE_LIBXML@with Designer.Visual_Editor.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Designer.Visual_Editor.Microline);
-
-package body Designer.Setup is
-
-end Designer.Setup;
+end Designer.Visual_Editor.Microline;

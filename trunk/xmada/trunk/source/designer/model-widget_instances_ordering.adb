@@ -233,7 +233,7 @@ package body Model.Widget_Instances_Ordering is
 
    begin
          Widget_Instances_Order_Table.Increment_Last;
-         Widget_Instances_Order_Table.Table 
+         Widget_Instances_Order_Table.Table
            (Widget_Instances_Order_Table.Last) :=
              Widget_Instances.Table (Chosen).Node;
 
@@ -385,7 +385,7 @@ package body Model.Widget_Instances_Ordering is
          end if;
       end loop;
    end Diagnose_Problem;
-   
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Find_Widget_Id
@@ -424,7 +424,9 @@ package body Model.Widget_Instances_Ordering is
       if Root_Node /= Null_Node then
          Widget_Instances.Increment_Last;
          Widget_Instances.Table (Widget_Instances.Last).Node := Root_Node;
-      else return;
+
+      else
+         return;
       end if;
 
       Reindexation (Root_Node);
@@ -563,9 +565,11 @@ package body Model.Widget_Instances_Ordering is
             Aux := First (Children (Node));
 
             while Aux /= Null_Node loop
+               if not Is_Pseudo_Class (Class (Aux)) then
+                  Widget := Find_Widget_Id (Aux);
+                  Build_Link (K, Widget);
+               end if;
 
-               Widget := Find_Widget_Id (Aux);
-               Build_Link (K, Widget);
                Aux := Next (Aux);
             end loop;
          end if;
@@ -602,9 +606,8 @@ package body Model.Widget_Instances_Ordering is
    ---------------------------------------------------------------------------
    procedure Reindexation (Node : in Node_Id) is
       Aux : Node_Id;
-      
-   begin
 
+   begin
       if Resources (Node) /= Null_List then
          Aux := First (Resources (Node));
 
@@ -627,9 +630,12 @@ package body Model.Widget_Instances_Ordering is
          Aux := First (Children (Node));
 
          while Aux /= Null_Node loop
-            Widget_Instances.Increment_Last;
-            Widget_Instances.Table (Widget_Instances.Last).Node := Aux;
-            Reindexation (Aux);
+            if not Is_Pseudo_Class (Class (Aux)) then
+               Widget_Instances.Increment_Last;
+               Widget_Instances.Table (Widget_Instances.Last).Node := Aux;
+               Reindexation (Aux);
+            end if;
+
             Aux := Next (Aux);
          end loop;
       end if;
