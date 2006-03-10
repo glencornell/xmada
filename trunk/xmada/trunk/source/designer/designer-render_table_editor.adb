@@ -323,12 +323,6 @@ package body Designer.Render_Table_Editor is
       Xt_Set_Arg (Argl (3), Xm_N_Right_Attachment, Xm_Attach_Form);
       Drawing_Area :=
         Xm_Create_Managed_Drawing_Area (Form, "drawing_area", Argl (0 .. 3));
-
-      Xt_Manage_Child (Drawing_Area);
-
---      Xt_Unmanage_Child (Notebook);
---      Xt_Manage_Child (Notebook);
---
    end Initialize;
 
    ---------------------------------------------------------------------------
