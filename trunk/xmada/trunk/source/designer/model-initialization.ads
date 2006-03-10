@@ -105,6 +105,8 @@ private
    Xt_Motif_Label_Type_Resource_Type                 : Node_Id;
    Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
    Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
+   Xt_Motif_Font_Type_Resource_Type                  : Node_Id; 
+   Xt_Motif_Load_Model_Resource_Type                 : Node_Id;
    Xt_Motif_Match_Behavior_Resource_Type             : Node_Id;
    Xt_Motif_Multi_Click_Resource_Type                : Node_Id;
    Xt_Motif_Navigation_Type_Resource_Type            : Node_Id;
@@ -130,6 +132,8 @@ private
    Xt_Motif_Show_Arrows_Resource_Type                : Node_Id;
    Xt_Motif_Show_Value_Resource_Type                 : Node_Id;
    Xt_Motif_Slider_Mark_Resource_Type                : Node_Id;
+   Xt_Motif_Strikethru_Type_Resource_Type            : Node_Id;
+   Xt_Motif_Underline_Type_Resource_Type             : Node_Id;
 
    --  Типы ресурсов (не перечислений).
 
