@@ -35,6 +35,7 @@ xml_grid.lo: \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
 	$(top_srcdir)/source/xlib/xlib.ads \
 	$(top_srcdir)/source/xm/xm_manager.ads \
+	$(srcdir)/xml.ads \
 	$(srcdir)/xml_grid.adb \
 	$(srcdir)/xml_grid.ads \
 	$(top_srcdir)/source/xt/xt-ancillary_types.ads \
