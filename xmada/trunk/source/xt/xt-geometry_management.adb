@@ -85,5 +85,28 @@ package body Xt.Geometry_Management is
       XtResizeWindow (The_Widget);
    end Xt_Resize_Window;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Xt_Translate_Coords
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Xt_Translate_Coords (The_Widget : in     Widget;
+                                  X          : in     Position;
+                                  Y          : in     Position;
+                                  Root_X     :    out Position;
+                                  Root_Y     :    out Position)
+   is
+
+      procedure XtTranslateCoords (The_Widget : in     Widget;
+                                   X          : in     Position;
+                                   Y          : in     Position;
+                                   Root_X     :    out Position;
+                                   Root_Y     :    out Position);
+      pragma Import (C, XtTranslateCoords, "XtTranslateCoords");
+
+   begin
+      Check (The_Widget);
+      XtTranslateCoords (The_Widget, X, Y, Root_X, Root_Y);
+   end Xt_Translate_Coords;
 
 end Xt.Geometry_Management;
