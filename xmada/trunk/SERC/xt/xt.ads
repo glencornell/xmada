@@ -821,12 +821,12 @@ package Xt is
 --
 --	-- XtResizeWindow
 --	procedure Xt_Resize_Window (W : in Widget);
-
-	-- XtTranslateCoords
-	procedure Xt_Translate_Coords
-		     (W : in Widget;
-		      X, Y : in Position;
-		      Root_X_Return, Root_Y_Return : out Position);
+--
+--	-- XtTranslateCoords
+--	procedure Xt_Translate_Coords
+--		     (W : in Widget;
+--		      X, Y : in Position;
+--		      Root_X_Return, Root_Y_Return : out Position);
     end Xt_Geometry_Management;
 
     package Xt_Popup_Management is
