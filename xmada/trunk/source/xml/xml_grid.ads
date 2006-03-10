@@ -1,8 +1,11 @@
+
+with Interfaces.C;
+
+with Xlib;
 with Xt;
 with Xt.Ancillary_Types;
-
 with Xm_Manager;
-
+with XmL;
 
 package XmL_Grid is
 
@@ -66,7 +69,17 @@ package XmL_Grid is
 --   XmLGridRedrawRow
 --   XmLGridReorderColumns
 --   XmLGridReorderRows
---   XmLGridRowColumnToXY
+
+   procedure XmL_Grid_Row_Column_To_XY
+    (The_Widget  : in     XmL_Grid_Widget;
+     Row_Type    : in     XmL.Xm_Row_Type;
+     Row         : in     Interfaces.C.int;
+     Column_Type : in     XmL.Xm_Column_Type;
+     Column      : in     Interfaces.C.int;
+     Clipped     : in     Boolean;
+     Rectangle   :    out Xlib.X_Rectangle;
+     Exists      :    out Boolean);
+
 --   XmLGridRowlsVisible
 --   XmLGridSelectAllCells
 --   XmLGridSelectAllColumns
@@ -79,7 +92,16 @@ package XmL_Grid is
 --   XmLGridSetStringsPos
 --   XmLGridWrite
 --   XmLGridWritePos
---   XmLGridXYToRowColumn
+
+   procedure XmL_Grid_XY_To_Row_Column
+    (The_Widget  : in     XmL_Grid_Widget;
+     X           : in     Xt.Position;
+     Y           : in     Xt.Position;
+     Row_Type    :    out XmL.Xm_Row_Type;
+     Row         :    out Interfaces.C.int;
+     Column_Type :    out XmL.Xm_Column_Type;
+     Column      :    out Interfaces.C.int;
+     Exists      :    out Boolean);
 
 private
 
@@ -87,4 +109,4 @@ private
 
    pragma Import (C, XmL_Grid_Widget_Class, "XmLGridWidgetClass");
 
-END XmL_Grid;
+end XmL_Grid;

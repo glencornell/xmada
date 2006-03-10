@@ -15,10 +15,16 @@
    подпрограмма XtAppAddWorkProc
    подпрограмма XtConvertAndStore
    подпрограмма XtRemoveWorkProc
+   подпрограмма XtTranslateCoords
 
 В связку с Xm добавлены:
    подпрограмма XmSpinBoxValidatePosition
    подпрограмма Xt_Set_Arg для типа Xm_Include_Status
+   подпрограмма XmeSetWMShellTitle
+
+В связку с Microline добавлены:
+   подпрограмма XmLGridRowColumnToXY
+   подпрограмма XmLGridXYToRowColumn
 
 Пакеты связки Xlib отвечающие за расширения вынесены в отдельные библиотеки для
 исключения необходимости сборки конечной программы со всеми этими библиотеками.

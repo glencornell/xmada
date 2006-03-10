@@ -98,6 +98,11 @@ package XmL is
                            Xm_All_Types);
    --  Xm_Column_Type may be Xm_Invalid_Type (4) but not currently present
 
+   type Xm_Row_Type is (Xm_Content,
+                        Xm_Heading,
+                        Xm_Footer,
+                        Xm_All_Types);
+
    type Xm_Cell_Type is (Xm_Icon_Cell,
                          Xm_Pixmap_Cell,
                          Xm_String_Cell);
@@ -217,5 +222,13 @@ private
                            Xm_Footer    => 2,
                            Xm_All_Types => 3);
 --                         Xm_Invalid_Type => 4);
+
+   pragma Convention (C, Xm_Row_Type);
+   for Xm_Row_Type'Size use Interfaces.C.unsigned_char'Size;
+   for Xm_Row_Type use (Xm_Content   => 0,
+                        Xm_Heading   => 1,
+                        Xm_Footer    => 2,
+                        Xm_All_Types => 3);
+--                      Xm_Invalid_Type => 4);
 
 end XmL;
