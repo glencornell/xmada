@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2004-2005  Vadim Godunko (vgodunko@rostel.ru)
+--!  Copyright (C) 2004-2006  Vadim Godunko (vgodunko@rostel.ru)
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -57,5 +57,10 @@ package Xt.Geometry_Management is
 
    procedure Xt_Resize_Window (The_Widget : in Widget);
 
+   procedure Xt_Translate_Coords (The_Widget : in     Widget;
+                                  X          : in     Position;
+                                  Y          : in     Position;
+                                  Root_X     :    out Position;
+                                  Root_Y     :    out Position);
 
 end Xt.Geometry_Management;
