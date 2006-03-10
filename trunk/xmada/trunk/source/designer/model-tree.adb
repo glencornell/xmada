@@ -487,6 +487,19 @@ package body Model.Tree is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Is_Pseudo_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Is_Pseudo_Class (Node : in Node_Id) return Boolean is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      return Node_Table.Table (Node).Is_Pseudo_Class;
+   end Is_Pseudo_Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Is_Resource_Class_Value
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -540,7 +553,6 @@ package body Model.Tree is
             raise Program_Error;
       end case;
    end Is_Resource_Class_Value;
-
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -1300,6 +1312,19 @@ package body Model.Tree is
             raise Program_Error;
       end case;
    end Set_Is_Postponed;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Set_Is_Pseudo_Class
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Set_Is_Pseudo_Class (Node : in Node_Id; Value : in Boolean) is
+   begin
+      pragma Assert (Node in Node_Table.First .. Node_Table.Last);
+      pragma Assert (Node_Kind (Node) = Node_Widget_Class);
+
+      Node_Table.Table (Node).Is_Pseudo_Class := Value;
+   end Set_Is_Pseudo_Class;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
