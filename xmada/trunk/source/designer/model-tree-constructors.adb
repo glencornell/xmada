@@ -356,6 +356,7 @@ package body Model.Tree.Constructors is
          Next                                 => Null_Node,
          WC_Name                              => Null_Name,
          Is_Meta_Class                        => False,
+         Is_Pseudo_Class                      => False,
          Super_Class                          => Null_Node,
          WC_Automatically_Created_Parent      => Null_Node,
          WC_Automatically_Created_Children    => Null_List,

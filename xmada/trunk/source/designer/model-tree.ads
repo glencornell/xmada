@@ -355,6 +355,9 @@ package Model.Tree is
    function Is_Postponed (Node : in Node_Id) return Boolean;
    procedure Set_Is_Postponed (Node : in Node_Id; Value : in Boolean);
 
+   function Is_Pseudo_Class (Node : in Node_Id) return Boolean;
+   procedure Set_Is_Pseudo_Class (Node : in Node_Id; Value : in Boolean);
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
@@ -440,6 +443,10 @@ private
             Is_Meta_Class                        : Boolean;
             --  Класс предназначен только для создания иерархии классов.
             --  Создание экземпляров класса не возможно.
+
+            Is_Pseudo_Class                      : Boolean;
+            --  Вспомогательный класс, не являющийся потомком класса Object,
+            --  но описание которого удобно производить в терминах класса.
 
             Super_Class                          : Node_Id;
             --  Объявление базового класса.
