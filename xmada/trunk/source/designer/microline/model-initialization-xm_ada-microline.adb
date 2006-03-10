@@ -68,33 +68,32 @@ package body Model.Initialization.Xm_Ada.Microline is
       --  Установка имён подпрограмм создания экземпляров виджетов.
 
       Set_Convenience_Create_Function_Name
-       (Xt_Motif_Folder_Widget_Class,
+       (Microline_Folder_Widget_Class,
         Enter ("XmL_Folder.XmL_Create_Folder"));
       Set_Convenience_Create_Function_Name
-       (Xt_Motif_Progress_Widget_Class,
+       (Microline_Progress_Widget_Class,
         Enter ("XmL_Progress.XmL_Create_Progress"));
       Set_Convenience_Create_Function_Name
-       (Xt_Motif_Tree_Widget_Class,
+       (Microline_Tree_Widget_Class,
         Enter ("XmL_Tree.XmL_Create_Tree"));
       Set_Convenience_Create_Function_Name
-       (Xt_Motif_Grid_Widget_Class,
+       (Microline_Grid_Widget_Class,
         Enter ("XmL_Grid.XmL_Create_Grid"));
 
       --  Инициализация имен пакетов создаваемых классов виджетов
 
       Set_Convenience_Create_Function_Package_Name
-       (Xt_Motif_Folder_Widget_Class,
+       (Microline_Folder_Widget_Class,
         Enter ("XmL_Folder"));
       Set_Convenience_Create_Function_Package_Name
-       (Xt_Motif_Progress_Widget_Class,
+       (Microline_Progress_Widget_Class,
         Enter ("XmL_Progress"));
       Set_Convenience_Create_Function_Package_Name
-       (Xt_Motif_Tree_Widget_Class,
+       (Microline_Tree_Widget_Class,
         Enter ("XmL_Tree"));
       Set_Convenience_Create_Function_Package_Name
-       (Xt_Motif_Grid_Widget_Class,
+       (Microline_Grid_Widget_Class,
         Enter ("XmL_Grid"));
-
    end Initialize;
 
 begin

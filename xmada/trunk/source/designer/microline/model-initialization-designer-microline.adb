@@ -40,14 +40,15 @@
 ------------------------------------------------------------------------------
 with XmL_Grid;
 
+with Designer.Visual_Editor.Microline;
 with Model.Initialization.Microline;
 with Model.Tree.Designer;
 
 package body Model.Initialization.Designer.Microline is
 
-   use XmL_Grid;
    use Model.Initialization.Microline;
    use Model.Tree.Designer;
+   use XmL_Grid;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -64,6 +65,16 @@ package body Model.Initialization.Designer.Microline is
    ---------------------------------------------------------------------------
    procedure Initialize is
    begin
+      Set_Representation_Type
+       (Microline_Cell_Type_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
+       (Microline_Column_Type_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
+       (Microline_Row_Type_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
+
 --      Set_Convenience_Create_Function
 --       (Xt_Motif_Folder_Widget_Class,
 --        XmL_Folder.XmL_Create_Folder'Access);
@@ -73,9 +84,16 @@ package body Model.Initialization.Designer.Microline is
 --      Set_Convenience_Create_Function
 --       (Xt_Motif_Tree_Widget_Class,
 --        XmL_Tree.XmL_Create_Tree'Access);
+
+      Set_Widget_Class
+       (Microline_Grid_Widget_Class,
+        XmL_Grid.XmL_Grid_Widget_Class);
       Set_Convenience_Create_Function
-       (Xt_Motif_Grid_Widget_Class,
+       (Microline_Grid_Widget_Class,
         XmL_Grid.XmL_Create_Grid'Access);
+      Set_Visual_Editor_Plugin
+       (Microline_Grid_Widget_Class,
+        new Standard.Designer.Visual_Editor.Microline.Microline_Plugin);
    end Initialize;
 
 begin

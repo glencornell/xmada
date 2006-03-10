@@ -50,6 +50,7 @@ with Xlib.Resource_Manager;
 with Xt.Ancillary_Types;
 with Xt.Composite_Management;
 with Xt.Event_Management;
+with Xt.Initializers;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Translation_Management;
@@ -91,6 +92,7 @@ package body Designer.Visual_Editor is
    use Xt.Ancillary_Types;
    use Xt.Composite_Management;
    use Xt.Event_Management;
+   use Xt.Initializers;
    use Xt.Instance_Management;
    use Xt.Resource_Management;
    use Xt.Translation_Management;
@@ -212,42 +214,6 @@ package body Designer.Visual_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
-   --!    <Unit> Corresponding_Enumeration_Resource_Value_Specification
-   --!    <Purpose> Возвращает узел спецификации значения указанного
-   --! перечислимого типа для указанного внутреннего значения перечислимого
-   --! типа Xt/Motif.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Corresponding_Enumeration_Resource_Value_Specification
-    (Enumeration_Resource_Type : in Node_Id;
-     Value                     : in Interfaces.C.unsigned_char)
-       return Node_Id;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Corresponding_Value
-   --!    <Purpose> Возвращает внутреннее значение перечислимого типа для
-   --! указанной спецификации значения перечислимого типа.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Corresponding_Value
-    (Enumeration_Resource_Value_Specification : in Node_Id)
-       return Interfaces.C.unsigned_char;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
-   --!    <Unit> Make_Set_Arg_List
-   --!    <Purpose> Формирует и возвращает список параметров виджета для
-   --! последующего использования при создании виджета или установки значения.
-   --! Для пустого списка возвращает пустой список параметров виджета.
-   --!    <Exceptions>
-   ---------------------------------------------------------------------------
-   function Make_Set_Arg_List (List             : in List_Id;
-                               Set_Initial_Size : in Boolean := False)
-     return Xt_Arg_List;
-
-   ---------------------------------------------------------------------------
-   --! <Subprogram>
    --!    <Unit> Make_Get_Arg_List
    --!    <Purpose> Формирует и возвращает список параметров виджета для
    --! последующего использования его при получении значений ресурсов виджета.
@@ -313,7 +279,6 @@ package body Designer.Visual_Editor is
            ("XmAdaDesignerVisualEditorOnSelect"),
           Callbacks.On_Select'Access));
 
-   Drawing_Area     : Widget  := Null_Widget;
    Edited_Component : Node_Id := Null_Node;
    Selected_Item    : Node_Id := Null_Node;
    Translations     : Xt_Translations;
@@ -467,13 +432,25 @@ package body Designer.Visual_Editor is
                            Params     : in System.Address;
                            Num_Params : in Cardinal)
       is
-         pragma Unreferenced (The_Widget);
-         pragma Unreferenced (Event);
          pragma Unreferenced (Params);
          pragma Unreferenced (Num_Params);
 
+         Node : Xt_Arg_Val;
+         Args : Xt_Arg_List (0 .. 0);
+
       begin
-         null;
+         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Args (0 .. 0));
+
+         --  Вызов вспомогательного модуля визуального редактора (если
+         --  таковой задан для класса виджета).
+
+         if Visual_Editor_Plugin (Class (Node_Id (Node))) /= null then
+            On_Select (Visual_Editor_Plugin (Class (Node_Id (Node))),
+                       Node_Id (Node),
+                       The_Widget,
+                       Event);
+         end if;
 
       exception
          when E : others =>
@@ -522,7 +499,7 @@ package body Designer.Visual_Editor is
 
    begin
       --  Специальная обработка предопределенного типа Boolean. Тип имеет
-      --  значение FALSE если преобразовываемое знаячение равно нулю и TRUE
+      --  значение FALSE если преобразовываемое значение равно нулю и TRUE
       --  в противном случае.
 
       if Internal_Name_Image (Enumeration_Resource_Type) = "Boolean" then
@@ -718,6 +695,15 @@ package body Designer.Visual_Editor is
             & Make_Set_Arg_List (Constraint_Resources (Node))
             & Args);
 
+      --  Вызов вспомогательного модуля визуального редактора (если
+      --  таковой задан для класса виджета).
+
+      if Visual_Editor_Plugin (Class (Node)) /= null then
+         On_Widget_Create (Visual_Editor_Plugin (Class (Node)),
+                           Node,
+                           Annotation_Table.Table (Node).Widget);
+      end if;
+
       Xt_Manage_Child (Annotation_Table.Table (Node).Widget);
    end Create_Widget;
 
@@ -843,6 +829,34 @@ package body Designer.Visual_Editor is
    begin
       case Node_Kind (Node) is
          when Node_Project =>
+            --  Инициализируем все классы виджетов. Это необходимо для
+            --  установки классами конверторов перечислимых типов.
+
+            declare
+               Set : Node_Id := First (Imported_Widget_Sets (Node));
+
+            begin
+               while Set /= Null_Node loop
+                  declare
+                     Class : Node_Id := First (Widget_Classes (Set));
+
+                  begin
+                     while Class /= Null_Node loop
+                        if Model.Tree.Designer.Widget_Class (Class)
+                             /= Null_Widget_Class
+                        then
+                           Xt_Initialize_Widget_Class
+                            (Model.Tree.Designer.Widget_Class (Class));
+                        end if;
+
+                        Class := Next (Class);
+                     end loop;
+                  end;
+
+                  Set := Next (Set);
+               end loop;
+            end;
+
             --  Устанавливаем обратные конверторы типов ресурсов.
 
             declare

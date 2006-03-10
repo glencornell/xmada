@@ -42,12 +42,17 @@
 --  $Date$
 ------------------------------------------------------------------------------
 
-private package Model.Initialization.Microline is
+package Model.Initialization.Microline is
+
    pragma Elaborate_Body;
 
-   Xt_Motif_Folder_Widget_Class   : Node_Id;
-   Xt_Motif_Progress_Widget_Class : Node_Id;
-   Xt_Motif_Grid_Widget_Class     : Node_Id;
-   Xt_Motif_Tree_Widget_Class     : Node_Id;
+   Microline_Cell_Type_Resource_Type   : Node_Id;
+   Microline_Column_Type_Resource_Type : Node_Id;
+   Microline_Row_Type_Resource_Type    : Node_Id;
+
+   Microline_Folder_Widget_Class   : Node_Id;
+   Microline_Progress_Widget_Class : Node_Id;
+   Microline_Grid_Widget_Class     : Node_Id;
+   Microline_Tree_Widget_Class     : Node_Id;
 
 end Model.Initialization.Microline;

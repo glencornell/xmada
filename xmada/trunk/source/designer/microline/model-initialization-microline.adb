@@ -38,6 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+with Model.Microline;
 with Model.Names;
 with Model.Tree.Constructors;
 with Model.Tree.Lists;
@@ -46,6 +47,7 @@ with Model.Xt_Motif;
 package body Model.Initialization.Microline is
 
    use Model;
+   use Model.Microline;
    use Model.Names;
    use Model.Tree;
    use Model.Tree.Lists;
@@ -91,7 +93,139 @@ package body Model.Initialization.Microline is
    ---------------------------------------------------------------------------
    procedure Create_Predefined_Resource_Types is
    begin
-      null;
+      --  CellType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmICON_CELL"));
+         Set_Internal_Name (Value, Enter ("ICON_CELL"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmSTRING_CELL"));
+         Set_Internal_Name (Value, Enter ("STRING_CELL"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmPIXMAP_CELL"));
+         Set_Internal_Name (Value, Enter ("PIXMAP_CELL"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmTOGGLE_CELL"));
+         Set_Internal_Name (Value, Enter ("TOGGLE_CELL"));
+         Append (Values, Value);
+
+         Microline_Cell_Type_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Microline_Cell_Type_Resource_Type, Enter ("XmRCellType"));
+         Set_Internal_Name
+          (Microline_Cell_Type_Resource_Type, Enter ("CellType"));
+         Set_Value_Specifications
+          (Microline_Cell_Type_Resource_Type, Values);
+      end;
+
+      --  ColumnType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmHEADING"));
+         Set_Internal_Name (Value, Enter ("HEADING"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmCONTENT"));
+         Set_Internal_Name (Value, Enter ("CONTENT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmFOOTER"));
+         Set_Internal_Name (Value, Enter ("FOOTER"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmALL_TYPES"));
+         Set_Internal_Name (Value, Enter ("ALL_TYPES"));
+         Append (Values, Value);
+
+         Microline_Column_Type_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Microline_Column_Type_Resource_Type, Enter ("XmRColumnType"));
+         Set_Internal_Name
+          (Microline_Column_Type_Resource_Type, Enter ("ColumnType"));
+         Set_Value_Specifications
+          (Microline_Column_Type_Resource_Type, Values);
+      end;
+
+      --  RowType
+
+      declare
+         Values : constant List_Id := New_List;
+         Value  : Node_Id;
+
+      begin
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmHEADING"));
+         Set_Internal_Name (Value, Enter ("HEADING"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmCONTENT"));
+         Set_Internal_Name (Value, Enter ("CONTENT"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmFOOTER"));
+         Set_Internal_Name (Value, Enter ("FOOTER"));
+         Append (Values, Value);
+
+         Value := Create_Enumeration_Value_Specification;
+         Set_Name (Value, Enter ("XmALL_TYPES"));
+         Set_Internal_Name (Value, Enter ("ALL_TYPES"));
+         Append (Values, Value);
+
+         Microline_Row_Type_Resource_Type := Create_Enumerated_Resource_Type;
+         Set_Name
+          (Microline_Row_Type_Resource_Type, Enter ("XmRRowType"));
+         Set_Internal_Name
+          (Microline_Row_Type_Resource_Type, Enter ("RowType"));
+         Set_Value_Specifications
+          (Microline_Row_Type_Resource_Type, Values);
+      end;
+
+      --
+
+--      declare
+--         Values : constant List_Id := New_List;
+--         Value  : Node_Id;
+--
+--      begin
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--         Value := Create_Enumeration_Value_Specification;
+--         Set_Name (Value, Enter (""));
+--         Set_Internal_Name (Value, Enter (""));
+--         Append (Values, Value);
+--
+--          := Create_Enumerated_Resource_Type;
+--         Set_Name
+--          (, Enter (""));
+--         Set_Internal_Name
+--          (, Enter (""));
+--         Set_Value_Specifications
+--          (, Values);
+--      end;
    end Create_Predefined_Resource_Types;
 
    --------------------------------------------------------------------------
@@ -105,10 +239,15 @@ package body Model.Initialization.Microline is
       Classes : constant List_Id := New_List;
 
    begin
-      Append (Classes, Xt_Motif_Folder_Widget_Class);
-      Append (Classes, Xt_Motif_Progress_Widget_Class);
-      Append (Classes, Xt_Motif_Grid_Widget_Class);
-      Append (Classes, Xt_Motif_Tree_Widget_Class);
+      Append (Classes, Microline_Folder_Widget_Class);
+      Append (Classes, Microline_Progress_Widget_Class);
+      Append (Classes, Microline_Grid_Widget_Class);
+      Append (Classes, Microline_Tree_Widget_Class);
+      Append (Classes, Microline_Grid_Cell_Class);
+
+      Append (Types, Microline_Cell_Type_Resource_Type);
+      Append (Types, Microline_Column_Type_Resource_Type);
+      Append (Types, Microline_Row_Type_Resource_Type);
 
       Set := Create_Widget_Set;
       Set_Name (Set, Enter ("Microline"));
@@ -130,9 +269,9 @@ package body Model.Initialization.Microline is
 --      Resource    : Node_Id;
 
    begin
-      Xt_Motif_Folder_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Folder_Widget_Class, Enter ("XmLFolder"));
-      Set_Super_Class (Xt_Motif_Folder_Widget_Class,
+      Microline_Folder_Widget_Class := Create_Widget_Class;
+      Set_Name (Microline_Folder_Widget_Class, Enter ("XmLFolder"));
+      Set_Super_Class (Microline_Folder_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
     --  All resources.
@@ -559,8 +698,8 @@ package body Model.Initialization.Microline is
 ----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 ----       Append (Constraints, Resource);
 
-      Set_Resources (Xt_Motif_Folder_Widget_Class, Resources);
-      Merge_Inherited_Resources (Xt_Motif_Folder_Widget_Class);
+      Set_Resources (Microline_Folder_Widget_Class, Resources);
+      Merge_Inherited_Resources (Microline_Folder_Widget_Class);
    end Folder_Widget_Class;
 
    ---------------------------------------------------------------------------
@@ -569,13 +708,13 @@ package body Model.Initialization.Microline is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Grid_Widget_Class is
-      Resources   : constant List_Id := New_List;
-      Resource    : Node_Id;
+      Resources : List_Id := New_List;
+      Resource  : Node_Id;
 
    begin
-      Xt_Motif_Grid_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Grid_Widget_Class, Enter ("XmLGrid"));
-      Set_Super_Class (Xt_Motif_Grid_Widget_Class,
+      Microline_Grid_Widget_Class := Create_Widget_Class;
+      Set_Name (Microline_Grid_Widget_Class, Enter ("XmLGrid"));
+      Set_Super_Class (Microline_Grid_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
       --  All resources.
@@ -718,20 +857,6 @@ package body Model.Initialization.Microline is
       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
       Append (Resources, Resource);
 
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellDefaults"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellDefaults"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellDefaults"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellDefaults"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Boolean_Resource_Type);
---      Set_Can_Be_Set_At_Creation_Time (Resource, True);
---  --  Set_Can_Be_Set_By_Set_Values (Resource, True);
---  --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
 ----       Resource := Create_Resource_Specification;
 ----       Set_Resource_Name (Resource, Enter ("XmNcellDrawCallback"));
 ----       Set_Internal_Resource_Name (Resource, Enter ("cellDrawCallback"));
@@ -887,32 +1012,6 @@ package body Model.Initialization.Microline is
 --       Set_Can_Be_Set_By_Set_Values (Resource, True);
 --       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --       Append (Resources, Resource);
-
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellFontList"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellFontList"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellFontList"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellFontList"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Font_List_Resource_Type);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
-
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellRenderTable"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellRenderTable"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellRenderTable"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellRenderTable"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Xm_Render_Table_Resource_Type);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
 
 ----       Resource := Create_Resource_Specification;
 ----       Set_Resource_Name (Resource, Enter ("XmNcellRenderTable"));
@@ -1565,146 +1664,6 @@ package body Model.Initialization.Microline is
 ----       Append (Resources, Resource);
 --
 --      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNrow"));
---      Set_Internal_Resource_Name (Resource, Enter ("row"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCrow"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("row"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---  --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNrowUserData"));
-----       Set_Internal_Resource_Name (Resource, Enter ("rowUserData"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCUserData"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("UserData"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Pointer_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNrowHeight"));
---      Set_Internal_Resource_Name (Resource, Enter ("rowHeight"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCRowHeight"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("RowHeight"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Dimension_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNrowRangeEnd"));
---      Set_Internal_Resource_Name (Resource, Enter ("rowRangeEnd"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCRowRangeEnd"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("RowRangeEnd"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---  --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNrowRangeStart"));
---      Set_Internal_Resource_Name (Resource, Enter ("rowRangeStart"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCRowRangeStart"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("RowRangeStart"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---  --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNrowSizePolicy"));
-----       Set_Internal_Resource_Name (Resource, Enter ("rowSizePolicy"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCRowSizePolicy"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("RowSizePolicy"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Grid_Size_Policy_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNrowStep"));
---      Set_Internal_Resource_Name (Resource, Enter ("rowStep"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCRowStep"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("RowStep"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---  --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNrowType"));
-----       Set_Internal_Resource_Name (Resource, Enter ("rowType"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCRowType"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("RowType"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Row_Type_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----   --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcolumn"));
---      Set_Internal_Resource_Name (Resource, Enter ("column"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCColumn"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("Column"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---  --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcolumnUserData"));
-----       Set_Internal_Resource_Name (Resource, Enter ("columnUserData"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCUserData"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("UserData"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Pointer_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
 --      Set_Resource_Name (Resource, Enter ("XmNcolumnResizable"));
 --      Set_Internal_Resource_Name (Resource, Enter ("columnResizable"));
 --      Set_Resource_Class_Name (Resource,
@@ -1719,90 +1678,6 @@ package body Model.Initialization.Microline is
 --      Append (Resources, Resource);
 --
 --      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcolumnWidth"));
---      Set_Internal_Resource_Name (Resource, Enter ("columnWidth"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCColumnWidth"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("ColumnWidth"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Dimension_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcolumnRangeEnd"));
---      Set_Internal_Resource_Name (Resource, Enter ("columnRangeEnd"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCColumnRangeEnd"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("ColumnRangeEnd"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---  --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcolumnRangeStart"));
---      Set_Internal_Resource_Name (Resource, Enter ("columnRangeStart"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCColumnRangeStart"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("ColumnRangeStart"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---  --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcolumnSizePolicy"));
-----       Set_Internal_Resource_Name (Resource, Enter ("columnSizePolicy"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCColumnSizePolicy"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("ColumnSizePolicy"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Grid_Size_Policy_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcolumnStep"));
---      Set_Internal_Resource_Name (Resource, Enter ("columnStep"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCColumnStep"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("ColumnStep"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---  --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcolumnType"));
-----       Set_Internal_Resource_Name (Resource, Enter ("columnType"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCColumnType"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("ColumnType"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Column_Type_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----   --  Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
 --      Set_Resource_Name (Resource, Enter ("XmNcolumnHidden"));
 --      Set_Internal_Resource_Name (Resource, Enter ("columnHidden"));
 --      Set_Resource_Class_Name (Resource,
@@ -1812,272 +1687,6 @@ package body Model.Initialization.Microline is
 --      Set_Resource_Type (Resource,
 --                         Xt_Motif_Boolean_Resource_Type);
 --      Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellAlignment"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellAlignment"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellAlignment"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellAlignment"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Cell_Alignment_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellBackground"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellBackground"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellBackground"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellBackground"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Pixel_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellBottomBorderColor"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellBottomBorderColor"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellBottomBorderColor"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellBottomBorderColor"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Pixel_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellBottomBorderType"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellBottomBorderType"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellBottomBorderType"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellBottomBorderType"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Cell_Border_Type_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellColumnSpan"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellColumnSpan"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellColumnSpan"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellColumnSpan"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellEditable"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellEditable"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellEditable"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellEditable"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Boolean_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellForeground"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellForeground"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellForeground"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellForeground"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Pixel_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellLeftBorderColor"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellLeftBorderColor"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellLeftBorderColor"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellLeftBorderColor"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Pixel_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellLeftBorderType"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellLeftBorderType"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellLeftBorderType"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellLeftBorderType"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Cell_Border_Type_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellMarginBottom"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellMarginBottom"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellMarginBottom"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellMarginBottom"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Dimension_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellMarginLeft"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellMarginLeft"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellMarginLeft"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellMarginLeft"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Dimension_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellMarginRight"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellMarginRight"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellMarginRight"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellMarginRight"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Dimension_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellMarginTop"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellMarginTop"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellMarginTop"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellMarginTop"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Dimension_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellPixmap"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellPixmap"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellPixmap"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellPixmap"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Man_Foreground_Pixmap_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellPixmapMask"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellPixmapMask"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellPixmapMask"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellPixmapMask"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Bitmap_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellRightBorderColor"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellRightBorderColor"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellRightBorderColor"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellRightBorderColor"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Pixel_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellRightBorderType"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellRightBorderType"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellRightBorderType"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellRightBorderType"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Cell_Border_Type_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellRowSpan"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellRowSpan"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellRowSpan"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellRowSpan"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_C_Int_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellString"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellString"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCXmString"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("XmString"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Xm_String_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
 --      Set_Can_Be_Set_By_Set_Values (Resource, True);
 --      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --      Append (Resources, Resource);
@@ -2095,62 +1704,6 @@ package body Model.Initialization.Microline is
 --      Set_Can_Be_Set_By_Set_Values (Resource, True);
 --      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --      Append (Resources, Resource);
---
---      Resource := Create_Resource_Specification;
---      Set_Resource_Name (Resource, Enter ("XmNcellTopBorderColor"));
---      Set_Internal_Resource_Name (Resource, Enter ("cellTopBorderColor"));
---      Set_Resource_Class_Name (Resource,
---                               Enter ("XmCCellTopBorderColor"));
---      Set_Internal_Resource_Class_Name (Resource,
---                                        Enter ("CellTopBorderColor"));
---      Set_Resource_Type (Resource,
---                         Xt_Motif_Pixel_Resource_Type);
---  --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
---      Set_Can_Be_Set_By_Set_Values (Resource, True);
---      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
---      Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellTopBorderType"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellTopBorderType"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellTopBorderType"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellTopBorderType"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Cell_Border_Type_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellType"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellType"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCCellType"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("CellType"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Cell_Type_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
---
-----       Resource := Create_Resource_Specification;
-----       Set_Resource_Name (Resource, Enter ("XmNcellUserData"));
-----       Set_Internal_Resource_Name (Resource, Enter ("cellUserData"));
-----       Set_Resource_Class_Name (Resource,
-----                                Enter ("XmCUserData"));
-----       Set_Internal_Resource_Class_Name (Resource,
-----                                         Enter ("UserData"));
-----       Set_Resource_Type (Resource,
-----                          Xt_Motif_Pointer_Resource_Type);
-----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
-----       Set_Can_Be_Set_By_Set_Values (Resource, True);
-----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
-----       Append (Resources, Resource);
 --
 --      Resource := Create_Resource_Specification;
 --      Set_Resource_Name (Resource, Enter ("XmNshadowThickness"));
@@ -2222,8 +1775,541 @@ package body Model.Initialization.Microline is
 --      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --      Append (Resources, Resource);
 
-      Set_Resources (Xt_Motif_Grid_Widget_Class, Resources);
-      Merge_Inherited_Resources (Xt_Motif_Grid_Widget_Class);
+      Set_Resources (Microline_Grid_Widget_Class, Resources);
+      Merge_Inherited_Resources (Microline_Grid_Widget_Class);
+
+      --  Grid Cell Pseudo Class
+
+      Microline_Grid_Cell_Class := Create_Widget_Class;
+      Set_Name (Microline_Grid_Cell_Class, Enter ("XmLGridCell"));
+      Set_Is_Pseudo_Class (Microline_Grid_Cell_Class, True);
+
+      Resources := New_List;
+
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellAlignment"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellAlignment"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCCellAlignment"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("CellAlignment"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Cell_Alignment_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellBackground"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellBackground"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellBackground"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellBackground"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Pixel_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellBottomBorderColor"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellBottomBorderColor"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellBottomBorderColor"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellBottomBorderColor"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Pixel_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellBottomBorderType"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellBottomBorderType"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCCellBottomBorderType"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("CellBottomBorderType"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Cell_Border_Type_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellColumnSpan"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellColumnSpan"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellColumnSpan"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellColumnSpan"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_C_Int_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellDefaults"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellDefaults"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellDefaults"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellDefaults"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Boolean_Resource_Type);
+--      Set_Can_Be_Set_At_Creation_Time (Resource, True);
+--      Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellEditable"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellEditable"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellEditable"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellEditable"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Boolean_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellFontList"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellFontList"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCCellFontList"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("CellFontList"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Font_List_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellForeground"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellForeground"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellForeground"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellForeground"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Pixel_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellLeftBorderColor"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellLeftBorderColor"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellLeftBorderColor"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellLeftBorderColor"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Pixel_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellLeftBorderType"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellLeftBorderType"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCCellLeftBorderType"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("CellLeftBorderType"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Cell_Border_Type_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellMarginBottom"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellMarginBottom"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellMarginBottom"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellMarginBottom"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Dimension_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellMarginLeft"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellMarginLeft"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellMarginLeft"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellMarginLeft"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Dimension_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellMarginRight"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellMarginRight"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellMarginRight"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellMarginRight"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Dimension_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellMarginTop"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellMarginTop"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellMarginTop"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellMarginTop"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Dimension_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellPixmap"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellPixmap"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCCellPixmap"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("CellPixmap"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Man_Foreground_Pixmap_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellPixmapMask"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellPixmapMask"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCCellPixmapMask"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("CellPixmapMask"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Bitmap_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellRenderTable"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellRenderTable"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCCellRenderTable"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("CellRenderTable"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Xm_Render_Table_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellRightBorderColor"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellRightBorderColor"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellRightBorderColor"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellRightBorderColor"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Pixel_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellRightBorderType"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellRightBorderType"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCCellRightBorderType"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("CellRightBorderType"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Cell_Border_Type_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellRowSpan"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellRowSpan"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellRowSpan"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellRowSpan"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_C_Int_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+
+      Resource := Create_Resource_Specification;
+      Set_Resource_Name (Resource, Enter ("XmNcellString"));
+      Set_Internal_Resource_Name (Resource, Enter ("cellString"));
+      Set_Resource_Class_Name (Resource, Enter ("XmCXmString"));
+      Set_Internal_Resource_Class_Name (Resource, Enter ("XmString"));
+      Set_Resource_Type (Resource, Xt_Motif_Xm_String_Resource_Type);
+      Set_Can_Be_Set_By_Set_Values (Resource, True);
+      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+      Append (Resources, Resource);
+
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcellTopBorderColor"));
+--      Set_Internal_Resource_Name (Resource, Enter ("cellTopBorderColor"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCCellTopBorderColor"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("CellTopBorderColor"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Pixel_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellTopBorderType"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellTopBorderType"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCCellTopBorderType"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("CellTopBorderType"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Cell_Border_Type_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+
+       Resource := Create_Resource_Specification;
+       Set_Resource_Name (Resource, Enter ("XmNcellType"));
+       Set_Internal_Resource_Name (Resource, Enter ("cellType"));
+       Set_Resource_Class_Name (Resource, Enter ("XmCCellType"));
+       Set_Internal_Resource_Class_Name (Resource, Enter ("CellType"));
+       Set_Resource_Type (Resource, Microline_Cell_Type_Resource_Type);
+       Set_Can_Be_Set_By_Set_Values (Resource, True);
+       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+       Append (Resources, Resource);
+
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcellUserData"));
+----       Set_Internal_Resource_Name (Resource, Enter ("cellUserData"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCUserData"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("UserData"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Pointer_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+
+      Resource := Create_Resource_Specification;
+      Set_Resource_Name (Resource, Enter ("XmNcolumn"));
+      Set_Internal_Resource_Name (Resource, Enter ("column"));
+      Set_Resource_Class_Name (Resource, Enter ("XmCColumn"));
+      Set_Internal_Resource_Class_Name (Resource, Enter ("Column"));
+      Set_Resource_Type (Resource, Xt_Motif_C_Int_Resource_Type);
+      Set_Can_Be_Set_By_Set_Values (Resource, True);
+      Append (Resources, Resource);
+
+      --  XXX  XmNcolumnPtr ???
+
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcolumnRangeEnd"));
+--      Set_Internal_Resource_Name (Resource, Enter ("columnRangeEnd"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCColumnRangeEnd"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("ColumnRangeEnd"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_C_Int_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcolumnRangeStart"));
+--      Set_Internal_Resource_Name (Resource, Enter ("columnRangeStart"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCColumnRangeStart"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("ColumnRangeStart"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_C_Int_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcolumnSizePolicy"));
+----       Set_Internal_Resource_Name (Resource, Enter ("columnSizePolicy"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCColumnSizePolicy"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("ColumnSizePolicy"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Grid_Size_Policy_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcolumnStep"));
+--      Set_Internal_Resource_Name (Resource, Enter ("columnStep"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCColumnStep"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("ColumnStep"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_C_Int_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Append (Resources, Resource);
+
+       Resource := Create_Resource_Specification;
+       Set_Resource_Name (Resource, Enter ("XmNcolumnType"));
+       Set_Internal_Resource_Name (Resource, Enter ("columnType"));
+       Set_Resource_Class_Name (Resource, Enter ("XmCColumnType"));
+       Set_Internal_Resource_Class_Name (Resource, Enter ("ColumnType"));
+       Set_Resource_Type (Resource, Microline_Column_Type_Resource_Type);
+       Set_Can_Be_Set_By_Set_Values (Resource, True);
+       Append (Resources, Resource);
+
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNcolumnWidth"));
+--      Set_Internal_Resource_Name (Resource, Enter ("columnWidth"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCColumnWidth"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("ColumnWidth"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Dimension_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNcolumnUserData"));
+----       Set_Internal_Resource_Name (Resource, Enter ("columnUserData"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCUserData"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("UserData"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Pointer_Resource_Type);
+----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+
+      Resource := Create_Resource_Specification;
+      Set_Resource_Name (Resource, Enter ("XmNrow"));
+      Set_Internal_Resource_Name (Resource, Enter ("row"));
+      Set_Resource_Class_Name (Resource, Enter ("XmCRow"));
+      Set_Internal_Resource_Class_Name (Resource, Enter ("Row"));
+      Set_Resource_Type (Resource, Xt_Motif_C_Int_Resource_Type);
+      Set_Can_Be_Set_By_Set_Values (Resource, True);
+      Append (Resources, Resource);
+
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNrowHeight"));
+--      Set_Internal_Resource_Name (Resource, Enter ("rowHeight"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCRowHeight"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("RowHeight"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_Dimension_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+--      Append (Resources, Resource);
+
+      --  XXX  XmNrowPtr ???
+
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNrowRangeEnd"));
+--      Set_Internal_Resource_Name (Resource, Enter ("rowRangeEnd"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCRowRangeEnd"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("RowRangeEnd"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_C_Int_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNrowRangeStart"));
+--      Set_Internal_Resource_Name (Resource, Enter ("rowRangeStart"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCRowRangeStart"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("RowRangeStart"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_C_Int_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Append (Resources, Resource);
+--
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNrowSizePolicy"));
+----       Set_Internal_Resource_Name (Resource, Enter ("rowSizePolicy"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCRowSizePolicy"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("RowSizePolicy"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Grid_Size_Policy_Resource_Type);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+--
+--      Resource := Create_Resource_Specification;
+--      Set_Resource_Name (Resource, Enter ("XmNrowStep"));
+--      Set_Internal_Resource_Name (Resource, Enter ("rowStep"));
+--      Set_Resource_Class_Name (Resource,
+--                               Enter ("XmCRowStep"));
+--      Set_Internal_Resource_Class_Name (Resource,
+--                                        Enter ("RowStep"));
+--      Set_Resource_Type (Resource,
+--                         Xt_Motif_C_Int_Resource_Type);
+--      Set_Can_Be_Set_By_Set_Values (Resource, True);
+--      Append (Resources, Resource);
+
+       Resource := Create_Resource_Specification;
+       Set_Resource_Name (Resource, Enter ("XmNrowType"));
+       Set_Internal_Resource_Name (Resource, Enter ("rowType"));
+       Set_Resource_Class_Name (Resource, Enter ("XmCRowType"));
+       Set_Internal_Resource_Class_Name (Resource, Enter ("RowType"));
+       Set_Resource_Type (Resource, Microline_Row_Type_Resource_Type);
+       Set_Can_Be_Set_By_Set_Values (Resource, True);
+       Append (Resources, Resource);
+
+----       Resource := Create_Resource_Specification;
+----       Set_Resource_Name (Resource, Enter ("XmNrowUserData"));
+----       Set_Internal_Resource_Name (Resource, Enter ("rowUserData"));
+----       Set_Resource_Class_Name (Resource,
+----                                Enter ("XmCUserData"));
+----       Set_Internal_Resource_Class_Name (Resource,
+----                                         Enter ("UserData"));
+----       Set_Resource_Type (Resource,
+----                          Xt_Motif_Pointer_Resource_Type);
+----   --  Set_Can_Be_Set_At_Creation_Time (Resource, True);
+----       Set_Can_Be_Set_By_Set_Values (Resource, True);
+----       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
+----       Append (Resources, Resource);
+
+      Set_Resources (Microline_Grid_Cell_Class, Resources);
    end Grid_Widget_Class;
 
    --------------------------------------------------------------------------
@@ -2252,9 +2338,9 @@ package body Model.Initialization.Microline is
       Resource  : Node_Id;
 
    begin
-      Xt_Motif_Progress_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Progress_Widget_Class, Enter ("XmLProgress"));
-      Set_Super_Class (Xt_Motif_Progress_Widget_Class,
+      Microline_Progress_Widget_Class := Create_Widget_Class;
+      Set_Name (Microline_Progress_Widget_Class, Enter ("XmLProgress"));
+      Set_Super_Class (Microline_Progress_Widget_Class,
                        Xt_Motif_Primitive_Widget_Class);
 
       --  All resources.
@@ -2353,8 +2439,8 @@ package body Model.Initialization.Microline is
       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
       Append (Resources, Resource);
 
-      Set_Resources (Xt_Motif_Progress_Widget_Class, Resources);
-      Merge_Inherited_Resources (Xt_Motif_Progress_Widget_Class);
+      Set_Resources (Microline_Progress_Widget_Class, Resources);
+      Merge_Inherited_Resources (Microline_Progress_Widget_Class);
    end Progress_Widget_Class;
 
    --------------------------------------------------------------------------
@@ -2367,9 +2453,9 @@ package body Model.Initialization.Microline is
       Resource    : Node_Id;
 
    begin
-      Xt_Motif_Tree_Widget_Class := Create_Widget_Class;
-      Set_Name (Xt_Motif_Tree_Widget_Class, Enter ("XmLTree"));
-      Set_Super_Class (Xt_Motif_Tree_Widget_Class,
+      Microline_Tree_Widget_Class := Create_Widget_Class;
+      Set_Name (Microline_Tree_Widget_Class, Enter ("XmLTree"));
+      Set_Super_Class (Microline_Tree_Widget_Class,
                        Xt_Motif_Manager_Widget_Class);
 
       --  All resources.
@@ -2500,8 +2586,8 @@ package body Model.Initialization.Microline is
 --      Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
 --      Append (Resources, Resource);
 
-      Set_Resources (Xt_Motif_Tree_Widget_Class, Resources);
-      Merge_Inherited_Resources (Xt_Motif_Tree_Widget_Class);
+      Set_Resources (Microline_Tree_Widget_Class, Resources);
+      Merge_Inherited_Resources (Microline_Tree_Widget_Class);
    end Tree_Widget_Class;
 
 begin

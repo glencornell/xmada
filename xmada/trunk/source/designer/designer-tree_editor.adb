@@ -1351,13 +1351,14 @@ package body Designer.Tree_Editor is
               Create_Item_Icon (Node, Component_Container (Node));
 
          when Node_Widget_Instance =>
+            if not Is_Pseudo_Class (Class (Node)) then
 --  XXX            declare
 --  XXX               Tab  : constant Widget
 --  XXX                 := Component_Tab (Enclosing_Component_Class (Node));
 --  XXX               N    : Integer;
 --  XXX               Args : Xt_Arg_List (0 .. 0);
 
-            begin
+--  XXX            begin
                Annotation_Table.Table (Node).WI_Component_Tree_Icon :=
                  Create_Item_Icon
                   (Node,
@@ -1372,7 +1373,7 @@ package body Designer.Tree_Editor is
 
 --  XXX        Xt_Set_Arg (Args (0), Xm_N_Current_Page_Number, Xt_Arg_Val (N));
 --  XXX        Xt_Set_Values (Notebook, Args (0 .. 0));
-            end;
+            end if;
          when Node_Application     =>
             Annotation_Table.Table (Node).NA_Project_Tree_Icon :=
               Create_Item_Icon

@@ -28,34 +28,20 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
---! <Unit> Designer.Setup
---! <ImplementationNotes>
---! <PortabilityIssues>
---! <AnticipatedChanges>
+--! <Unit> Model.Microline
+--! <Purpose>
+--!   Пакет содержит переменные для хранения узлов классов виджетов из набора
+--! Microline для использования другими компонентами.
+--!
+--! <Effects>
+--! <Perfomance>
 ------------------------------------------------------------------------------
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
 
---  Модуль трассировки стека в символьном виде.
+package Model.Microline is
 
-@HAVE_GNAT_SYMBOLIC_TRACEBACK@with Designer.Main_Window.Traceback;
-@HAVE_GNAT_SYMBOLIC_TRACEBACK@pragma Warnings (Off, Designer.Main_Window.Traceback);
+   Microline_Grid_Cell_Class : Node_Id;
 
---  Модули поддержки набора виджетов Microline.
-
-@HAVE_LIBXML@with Model.Initialization.Designer.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Model.Initialization.Designer.Microline);
-
-@HAVE_LIBXML@with Model.Initialization.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Model.Initialization.Microline);
-
-@HAVE_LIBXML@with Model.Initialization.Xm_Ada.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Model.Initialization.Xm_Ada.Microline);
-
-@HAVE_LIBXML@with Designer.Visual_Editor.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Designer.Visual_Editor.Microline);
-
-package body Designer.Setup is
-
-end Designer.Setup;
+end Model.Microline;
