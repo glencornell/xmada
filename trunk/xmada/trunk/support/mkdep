@@ -11,6 +11,8 @@ shift
 
 INCLUDE_DIRS="${SRCDIR} "
 
+export LC_COLLATE=C
+
 while [ $# -ne 0 ]; do
   case "$1" in
     -I*)
