@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 --! <Copyright>
---!  Copyright (C) 2006
+--!  Copyright (C) 2006  TechnoServ A/S
 --!
 --! XmAda is free software; you can redistribute it and/or modify it under
 --! the terms of the GNU General Public License as published by the Free
@@ -28,6 +28,8 @@
 --! however invalidate any other reasons why the executable file might be
 --! covered by the GNU Public License.
 --!
+--! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
+--!
 --! <Unit> Designer.RTL_Consistency
 --! <ImplementationNotes>
 --! <PortabilityIssues>
@@ -38,7 +40,6 @@
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
 with Ada.Strings.Wide_Fixed;
---  with Ada.Unchecked_Deallocation;
 with Ada.Wide_Text_IO;
 with Interfaces.C.Strings;
 
@@ -47,7 +48,6 @@ with Xt.Initializers;
 with Xt.Resource_Management;
 with Xm.Resource_Management;
 
---  with Designer.Main_Window;
 with Model.Names;
 with Model.Queries;
 with Model.Tree.Designer;
