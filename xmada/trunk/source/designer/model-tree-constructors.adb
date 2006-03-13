@@ -321,6 +321,48 @@ package body Model.Tree.Constructors is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Create_String_Resource_Type
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_String_Resource_Type return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind               => Node_String_Resource_Type,
+         Parent             => Null_Node,
+         List               => Null_List,
+         Previous           => Null_Node,
+         Next               => Null_Node,
+         STRT_Name          => Null_Name,
+         STRT_Internal_Name => Null_Name));
+
+      return Node_Table.Last;
+   end Create_String_Resource_Type;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_String_Resource_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Create_String_Resource_Value return Node_Id is
+   begin
+      Node_Table.Append
+       ((Kind                         => Node_String_Resource_Value,
+         Parent                       => Null_Node,
+         List                         => Null_List,
+         Previous                     => Null_Node,
+         Next                         => Null_Node,
+         STRV_Resource_Specification  => Null_Node,
+         STRV_Resource_Value          => Null_String,
+         STRV_Is_Resource_Class_Value => False,
+         STRV_Is_Hardcoded            => False,
+         STRV_Is_Fallback             => False,
+         STRV_Is_Postponed            => False));
+
+      return Node_Table.Last;
+   end Create_String_Resource_Value;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Create_Translation_Data_Resource_Value
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------

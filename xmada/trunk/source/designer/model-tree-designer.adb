@@ -58,6 +58,7 @@ package body Model.Tree.Designer is
      Annotation_Pixel_Resource_Value,
      Annotation_Pixmap_Resource_Value,
      Annotation_Screen_Resource_Value,
+     Annotation_String_Resource_Value,
      Annotation_Translation_Data_Resource_Value,
      Annotation_Widget_Reference_Resource_Value,
      Annotation_Widget_Class,
@@ -78,6 +79,7 @@ package body Model.Tree.Designer is
            | Annotation_Pixel_Resource_Value
            | Annotation_Pixmap_Resource_Value
            | Annotation_Screen_Resource_Value
+           | Annotation_String_Resource_Value
            | Annotation_Translation_Data_Resource_Value
            | Annotation_Widget_Reference_Resource_Value
            | Annotation_Xm_Render_Table_Resource_Value
@@ -206,6 +208,7 @@ package body Model.Tree.Designer is
           or else Node_Kind (Node) = Node_Pixel_Resource_Value
           or else Node_Kind (Node) = Node_Pixmap_Resource_Value
           or else Node_Kind (Node) = Node_Screen_Resource_Value
+          or else Node_Kind (Node) = Node_String_Resource_Value
           or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value
           or else Node_Kind (Node) = Node_Xm_Render_Table_Resource_Value
@@ -299,6 +302,11 @@ package body Model.Tree.Designer is
                when Node_Screen_Resource_Value =>
                   Annotation_Table.Table (J) :=
                    (Kind       => Annotation_Screen_Resource_Value,
+                    Is_Changed => False);
+
+               when Node_String_Resource_Value =>
+                  Annotation_Table.Table (J) :=
+                   (Kind       => Annotation_String_Resource_Value,
                     Is_Changed => False);
 
                when Node_Translation_Data_Resource_Value =>
@@ -428,6 +436,7 @@ package body Model.Tree.Designer is
           or else Node_Kind (Node) = Node_Pixel_Resource_Value
           or else Node_Kind (Node) = Node_Pixmap_Resource_Value
           or else Node_Kind (Node) = Node_Screen_Resource_Value
+          or else Node_Kind (Node) = Node_String_Resource_Value
           or else Node_Kind (Node) = Node_Translation_Data_Resource_Value
           or else Node_Kind (Node) = Node_Widget_Reference_Resource_Value
           or else Node_Kind (Node) = Node_Xm_Render_Table_Resource_Value

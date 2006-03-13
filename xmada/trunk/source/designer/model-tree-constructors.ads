@@ -70,6 +70,10 @@ package Model.Tree.Constructors is
 
    function Create_Screen_Resource_Value return Node_Id;
 
+   function Create_String_Resource_Type return Node_Id;
+
+   function Create_String_Resource_Value return Node_Id;
+
    function Create_Translation_Data_Resource_Value return Node_Id;
 
    function Create_Widget_Class return Node_Id;

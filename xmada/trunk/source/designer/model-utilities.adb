@@ -92,6 +92,9 @@ package body Model.Utilities is
          when Node_Enumerated_Resource_Type =>
             Result := Create_Enumeration_Resource_Value;
 
+         when Node_String_Resource_Type =>
+            Result := Create_String_Resource_Value;
+
          when Node_Widget_Reference_Resource_Type =>
             Result := Create_Widget_Reference_Resource_Value;
 

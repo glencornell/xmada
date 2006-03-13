@@ -53,6 +53,7 @@ package Model.Initialization is
    procedure Initialize;
 
 private
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Merge_Inherited_Resources
@@ -95,17 +96,19 @@ private
    Xt_Motif_Delete_Response_Resource_Type            : Node_Id;
    Xt_Motif_Dialog_Style_Resource_Type               : Node_Id;
    Xt_Motif_Dialog_Type_Resource_Type                : Node_Id;
+   Xt_Motif_Layout_Direction_Resource_Type           : Node_Id;
    Xt_Motif_Edit_Mode_Resource_Type                  : Node_Id;
+   Xt_Motif_Font_Type_Resource_Type                  : Node_Id;
    Xt_Motif_Gravity_Resource_Type                    : Node_Id;
    Xt_Motif_Toggle_Indicator_On_Resource_Type        : Node_Id;
    Xt_Motif_Indicator_Type_Resource_Type             : Node_Id;
    Xt_Motif_Initial_State_Resource_Type              : Node_Id;
    Xt_Motif_Input_Policy_Resource_Type               : Node_Id;
---   Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
+   Xt_Motif_Keyboard_Focus_Policy_Resource_Type      : Node_Id;
    Xt_Motif_Label_Type_Resource_Type                 : Node_Id;
    Xt_Motif_Layout_Type_Resource_Type                : Node_Id;
    Xt_Motif_Container_Line_Style_Resource_Type       : Node_Id;
-   Xt_Motif_Font_Type_Resource_Type                  : Node_Id; 
+   Xt_Motif_Line_Type_Resource_Type                  : Node_Id;
    Xt_Motif_Load_Model_Resource_Type                 : Node_Id;
    Xt_Motif_Match_Behavior_Resource_Type             : Node_Id;
    Xt_Motif_Multi_Click_Resource_Type                : Node_Id;
@@ -132,12 +135,11 @@ private
    Xt_Motif_Show_Arrows_Resource_Type                : Node_Id;
    Xt_Motif_Show_Value_Resource_Type                 : Node_Id;
    Xt_Motif_Slider_Mark_Resource_Type                : Node_Id;
-   Xt_Motif_Strikethru_Type_Resource_Type            : Node_Id;
-   Xt_Motif_Underline_Type_Resource_Type             : Node_Id;
 
    --  Типы ресурсов (не перечислений).
 
    Xt_Motif_Accelerator_Table_Resource_Type          : Node_Id;
+   Xt_Motif_Button_Render_Table_Resource_Type        : Node_Id;
    Xt_Motif_C_Int_Resource_Type                      : Node_Id;
    Xt_Motif_C_Short_Resource_Type                    : Node_Id;
    Xt_Motif_Colormap_Resource_Type                   : Node_Id;
@@ -146,14 +148,18 @@ private
    Xt_Motif_Horizontal_Dimension_Resource_Type       : Node_Id;
    Xt_Motif_Horizontal_Int_Resource_Type             : Node_Id;
    Xt_Motif_Horizontal_Position_Resource_Type        : Node_Id;
+   Xt_Motif_Label_Render_Table_Resource_Type         : Node_Id;
    Xt_Motif_Menu_Widget_Reference_Resource_Type      : Node_Id;
    Xt_Motif_No_Scaling_Dynamic_Pixmap_Resource_Type  : Node_Id;
    Xt_Motif_Pixel_Resource_Type                      : Node_Id;
    Xt_Motif_Pixmap_Resource_Type                     : Node_Id;
    Xt_Motif_Position_Resource_Type                   : Node_Id;
    Xt_Motif_Render_Table_Resource_Type               : Node_Id;
+   Xt_Motif_Rendition_Pixel_Resource_Type            : Node_Id;
    Xt_Motif_Screen_Resource_Type                     : Node_Id;
    Xt_Motif_Select_Color_Resource_Type               : Node_Id;
+   Xt_Motif_String_Resource_Type                     : Node_Id;
+   Xt_Motif_Text_Render_Table_Resource_Type          : Node_Id;
    Xt_Motif_Translation_Table_Resource_Type          : Node_Id;
    Xt_Motif_Vertical_Dimension_Resource_Type         : Node_Id;
    Xt_Motif_Vertical_Int_Resource_Type               : Node_Id;

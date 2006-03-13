@@ -175,7 +175,13 @@ package body Model.Initialization.Designer is
        (Xt_Motif_Dialog_Type_Resource_Type,
         Representation_Type_C_Unsigned_Char);
       Set_Representation_Type
+       (Xt_Motif_Layout_Direction_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
        (Xt_Motif_Edit_Mode_Resource_Type,
+        Representation_Type_C_Int);
+      Set_Representation_Type
+       (Xt_Motif_Font_Type_Resource_Type,
         Representation_Type_C_Int);
       Set_Representation_Type
        (Xt_Motif_Gravity_Resource_Type,
@@ -192,9 +198,9 @@ package body Model.Initialization.Designer is
       Set_Representation_Type
        (Xt_Motif_Input_Policy_Resource_Type,
         Representation_Type_C_Unsigned_Char);
---      Set_Representation_Type
---       (Xt_Motif_Keyboard_Focus_Policy_Resource_Type,
---        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
+       (Xt_Motif_Keyboard_Focus_Policy_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
       Set_Representation_Type
        (Xt_Motif_Label_Type_Resource_Type,
         Representation_Type_C_Unsigned_Char);
@@ -202,7 +208,13 @@ package body Model.Initialization.Designer is
        (Xt_Motif_Layout_Type_Resource_Type,
         Representation_Type_C_Unsigned_Char);
       Set_Representation_Type
+       (Xt_Motif_Load_Model_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
        (Xt_Motif_Container_Line_Style_Resource_Type,
+        Representation_Type_C_Unsigned_Char);
+      Set_Representation_Type
+       (Xt_Motif_Line_Type_Resource_Type,
         Representation_Type_C_Unsigned_Char);
       Set_Representation_Type
        (Xt_Motif_Match_Behavior_Resource_Type,

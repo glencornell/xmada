@@ -398,6 +398,18 @@ package body Model.Tools is
                     XML_Tools.Strings.Store (Str (Str'First + 1 .. Str'Last)));
                end;
 
+            when Node_String_Resource_Value =>
+               declare
+                  S : constant String_Id := Resource_Value (Resource);
+
+               begin
+                  if S /= Null_String then
+                     Elements.Create_String
+                      (Tag,
+                       XML_Tools.Strings.Store (Model.Strings.Image (S)));
+                  end if;
+               end;
+
             when Node_Widget_Reference_Resource_Value =>
                declare
                   N : constant Node_Id := Resource_Value (Resource);
@@ -944,11 +956,11 @@ package body Model.Tools is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> XML_To_Widget_Instance
+      --!    <Unit> XML_To_Resource
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      procedure XML_To_Resource (Tag           : in Element_Id;
-                                 Resource      : in Node_Id)
+      procedure XML_To_Resource (Tag      : in Element_Id;
+                                 Resource : in Node_Id)
       is
          function Get_Enumeration_Value_By_Name (Specification : in Node_Id;
                                                  Name : in Wide_String)
@@ -1185,7 +1197,6 @@ package body Model.Tools is
                Set_Resource_Value (Resource, Model.Strings.Store (""));
             end if;
          end;
-
       end XML_To_Resource;
 
       ------------------------------------------------------------------------
