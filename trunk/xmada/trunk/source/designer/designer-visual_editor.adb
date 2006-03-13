@@ -62,6 +62,7 @@ with Xm_Scrolled_Window;
 with Xm_String_Defs;
 
 with Designer.Main_Window;
+with Designer.Utilities;
 with Model.Allocations;
 with Model.Names;
 with Model.Queries;
@@ -73,6 +74,7 @@ with Model.Widget_Instances_Ordering;
 
 package body Designer.Visual_Editor is
 
+   use Designer.Utilities;
    use Model;
    use Model.Names;
    use Model.Queries;
@@ -108,6 +110,7 @@ package body Designer.Visual_Editor is
      Value_C_Unsigned_Char,
      Value_C_Short,
      Value_C_Int,
+     Value_String,
      Value_Position,
      Value_Dimension,
      Value_Widget_Reference,
@@ -144,6 +147,9 @@ package body Designer.Visual_Editor is
 
                when Value_Position =>
                   Position_Value : aliased Xt.Position;
+
+               when Value_String =>
+                  String_Value : aliased Interfaces.C.Strings.chars_ptr;
 
                when Value_Dimension =>
                   Dimension_Value : aliased Xt.Dimension;
@@ -689,7 +695,7 @@ package body Designer.Visual_Editor is
       Annotation_Table.Table (Node).Widget :=
         Convenience_Create_Function (Class (Node))
          (Parent,
-          Ada.Characters.Handling.To_String (Name_Image (Node)),
+          To_Locale_String (Name_Image (Node)),
           Make_Set_Arg_List (Resources (Node),
                              Is_Set_Initial_Size (Class (Node)))
             & Make_Set_Arg_List (Constraint_Resources (Node))
@@ -1016,6 +1022,13 @@ package body Designer.Visual_Editor is
                      (Aux).C_Unsigned_Char_Value'Address);
                   Next_Arg := Next_Arg + 1;
 
+               when Node_String_Resource_Type =>
+                  Xt_Set_Arg
+                   (Args (Next_Arg),
+                    Annotation_Table.Table (Aux).Name,
+                    Annotation_Table.Table (Aux).String_Value'Address);
+                  Next_Arg := Next_Arg + 1;
+
                when Node_Widget_Reference_Resource_Type =>
                   Xt_Set_Arg
                    (Args (Next_Arg),
@@ -1033,8 +1046,7 @@ package body Designer.Visual_Editor is
                   Xt_Set_Arg
                    (Args (Next_Arg),
                     Annotation_Table.Table (Aux).Name,
-                    Annotation_Table.Table
-                     (Aux).Xm_String_Value'Address);
+                    Annotation_Table.Table (Aux).Xm_String_Value'Address);
                   Next_Arg := Next_Arg + 1;
 
                when others =>
@@ -1171,6 +1183,17 @@ package body Designer.Visual_Editor is
 
                   Next_Arg := Next_Arg + 1;
 
+               when Node_String_Resource_Type =>
+                  if Resource_Value (Aux) /= Null_String then
+                     Xt_Set_Arg
+                      (Args (Next_Arg),
+                       Annotation_Table.Table (Aux).Name,
+                       Interfaces.C.Strings.New_String
+                        (To_Locale_String (Image (Resource_Value (Aux)))));
+
+                     Next_Arg := Next_Arg + 1;
+                  end if;
+
                when Node_Widget_Reference_Resource_Type =>
                   if Resource_Value (Aux) = Null_Node then
                      Xt_Set_Arg
@@ -1299,6 +1322,25 @@ package body Designer.Visual_Editor is
                      (Resource_Type (Resource_Specification (Aux)),
                    Annotation_Table.Table (Aux).C_Unsigned_Char_Value));
 
+               when Node_String_Resource_Type =>
+                  declare
+                     Str : constant Wide_String
+                       := From_Locale_String
+                           (Annotation_Table.Table (Aux).String_Value);
+
+                  begin
+                     if Resource_Value (Aux) = Null_String
+                       or else Image (Resource_Value (Aux)) /= Str
+                     then
+                        Set_Resource_Value (Aux, Store (Str));
+                     end if;
+
+                     Interfaces.C.Strings.Free
+                      (Annotation_Table.Table (Aux).String_Value);
+                     Annotation_Table.Table (Aux).String_Value :=
+                       Interfaces.C.Strings.Null_Ptr;
+                  end;
+
                when Node_Widget_Reference_Resource_Type =>
                   declare
                      Node : Xt_Arg_Val;
@@ -1413,6 +1455,7 @@ package body Designer.Visual_Editor is
               | Node_Colormap_Resource_Value
               | Node_Screen_Resource_Value
               | Node_Translation_Data_Resource_Value
+              | Node_String_Resource_Value
               | Node_Enumeration_Resource_Value
               | Node_Xm_String_Resource_Value
             =>
@@ -1504,6 +1547,17 @@ package body Designer.Visual_Editor is
                             (Internal_Resource_Name_Image
                               (Resource_Specification (J)))),
                        C_Unsigned_Char_Value => 0);
+
+                  when Node_String_Resource_Type =>
+                     Annotation_Table.Table (J) :=
+                      (Kind         => Annotation_Resource_Value,
+                       Value_Kind   => Value_String,
+                       Name         =>
+                         Interfaces.C.Strings.New_String
+                          (Ada.Characters.Handling.To_String
+                            (Internal_Resource_Name_Image
+                              (Resource_Specification (J)))),
+                       String_Value => Interfaces.C.Strings.Null_Ptr);
 
                   when Node_Widget_Reference_Resource_Type =>
                      Annotation_Table.Table (J) :=

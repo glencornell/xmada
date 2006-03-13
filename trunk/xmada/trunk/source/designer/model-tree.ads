@@ -78,6 +78,9 @@ package Model.Tree is
      Node_Enumerated_Resource_Type,
      --  Описание перечислимого типа ресурса.
 
+     Node_String_Resource_Type,
+     --  Описание строкового типа ресрусов.
+
      Node_Xm_Render_Table_Resource_Type,
      --  Описание типа ресурса, содержащего список элементов таблицы
      --  представлений Xm_Render_Table.
@@ -102,6 +105,9 @@ package Model.Tree is
 
      Node_Integer_Resource_Value,
      --  Значение ресурса, содержащего любую целочисленную величину.
+
+     Node_String_Resource_Value,
+     --  Значение ресурса, содержащего строку текста.
 
      Node_Widget_Reference_Resource_Type,
      --  Тип ресурсов, представляющий ссылку на экземпляр виджета.
@@ -614,6 +620,37 @@ private
             IRV_Is_Postponed            : Boolean;
             --  Признак отложенного ресурса.
 
+         when Node_String_Resource_Type =>
+            STRT_Name          : Name_Id;
+            --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
+
+            STRT_Internal_Name : Name_Id;
+            --  Внутреннее имя типа ресурса, используемое Xt для преобразований
+            --  типов ресурсов.
+
+         when Node_String_Resource_Value =>
+            STRV_Resource_Specification  : Node_Id;
+            --  Ссылка на спецификацию ресурса.
+
+            STRV_Is_Resource_Class_Value : Boolean;
+            --  Признак значения класса ресурса (а не ресурса).
+
+            STRV_Resource_Value          : String_Id;
+            --  Ссылка на экземпляр виджета, используемого в качестве
+            --  значения ресурса.
+
+            STRV_Is_Hardcoded            : Boolean;
+            --  Признак необходимости жесткой фиксации значения ресурса
+            --  в генерируемом коде программы. В противном случае значение
+            --  ресурса по возможности будет сохраняться в файле ресурсов.
+
+            STRV_Is_Fallback             : Boolean;
+            --  Признак необходимости занесения значения ресурса в список
+            --  ресурсов отката приложения.
+
+            STRV_Is_Postponed            : Boolean;
+            --  Признак отложенного ресурса.
+
          when Node_Pixel_Resource_Value =>
             PRV_Resource_Specification  : Node_Id;
             --  Ссылка на спецификацию ресурса.
@@ -760,14 +797,6 @@ private
             WRRV_Is_Postponed            : Boolean;
             --  Признак отложенного ресурса.
 
-         when Node_Xm_String_Resource_Type =>
-            XSRT_Name             : Name_Id;
-            --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
-
-            XSRT_Internal_Name    : Name_Id;
-            --  Внутреннее имя типа ресурса, используемое Xt для преобразований
-            --  типов ресурсов.
-
          when Node_Xm_Render_Table_Resource_Type =>
             XRTRT_Name             : Name_Id;
             --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
@@ -797,6 +826,14 @@ private
 
             XRTRV_Is_Postponed            : Boolean;
             --  Признак отложенного ресурса.
+
+         when Node_Xm_String_Resource_Type =>
+            XSRT_Name             : Name_Id;
+            --  Имя типа ресурса. Не все типы ресурсов имеют это имя.
+
+            XSRT_Internal_Name    : Name_Id;
+            --  Внутреннее имя типа ресурса, используемое Xt для преобразований
+            --  типов ресурсов.
 
          when Node_Xm_String_Resource_Value =>
             XSRV_Resource_Specification  : Node_Id;

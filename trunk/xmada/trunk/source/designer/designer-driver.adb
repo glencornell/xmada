@@ -72,13 +72,19 @@ begin
    --  Если в командной строке указано имя файла проекта, то открываем этот
    --  файл. В противном случае создаём новый проект.
 
-   if Argument_Count = 0 then
-      Designer.Operations.New_Project;
+   begin
+      if Argument_Count = 0 then
+         Designer.Operations.New_Project;
 
-   else
-      Designer.Operations.Open_Project
-       (Ada.Characters.Handling.To_Wide_String (Argument (1)));
-   end if;
+      else
+         Designer.Operations.Open_Project
+          (Ada.Characters.Handling.To_Wide_String (Argument (1)));
+      end if;
+
+   exception
+      when E : others =>
+         Designer.Main_Window.Put_Exception_In_Callback ("", E);
+   end;
 
    Xt_App_Main_Loop (App_Context);
 

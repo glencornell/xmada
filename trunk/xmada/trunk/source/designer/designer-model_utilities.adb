@@ -84,6 +84,10 @@ package body Designer.Model_Utilities is
             Result := Create_Enumeration_Resource_Value;
             Set_Resource_Value (Result, Node_Id'(Resource_Value (Node)));
 
+         when Node_String_Resource_Type =>
+            Result := Create_String_Resource_Value;
+            Set_Resource_Value (Result, String_Id'(Resource_Value (Node)));
+
          when Node_Widget_Reference_Resource_Type =>
             Result := Create_Widget_Reference_Resource_Value;
             Set_Resource_Value (Result, Node_Id'(Resource_Value (Node)));

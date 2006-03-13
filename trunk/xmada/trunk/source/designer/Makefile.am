@@ -54,9 +54,12 @@ designer_driver_SOURCES = designer-driver.ads
 compiler_SOURCES = compiler.ads
 data_DATA = XmAdaDesigner
 
-all: XmAdaDesigner
-	gnatmake $(DESIGNER_ADAFLAGS) designer-driver.adb -o designer-driver -bargs $(BARGS) -largs $(ADALFLAGS)
+all: XmAdaDesigner designer_c.o
+	gnatmake $(DESIGNER_ADAFLAGS) designer-driver.adb -o designer-driver -bargs $(BARGS) -largs $(ADALFLAGS) designer_c.o
 	gnatmake $(COMPILER_ADAFLAGS) compiler-driver.adb -o compiler -bargs $(BARGS)
+
+designer_c.o: designer_c.c
+	gcc -c $< -o $@
 
 XmAdaDesigner:
 	ln -s $(srcdir)/XmAdaDesigner.ad XmAdaDesigner
