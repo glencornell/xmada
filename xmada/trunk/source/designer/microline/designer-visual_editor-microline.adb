@@ -134,6 +134,14 @@ package body Designer.Visual_Editor.Microline is
 
    procedure Set_Cell_String (Node : in Node_Id; Value : in Wide_String);
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Save_Text
+   --!    <Purpose> Производит сохранение введенного текста в модели.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Save_Text;
+
    package Callbacks is
 
       ------------------------------------------------------------------------
@@ -216,44 +224,17 @@ package body Designer.Visual_Editor.Microline is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
 
-         Aux : Node_Id := Null_Node;
-
       begin
-         if Children (Grid_Node) /= Null_List then
-            Aux := First (Children (Grid_Node));
+         if Xt_Is_Managed (Text) then
+	    --  Поскольку подпрограмма вызывается при потере фокуса необходимо
+	    --  проверить, является ли виджет управляемым. Если да, то
+	    --  произвести сохранение введенного текста и снять виджет с
+            --  управления.
 
-            while Aux /= Null_Node loop
-               exit when Class (Aux) = Microline_Grid_Cell_Class
-                 and then Row_Type = Get_Row_Type (Aux)
-                 and then Row = Get_Row (Aux)
-                 and then Column_Type = Get_Column_Type (Aux)
-                 and then Column = Get_Column (Aux);
+            Save_Text;
 
-               Aux := Next (Aux);
-            end loop;
-
-         else
-            Set_Children (Grid_Node, New_List);
+            Xt_Unmanage_Child (Text);
          end if;
-
-         if Aux = Null_Node then
-            Aux := Create_Widget_Instance (Microline_Grid_Cell_Class);
-            Set_Name (Aux, Enter ("GridCellPseudoClass"));
-            Set_Resources (Aux, New_List);
-
-            Set_Row_Type (Aux, Row_Type);
-            Set_Row (Aux, Row);
-            Set_Column_Type (Aux, Column_Type);
-            Set_Column (Aux, Column);
-
-            Append (Children (Grid_Node), Aux);
-         end if;
-
-         Set_Cell_String (Aux, Xm_Text_Field_Get_String_Wcs (Text));
-
-         Xt_Unmanage_Child (Text);
-
-         Xt_Set_Values (Grid_Widget, Make_Set_Arg_List (Resources (Aux)));
 
       exception
          when E : others =>
@@ -434,6 +415,15 @@ package body Designer.Visual_Editor.Microline is
       G_Root_Y    : Position;
 
    begin
+      if Text /= Null_Widget and then Xt_Is_Managed (Text) then
+
+         --  Если текстовое поле было создано и находится на управлении,
+         --  то в нём потенциально содержится изменённый текст, который
+         --  необходимо сохранить.
+
+         Save_Text;
+      end if;
+
       if Event.Kind = Button_Press then
          XmL_Grid_XY_To_Row_Column
           (The_Widget,
@@ -460,6 +450,10 @@ package body Designer.Visual_Editor.Microline is
               Exists);
 
             if Text = Null_Widget then
+
+               --  Производим создание текстового поля, если оно ещё не было
+               --  созданно.
+
                Xt_App_Add_Actions
                 (Xt_Widget_To_Application_Context (Drawing_Area), Actions);
 
@@ -559,6 +553,50 @@ package body Designer.Visual_Editor.Microline is
          end;
       end if;
    end On_Widget_Create;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Save_Text
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Save_Text is
+      Aux : Node_Id := Null_Node;
+
+   begin
+      if Children (Grid_Node) /= Null_List then
+         Aux := First (Children (Grid_Node));
+
+         while Aux /= Null_Node loop
+            exit when Class (Aux) = Microline_Grid_Cell_Class
+              and then Row_Type = Get_Row_Type (Aux)
+              and then Row = Get_Row (Aux)
+              and then Column_Type = Get_Column_Type (Aux)
+              and then Column = Get_Column (Aux);
+
+            Aux := Next (Aux);
+         end loop;
+
+      else
+         Set_Children (Grid_Node, New_List);
+      end if;
+
+      if Aux = Null_Node then
+         Aux := Create_Widget_Instance (Microline_Grid_Cell_Class);
+         Set_Name (Aux, Enter ("GridCellPseudoClass"));
+         Set_Resources (Aux, New_List);
+
+         Set_Row_Type (Aux, Row_Type);
+         Set_Row (Aux, Row);
+         Set_Column_Type (Aux, Column_Type);
+         Set_Column (Aux, Column);
+
+         Append (Children (Grid_Node), Aux);
+      end if;
+
+      Set_Cell_String (Aux, Xm_Text_Field_Get_String_Wcs (Text));
+
+      Xt_Set_Values (Grid_Widget, Make_Set_Arg_List (Resources (Aux)));
+   end Save_Text;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
