@@ -3,9 +3,7 @@ ACLOCAL_AMFLAGS = -I support
 
 SUBDIRS = source
 
+bin_SCRIPTS = xmada-config
+
 depend:
 	cd source && ${MAKE} depend
-
-install-exec-local:
-	$(INSTALL) -d $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) xmada-config $(DESTDIR)$(bindir)/xmada-config

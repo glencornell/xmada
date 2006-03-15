@@ -47,9 +47,9 @@ ADALFLAGS = $(LIBS)
 
 CLEANFILES += *.ali *.o XmAdaDesigner b~designer-driver.ad[sb] designer
 
-bin_PROGRAMS = compiler designer
+bin_PROGRAMS = compiler
+bin_SCRIPTS = designer
 libexec_PROGRAMS = designer-driver
-designer_SOURCES = designer.in
 designer_driver_SOURCES = designer-driver.ads
 compiler_SOURCES = compiler.ads
 data_DATA = XmAdaDesigner
