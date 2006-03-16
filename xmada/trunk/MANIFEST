@@ -54,9 +54,12 @@ source/designer/designer-setup.adb.in
 source/designer/designer-setup.ads
 source/designer/designer-tree_editor.adb
 source/designer/designer-tree_editor.ads
+source/designer/designer-utilities.adb
+source/designer/designer-utilities.ads
 source/designer/designer-visual_editor.adb
 source/designer/designer-visual_editor.ads
 source/designer/designer.ads
+source/designer/designer_c.c
 source/designer/designer.in
 source/designer/generator-application_resources.adb
 source/designer/generator-application_resources.ads
@@ -319,13 +322,11 @@ source/xt/xt_transient_shell.ads
 source/xt/xt_vendor_shell.ads
 source/xt/xt_wm_shell.ads
 support/Makefile.common
-support/aclocal.m4
 support/ada.m4
 support/adacompiler.in
 support/config.guess
 support/config.sub
 support/install-sh
-support/libtool.m4
 support/ltmain.sh
 support/missing
 xmada-config.in
