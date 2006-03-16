@@ -62,7 +62,7 @@ package Designer.Render_Table_Editor is
    --! Xt_Motif_Rendition_Class.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Insert_Item (Resource : in Model.Node_Id);
+   procedure Insert_Item (Node : in Model.Node_Id);
       
    -------------------------------------------------------------------------
    --! <Subprogram>
@@ -71,5 +71,14 @@ package Designer.Render_Table_Editor is
    --!    <Exceptions>
    -------------------------------------------------------------------------
    procedure Open (Resource : in Model.Node_Id);
+   
+      ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Reinitialize
+   --!    <Purpose> Производит освобождение всех использующихся ресурсов и
+   --! повторную инициализацию внутренних структур.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Reinitialize;
 
 end Designer.Render_Table_Editor;
