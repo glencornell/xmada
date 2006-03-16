@@ -2881,9 +2881,9 @@ package body Model.Initialization is
       Resource := Create_Resource_Specification;
       Set_Resource_Name (Resource, Enter ("XmNtag"));
       Set_Internal_Resource_Name (Resource, Enter ("tag"));
-      Set_Resource_Class_Name (Resource, Enter ("XmCTag"));
+      Set_Resource_Class_Name (Resource, Enter ("XmCtag"));
       Set_Internal_Resource_Class_Name (Resource, Enter ("Tag"));
-      Set_Resource_Type (Resource, Xt_Motif_String_Resource_Type);
+      Set_Resource_Type (Resource, Xt_Motif_Xm_String_Resource_Type);
       Set_Can_Be_Retrieved_By_Get_Values (Resource, True);
       Append (Resources, Resource);
 

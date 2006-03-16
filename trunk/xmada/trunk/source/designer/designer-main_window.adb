@@ -1103,10 +1103,10 @@ package body Designer.Main_Window is
       Designer.Tree_Editor.Insert_Item (Node);
       Designer.Visual_Editor.Insert_Item (Node);
       Designer.Properties_Editor.Insert_Item (Node);
-
+      Designer.Render_Table_Editor.Insert_Item (Node);
+      
       if Node_Kind (Node) = Node_Project then
-         Project_Node := Node;
-	 Designer.Render_Table_Editor.Insert_Item (Node);
+         Project_Node := Node; 
       end if;
    end Insert_Item;
 
@@ -1163,6 +1163,7 @@ package body Designer.Main_Window is
       Designer.Tree_Editor.Reinitialize;
       Designer.Visual_Editor.Reinitialize;
       Designer.Properties_Editor.Reinitialize;
+      Designer.Render_Table_Editor.Reinitialize;
    end Reinitialize;
 
    ---------------------------------------------------------------------------
