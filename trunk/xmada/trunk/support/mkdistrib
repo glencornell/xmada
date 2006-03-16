@@ -29,7 +29,7 @@ mv $XTMP/configure.ac.tmp $XTMP/configure.ac
 
 ##  Настройка среды сборки AutoTools.
 
-(cd $XTMP && ../support/reconfig)
+(cd $XTMP && autoreconf --force --install)
 
 ##  Копирование файлов в каталог дистрибутива и замещение ссылок файлами.
 
