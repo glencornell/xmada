@@ -203,7 +203,7 @@ package body Designer.Operations is
       pragma Assert (Node_Kind (Application) = Node_Application);
 
       Component : Node_Id;
-      List      : List_Id;
+      List      : List_Id := Component_Classes (Application);
 
    begin
       --  Создание компонента приложения и добавление его в состав приложения.
@@ -211,9 +211,13 @@ package body Designer.Operations is
       Component := Create_Component_Class;
       Set_Name (Component, New_Name ("Component"));
 
-      List := New_List;
+      if List = Null_List then
+         List := New_List;
+         Set_Component_Classes (Application, List);
+      end if;
+
       Append (List, Component);
-      Set_Component_Classes (Application, List);
+
       Main_Window.Insert_Item (Component);
    end New_Component;
 
