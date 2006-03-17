@@ -71,8 +71,11 @@ package Model.Allocations is
 
    --  Таблица узлов дерева модели (пакет Model.Tree).
 
-   Node_Table_Initial                     : constant := 100;
-   Node_Table_Increment                   : constant := 100;
+   Node_Table_Initial                     : constant := 100000;
+   Node_Table_Increment                   : constant := 100000;
+   --  XXX Внимание! Эти числа - временные. Необходимо найти
+   --  XXX и исправить причину ошибки 104: кто-то где-то не
+   --  XXX вызывает Relocate для таблицы.
 
    --  Таблица отсортированных в порядке очередности создания экземпляров
    --  виджетов.
