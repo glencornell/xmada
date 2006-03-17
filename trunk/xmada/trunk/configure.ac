@@ -74,9 +74,13 @@ AC_SUBST(SED)
 # Output generated files
 ##########################################
 
-dnl Important! One file per line, nothing before
-dnl or after except whitespace! This section
-dnl is edited automatically by make_distrib.
+AC_CONFIG_FILES([support/adacompiler], [chmod +x support/adacompiler])
+
+# Это условие необходимо заменить специальной обработкой файла при сборке
+# дистрибутива.
+if test -f ${srcdir}/support/run_designer.in; then
+AC_CONFIG_FILES([support/run_designer], [chmod +x support/run_designer])
+fi
 
 AC_OUTPUT([
 	Makefile
@@ -92,13 +96,5 @@ AC_OUTPUT([
 	source/xt/Makefile
 	source/xm/Makefile
 	source/xml/Makefile
-	support/adacompiler
-	support/run_designer
 	xmada-config
 ])
-
-for f in support/adacompiler support/run_desiger; do
-    if test -f $f; then
-        chmod +x $f
-    fi
-done
