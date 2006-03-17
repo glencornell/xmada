@@ -174,7 +174,7 @@ package body Designer.Operations is
       pragma Assert (Node_Kind (Project) = Node_Project);
 
       Application : Node_Id;
-      List        : List_Id;
+      List        : List_Id := Applications (Project);
 
    begin
       --  Создание узла приложения и добавление его в состав проекта.
@@ -182,9 +182,12 @@ package body Designer.Operations is
       Application := Create_Application;
       Set_Application_Class_Name (Application, New_Name ("Application"));
 
-      List := New_List;
+      if List = Null_List then
+         List := New_List;
+         Set_Applications (Project, List);
+      end if;
+
       Append (List, Application);
-      Set_Applications (Project, List);
       Main_Window.Insert_Item (Application);
 
       New_Component (Application);
