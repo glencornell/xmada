@@ -121,14 +121,14 @@ package body Designer.Render_Table_Editor is
    
    use Ada.Wide_Text_IO;
 
-   Notebook              : Widget;
-   Dialog                : Widget;
-   Page                  : Widget;
-   Current_Resource_Node : Node_Id := Null_Node;
-   Saved_Resource_Node   : Node_Id;
-   Xm_C_Unset            : constant := 0;
-   Xm_C_Set              : constant := 1;
+   Notebook                   : Widget;
+   Dialog                     : Widget;
+   Page                       : Widget;
+   Current_Resource_Node      : Node_Id := Null_Node;
+   Xm_C_Unset                 : constant := 0;
+   Xm_C_Set                   : constant := 1;
    Tag_Resource_Specification : Node_Id := Null_Node;
+
    
       type Annotation_Kinds is
     (Annotation_Empty,
@@ -204,6 +204,19 @@ package body Designer.Render_Table_Editor is
       return Model.Node_Id;
 
    ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Find_Value
+   --!    <Purpose> Производит поиск в указанном списке значения ресурсов.
+   --! Возвращает Null_Node если значение
+   --! не найдено.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Find_Value
+    (The_Resource_Specification : in Model.Node_Id;
+     The_Resource               : in Model.Node_Id)
+      return Model.Node_Id;
+      
+    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Relocate_Annotation_Table
    --!    <Purpose> Производит расширение таблицы для обеспечения возможности
@@ -404,17 +417,82 @@ package body Designer.Render_Table_Editor is
          pragma Unreferenced (Closure);
          --  Данные переменные не используются.
 
-         Data : constant Xm_Toggle_Button_Callback_Struct_Access
+         Page_Info          : constant Xm_Notebook_Callback_Struct_Access 
            := To_Callback_Struct_Access (Call_Data);
-         Node : Node_Id;
-         Args : Xt_Arg_List (0 .. 0);
+     
+         Node_New            : Node_Id;            
+         Button_Data         : constant Xm_Toggle_Button_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
+         Argl                : Xt_Arg_List (0 .. 0);
+         Page_Notebook_Info  : Xm_Notebook_Page_Info; 
+         Page_Number         : Xm_Notebook_Page_Number;
+         Status              : Xm_Notebook_Page_Status;
+         Rendition           : Node_Id := Null_Node;
+         Rendition_Resources : List_Id := New_List;
+         Rendition_Resource  : Node_Id := Null_Node;
 
       begin
-         --  Получаем узел, для которого вызван callback.
+         --  Получаем выбранную кнопку.
 
-         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
-         Xt_Get_Values (The_Widget, Args (0 .. 0));
+         Xt_Set_Arg (Argl (0), Xm_N_User_Data, Node_New'Address);
+         Xt_Get_Values (The_Widget, Argl (0 .. 0));
+         
+         Xt_Set_Arg (Argl (0), 
+                     Xm_N_Current_Page_Number,
+                     Page_Number'Address);
+         Xt_Get_Values (Notebook, Argl (0 .. 0));
+         
+         Xm_Notebook_Get_Page_Info (Notebook, 
+                                    Page_Number,  
+                                    Page_Notebook_Info, 
+                                    Status);
+      
+         if Page_Notebook_Info.Major_Tab_Widget /= Null_Widget then
+            Xt_Set_Arg (Argl (0), Xm_N_User_Data, Rendition'Address);
+            Xt_Get_Values (Page_Notebook_Info.Major_Tab_Widget, Argl (0 .. 0));
+          
+         elsif Page_Notebook_Info.Minor_Tab_Widget /= Null_Widget then
+            Xt_Set_Arg (Argl (0), Xm_N_User_Data, Rendition'Address);
+            Xt_Get_Values (Page_Notebook_Info.Major_Tab_Widget, Argl (0 .. 0));
+         end if;
+         
+         if Rendition /= Null_Node then
+            Rendition_Resources := Resources (Rendition);
+            Rendition_Resource := 
+              Find_Resource_Value (Rendition_Resources, 
+                                   Node_New);
+                                                    
+         end if;   
 
+         if Button_Data.Set = Xm_C_Set then
+       
+            case Node_Kind (Resource_Type (Node_New)) is
+               when Node_Enumerated_Resource_Type =>
+                  if Rendition_Resource = Null_Node then
+                     Rendition_Resource := Create_Enumeration_Resource_Value;
+                     Append (Rendition_Resources, Rendition_Resource);
+                     Set_Resource_Specification 
+                      (Rendition_Resource, Node_New);
+                   end if;
+                                              
+                when Node_Xm_String_Resource_Type => 
+                   if Rendition_Resource = Null_Node then
+                      Rendition_Resource := Create_String_Resource_Value;
+                      Set_Resource_Specification 
+                       (Rendition_Resource, Node_New);
+                      Append (Rendition_Resources, Rendition_Resource);
+                   end if;
+                       
+                when others =>
+                   null;
+
+              end case;
+              
+           elsif Button_Data.Set = Xm_C_Unset 
+             and Rendition_Resource /= Null_Node then
+              Remove (Rendition_Resource);
+         end if;
+         
       exception
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback
@@ -434,9 +512,9 @@ package body Designer.Render_Table_Editor is
          pragma Unreferenced (Call_Data);
          pragma Unreferenced (The_Widget);
 
-         Argl        : Xt_Arg_List (0 .. 0);
-       --  Data                : constant Xm_Row_Column_Callback_Struct_Access
-       --    := To_Callback_Struct_Access (Call_Data);
+         Argl                : Xt_Arg_List (0 .. 0);
+         Data                : constant Xm_Row_Column_Callback_Struct_Access
+           := To_Callback_Struct_Access (Call_Data);
            
          Page_Info           : constant Xm_Notebook_Callback_Struct_Access 
            := To_Callback_Struct_Access (Call_Data);
@@ -444,25 +522,22 @@ package body Designer.Render_Table_Editor is
          Page_Notebook_Info  : Xm_Notebook_Page_Info; 
          Status              : Xm_Notebook_Page_Status;
          Rendition           : Node_Id := Null_Node;
-         Label                : Widget;
-         Page_Number : Positive;
+         Label               : Widget;
+         Page_Number         : Xm_Notebook_Page_Number;
+         
       begin      
-    --     Xt_Set_Arg (Argl (0), 
-    --                 Xm_N_Page_Number,
-    --                 Xt_Arg_Val (Page_Info.Page_Number));
-    --     Xt_Set_Values (Page, Argl (0 .. 0));
+         --  Получаем выбранный элемент меню.
          
          Xt_Set_Arg (Argl (0), 
                      Xm_N_Current_Page_Number, 
                      Xt_Arg_Val (Page_Number));
          Xt_Get_Values (Notebook, Argl (0 .. 0));
          
-         
          Xt_Set_Arg (Argl (0), Xm_N_Page_Number, Page_Number'Address);
          Xt_Get_Values (Label, Argl (0 .. 0));
          Xt_Unmanage_Child (Label);
-         
-         
+
+         Xt_Manage_Child (Page);
       end On_Delete;
 
       ------------------------------------------------------------------------
@@ -495,7 +570,8 @@ package body Designer.Render_Table_Editor is
          Rendition           : Node_Id := Null_Node;
          Rendition_Resources : List_Id;
          Rendition_Resource  : Node_Id;
-
+         Current_Value       : Node_Id := Null_Node;
+         
       begin
          --  Получаем выбранный элемент меню.
 
@@ -526,24 +602,26 @@ package body Designer.Render_Table_Editor is
          
          if Rendition /= Null_Node then
             Rendition_Resources := Resources (Rendition);
-     
+            
             Rendition_Resource := 
               Find_Resource_Value (Rendition_Resources, 
-                                   Menu);
+                                   Node);
                                     
             if Rendition_Resource /= Null_Node then
-               Set_Resource_Specification (Rendition_Resource, 
-                                           Resource_Specification (Menu));
-               Append (Rendition_Resources, Rendition_Resource); 
-               Set_Resources (Rendition, Rendition_Resources);
+               if Resource_Value (Rendition_Resource) /= Menu then
+                  Set_Resource_Value (Rendition_Resource, 
+                                      Menu);
+               end if;
+               
             else
                Rendition_Resource := Create_Enumeration_Resource_Value;
-               Set_Resource_Specification (Rendition_Resource, Menu);
+               Set_Resource_Specification (Rendition_Resource, Node);
+               Set_Resource_Value (Rendition_Resource, 
+                                   Menu);
                Append (Rendition_Resources, Rendition_Resource); 
-               Set_Resources (Rendition, Rendition_Resources);         
             end if;
          end if;
-
+                           
       exception
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback
@@ -563,115 +641,15 @@ package body Designer.Render_Table_Editor is
          pragma Unreferenced (Call_Data);
          pragma Unreferenced (The_Widget);
          
-         Rendition_List       : List_Id;
          Saved_Rendition_List : List_Id := New_List;
-         Saved_Recources      : List_Id;
          Saved_Rendition      : Node_Id := Null_Node;
-         Current_Rendition    : Node_Id;
-         Resource_Name        : Node_Id;
          Saved_Resource_Name  : Node_Id := Null_Node;
-         Current_Value        : Node_Id;
          State                : Boolean := False;
-         Motif_Resource       : Node_Id;
          Motif_Resource_List  : List_Id  
            := Resources (Xt_Motif_Rendition_Class);
          
       begin
-      Put_Line ("---------------------------");
-         Rendition_List := Resource_Value (Current_Resource_Node);
-         Saved_Rendition_List := Resource_Value (Saved_Resource_Node);
-         
-         if Resource_Value (Saved_Resource_Node) = Null_List then
-            Saved_Rendition_List := New_List;
-            Set_Resource_Value (Saved_Resource_Node, Saved_Rendition_List);
-            
-         else
-            Saved_Rendition_List := Resource_Value (Saved_Resource_Node);
-         end if;
-            
-         if Rendition_List /= Null_List then
-            Current_Rendition := First (Rendition_List);
-             
-            if Saved_Rendition_List /= Null_List then
-               Saved_Rendition := Find_Rendition (Saved_Rendition_List, 
-                                                  Current_Rendition); 
-            end if;
-                                               
-            if Saved_Rendition = Null_Node then
-               Saved_Rendition := Create_Xm_Rendition;
-               Append (Saved_Rendition_List, Saved_Rendition);  
-            end if;
-           
-            while Current_Rendition /= Null_Node loop
-               Resource_Name := First (Resources (Current_Rendition));
-               Saved_Recources := Resources (Saved_Rendition);
-               
-               if Saved_Recources = Null_List then 
-                  Saved_Recources := New_List;
-                  Set_Resources (Saved_Rendition, Saved_Recources);
-               end if;
-
-               while Resource_Name /= Null_Node loop
-                      Saved_Resource_Name := 
-                        Find_Resource_Value (Saved_Recources,
-                                             Resource_Name);  
-                                              
-                      Motif_Resource := 
-                        Find_Motif_Resource (Motif_Resource_List, 
-                                             Resource_Specification 
-                                              (Resource_Name));
-                      State := True; 
-                        --:= Xm_Toggle_Button_Gadget_Get_State 
-                        -- (Annotation_Table.Table (Motif_Resource).Button);
-                   
-                      if State then
-                         Put_Line (Node_Id'Wide_Image (Resource_Name));
-                         case Node_Kind (Resource_Name) is
-                            when Node_Enumeration_Resource_Value =>
-                           
-                              if Saved_Resource_Name = Null_Node then
-                                  Saved_Resource_Name 
-                                    := Create_Enumeration_Resource_Value;
-                                  Append (Saved_Recources, Saved_Resource_Name); 
-                               end if;
-                        
-                               Current_Value := Resource_Value (Resource_Name);
-                        
-                               Set_Resource_Value 
-                                (Saved_Resource_Name, Current_Value);
-                               Set_Resource_Specification 
-                                (Saved_Resource_Name, 
-                                 Resource_Specification (Resource_Name));
-                                              
-                            when Node_Xm_String_Resource_Value => 
-                               if Saved_Resource_Name = Null_Node then
-                                  Saved_Resource_Name 
-                                    := Create_Xm_String_Resource_Value;
-                                  Append (Saved_Recources, Saved_Resource_Name);  
-                               end if;
-
-                               Set_Resource_Value 
-                                (Saved_Resource_Name, 
-                                 Store 
-                                  (Image 
-                                   (Resource_Value 
-                                    (Resource_Name))));
-                               Set_Resource_Specification 
-                                (Saved_Resource_Name,
-                                 Resource_Specification (Resource_Name));
-                       
-                            when others =>
-                               null;
-                        end case;
-                     end if;
-                 -- end;
-                      
-                  Resource_Name := Next (Resource_Name);
-               end loop;   
-               
-               Current_Rendition := Next (Current_Rendition);
-            end loop;
-         end if;
+         null;
       end On_OK;
 
       ------------------------------------------------------------------------
@@ -766,13 +744,8 @@ package body Designer.Render_Table_Editor is
    is
       Aux : Node_Id := First (Resources);
 
-   begin
-       Put_Line ("Find_Motif_Resource");
-        Put_Line (Node_Id'Wide_Image (The_Resource_Specification));
-                         Put_Line ("--------------*****");
-                         
+   begin                 
       while Aux /= Null_Node loop
-      Put_Line (Node_Id'Wide_Image (Aux ));
          if Aux = The_Resource_Specification then
             exit;
          end if;
@@ -783,6 +756,31 @@ package body Designer.Render_Table_Editor is
       return Aux;
    end Find_Motif_Resource;
       
+     ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Find_Value
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Find_Value
+    (The_Resource_Specification : in Node_Id;
+     The_Resource               : in Node_Id)
+       return Model.Node_Id
+   is     
+      Aux : Node_Id := First 
+       (Value_Specifications (The_Resource_Specification));
+
+   begin
+      while Aux /= Null_Node loop
+         if Internal_Name (Aux) = Internal_Name ((The_Resource)) then
+            exit;
+         end if;
+
+         Aux := Next (Aux);
+      end loop;
+
+      return Aux;
+   end Find_Value;
+   
    -------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
@@ -897,6 +895,7 @@ package body Designer.Render_Table_Editor is
       Str              : Xm_String;
       Pulldown_Menu    : Widget; 
       Form             : Widget;
+      Toggle_Button    :Widget;  
 
    begin
       Relocate_Annotation_Table (Node);
@@ -917,21 +916,28 @@ package body Designer.Render_Table_Editor is
             Xt_Set_Arg (Argl (0), Xm_N_Left_Attachment, Xm_Attach_Form);
             Xt_Set_Arg (Argl (1), Xm_N_Bottom_Attachment, Xm_Attach_Form);
             Xt_Set_Arg (Argl (2), Xm_N_Top_Attachment, Xm_Attach_Form);
-            Xt_Set_Arg (Argl (3), Xm_N_User_Data, Xt_Arg_Val (Node));
+            Xt_Set_Arg (Argl (3), Xm_N_User_Data, Xt_Arg_Val (Current_Resource));
 
             Relocate_Annotation_Table (Current_Resource);
 
             pragma Assert 
              (Annotation_Table.Table (Current_Resource).Button = Null_Widget);
-            Put_Line (Node_Id'Wide_Image (Current_Resource));
+             
             Annotation_Table.Table (Current_Resource).Button := 
               Xm_Create_Managed_Toggle_Button_Gadget 
                (Form, "toggle_button", Argl (0 .. 3));
+               
+       --     Toggle_Button :=  Annotation_Table.Table (Current_Resource).Button;  
 
-            Xt_Add_Callback (Annotation_Table.Table (Current_Resource).Button,
+            Xt_Add_Callback (--Toggle_Button, 
+             Annotation_Table.Table (Current_Resource).Button,
                              Xm_N_Value_Changed_Callback,
                              Callbacks.On_Create_In_Record_Changed'Access);
-
+                  
+        --    Xt_Add_Callback (Pulldown_Menu,
+        --                           Xm_N_Entry_Callback,
+        --                           Callbacks.On_Menu_Entry'Access);
+                                   
             Str := 
               Xm_String_Generate
                (Internal_Resource_Name_Image (Current_Resource));
@@ -984,7 +990,7 @@ package body Designer.Render_Table_Editor is
 
                   while Current_Value /= Null_Node loop
                      Xt_Set_Arg 
-                      (Argl (0), Xm_N_User_Data, Xt_Arg_Val (Current_Value));
+                      (Argl (0), Xm_N_User_Data, Xt_Arg_Val (Current_Resource));
                      Xt_Set_Values 
                       (Annotation_Table.Table (Current_Resource).Value,
                        Argl (0 .. 0));
@@ -1062,9 +1068,7 @@ package body Designer.Render_Table_Editor is
       Page_Number            : Xm_Notebook_Page_Number;
       Copy_Rendition_List    : constant List_Id := New_List; 
       Copy_Resources_List    : constant List_Id := New_List; 
-      Copy_Current_Rendition : Node_Id;
       Copy_Resource          : Node_Id := Null_Node;
-      Current_Value          : Node_Id;
   
    begin
       pragma
@@ -1072,59 +1076,7 @@ package body Designer.Render_Table_Editor is
 
       --  Создание копии значения
       
-      if Saved_Resource_Node /= Resource then
-      
-         Current_Resource_Node := Create_Xm_Render_Table_Resource_Value;
-      
-         Rendition_List := Resource_Value (Resource);
-
-         if Rendition_List /= Null_List then
-            Current_Rendition := First (Rendition_List);
-            Set_Resource_Value (Current_Resource_Node, Copy_Rendition_List);
-           
-            while Current_Rendition /= Null_Node loop
-              Copy_Current_Rendition := Create_Xm_Rendition;
-               Append (Copy_Rendition_List, Copy_Current_Rendition);
-               Resource_Name := First (Resources (Current_Rendition));
-             
-               while Resource_Name /= Null_Node loop
-
-                  case Node_Kind (Resource_Name) is
-                     when Node_Enumeration_Resource_Value => 
-                        Current_Value := Resource_Value (Resource_Name);
-                        Copy_Resource := Create_Enumeration_Resource_Value;
-                        Set_Resource_Value (Copy_Resource, Current_Value);
-                        Set_Resource_Specification 
-                         (Copy_Resource, 
-                          Resource_Specification (Resource_Name));
-                 
-                      when Node_Xm_String_Resource_Value => 
-                         Copy_Resource := Create_Xm_String_Resource_Value;
-                         Set_Resource_Value (Copy_Resource, 
-                                             Store 
-                                              (Image 
-                                               (Resource_Value 
-                                                (Resource_Name))));
-                       Set_Resource_Specification 
-                        (Copy_Resource,
-                         Resource_Specification (Resource_Name));
-                       
-                       when others =>
-                         null;
-                    end case;
-
-                 Append (Copy_Resources_List, Copy_Resource);           
-                 Resource_Name := Next (Resource_Name);
-               end loop;   
-            
-              Set_Resources (Copy_Current_Rendition, Copy_Resources_List);
-             
-              Current_Rendition := Next (Current_Rendition);
-            end loop;
-         end if;
-           
-         Saved_Resource_Node := Resource;
-      end if;
+      Current_Resource_Node := Resource;
       
       Xt_Set_Arg (Argl (0), Xm_N_First_Page_Number, First_Page'Address);
       Xt_Set_Arg (Argl (1), Xm_N_Last_Page_Number, Last_Page'Address);
@@ -1305,8 +1257,6 @@ package body Designer.Render_Table_Editor is
            return;
         end if;
         
-      --    Put_Line ("**************************");
-        
         Res_List := Resources (Rendition);
         
         if Res_List /= Null_List then
@@ -1316,9 +1266,8 @@ package body Designer.Render_Table_Editor is
               Rendition_Resource := 
                 Find_Resource_Value (Res_List, 
                                      Current_Resource);
-              
+
               if Rendition_Resource /= Null_Node then  
-              --      Put_Line (Node_Id'Wide_Image (Rendition_Resource));
                  Xm_Toggle_Button_Gadget_Set_State 
                   (Annotation_Table.Table (Current_Resource).Button, 
                    True, 
