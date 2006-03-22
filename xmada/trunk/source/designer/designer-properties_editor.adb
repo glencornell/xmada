@@ -336,7 +336,7 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Update_Item (Node : in Model.Node_Id) is
    begin
-      null;
+      Designer.Properties_Editor.Widget_Instance.Update_Item (Node);
    end Update_Item;
 
 end Designer.Properties_Editor;

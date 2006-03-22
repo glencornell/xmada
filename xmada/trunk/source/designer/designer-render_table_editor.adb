@@ -39,6 +39,7 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Interfaces.C.Wide_Strings;
+with Ada.Exceptions;
 with GNAT.Table;
 
 with Xt.Ancillary_Types;
@@ -77,6 +78,7 @@ with Model.Xt_Motif;
 
 with Designer.Visual_Editor;
 with Designer.Model_Utilities;
+with Designer.Main_Window;
 
 with Ada.Wide_Text_IO;
 
@@ -286,6 +288,18 @@ package body Designer.Render_Table_Editor is
       
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_In_Record_Name_Activate
+      --!    <Purpose> Подпрограмма обратного вызова при активации поля
+      --! ввода имени переменной.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_In_Record_Name_Activate (The_Widget : in Widget;
+                                            Closure    : in Xt_Pointer;
+                                            Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_In_Record_Name_Activate);
+      
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Menu_Entry
       --!    <Purpose> Подпрограмма обратного вызова
       --!    <Exceptions>
@@ -369,6 +383,7 @@ package body Designer.Render_Table_Editor is
          end if;
 
          Append (Rendition_List, New_Rendition);
+         
          Xt_Set_Arg (Argl (0), Xm_N_User_Data, Xt_Arg_Val (New_Rendition));
          Xt_Set_Arg (Argl (1), Xm_N_Label_String, Str);
 
@@ -386,6 +401,7 @@ package body Designer.Render_Table_Editor is
          Xm_String_Free (Str);
          Xt_Manage_Child (Page);
          Update_Item (New_Rendition);
+         
       end On_Add;
 
       ------------------------------------------------------------------------
@@ -423,6 +439,7 @@ package body Designer.Render_Table_Editor is
          Node_New            : Node_Id;            
          Button_Data         : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
+           
          Argl                : Xt_Arg_List (0 .. 0);
          Page_Notebook_Info  : Xm_Notebook_Page_Info; 
          Page_Number         : Xm_Notebook_Page_Number;
@@ -461,7 +478,6 @@ package body Designer.Render_Table_Editor is
             Rendition_Resource := 
               Find_Resource_Value (Rendition_Resources, 
                                    Node_New);
-                                                    
          end if;   
 
          if Button_Data.Set = Xm_C_Set then
@@ -508,37 +524,138 @@ package body Designer.Render_Table_Editor is
                            Closure    : in Xt_Pointer;
                            Call_Data  : in Xt_Pointer)
       is
-         pragma Unreferenced (Closure);
-         pragma Unreferenced (Call_Data);
-         pragma Unreferenced (The_Widget);
-
-         Argl                : Xt_Arg_List (0 .. 0);
+         Argl                : Xt_Arg_List (0 .. 2);
          Data                : constant Xm_Row_Column_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
            
-         Page_Info           : constant Xm_Notebook_Callback_Struct_Access 
-           := To_Callback_Struct_Access (Call_Data);
-           
+         Page_Info          : Xm_Notebook_Page_Info; 
+         Status              : Xm_Notebook_Page_Status;
+         Rendition           : Node_Id := Null_Node;
+         Label               : Widget;
+         Page_Number         : Xm_Notebook_Page_Number;
+         Last_Page           : Xm_Notebook_Page_Number;
+         First_Page          : Xm_Notebook_Page_Number;
+         
+      begin      
+
+         --  Удаление страницы блокнота для соответствующего Rendition.
+
+         Xt_Set_Arg (Argl (0), 
+                     Xm_N_Current_Page_Number, 
+                     Page_Number'Address);
+         Xt_Set_Arg (Argl (1), Xm_N_First_Page_Number, First_Page'Address);
+         Xt_Set_Arg (Argl (2), Xm_N_Last_Page_Number, Last_Page'Address);
+         Xt_Get_Values (Notebook, Argl (0 .. 2));
+
+         Xm_Notebook_Get_Page_Info (Notebook, 
+                                    Page_Number,  
+                                    Page_Info, 
+                                    Status);
+      
+         if Page_Info.Major_Tab_Widget /= Null_Widget then
+            Xt_Set_Arg (Argl (0), Xm_N_User_Data, Rendition'Address);
+            Xt_Get_Values (Page_Info.Major_Tab_Widget, Argl (0 .. 0));
+            Xt_Destroy_Widget (Page_Info.Major_Tab_Widget);
+          
+         elsif Page_Info.Minor_Tab_Widget /= Null_Widget then
+            Xt_Set_Arg (Argl (0), Xm_N_User_Data, Rendition'Address);
+            Xt_Get_Values (Page_Info.Major_Tab_Widget, Argl (0 .. 0));
+            Xt_Destroy_Widget (Page_Info.Minor_Tab_Widget);
+         end if;
+       
+         if Last_Page /= First_Page then
+            if First_Page = Page_Number then
+               Xt_Set_Arg (Argl (0), 
+                           Xm_N_Current_Page_Number, 
+                           Xt_Arg_Val (Last_Page));
+            else
+               Xt_Set_Arg (Argl (0), 
+                           Xm_N_Current_Page_Number,
+                           Xt_Arg_Val (First_Page));
+            end if;
+   
+            Xt_Set_Values (Notebook, Argl (0 .. 0));
+         end if;
+
+         Remove (Rendition);
+        
+         --  Обновление значений текущей страницы.
+        
+         On_Page_Changed (The_Widget, Closure, Call_Data);
+         
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Delete", E);
+      end On_Delete;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_In_Record_Name_Activate
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_In_Record_Name_Activate (The_Widget : in Widget;
+                                            Closure    : in Xt_Pointer;
+                                            Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Argl                : Xt_Arg_List (0 .. 0);
+         Node                : Node_Id;
          Page_Notebook_Info  : Xm_Notebook_Page_Info; 
          Status              : Xm_Notebook_Page_Status;
          Rendition           : Node_Id := Null_Node;
          Label               : Widget;
          Page_Number         : Xm_Notebook_Page_Number;
+         Name                : constant Wide_String
+           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+           
+         Rendition_Resources : List_Id;
+         Rendition_Resource  : Node_Id;
          
-      begin      
-         --  Получаем выбранный элемент меню.
+      begin
+         --  Извлекаем узел ресурса.
+
+         Xt_Set_Arg (Argl (0), Xm_N_User_Data, Node'Address);
+         Xt_Get_Values (The_Widget, Argl (0 .. 0));
          
          Xt_Set_Arg (Argl (0), 
-                     Xm_N_Current_Page_Number, 
-                     Xt_Arg_Val (Page_Number));
+                     Xm_N_Current_Page_Number,
+                     Page_Number'Address);
          Xt_Get_Values (Notebook, Argl (0 .. 0));
          
-         Xt_Set_Arg (Argl (0), Xm_N_Page_Number, Page_Number'Address);
-         Xt_Get_Values (Label, Argl (0 .. 0));
-         Xt_Unmanage_Child (Label);
+         Xm_Notebook_Get_Page_Info (Notebook,
+                                    Page_Number,  
+                                    Page_Notebook_Info, 
+                                    Status);
+      
+         if Page_Notebook_Info.Major_Tab_Widget /= Null_Widget then
+            Xt_Set_Arg (Argl (0), Xm_N_User_Data, Rendition'Address);
+            Xt_Get_Values (Page_Notebook_Info.Major_Tab_Widget, Argl (0 .. 0));
+          
+         elsif Page_Notebook_Info.Minor_Tab_Widget /= Null_Widget then
+            Xt_Set_Arg (Argl (0), Xm_N_User_Data, Rendition'Address);
+            Xt_Get_Values (Page_Notebook_Info.Major_Tab_Widget, Argl (0 .. 0));
+         end if;
 
-         Xt_Manage_Child (Page);
-      end On_Delete;
+         --  Сохранение нового имени.
+         
+         if Rendition /= Null_Node then
+            Rendition_Resources := Resources (Rendition);
+            Rendition_Resource := 
+              Find_Resource_Value (Rendition_Resources, 
+                                   Tag_Resource_Specification);
+            Set_Resource_Value (Rendition_Resource, Store (Name));
+                                                    
+         end if;   
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_In_Record_Name_Activate", E);
+      end On_In_Record_Name_Activate;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -602,7 +719,7 @@ package body Designer.Render_Table_Editor is
          
          if Rendition /= Null_Node then
             Rendition_Resources := Resources (Rendition);
-            
+
             Rendition_Resource := 
               Find_Resource_Value (Rendition_Resources, 
                                    Node);
@@ -641,15 +758,13 @@ package body Designer.Render_Table_Editor is
          pragma Unreferenced (Call_Data);
          pragma Unreferenced (The_Widget);
          
-         Saved_Rendition_List : List_Id := New_List;
-         Saved_Rendition      : Node_Id := Null_Node;
-         Saved_Resource_Name  : Node_Id := Null_Node;
+         Rendition_Node       : Node_Id := Parent_Node (Current_Resource_Node);
          State                : Boolean := False;
          Motif_Resource_List  : List_Id  
            := Resources (Xt_Motif_Rendition_Class);
          
       begin
-         null;
+         Designer.Main_Window.Update_Item (Rendition_Node);
       end On_OK;
 
       ------------------------------------------------------------------------
@@ -797,9 +912,10 @@ package body Designer.Render_Table_Editor is
       Text_Field       : Widget;
       Argl             : Xt_Arg_List (0 .. 5);
 
-   begin
+   begin      
       Dialog :=
         Xm_Create_Template_Dialog (Parent, "renderTableDialog");
+        
       Xt_Add_Callback (Dialog, Xm_N_Ok_Callback, Callbacks.On_OK'Access);
       Xt_Add_Callback
        (Dialog, Xm_N_Cancel_Callback, Callbacks.On_Cancel'Access);
@@ -843,7 +959,6 @@ package body Designer.Render_Table_Editor is
                          Xm_N_Page_Changed_Callback, 
                          Callbacks.On_Page_Changed'Access);
 
-                         
       Button := Xt_Name_To_Widget (Notebook, "PageScroller");
       Xt_Unmanage_Child (Button);
 
@@ -916,7 +1031,9 @@ package body Designer.Render_Table_Editor is
             Xt_Set_Arg (Argl (0), Xm_N_Left_Attachment, Xm_Attach_Form);
             Xt_Set_Arg (Argl (1), Xm_N_Bottom_Attachment, Xm_Attach_Form);
             Xt_Set_Arg (Argl (2), Xm_N_Top_Attachment, Xm_Attach_Form);
-            Xt_Set_Arg (Argl (3), Xm_N_User_Data, Xt_Arg_Val (Current_Resource));
+            Xt_Set_Arg (Argl (3), 
+                        Xm_N_User_Data, 
+                        Xt_Arg_Val (Current_Resource));
 
             Relocate_Annotation_Table (Current_Resource);
 
@@ -925,18 +1042,12 @@ package body Designer.Render_Table_Editor is
              
             Annotation_Table.Table (Current_Resource).Button := 
               Xm_Create_Managed_Toggle_Button_Gadget 
-               (Form, "toggle_button", Argl (0 .. 3));
-               
-       --     Toggle_Button :=  Annotation_Table.Table (Current_Resource).Button;  
+               (Form, "toggle_button", Argl (0 .. 3)); 
 
-            Xt_Add_Callback (--Toggle_Button, 
-             Annotation_Table.Table (Current_Resource).Button,
-                             Xm_N_Value_Changed_Callback,
-                             Callbacks.On_Create_In_Record_Changed'Access);
-                  
-        --    Xt_Add_Callback (Pulldown_Menu,
-        --                           Xm_N_Entry_Callback,
-        --                           Callbacks.On_Menu_Entry'Access);
+            Xt_Add_Callback 
+             (Annotation_Table.Table (Current_Resource).Button,
+              Xm_N_Value_Changed_Callback,
+              Callbacks.On_Create_In_Record_Changed'Access);
                                    
             Str := 
               Xm_String_Generate
@@ -1023,6 +1134,9 @@ package body Designer.Render_Table_Editor is
                   Xt_Set_Arg (Argl (1), 
                               Xm_N_Left_Widget,
                               Annotation_Table.Table (Current_Resource).Button);
+                  Xt_Set_Arg (Argl (2), 
+                              Xm_N_User_Data, 
+                              Xt_Arg_Val (Current_Resource));
              
                   Xm_Toggle_Button_Gadget_Set_State 
                    (Annotation_Table.Table (Current_Resource).Button, 
@@ -1032,7 +1146,12 @@ package body Designer.Render_Table_Editor is
                    (Annotation_Table.Table (Current_Resource).Button, False);
                   Annotation_Table.Table (Current_Resource).Value 
                     := Xm_Create_Managed_Text_Field
-                     (Form, "resource_name", Argl (0 .. 1));
+                     (Form, "resource_name", Argl (0 .. 2));
+                     
+                  Xt_Add_Callback 
+                   (Annotation_Table.Table (Current_Resource).Value,
+                    Xm_N_Losing_Focus_Callback,
+                    Callbacks.On_In_Record_Name_Activate'Access);
 
                   if 
                    Internal_Resource_Name_Image (Current_Resource) = "tag" then
@@ -1075,7 +1194,7 @@ package body Designer.Render_Table_Editor is
         Assert (Node_Kind (Resource) = Node_Xm_Render_Table_Resource_Value);
 
       --  Создание копии значения
-      
+
       Current_Resource_Node := Resource;
       
       Xt_Set_Arg (Argl (0), Xm_N_First_Page_Number, First_Page'Address);
@@ -1096,13 +1215,12 @@ package body Designer.Render_Table_Editor is
       
 
       Rendition_List := Resource_Value (Current_Resource_Node);
-      
       if Rendition_List /= Null_List then
 
          Current_Rendition := First (Rendition_List);
          while Current_Rendition /= Null_Node loop
 
-         Xt_Set_Arg (Argl (0), 
+            Xt_Set_Arg (Argl (0), 
                         Xm_N_User_Data, Xt_Arg_Val (Current_Rendition));
             Label := Xm_Create_Managed_Push_Button_Gadget 
              (Notebook, "page1", Argl (0 .. 0));
@@ -1114,6 +1232,7 @@ package body Designer.Render_Table_Editor is
                   if Resource_Specification (Resource_Name)
                     = Tag_Resource_Specification
                   then
+    
                      Str := Xm_String_Generate 
                       (Image (Resource_Value (Resource_Name)));
                      Xt_Set_Arg (Argl (0), Xm_N_Label_String, Str);
@@ -1129,14 +1248,18 @@ package body Designer.Render_Table_Editor is
        end if;
 
        if Label /= Null_Widget then 
-          Xt_Set_Arg (Argl (0), Xm_N_Page_Number, Page_Number'Address);
-          Xt_Get_Values (Label, Argl (0 .. 0));
- 
-          Xt_Set_Arg (Argl (0), Xm_N_Current_Page_Number, Xt_Arg_Val (Page_Number));
-          Xt_Set_Values (Notebook, Argl (0 .. 0));
-       end if;
+          Xt_Set_Arg (Argl (0), Xm_N_Last_Page_Number, Page_Number'Address);
+          Xt_Get_Values (Notebook, Argl (0 .. 0));
       
+          Xt_Set_Arg (Argl (0), 
+                      Xm_N_Current_Page_Number, 
+                      Xt_Arg_Val (Page_Number));
+          Xt_Set_Values (Notebook, Argl (0 .. 0));
+
+       end if;
+
       Xt_Manage_Child (Dialog);
+
    end Open;
 
    ---------------------------------------------------------------------------
@@ -1248,18 +1371,19 @@ package body Designer.Render_Table_Editor is
    ---------------------------------------------------------------------------
    procedure Update_Item (Rendition : in Node_Id)
    is
-         Argl           : Xt_Arg_List (0 .. 0);
+         Argl               : Xt_Arg_List (0 .. 0);
          Current_Resource   : Node_Id;
-         Rendition_Resource   : Node_Id;
-         Res_List            : List_Id;
+         Rendition_Resource : Node_Id;
+         Res_List           : List_Id;
+         
    begin      
-       if Rendition = Null_Node then
-           return;
-        end if;
+      if Rendition = Null_Node then
+         return;
+      end if;
+
+      Res_List := Resources (Rendition);
         
-        Res_List := Resources (Rendition);
-        
-        if Res_List /= Null_List then
+      if Res_List /= Null_List then
            Current_Resource := First (Resources (Xt_Motif_Rendition_Class));
 
            while Current_Resource /= Null_Node loop
@@ -1275,27 +1399,36 @@ package body Designer.Render_Table_Editor is
                    
                   case Node_Kind (Resource_Type (Current_Resource)) is
                      when Node_Enumerated_Resource_Type =>
-                        Xt_Set_Arg (Argl (0),
-                                    Xm_N_Menu_History,
-                                    Annotation_Table.Table 
-                                     (Resource_Value 
-                                      (Rendition_Resource)).Menu_Item);
-                        Xt_Set_Values
-                         (Annotation_Table.Table (Current_Resource).Value,
-                          Argl (0 .. 0));
+                        if Annotation_Table.Table 
+                         (Resource_Value 
+                          (Rendition_Resource)).Menu_Item /= Null_Widget then
+                          
+                           Xt_Set_Arg (Argl (0),
+                                       Xm_N_Menu_History,
+                                       Annotation_Table.Table 
+                                        (Resource_Value 
+                                         (Rendition_Resource)).Menu_Item);
+                           Xt_Set_Values
+                           (Annotation_Table.Table (Current_Resource).Value,
+                            Argl (0 .. 0));
+                          
+                      end if;    
                      
                      when Node_Xm_String_Resource_Type =>   
                      
                         Xm_Text_Field_Set_String_Wcs 
                          (Annotation_Table.Table (Current_Resource).Value,
                           Image (Resource_Value (Rendition_Resource)));
+                          
                      when others =>
                         null;
                   end case; 
                    
                else 
                   Xm_Toggle_Button_Gadget_Set_State 
-                   (Annotation_Table.Table (Current_Resource).Button, False, False);
+                   (Annotation_Table.Table (Current_Resource).Button, 
+                    False, 
+                    False);
                end if;
                
                Current_Resource := Next (Current_Resource);
