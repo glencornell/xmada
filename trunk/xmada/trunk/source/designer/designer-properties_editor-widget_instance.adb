@@ -76,6 +76,8 @@ with Model.Tree.Designer;
 with Model.Tree.Lists;
 with Model.Tree.Xm_Ada;
 
+with Ada.Strings.Wide_Unbounded;
+
 package body Designer.Properties_Editor.Widget_Instance is
 
    use Designer.Model_Utilities;
@@ -188,6 +190,17 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    Xm_C_Unset : constant := 0;
    Xm_C_Set   : constant := 1;
+   
+   ----------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Add_Rendition_Name
+   --!    <Purpose> Добавляет список имеющихся воспроизведений Rendition
+   --! в текстовое поле.
+   --!    <Exceptions>
+   ----------------------------------------------------------------------
+   procedure Add_Rendition_Name 
+    (Set_String : in out Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+     Added_Node : in     Node_Id);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -1324,6 +1337,22 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    end Callbacks;
 
+   ----------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Add_Rendition_Name
+   --!    <ImplementationNotes>
+   ----------------------------------------------------------------------
+   procedure Add_Rendition_Name 
+    (Set_String : in out Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+     Added_Node : in     Node_Id)
+   is
+   begin
+      Ada.Strings.Wide_Unbounded.Append (Set_String , " "); 
+      Ada.Strings.Wide_Unbounded.Append 
+       (Set_String , 
+        Image (Resource_Value (Added_Node)));
+   end;
+      
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Check_Sensitive
@@ -1403,7 +1432,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure Add_Ada_Names (Parent : in Widget);
-
+                                   
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Add_Resource
@@ -1503,7 +1532,7 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          Do_Alignment (Alignment);
       end Add_Ada_Names;
-
+                               
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Add_Resource
@@ -1621,7 +1650,44 @@ package body Designer.Properties_Editor.Widget_Instance is
                Annotation_Table.Table (Node).Value :=
                  Xm_Create_Managed_Text_Field
                   (Form, "resource_renditions", Args (0 .. 5));
+                  
+                     declare
+                        Rendition_List    : List_Id := Resource_Value (Node);
+                        Current_Rendition : Node_Id;
+                        Current_Resource  : Node_Id;
+                        Set_String        : 
+                          Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+                  
+                     begin
+                        if Rendition_List /= Null_List then
+                           Current_Rendition := First (Rendition_List);
 
+                           while Current_Rendition /= Null_Node loop
+                              Current_Resource 
+                                := First (Resources (Current_Rendition));
+                                 
+                              while Current_Resource /= Null_Node loop
+                                 if Node_Kind 
+                                  ((Current_Resource)) =
+                                    Node_Xm_String_Resource_Value then
+                                    
+                                    Add_Rendition_Name (Set_String, 
+                                                        Current_Resource);
+                                 end if;
+                                    
+                                 Current_Resource := Next (Current_Resource);
+                              end loop;    
+                              
+                              Current_Rendition := Next (Current_Rendition);
+                           end loop;
+                        end if;
+                  
+                        Xm_Text_Field_Set_String_Wcs 
+                         (Annotation_Table.Table (Node).Value, 
+                          Ada.Strings.Wide_Unbounded.To_Wide_String 
+                           (Set_String));
+                     end;
+                  
             when Node_Enumerated_Resource_Type =>
                Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
                Xt_Set_Arg (Args (1),
@@ -2638,8 +2704,43 @@ package body Designer.Properties_Editor.Widget_Instance is
                      end;
 
                   when Node_Xm_Render_Table_Resource_Type =>
-                     null;
-                     --  XXX Не реализовано.
+
+                     declare
+                        Rendition_List    : List_Id := Resource_Value (Current);
+                        Current_Rendition : Node_Id;
+                        Current_Resource  : Node_Id;
+                        Set_String        : 
+                          Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+                  
+                     begin
+                        if Rendition_List /= Null_List then
+                           Current_Rendition := First (Rendition_List);
+
+                           while Current_Rendition /= Null_Node loop
+                              Current_Resource 
+                                := First (Resources (Current_Rendition));
+                                 
+                              while Current_Resource /= Null_Node loop
+                                 if Node_Kind 
+                                  ((Current_Resource)) =
+                                    Node_Xm_String_Resource_Value then
+                                    
+                                    Add_Rendition_Name (Set_String, 
+                                                        Current_Resource);
+                                 end if;
+                                    
+                                 Current_Resource := Next (Current_Resource);
+                              end loop;    
+                              
+                              Current_Rendition := Next (Current_Rendition);
+                           end loop;
+                        end if;
+                  
+                        Xm_Text_Field_Set_String_Wcs 
+                         (Annotation_Table.Table (Current).Value, 
+                          Ada.Strings.Wide_Unbounded.To_Wide_String 
+                           (Set_String));
+                     end;
 
                   when Node_Xm_String_Resource_Type =>
                      Xm_Text_Field_Set_String_Wcs
@@ -2659,11 +2760,10 @@ package body Designer.Properties_Editor.Widget_Instance is
       case Node_Kind (Node) is
          when Node_Widget_Instance =>
             Visual_Editor.Get_Properties (Node);
-
             Update_Resource (All_Resources (Node), Resources (Node));
             Update_Resource (All_Constraint_Resources (Node),
                              Constraint_Resources (Node));
-
+                             
          when others =>
             null;
       end case;
