@@ -31,6 +31,51 @@ Michail Shilov <shilovm@list.ru>\n\n\
 XmAda maintained by TechnoServ A/S\n\
 (email: vgodunko@rostel.ru)
 
+!!  Окно "Не верное расширение файла".
+
+*no_open_dialog.dialogTitle: XmAda designer
+*no_open_dialog.cancelLabelString: Close
+*no_open_dialog.defaultButtonType:DIALOG_CANCEL_BUTTON
+*no_open_dialog.messageAlignment: ALIGNMENT_CENTER
+*no_open_dialog.messageString: Sorry. \n Invalid extention
+
+!!  Диалог "Подтверждения удаления".
+
+*Warning_XmMessageBox.dialogType: DIALOG_QUESTION
+*Warning_XmMessageBox.dialogTitle: XmAda designer
+!!*Warning_XmMessageBox.defaultButtonType:DIALOG_CANCEL_BUTTON
+*Warning_XmMessageBox.messageAlignment: ALIGNMENT_CENTER
+!!*Warning_XmMessageBox.messageString: Delete?
+
+!!  Диалог "Подтверждения сохранения проекта при выходе".
+
+*warning_on_exit_xmmessageBox.dialogType: DIALOG_QUESTION
+*warning_on_exit_xmmessageBox.dialogTitle: XmAda designer
+!!*warning_on_exit_xmmessageBox.defaultButtonType:DIALOG_CANCEL_BUTTON
+*warning_on_exit_xmmessageBox.messageAlignment: ALIGNMENT_CENTER
+*warning_on_exit_xmmessageBox.okLabelString : Yes
+*warning_on_exit_xmmessageBox.cancelLabelString : No
+*warning_on_exit_xmmessageBox.helpLabelString : Cancel
+*warning_on_exit_xmmessageBox.messageString: Save Progect?
+
+!!  Диалог "Подтверждения сохранения проекта".
+
+*Warning_On_Open_Project_XmMessageBox.dialogType: DIALOG_QUESTION
+*Warning_On_Open_Project_XmMessageBox.dialogTitle: XmAda designer
+!!*Warning_On_Open_Project_XmMessageBox.defaultButtonType:DIALOG_CANCEL_BUTTON
+*Warning_On_Open_Project_XmMessageBox.messageAlignment: ALIGNMENT_CENTER
+*Warning_On_Open_Project_XmMessageBox.okLabelString : Yes
+*Warning_On_Open_Project_XmMessageBox.cancelLabelString : No
+
+!!  Диалог "Подтверждения сохранения проекта".
+
+*Warning_On_New_Project_XmMessageBox.dialogType: DIALOG_QUESTION
+*Warning_On_New_Project_XmMessageBox.dialogTitle: XmAda designer
+!!*Warning_On_New_Project_XmMessageBox.defaultButtonType:DIALOG_CANCEL_BUTTON
+*Warning_On_New_Project_XmMessageBox.messageAlignment: ALIGNMENT_CENTER
+*Warning_On_New_Project_XmMessageBox.okLabelString : Yes
+*Warning_On_New_Project_XmMessageBox.cancelLabelString : No
+
 !!  Окно "Редактирование свойств XmRenderTable".
 
 *renderTableDialog.dialogStyle: DIALOG_FULL_APPLICATION_MODAL
@@ -52,7 +97,8 @@ XmAda maintained by TechnoServ A/S\n\
 !!  Главное окно.
 
 *open_file_dialog.dialogTitle : Open existing file
-*save_file_dialog.dialogTitle : Save current file
+*open_file_dialog.pattern : *.xad
+*save_file_as_dialog.dialogTitle : Save current file
 *main_window.main_menu*file.labelString : File
 *main_window.main_menu*file.mnemonic : F
 *main_window.main_menu*file_pulldown*new.labelString: New

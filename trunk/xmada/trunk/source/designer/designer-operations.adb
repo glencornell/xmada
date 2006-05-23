@@ -241,8 +241,9 @@ package body Designer.Operations is
       --  атрибутов узла.
 
       Project := Create_Project;
-      Set_Name (Project, Enter ("Untitled"));
-      Set_File_Name (Project, Enter ("untitled.xad"));
+      Set_Name (Project, Enter (Main_Window.Default_Project_Name));
+      Set_File_Name (Project, Enter (Main_Window.Default_Project_Name
+                                       & Main_Window.Project_Extention));
 
       Set_Imported_Widget_Sets (Project, Xt_Motif.Known_Widget_Sets);
 
@@ -261,6 +262,8 @@ package body Designer.Operations is
       Set_Component_Classes (Application, List);
 
       Notify_Designer_Components (Project);
+      Designer.Main_Window.XmAdaDesigner_title
+       (Main_Window.Default_Project_Name & Main_Window.Project_Extention);
    end New_Project;
 
    ---------------------------------------------------------------------------
@@ -384,8 +387,8 @@ package body Designer.Operations is
    begin
       Initialize;
       Project := Model.Tools.XML_To_Project (File_Name);
-
       Notify_Designer_Components (Project);
+      Designer.Main_Window.XmAdaDesigner_title (File_Name);
    end Open_Project;
 
    ---------------------------------------------------------------------------
@@ -394,8 +397,29 @@ package body Designer.Operations is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Save_Project (File_Name : in Wide_String) is
+      Aux : constant Natural := File_Name'Last;
+
    begin
-      Model.Tools.Project_To_XML (Project, File_Name);
+      if File_Name'Length > 4 then
+         if File_Name (Aux - 3 .. Aux)
+              = Main_Window.Project_Extention
+         then
+            Model.Tools.Project_To_XML (Project, File_Name);
+            Designer.Main_Window.XmAdaDesigner_title (File_Name);
+
+         else
+            Model.Tools.Project_To_XML
+             (Project, File_Name & Main_Window.Project_Extention);
+            Designer.Main_Window.XmAdaDesigner_title
+             (File_Name & Main_Window.Project_Extention);
+         end if;
+
+      else
+         Model.Tools.Project_To_XML
+          (Project, File_Name & Main_Window.Project_Extention);
+         Designer.Main_Window.XmAdaDesigner_title
+          (File_Name & Main_Window.Project_Extention);
+      end if;
    end Save_Project;
 
    ---------------------------------------------------------------------------
@@ -404,8 +428,29 @@ package body Designer.Operations is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Save_Project is
+      Full_File_Name : constant Wide_String := Image (File_Name (Project));
+      Aux            : constant Natural := Full_File_Name'Last;
+
    begin
-      Save_Project (Image (File_Name (Project)));
+      if Full_File_Name'Length > 4 then
+         if Full_File_Name ((Aux - 3) .. Aux) = Main_Window.Project_Extention
+         then
+            Save_Project (Full_File_Name);
+            Designer.Main_Window.XmAdaDesigner_title (Full_File_Name);
+         else
+
+            Save_Project
+             (Full_File_Name & Main_Window.Project_Extention);
+            Designer.Main_Window.XmAdaDesigner_title
+             (Full_File_Name & Main_Window.Project_Extention);
+         end if;
+
+      else
+         Save_Project
+          (Image (File_Name (Project)) & Main_Window.Project_Extention);
+         Designer.Main_Window.XmAdaDesigner_title
+          (Image (File_Name (Project)) & Main_Window.Project_Extention);
+      end if;
    end Save_Project;
 
 end Designer.Operations;
