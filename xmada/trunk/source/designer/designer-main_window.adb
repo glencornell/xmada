@@ -50,6 +50,7 @@ with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Utilities;
 with Xm.Class_Management;
+with Xm.Internal;
 with Xm.Resource_Management;
 with Xm.Strings;
 with Xm.Traversal_Management;
@@ -76,15 +77,18 @@ with Designer.Properties_Editor;
 with Designer.Render_Table_Editor;
 with Designer.Tree_Editor;
 with Designer.Visual_Editor;
+with Model.Names;
 with Model.Tree;
 
 package body Designer.Main_Window is
 
    use Designer.Model_Utilities;
    use Model;
+   use Model.Names;
    use Model.Tree;
    use Xm;
    use Xm.Class_Management;
+   use Xm.Internal;
    use Xm.Resource_Management;
    use Xm.Strings;
    use Xm.Traversal_Management;
@@ -114,10 +118,14 @@ package body Designer.Main_Window is
    Selected_Item : Node_Id;
    Project_Node  : Node_Id;
 
-   About_Dialog : Widget;
+   About_Dialog            : Widget;
+   App_Shell_MW            : Widget;
    New_Component_Item      : Widget;
+   No_Open_Dialog          : Widget;
    Delete_Application_Item : Widget;
    Delete_Component_Item   : Widget;
+   File_Name_MW            : Xm_String;
+   On_Exit_Flag            : boolean := False;
 
    Xm_C_New_Application    : constant := 1;
    Xm_C_New_Component      : constant := 2;
@@ -140,6 +148,96 @@ package body Designer.Main_Window is
                           Closure    : in Xt_Pointer;
                           Call_Data  : in Xt_Pointer);
       pragma Convention (C, On_About);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Exit_XmMessageBox_Ok
+      --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
+      --! клавиши OK в диалоге подтверждения сохранения проекта.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Exit_XmMessageBox_Ok (The_Widget : in Widget;
+                                                 Closure    : in Xt_Pointer;
+                                                 Call_Data  : in Xt_Pointer);
+      pragma Convention (C, Warning_On_Exit_XmMessageBox_Ok);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Exit_XmMessageBox_Cancel
+      --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
+      --! клавиши Cancel в диалоге подтверждения сохранения проекта.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Exit_XmMessageBox_Cancel
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, Warning_On_Exit_XmMessageBox_Cancel);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Exit_XmMessageBox_Help
+      --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
+      --! клавиши Help в диалоге подтверждения сохранения проекта.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Exit_XmMessageBox_Help
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, Warning_On_Exit_XmMessageBox_Help);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_New_Project_XmMessageBox_Ok
+      --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
+      --! клавиши OK в диалоге подтверждения сохранения проекта.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Warning_On_New_Project_XmMessageBox_Ok
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, Warning_On_New_Project_XmMessageBox_Ok);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_New_Project_XmMessageBox_Cancel
+      --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
+      --! клавиши Cancel в диалоге подтверждения сохранения проекта.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Warning_On_New_Project_XmMessageBox_Cancel
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, Warning_On_New_Project_XmMessageBox_Cancel);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Open_Project_XmMessageBox_Ok
+      --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
+      --! клавиши OK в диалоге подтверждения сохранения проекта.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Open_Project_XmMessageBox_Ok
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, Warning_On_Open_Project_XmMessageBox_Ok);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Open_Project_XmMessageBox_Cancel
+      --!    <Purpose> Подпрограмма обратного вызова вызывается при нажатии
+      --! клавиши Cancel в диалоге подтверждения сохранения проекта.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Open_Project_XmMessageBox_Cancel
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer);
+      pragma Convention (C, Warning_On_Open_Project_XmMessageBox_Cancel);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -301,11 +399,15 @@ package body Designer.Main_Window is
 
    end Callbacks;
 
-   Status_Bar     : Widget;
-   Open_Dialog    : Widget;
-   Save_As_Dialog : Widget;
-   Message_Text   : Widget;
-   Message_Buffer : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+   Warning_On_Exit_XmMessageBox         : Widget;
+   Warning_On_New_Project_XmMessageBox  : Widget;
+   Warning_On_Open_Project_XmMessageBox : Widget;
+   Status_Bar                           : Widget;
+   Open_Dialog                          : Widget;
+   Save_As_Dialog                       : Widget;
+   Message_Text                         : Widget;
+   Message_Buffer                       :
+     Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
    --  Временный буфер для хранения текста диагностических сообщений,
    --  выводимых до фактического создания виджета отображения диагностических
    --  сообщений.
@@ -362,6 +464,200 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> Warning_On_Exit_XmMessageBox_Ok
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Exit_XmMessageBox_Ok (The_Widget : in Widget;
+                                                 Closure    : in Xt_Pointer;
+                                                 Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         if Image (File_Name (Project_Node)) = Default_Project_Name
+                                                 & Project_Extention
+         then
+            Child_Save_As_Dialog;
+            On_Exit_Flag := True;
+
+         else
+            Operations.Save_Project;
+            Xt_App_Set_Exit_Flag (Xt_Widget_To_Application_Context
+                                   (The_Widget));
+         end if;
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback ("Warning_On_Exit_XmMessageBox_Ok", E);
+      end Warning_On_Exit_XmMessageBox_Ok;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Exit_XmMessageBox_Cancel
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Exit_XmMessageBox_Cancel
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Xt_App_Set_Exit_Flag (Xt_Widget_To_Application_Context (The_Widget));
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback ("Cancel_On_Exitx", E);
+      end Warning_On_Exit_XmMessageBox_Cancel;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Exit_XmMessageBox_Help
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Exit_XmMessageBox_Help
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Xt_Unmanage_Child (Warning_On_Exit_XmMessageBox);
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback ("Cancel_On_Help", E);
+      end Warning_On_Exit_XmMessageBox_Help;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_New_Project_XmMessageBox_Ok
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Warning_On_New_Project_XmMessageBox_Ok
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Xt_Unmanage_Child (Warning_On_New_Project_XmMessageBox);
+
+         if Image (File_Name (Project_Node)) = Default_Project_Name
+                                                 & Project_Extention
+         then
+            Designer.Main_Window.Child_Save_As_Dialog;
+
+         else
+            Operations.Save_Project;
+         end if;
+
+         Operations.New_Project;
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback
+             ("Warning_On_New_Project_XmMessageBox_Ok", E);
+      end Warning_On_New_Project_XmMessageBox_Ok;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Open_Project_XmMessageBox_Cancel
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Warning_On_New_Project_XmMessageBox_Cancel
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Xt_Unmanage_Child (Warning_On_New_Project_XmMessageBox);
+         Operations.New_Project;
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback
+             ("On_Open_Project_XmMessageBox_Cancel", E);
+      end Warning_On_New_Project_XmMessageBox_Cancel;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Open_Project_XmMessageBox_Ok
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Open_Project_XmMessageBox_Ok
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Xt_Unmanage_Child (Warning_On_Exit_XmMessageBox);
+         Xt_Manage_Child (Open_Dialog);
+
+         if File_Name_MW = Xm_String_Generate (Default_Project_Name
+                                                 & Project_Extention)
+         then
+            Child_Save_As_Dialog;
+
+         else
+            Operations.Save_Project;
+         end if;
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback
+             ("Warning_On_Open_Project_XmMessageBox_Ok", E);
+      end Warning_On_Open_Project_XmMessageBox_Ok;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Warning_On_Open_Project_XmMessageBox_Cancel
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Open_Project_XmMessageBox_Cancel
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Xt_Unmanage_Child (Warning_On_Exit_XmMessageBox);
+         Xt_Manage_Child (Open_Dialog);
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback
+             ("On_Open_Project_XmMessageBox_Cancel", E);
+      end Warning_On_Open_Project_XmMessageBox_Cancel;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Exit
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -374,8 +670,7 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         Operations.Save_Project;
-         Xt_App_Set_Exit_Flag (Xt_Widget_To_Application_Context (The_Widget));
+         Warning_On_Exit_XmMessageBox_Dialog;
 
       exception
          when E : others =>
@@ -481,7 +776,7 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         Operations.New_Project;
+         Warning_On_New_Project_XmMessageBox_Dialog;
 
       exception
          when E : others =>
@@ -503,7 +798,7 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         Xt_Manage_Child (Open_Dialog);
+         Warning_On_Open_Project_XmMessageBox_Dialog;
 
       exception
          when E : others =>
@@ -528,10 +823,26 @@ package body Designer.Main_Window is
            := To_Callback_Struct_Access (Call_Data);
          File_Name : constant Wide_String
            := Xm_String_Unparse (Data.Value);
+         Aux : constant Natural := File_Name'Last;
 
       begin
          if Data.Reason = Xm_CR_Ok then
-            Operations.Open_Project (File_Name);
+            if File_Name'Length > 4 then
+               if File_Name (Aux - 3 .. Aux) = Main_Window.Project_Extention
+               then
+                  Operations.Open_Project (File_Name);
+
+               else
+                  No_Open_Dialog
+                    := Xm_Create_Template_Dialog (App_Shell_MW, "no_open_dialog");
+                  Xt_Manage_Child (No_Open_Dialog);
+               end if;
+
+            else
+               No_Open_Dialog
+                 := Xm_Create_Template_Dialog (App_Shell_MW, "no_open_dialog");
+               Xt_Manage_Child (No_Open_Dialog);
+            end if;
 
          elsif Data.Reason = Xm_CR_Cancel then
             null;
@@ -553,8 +864,8 @@ package body Designer.Main_Window is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure On_Project_Activate (The_Widget : in Widget;
-                                           Closure    : in Xt_Pointer;
-                                           Call_Data  : in Xt_Pointer)
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
@@ -618,7 +929,14 @@ package body Designer.Main_Window is
          --  Данные переменные не используются.
 
       begin
-         Operations.Save_Project;
+         if Image (File_Name (Project_Node)) = Default_Project_Name
+                                                 & Project_Extention
+         then
+            Child_Save_As_Dialog;
+
+         else
+            Operations.Save_Project;
+         end if;
 
       exception
          when E : others =>
@@ -680,6 +998,11 @@ package body Designer.Main_Window is
 
          Xt_Unmanage_Child (The_Widget);
 
+         if On_Exit_Flag then
+            Xt_App_Set_Exit_Flag (Xt_Widget_To_Application_Context
+                                   (The_Widget));
+         end if;
+
       exception
          when E : others =>
             Put_Exception_In_Callback
@@ -713,6 +1036,16 @@ package body Designer.Main_Window is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Child_Save_As_Dialog
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Child_Save_As_Dialog is
+   begin
+      Xt_Manage_Child (Save_As_Dialog);
+   end Child_Save_As_Dialog;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Delete_Item
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -720,9 +1053,20 @@ package body Designer.Main_Window is
    begin
       Designer.Palette.Delete_Item (Node);
       Designer.Tree_Editor.Delete_Item (Node);
-      Designer.Visual_Editor.Delete_Item (Node);
       Designer.Properties_Editor.Delete_Item (Node);
+      Designer.Visual_Editor.Delete_Item (Node);
    end Delete_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_App_Shell
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Get_App_Shell return Xt.Widget
+   is
+   begin
+      return App_Shell_MW;
+   end Get_App_Shell;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -749,6 +1093,8 @@ package body Designer.Main_Window is
       Element           : Widget;
 
    begin
+      App_Shell_MW := App_Shell;
+
       --  Создание диалога "О программе".
 
       About_Dialog := Xm_Create_Template_Dialog (App_Shell, "about_dialog");
@@ -1104,11 +1450,114 @@ package body Designer.Main_Window is
       Designer.Visual_Editor.Insert_Item (Node);
       Designer.Properties_Editor.Insert_Item (Node);
       Designer.Render_Table_Editor.Insert_Item (Node);
-      
+
       if Node_Kind (Node) = Node_Project then
-         Project_Node := Node; 
+         Project_Node := Node;
       end if;
    end Insert_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> XmAdaDesigner_title
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure XmAdaDesigner_title (File_Name : in Wide_String) is
+      msg : Xm_String;
+
+   begin
+      File_Name_MW := Xm_String_Generate (File_Name);
+      msg := Xm_String_Generate (Wide_String'(File_Name)
+                                   & " - XmAda designer");
+      msg := Xm_String_Create_Localized(Xm_String_Unparse(msg));
+      Xme_Set_WM_Shell_Title (msg, App_Shell_MW);
+   end XmAdaDesigner_title;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Warning_On_Exit_XmMessageBox_Dialog
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Warning_On_Exit_XmMessageBox_Dialog is
+   begin
+      -- Добавляем диалог подтверждения сохранения проекта.
+
+      Warning_On_Exit_XmMessageBox
+        := Xm_Create_Message_Dialog (App_Shell_MW,
+                                     "warning_on_exit_xmmessageBox");
+      Xt_Add_Callback
+       (Warning_On_Exit_XmMessageBox,
+        Xm_N_Ok_Callback,
+        Callbacks.Warning_On_Exit_XmMessageBox_Ok'Access);
+      Xt_Add_Callback
+       (Warning_On_Exit_XmMessageBox,
+        Xm_N_Cancel_Callback,
+        Callbacks.Warning_On_Exit_XmMessageBox_Cancel'Access);
+      Xt_Add_Callback
+       (Warning_On_Exit_XmMessageBox,
+        Xm_N_Help_Callback,
+        Callbacks.Warning_On_Exit_XmMessageBox_Help'Access);
+      Xt_Manage_Child (Warning_On_Exit_XmMessageBox);
+   end Warning_On_Exit_XmMessageBox_Dialog;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Warning_On_Open_Project_XmMessageBox_Dialog
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Warning_On_Open_Project_XmMessageBox_Dialog is
+      Args : Xt_Arg_List (0 .. 0);
+      msg  : Xm_String;
+
+   begin
+      -- Добавляем диалог подтверждения сохранения проекта.
+
+      msg := Xm_String_Create ("Save project?  "
+                                 & Xm_String_Unparse(File_Name_MW));
+      Xt_Set_Arg (Args (0), Xm_N_Message_String, msg);
+      Warning_On_Open_Project_XmMessageBox
+        := Xm_Create_Message_Dialog (App_Shell_MW,
+                                     "Warning_On_Open_Project_XmMessageBox",
+                                     Args);
+      Xt_Add_Callback
+       (Warning_On_Open_Project_XmMessageBox,
+        Xm_N_Ok_Callback,
+        Callbacks.Warning_On_Open_Project_XmMessageBox_Ok'Access);
+      Xt_Add_Callback
+       (Warning_On_Open_Project_XmMessageBox,
+        Xm_N_Cancel_Callback,
+        Callbacks.Warning_On_Open_Project_XmMessageBox_Cancel'Access);
+      Xt_Manage_Child (Warning_On_Open_Project_XmMessageBox);
+   end Warning_On_Open_Project_XmMessageBox_Dialog;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Warning_On_New_Project_XmMessageBox_Dialog
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Warning_On_New_Project_XmMessageBox_Dialog is
+      Args : Xt_Arg_List (0 .. 0);
+      msg  : Xm_String;
+
+   begin
+      -- Добавляем диалог подтверждения сохранения проекта.
+
+      msg := Xm_String_Create ("Save project?  "
+                                 & Xm_String_Unparse(File_Name_MW));
+      Xt_Set_Arg (Args (0), Xm_N_Message_String, msg);
+      Warning_On_New_Project_XmMessageBox
+        := Xm_Create_Message_Dialog (App_Shell_MW,
+                                     "Warning_On_New_Project_XmMessageBox",
+                                     Args);
+      Xt_Add_Callback
+       (Warning_On_New_Project_XmMessageBox,
+        Xm_N_Ok_Callback,
+        Callbacks.Warning_On_New_Project_XmMessageBox_Ok'Access);
+      Xt_Add_Callback
+       (Warning_On_New_Project_XmMessageBox,
+        Xm_N_Cancel_Callback,
+        Callbacks.Warning_On_New_Project_XmMessageBox_Cancel'Access);
+      Xt_Manage_Child (Warning_On_New_Project_XmMessageBox);
+   end Warning_On_New_Project_XmMessageBox_Dialog;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

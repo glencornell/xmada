@@ -54,6 +54,7 @@ with Xm.Strings;
 with Xm_Cascade_Button_Gadget;
 with Xm_Container;
 with Xm_Icon_Gadget;
+with Xm_Message_Box;
 with Xm_Notebook;
 with Xm_Push_Button;
 with Xm_Push_Button_Gadget;
@@ -96,6 +97,7 @@ package body Designer.Tree_Editor is
    use Xm_Cascade_Button_Gadget;
    use Xm_Container;
    use Xm_Icon_Gadget;
+   use Xm_Message_Box;
    use Xm_Notebook;
    use Xm_Push_Button;
    use Xm_Push_Button_Gadget;
@@ -257,6 +259,28 @@ package body Designer.Tree_Editor is
                            Params     : in System.Address;
                            Num_Params : in Cardinal);
       pragma Convention (C, On_Delete);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Delete_Message_Box_Ok
+      --!    <Purpose> Ок в окне подтверждения при удалении виджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Delete_Message_Box_Ok (The_Widget : in Widget;
+                                          Closure    : in Xt_Pointer;
+                                          Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Delete_Message_Box_Ok);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Delete_Message_Box_Cancel
+      --!    <Purpose> Cancel в окне подтверждения при удалении виджета.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Delete_Message_Box_Cancel (The_Widget : in Widget;
+                                              Closure    : in Xt_Pointer;
+                                              Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Delete_Message_Box_Cancel);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -434,6 +458,55 @@ package body Designer.Tree_Editor is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Delete_Message_Box_Ok
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Delete_Message_Box_Ok (The_Widget : in Widget;
+                                          Closure    : in Xt_Pointer;
+                                          Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+         Node : Node_Id;
+
+      begin
+         Node := Selected_Item;
+         Main_Window.Select_Item (Null_Node);
+         Model_Utilities.Delete_Node (Node);
+         Xt_Destroy_Widget (The_Widget);
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Delete_Message_Box", E);
+      end On_Delete_Message_Box_Ok;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Delete_Message_Box_Cancel
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Delete_Message_Box_Cancel (The_Widget : in Widget;
+                                              Closure    : in Xt_Pointer;
+                                              Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Данные переменные не используются.
+
+      begin
+         Xt_Destroy_Widget (The_Widget);
+
+      exception
+         when E : others =>
+            Designer.Main_Window.Put_Exception_In_Callback
+             ("On_Delete_Message_Box_Cancel", E);
+      end On_Delete_Message_Box_Cancel;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Delete
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -448,15 +521,85 @@ package body Designer.Tree_Editor is
          pragma Unreferenced (Num_Params);
          --  Данные переменные не используются.
 
-         Node  : Node_Id;
+         Args                     : Xt_Arg_List (0 .. 3);
+         msg                      : Xm_String;
+         msg_w                    : Xm_String;
+         bool_msg_w               : Boolean := False;
+         Warning_XmMessageBox     : Widget;
+--          Bottom_Attachment_Widget : Node_Id;
+--          Left_Attachment_Widget   : Node_Id;
+--          Right_Attachment_Widget  : Node_Id;
+--          Top_Attachment_Widget    : Node_Id;
+--          Current_Widget_Class     : Node_Id;
 
       begin
-         --  Убираем выделение с элемента и удаляем его.
-
          if Selected_Item /= Null_Node then
-            Node := Selected_Item;
-            Main_Window.Select_Item (Null_Node);
-            Model_Utilities.Delete_Node (Node);
+            -- Добавляем диалог подтверждения удаления.
+-- --             Current_Widget_Class := First (Imported_Widget_Sets (Node_Widget_Instance (Selected_Item)));
+-- --             Current_Widget_Class := First (Imported_Widget_Sets (Node_Id (Selected_Item)));
+--             Current_Widget_Class := First (Imported_Widget_Sets (Enclosing_Project (Node_Id(Selected_Item))));
+--             while Current_Widget_Class /= Null_Node loop
+--                if Current_Widget_Class/= Node_Id (Selected_Item) then
+--
+--
+--                   Xt_Set_Arg (Args (0), Xm_N_Bottom_Attachment, Bottom_Attachment_Widget);
+--                   Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Left_Attachment_Widget);
+--                   Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Right_Attachment_Widget);
+--                   Xt_Set_Arg (Args (3), Xm_N_Top_Attachment, Top_Attachment_Widget);
+--                   Xt_Get_Values (Selected_Item, Args (0 .. 3))
+--
+--                   case Node_Id (Selected_Item) is
+--                      when Bottom_Attachment_Widget     =>
+--                         msg_w := Xm_String_Generate (Xm_String_Unparse(msg_w)
+--                                                      & Name_Image (Current_Widget_Class)
+--                                                      & " ");
+--                         bool_msg_w := True;
+--                      when Left_Attachment_Widget =>
+--                         msg_w := Xm_String_Generate (Xm_String_Unparse(msg_w)
+--                                                & Name_Image (Current_Widget_Class)
+--                                                & " ");
+--                         bool_msg_w := True;
+--                      when Right_Attachment_Widget         =>
+--                         msg_w := Xm_String_Generate (Xm_String_Unparse(msg_w)
+--                                                & Name_Image (Current_Widget_Class)
+--                                                & " ");
+--                         bool_msg_w := True;
+--                      when Top_Attachment_Widget         =>
+--                         msg_w := Xm_String_Generate (Xm_String_Unparse(msg_w)
+--                                                & Name_Image (Current_Widget_Class)
+--                                                & " ");
+--                         bool_msg_w := True;
+--                      when others               =>
+--                         null;
+--                   end case;
+--
+--                end if;
+--
+--                Current_Widget_Class := Next (Current_Widget_Class);
+--             end loop;
+
+            if bool_msg_w = False then
+               msg := Xm_String_Generate ("Delete?  "
+                                            & Name_Image (Selected_Item));
+            else
+--                msg := Xm_String_Generate ("Warning  "
+--                                             & Xm_String_Unparse(msg_w));
+               null;
+            end if;
+            Xt_Set_Arg (Args (0), Xm_N_Message_String, msg);
+            Warning_XmMessageBox := Xm_Create_Message_Dialog
+                                     (Main_Window.Get_App_Shell,
+                                      "Warning_XmMessageBox",
+                                      Args(0 .. 0));
+            Xt_Add_Callback
+             (Warning_XmMessageBox,
+              Xm_N_Ok_Callback,
+              Callbacks.On_Delete_Message_Box_Ok'Access);
+            Xt_Add_Callback
+             (Warning_XmMessageBox,
+              Xm_N_Cancel_Callback,
+              Callbacks.On_Delete_Message_Box_Cancel'Access);
+            Xt_Manage_Child (Warning_XmMessageBox);
          end if;
 
       exception

@@ -47,6 +47,24 @@ with Xt;
 with Model;
 
 package Designer.Main_Window is
+   Project_Extention    : constant Wide_String := ".xad";
+   Default_Project_Name : constant Wide_String := "untitled";
+   -- Расширение файлов по умолчанию.
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_App_Shell
+   --!    <Purpose> Возвращает значение App_Shell.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Get_App_Shell return Xt.Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Child_Save_As_Dialog
+   --!    <Purpose> Вызов диалога сохранения проекта.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Child_Save_As_Dialog;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -92,6 +110,30 @@ package Designer.Main_Window is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Warning_On_Exit_XmMessageBox_Dialog
+   --!    <Purpose> Выводит диалог подтверждения сохранения проекта при выходе.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Warning_On_Exit_XmMessageBox_Dialog;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Warning_On_New_Project_XmMessageBox_Dialog
+   --!    <Purpose> Выводит диалог подтверждения сохранения проекта.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Warning_On_New_Project_XmMessageBox_Dialog;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Warning_On_Open_Project_XmMessageBox_Dialog
+   --!    <Purpose> Выводит диалог подтверждения сохранения проекта.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Warning_On_Open_Project_XmMessageBox_Dialog;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Put_Line
    --!    <Purpose> Выводит строку текста в окно диагностически сообщений.
    --!    <Exceptions>
@@ -117,6 +159,14 @@ package Designer.Main_Window is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Initialize (App_Shell : in Xt.Widget);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> XmAdaDesigner_title
+   --!    <Purpose> Выводит заголовок главного окна дизайнера.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure XmAdaDesigner_title (File_Name : in Wide_String);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
