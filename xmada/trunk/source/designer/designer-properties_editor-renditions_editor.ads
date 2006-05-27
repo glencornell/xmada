@@ -30,7 +30,7 @@
 --!
 --! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
 --!
---! <Unit> Designer.Render_Table_Editor
+--! <Unit> Designer.Properties_Editor.Renditions_Editor
 --! <Purpose>
 --!   Пакет содержит реализацию диалога редактирования свойств Render_Table.
 --!
@@ -44,17 +44,33 @@ with Model;
 
 with Xt;
 
-package Designer.Render_Table_Editor is
+package Designer.Properties_Editor.Renditions_Editor is
+   -------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Add
+   --!    <Purpose> Добавляет страничку для редактироания rendition.
+   --!    <Exceptions>
+   -------------------------------------------------------------------------
+   procedure Add;
+
+   -------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Delete
+   --!    <Purpose> Удаляет страничку для редактироания rendition.
+   --!    <Exceptions>
+   -------------------------------------------------------------------------
+   procedure Delete;
 
    -------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Initialize
-   --!    <Purpose> Создает диалог редактирования свойств элементов 
+   --!    <Purpose> Создает редактор свойств элементов
    --! Xm_Render_Table.
    --!    <Exceptions>
    -------------------------------------------------------------------------
-   procedure Initialize (Parent : in Xt.Widget);
-   
+   procedure Initialize (Parent   : in Xt.Widget;
+                         Arg_List : in Xt.Ancillary_Types.Xt_Arg_List);
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Insert_Item
@@ -63,7 +79,7 @@ package Designer.Render_Table_Editor is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Insert_Item (Node : in Model.Node_Id);
-      
+
    -------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Open
@@ -71,8 +87,8 @@ package Designer.Render_Table_Editor is
    --!    <Exceptions>
    -------------------------------------------------------------------------
    procedure Open (Resource : in Model.Node_Id);
-   
-      ---------------------------------------------------------------------------
+
+   ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Reinitialize
    --!    <Purpose> Производит освобождение всех использующихся ресурсов и
@@ -81,4 +97,12 @@ package Designer.Render_Table_Editor is
    ---------------------------------------------------------------------------
    procedure Reinitialize;
 
-end Designer.Render_Table_Editor;
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Select_Item
+   --!    <Purpose> Запоминает выбранный пользователем элемент.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Select_Item (Node : in Model.Node_Id);
+
+end Designer.Properties_Editor.Renditions_Editor;

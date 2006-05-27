@@ -60,6 +60,14 @@ private package Designer.Properties_Editor.Widget_Instance is
                     Node     : in Model.Node_Id)
      return Node_Properties_Editor_Access;
 
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Header
+   --!    <Purpose> Создает заголовок редактора свойств.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Create_Header (Parent   : in out Xt.Widget;
+                            Arg_List : in out Xt.Ancillary_Types.Xt_Arg_List);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -77,7 +85,15 @@ private package Designer.Properties_Editor.Widget_Instance is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Reinitialize;
-   
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Select_Item
+   --!    <Purpose> Запоминает выбранный пользователем элемент.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Select_Item (Node : in Model.Node_Id);
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Update_Item
@@ -87,12 +103,8 @@ private package Designer.Properties_Editor.Widget_Instance is
    procedure Update_Item (Node : in Model.Node_Id);
 
 private
-
    type Widget_Instance_Properties_Editor is
-     new Node_Properties_Editor with
-   record
-      Form       : Xt.Widget;  --  Форма, на которой располагаются свойства.
-   end record;
+     new Node_Properties_Editor with null record;
 
    type Widget_Instance_Properties_Editor_Access is
      access all Widget_Instance_Properties_Editor'Class;

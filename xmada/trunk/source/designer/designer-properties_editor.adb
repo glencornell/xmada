@@ -41,15 +41,14 @@
 with Ada.Unchecked_Deallocation;
 with GNAT.Table;
 
-with Xt.Ancillary_Types;
 with Xt.Resource_Management;
 with Xm_String_Defs;
 
 with Designer.Properties_Editor.Component_Class;
+with Designer.Properties_Editor.Renditions_Editor;
 with Designer.Properties_Editor.Widget_Instance;
 with Model.Allocations;
 with Model.Tree;
-
 
 package body Designer.Properties_Editor is
 
@@ -59,6 +58,29 @@ package body Designer.Properties_Editor is
    use Xt;
    use Xt.Ancillary_Types;
    use Xt.Resource_Management;
+
+   WI_Args   : Xt_Arg_List (0 .. 4);
+   WI_Parent : Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Add
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Add is
+   begin
+      Renditions_Editor.Add;
+   end Add;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Delete
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Delete is
+   begin
+      Renditions_Editor.Delete;
+   end Delete;
 
    procedure Free is
      new Ada.Unchecked_Deallocation (Node_Properties_Editor'Class,
@@ -165,6 +187,30 @@ package body Designer.Properties_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Get_Properties_Editor
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Get_Properties_Editor (Node : Model.Node_Id)
+    return Widget
+   is
+   begin
+      return Get_Properties_Editor_Access (Node).Form;
+   end Get_Properties_Editor;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_Properties_Editor_Access
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Get_Properties_Editor_Access (Node : Model.Node_Id)
+    return Node_Properties_Editor_Access
+   is
+   begin
+      return Annotation_Table.Table (Node).Properties_Editor;
+   end Get_Properties_Editor_Access;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Initialize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -174,6 +220,10 @@ package body Designer.Properties_Editor is
    begin
       Properties_Args   := Arg_List;
       Properties_Parent := Parent;
+      WI_Args           := Arg_List;
+      WI_Parent         := Parent;
+      Widget_Instance.Create_Header (WI_Parent, WI_Args);
+      Renditions_Editor.Initialize (WI_Parent, WI_Args);
    end Initialize;
 
    ---------------------------------------------------------------------------
@@ -212,6 +262,7 @@ package body Designer.Properties_Editor is
    procedure Reinitialize is
    begin
       Widget_Instance.Reinitialize;
+      Renditions_Editor.Reinitialize;
 
       for J in Annotation_Table.First .. Annotation_Table.Last loop
          case Annotation_Table.Table (J).Kind is
@@ -294,29 +345,30 @@ package body Designer.Properties_Editor is
 
       Relocate_Annotation_Table (Node);
 
-     if Node /= Null_Node then
-        if Annotation_Table.Table (Node).Properties_Editor = null then
+      if Node /= Null_Node then
+         if Annotation_Table.Table (Node).Properties_Editor = null then
            --  Создание страниц редактора свойств.
 
-           case Node_Kind (Node) is
-              when Node_Component_Class =>
-                 Annotation_Table.Table (Node).Properties_Editor :=
-                   Component_Class.Create
-                    (Properties_Parent, Properties_Args, Node);
+            case Node_Kind (Node) is
+               when Node_Component_Class =>
+                  Annotation_Table.Table (Node).Properties_Editor :=
+                    Component_Class.Create
+                     (Properties_Parent, Properties_Args, Node);
 
-              when Node_Widget_Instance =>
-                 Annotation_Table.Table (Node).Properties_Editor :=
-                   Widget_Instance.Create
-                    (Properties_Parent, Properties_Args, Node);
+               when Node_Widget_Instance =>
+                  Annotation_Table.Table (Node).Properties_Editor :=
+                    Widget_Instance.Create
+                     (WI_Parent, WI_Args, Node);
 
-              when others =>
-                 null;
-           end case;
-        end if;
+               when others =>
+                  null;
+            end case;
+         end if;
 
-        Show (Annotation_Table.Table (Node).Properties_Editor);
-        Selected_Item := Node;
-     end if;
+         Selected_Item := Node;
+         Widget_Instance.Select_Item (Node);
+         Show (Annotation_Table.Table (Node).Properties_Editor);
+      end if;
    end Select_Item;
 
    ---------------------------------------------------------------------------
