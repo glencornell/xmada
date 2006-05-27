@@ -66,7 +66,7 @@ with Xm_Row_Column;
 
 with Designer.Main_Window;
 with Designer.Model_Utilities;
-with Designer.Render_Table_Editor;
+with Designer.Properties_Editor.Renditions_Editor;
 with Designer.Visual_Editor;
 with Model.Allocations;
 with Model.Names;
@@ -180,6 +180,11 @@ package body Designer.Properties_Editor.Widget_Instance is
       end case;
    end record;
 
+   Selected_Item : Node_Id := Null_Node;
+   Name          : Widget;
+   Is_Managed    : Widget;
+   Header_Form   : Widget;
+
    package Annotation_Table is
      new GNAT.Table
           (Table_Component_Type => Annotation_Record,
@@ -190,7 +195,7 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    Xm_C_Unset : constant := 0;
    Xm_C_Set   : constant := 1;
-   
+
    ----------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Add_Rendition_Name
@@ -198,7 +203,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    --! в текстовое поле.
    --!    <Exceptions>
    ----------------------------------------------------------------------
-   procedure Add_Rendition_Name 
+   procedure Add_Rendition_Name
     (Set_String : in out Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
      Added_Node : in     Node_Id);
 
@@ -377,7 +382,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <Unit> On_Numeric_Resource_Modify_Verify
       --!    <Purpose> Подпрограмма обратного вызова при изменении значения
       --! spinBox-а.
-      --!    <Exceptions>
+      --!    <Exceptions>Annotation_Xm_Render_Table_Resource_Value
       ------------------------------------------------------------------------
       procedure On_Numeric_Resource_Modify_Verify
                  (The_Widget : in Widget;
@@ -522,7 +527,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                                      Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
-         --  Данные переменные не используются.
+         --  Параметры требуется для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в нём нет фактической необходимости.
 
          Data     : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
@@ -577,7 +583,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                                      Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
-         --  Данные переменные не используются.
+         --  Параметры требуется для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в нём нет фактической необходимости.
 
          Data     : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
@@ -635,7 +642,8 @@ package body Designer.Properties_Editor.Widget_Instance is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
          Args     : Xt_Arg_List (0 .. 0);
          Node     : Node_Id;
@@ -679,34 +687,30 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure On_Is_Managed_Changed (The_Widget : in Widget;
-                                Closure    : in Xt_Pointer;
-                                Call_Data  : in Xt_Pointer)
+                                       Closure    : in Xt_Pointer;
+                                       Call_Data  : in Xt_Pointer)
       is
+         pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
-         Args : Xt_Arg_List (0 .. 0);
-         Node : Node_Id;
          Data : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
 
       begin
-         --  Получаем значение текущего узла.
-
-         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
-         Xt_Get_Values (The_Widget, Args (0 .. 0));
-
          if Data.Set = Xm_C_Unset then
-            Set_Is_Managed (Node, False);
+            Set_Is_Managed (Selected_Item, False);
 
          elsif Data.Set = Xm_C_Set then
-            Set_Is_Managed (Node, True);
+            Set_Is_Managed (Selected_Item, True);
 
          else
             raise Program_Error;
          end if;
 
-         Main_Window.Update_Item (Node);
+         Main_Window.Update_Item (Selected_Item);
+
       exception
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback
@@ -723,7 +727,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                                Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
-         --  Данные переменные не используются.
+         --  Параметры требуется для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в нём нет фактической необходимости.
 
          Args : Xt_Arg_List (0 .. 0);
          Menu : Node_Id;
@@ -823,7 +828,8 @@ package body Designer.Properties_Editor.Widget_Instance is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
          Node   : Node_Id;
          Args   : Xt_Arg_List (0 .. 0);
@@ -864,7 +870,8 @@ package body Designer.Properties_Editor.Widget_Instance is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
          Node   : Node_Id;
          Args   : Xt_Arg_List (0 .. 0);
@@ -908,7 +915,8 @@ package body Designer.Properties_Editor.Widget_Instance is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
          Node   : Node_Id;
          Args   : Xt_Arg_List (0 .. 5);
@@ -985,6 +993,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                end if;
             end;
          end if;
+
       exception
          when E : others =>
             Designer.Main_Window.Put_Exception_In_Callback
@@ -1002,7 +1011,8 @@ package body Designer.Properties_Editor.Widget_Instance is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (The_Widget);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
          Data : constant Xm_Text_Verify_Callback_Struct_Wcs_Access
            := To_Callback_Struct_Access (Call_Data);
@@ -1050,7 +1060,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                                                    Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
-         --  Данные переменные не используются.
+         --  Параметры требуется для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в нём нет фактической необходимости.
 
          Pos    : Xm_Spin_Box_Position := 0;
          Status : Xm_Spin_Box_Validation_Status;
@@ -1110,14 +1121,15 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          Node : Node_Id;
          Args : Xt_Arg_List (0 .. 0);
-
       begin
          --  Получаем узел ресурса, который поменял значение.
 
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
          Xt_Get_Values (The_Widget, Args (0 .. 0));
 
-         Designer.Render_Table_Editor.Open (Node);
+         Designer.Properties_Editor.Renditions_Editor.Open (Node);
+         Xt_Unmanage_Child (Get_Properties_Editor (Selected_Item));
+         Designer.Main_Window.Show_Rendition_Menu;
 
       exception
          when E : others =>
@@ -1136,7 +1148,8 @@ package body Designer.Properties_Editor.Widget_Instance is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
          Args : Xt_Arg_List (0 .. 0);
          Node : Node_Id;
@@ -1225,7 +1238,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                   Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
-         --  Данные переменные не используются.
+         --  Параметры требуется для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в нём нет фактической необходимости.
 
          Data          : constant Xm_Toggle_Button_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
@@ -1313,21 +1327,13 @@ package body Designer.Properties_Editor.Widget_Instance is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
 
          Name : Name_Id;
-         Node : Node_Id;
-         Args : Xt_Arg_List (0 .. 0);
 
       begin
-         --  Получаем значение текущего узла.
-
-         Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
-         Xt_Get_Values (The_Widget, Args (0 .. 0));
-
          Name := Enter (Xm_Text_Field_Get_String_Wcs (The_Widget));
-         Set_Name (Node, Name);
-         Main_Window.Update_Item (Node);
+         Set_Name (Selected_Item, Name);
+         Main_Window.Update_Item (Selected_Item);
 
       exception
          when E : others =>
@@ -1342,17 +1348,16 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <Unit> Add_Rendition_Name
    --!    <ImplementationNotes>
    ----------------------------------------------------------------------
-   procedure Add_Rendition_Name 
+   procedure Add_Rendition_Name
     (Set_String : in out Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
      Added_Node : in     Node_Id)
    is
    begin
-      Ada.Strings.Wide_Unbounded.Append (Set_String , " "); 
-      Ada.Strings.Wide_Unbounded.Append 
-       (Set_String , 
-        Image (Resource_Value (Added_Node)));
-   end;
-      
+      Ada.Strings.Wide_Unbounded.Append (Set_String, " ");
+      Ada.Strings.Wide_Unbounded.Append
+       (Set_String, Image (Resource_Value (Added_Node)));
+   end Add_Rendition_Name;
+
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Check_Sensitive
@@ -1367,8 +1372,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          --  у Hard_Code.
 
          Xt_Set_Sensitive
-          (Annotation_Table.Table (Node).Hard_Code,
-           True);
+          (Annotation_Table.Table (Node).Hard_Code, True);
 
          if Xm_Toggle_Button_Gadget_Get_State
              (Annotation_Table.Table (Node).Hard_Code)
@@ -1432,11 +1436,11 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure Add_Ada_Names (Parent : in Widget);
-                                   
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Add_Resource
-      --!    <Purpose> Добавляет на редактор свойств опимвние ресурса.
+      --!    <Purpose> Добавляет на редактор свойств описание ресурса.
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure Add_Resource (Parent : in Widget; Node : in Node_Id);
@@ -1532,7 +1536,7 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          Do_Alignment (Alignment);
       end Add_Ada_Names;
-                               
+
       ------------------------------------------------------------------------
       --! <Subprogram>
       --!    <Unit> Add_Resource
@@ -1650,44 +1654,44 @@ package body Designer.Properties_Editor.Widget_Instance is
                Annotation_Table.Table (Node).Value :=
                  Xm_Create_Managed_Text_Field
                   (Form, "resource_renditions", Args (0 .. 5));
-                  
+
                      declare
-                        Rendition_List    : List_Id := Resource_Value (Node);
+                        Rendition_List    : constant List_Id := Resource_Value (Node);
                         Current_Rendition : Node_Id;
                         Current_Resource  : Node_Id;
-                        Set_String        : 
+                        Set_String        :
                           Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
-                  
+
                      begin
                         if Rendition_List /= Null_List then
                            Current_Rendition := First (Rendition_List);
 
                            while Current_Rendition /= Null_Node loop
-                              Current_Resource 
+                              Current_Resource
                                 := First (Resources (Current_Rendition));
-                                 
+
                               while Current_Resource /= Null_Node loop
-                                 if Node_Kind 
-                                  ((Current_Resource)) =
-                                    Node_Xm_String_Resource_Value then
-                                    
-                                    Add_Rendition_Name (Set_String, 
+                                 if Node_Kind (Current_Resource)
+                                   = Node_Xm_String_Resource_Value
+                                 then
+
+                                    Add_Rendition_Name (Set_String,
                                                         Current_Resource);
                                  end if;
-                                    
+
                                  Current_Resource := Next (Current_Resource);
-                              end loop;    
-                              
+                              end loop;
+
                               Current_Rendition := Next (Current_Rendition);
                            end loop;
                         end if;
-                  
-                        Xm_Text_Field_Set_String_Wcs 
-                         (Annotation_Table.Table (Node).Value, 
-                          Ada.Strings.Wide_Unbounded.To_Wide_String 
+
+                        Xm_Text_Field_Set_String_Wcs
+                         (Annotation_Table.Table (Node).Value,
+                          Ada.Strings.Wide_Unbounded.To_Wide_String
                            (Set_String));
                      end;
-                  
+
             when Node_Enumerated_Resource_Type =>
                Xt_Set_Arg (Args (0), Xm_N_Left_Attachment, Xm_Attach_Widget);
                Xt_Set_Arg (Args (1),
@@ -1900,10 +1904,8 @@ package body Designer.Properties_Editor.Widget_Instance is
         := new Widget_Instance_Properties_Editor (Node);
       Ada           : Widget;
       Args          : Xt_Arg_List (0 .. 7);
-      Name          : Widget;
       Element       : Widget;
       Notebook      : Widget;
-      Is_Managed    : Widget;
       Properties    : Widget;
       Constraints   : Widget;
       Callbacks_Tab : Widget;
@@ -1912,54 +1914,11 @@ package body Designer.Properties_Editor.Widget_Instance is
       Result.Form := Xm_Create_Managed_Form (Parent, "subform", Arg_List);
 
       Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Position);
-      Xt_Set_Arg (Args (2), Xm_N_Right_Position, Xt_Arg_Val (50));
-      Xt_Set_Arg (Args (3), Xm_N_User_Data, Xt_Arg_Val (Node));
-      Name := Xm_Create_Managed_Text_Field
-               (Result.Form, "resource_name", Args (0 .. 3));
-      Xm_Text_Field_Set_String_Wcs (Name, Name_Image (Node));
-      Xt_Add_Callback (Name,
-                       Xm_N_Activate_Callback,
-                       Callbacks.On_Widget_Name_Changed'Access);
-      Xt_Add_Callback (Name,
-                       Xm_N_Losing_Focus_Callback,
-                       Callbacks.On_Widget_Name_Changed'Access);
-
-      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Name);
-      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Args (3), Xm_N_Right_Widget, Name);
-      Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Name);
-      Element  := Xm_Create_Managed_Label_Gadget
-                   (Result.Form, "name", Args (0 .. 6));
-
-      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Name);
+      Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Xm_Attach_Form);
       Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Args (3), Xm_N_Left_Widget, Name);
-      Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
-      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Name);
-      Xt_Set_Arg (Args (7), Xm_N_User_Data, Xt_Arg_Val (Node));
-      Is_Managed :=
-        Xm_Create_Managed_Toggle_Button_Gadget
-         (Result.Form, "manage_after_create", Args (0 .. 7));
-      Xt_Add_Callback (Is_Managed,
-                       Xm_N_Value_Changed_Callback,
-                       Callbacks.On_Is_Managed_Changed'Access);
-      Xm_Toggle_Button_Gadget_Set_State (Is_Managed,
-                                         Model.Tree.Is_Managed (Node),
-                                         False);
-
-      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
-      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Name);
-      Xt_Set_Arg (Args (2), Xm_N_Left_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (3), Xm_N_Right_Attachment, Xm_Attach_Form);
-      Xt_Set_Arg (Args (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (3), Xm_N_Bottom_Attachment, Xm_Attach_Form);
       Notebook := Xm_Create_Managed_Notebook
-                   (Result.Form, "notebook", Args (0 .. 4));
+                   (Result.Form, "notebook", Args (0 .. 3));
 
       --  Создаем вкладку "Свойства".
 
@@ -2036,6 +1995,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       Add_Ada_Names (Ada);
 
       Update_Item (Node);
+
       --  Задаем значение ресурсов.
 
       Xt_Manage_Child (Properties);
@@ -2045,6 +2005,66 @@ package body Designer.Properties_Editor.Widget_Instance is
 
       return Node_Properties_Editor_Access (Result);
    end Create;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Create_Header
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Create_Header (Parent   : in out Xt.Widget;
+                            Arg_List : in out Xt_Arg_List)
+   is
+      Args    : Xt_Arg_List (0 .. 7);
+      Element : Widget;
+
+   begin
+      Header_Form := Xm_Create_Managed_Form (Parent, "header_form", Arg_List);
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (1), Xm_N_Right_Attachment, Xm_Attach_Position);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Position, Xt_Arg_Val (50));
+      Name := Xm_Create_Managed_Text_Field
+               (Header_Form, "resource_name", Args (0 .. 2));
+      Xt_Add_Callback (Name,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Widget_Name_Changed'Access);
+      Xt_Add_Callback (Name,
+                       Xm_N_Losing_Focus_Callback,
+                       Callbacks.On_Widget_Name_Changed'Access);
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Name);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (3), Xm_N_Right_Widget, Name);
+      Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Name);
+      Element  := Xm_Create_Managed_Label_Gadget
+                   (Header_Form, "name", Args (0 .. 6));
+
+      Xt_Set_Arg (Args (0), Xm_N_Top_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (1), Xm_N_Top_Widget, Name);
+      Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Args (4), Xm_N_Left_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Args (3), Xm_N_Left_Widget, Name);
+      Xt_Set_Arg (Args (5), Xm_N_Bottom_Attachment, Xm_Attach_Opposite_Widget);
+      Xt_Set_Arg (Args (6), Xm_N_Bottom_Widget, Name);
+      Is_Managed :=
+        Xm_Create_Managed_Toggle_Button_Gadget
+         (Header_Form, "manage_after_create", Args (0 .. 6));
+      Xt_Add_Callback (Is_Managed,
+                       Xm_N_Value_Changed_Callback,
+                       Callbacks.On_Is_Managed_Changed'Access);
+
+      Xt_Unmanage_Child (Header_Form);
+
+      Xt_Set_Arg (Arg_List (0), Xm_N_Top_Attachment, Xm_Attach_Widget);
+      Xt_Set_Arg (Arg_List (1), Xm_N_Top_Widget, Is_Managed);
+      Xt_Set_Arg (Arg_List (2), Xm_N_Left_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Arg_List (3), Xm_N_Right_Attachment, Xm_Attach_Form);
+      Xt_Set_Arg (Arg_List (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
+      Parent := Header_Form;
+   end Create_Header;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -2263,7 +2283,6 @@ package body Designer.Properties_Editor.Widget_Instance is
                end if;
             end;
 
-
          when others =>
             null;
       end case;
@@ -2463,6 +2482,22 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Select_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Select_Item (Node : in Node_Id) is
+   begin
+      if Selected_Item /= Null_Node then
+         if Node_Kind (Selected_Item) = Node_Widget_Instance then
+            Designer.Main_Window.Hide_Rendition_Menu;
+         end if;
+      end if;
+      Selected_Item := Node;
+      Designer.Properties_Editor.Renditions_Editor.Select_Item (Node);
+   end Select_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Set_Button
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -2528,6 +2563,13 @@ package body Designer.Properties_Editor.Widget_Instance is
    ---------------------------------------------------------------------------
    procedure Show (Object : access Widget_Instance_Properties_Editor) is
    begin
+      --  Заполнение заголовка выбранного Widget-а
+
+      Xm_Text_Field_Set_String_Wcs (Name, Name_Image (Selected_Item));
+      Xm_Toggle_Button_Gadget_Set_State (Is_Managed,
+                                         Model.Tree.Is_Managed (Selected_Item),
+                                         False);
+      Xt_Manage_Child (Header_Form);
       Xt_Manage_Child (Object.Form);
    end Show;
 
@@ -2706,39 +2748,39 @@ package body Designer.Properties_Editor.Widget_Instance is
                   when Node_Xm_Render_Table_Resource_Type =>
 
                      declare
-                        Rendition_List    : List_Id := Resource_Value (Current);
+                        Rendition_List    : constant List_Id := Resource_Value (Current);
                         Current_Rendition : Node_Id;
                         Current_Resource  : Node_Id;
-                        Set_String        : 
+                        Set_String        :
                           Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
-                  
+
                      begin
                         if Rendition_List /= Null_List then
                            Current_Rendition := First (Rendition_List);
 
                            while Current_Rendition /= Null_Node loop
-                              Current_Resource 
+                              Current_Resource
                                 := First (Resources (Current_Rendition));
-                                 
+
                               while Current_Resource /= Null_Node loop
-                                 if Node_Kind 
+                                 if Node_Kind
                                   ((Current_Resource)) =
                                     Node_Xm_String_Resource_Value then
-                                    
-                                    Add_Rendition_Name (Set_String, 
+
+                                    Add_Rendition_Name (Set_String,
                                                         Current_Resource);
                                  end if;
-                                    
+
                                  Current_Resource := Next (Current_Resource);
-                              end loop;    
-                              
+                              end loop;
+
                               Current_Rendition := Next (Current_Rendition);
                            end loop;
                         end if;
-                  
-                        Xm_Text_Field_Set_String_Wcs 
-                         (Annotation_Table.Table (Current).Value, 
-                          Ada.Strings.Wide_Unbounded.To_Wide_String 
+
+                        Xm_Text_Field_Set_String_Wcs
+                         (Annotation_Table.Table (Current).Value,
+                          Ada.Strings.Wide_Unbounded.To_Wide_String
                            (Set_String));
                      end;
 
@@ -2763,7 +2805,7 @@ package body Designer.Properties_Editor.Widget_Instance is
             Update_Resource (All_Resources (Node), Resources (Node));
             Update_Resource (All_Constraint_Resources (Node),
                              Constraint_Resources (Node));
-                             
+
          when others =>
             null;
       end case;

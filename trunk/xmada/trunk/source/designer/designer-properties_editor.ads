@@ -52,6 +52,22 @@ package Designer.Properties_Editor is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Add
+   --!    <Purpose> Производит вызов Add для rendition
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Add;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Delete
+   --!    <Purpose> Производит вызов Delete для rendition
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Delete;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Select_Item
    --!    <Purpose> Обработка выбора пользователем элемента модели -
    --! отображение страниц редактора свойст элемента.
@@ -132,10 +148,33 @@ private
    procedure Do_Alignment (List : in Alignment_Widget_List);
 
    type Node_Properties_Editor (Node : Model.Node_Id) is
-     abstract new Ada.Finalization.Limited_Controlled with null record;
+     abstract new Ada.Finalization.Limited_Controlled with
+   record
+      Form       : Xt.Widget;  --  Форма, на которой располагаются свойства.
+   end record;
 
    type Node_Properties_Editor_Access is
      access all Node_Properties_Editor'Class;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_Properties_Editor_Access
+   --!    <Purpose> Возвращает ссылку на редактор свойств соответствующего
+   --! элемента модели.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Get_Properties_Editor_Access (Node : Model.Node_Id)
+     return Node_Properties_Editor_Access;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Get_Properties_Editor
+   --!    <Purpose> Возвращает Widget редактора свойств соответствующего
+   --! элемента модели.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Get_Properties_Editor (Node : Model.Node_Id)
+     return Xt.Widget;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

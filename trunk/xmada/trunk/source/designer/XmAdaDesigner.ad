@@ -130,6 +130,10 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.main_menu*project.mnemonic: P
 *main_window.main_menu*project_menu.new_application.labelString: New application
 *main_window.main_menu*project_menu.new_application.mnemonic: N
+*main_window.main_menu*rendition.labelString: Rendition
+*main_window.main_menu*rendition.mnemonic: R
+*main_window.main_menu*rendition_menu.new.labelString: New
+*main_window.main_menu*rendition_menu.delete.labelString: Delete
 
 !!  придумать акселератор.
 !!*main_window.main_menu*project_menu.new_application.acceleratorText: Ctrl-A
@@ -183,42 +187,48 @@ XmAda maintained by TechnoServ A/S\n\
 *main_window.horizontal_paned.properties_form.height: 700
 *main_window.horizontal_paned.properties_form.skipAdjust: TRUE
 *main_window.horizontal_paned.properties_form.allowResize: TRUE
-*main_window.horizontal_paned.properties_form.subform.form.name.labelString: Name
-*main_window.horizontal_paned.properties_form.subform.form.package_name.labelString: Package name
-*main_window.horizontal_paned.properties_form.subform.form.record_name.labelString: Record name
-*main_window.horizontal_paned.properties_form.subform.manage_after_create.labelString: Manage after create
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.packing: PACK_COLUMN
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.orientation: VERTICAL
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled.row_column.spacing: 0
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.create_in_record.labelString: Create in record
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.create_in_record_button.labelString:
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.variable_name.labelString: Variable name
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.use_in_program.labelString:
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.use_in_program.spacing: 0
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.hard_code.labelString:
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.hard_code.sensitive: FALSE
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.hard_code.spacing: 0
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.fallback.labelString:
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.fallback.sensitive: FALSE
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.fallback.spacing: 0
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_numeric.minimumValue: -1000000
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_numeric.maximumValue: 1000000
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_numeric.spinBoxChildType: NUMERIC
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.marginHeight: 0
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.marginWidth: 0
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_value.spacing: 0
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.edit.labelString: ...
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_renditions.editable: FALSE
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_renditions.navigationType: NONE
-*main_window.horizontal_paned.properties_form.subform.notebook.scrolled*row_column.form.resource_renditions.cursorPositionVisible: FALSE
-*main_window.horizontal_paned.properties_form.subform.notebook.ada.labelString: Ada
-*main_window.horizontal_paned.properties_form.subform.notebook.ada.notebookChildType: MINOR_TAB
-*main_window.horizontal_paned.properties_form.subform.notebook.resources.labelString: Resources
-*main_window.horizontal_paned.properties_form.subform.notebook.resources.notebookChildType: MINOR_TAB
-*main_window.horizontal_paned.properties_form.subform.notebook.constraints.labelString: Constraints
-*main_window.horizontal_paned.properties_form.subform.notebook.constraints.notebookChildType: MINOR_TAB
-*main_window.horizontal_paned.properties_form.subform.notebook.callbacks.labelString: Callbacks
-*main_window.horizontal_paned.properties_form.subform.notebook.callbacks.notebookChildType: MINOR_TAB
+*main_window.horizontal_paned.properties_form.header_form.form.name.labelString: Name
+*main_window.horizontal_paned.properties_form.header_form.form.package_name.labelString: Package name
+*main_window.horizontal_paned.properties_form.header_form.form.record_name.labelString: Record name
+*main_window.horizontal_paned.properties_form.header_form.manage_after_create.labelString: Manage after create
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled.row_column.packing: PACK_COLUMN
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled.row_column.orientation: VERTICAL
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled.row_column.spacing: 0
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.create_in_record.labelString: Create in record
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.create_in_record_button.labelString:
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.variable_name.labelString: Variable name
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.use_in_program.labelString:
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.use_in_program.spacing: 0
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.hard_code.labelString:
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.hard_code.sensitive: FALSE
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.hard_code.spacing: 0
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.fallback.labelString:
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.fallback.sensitive: FALSE
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.fallback.spacing: 0
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.resource_numeric.minimumValue: -1000000
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.resource_numeric.maximumValue: 1000000
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.resource_numeric.spinBoxChildType: NUMERIC
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.resource_value.marginHeight: 0
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.resource_value.marginWidth: 0
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.resource_value.spacing: 0
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.edit.labelString: ...
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.resource_renditions.editable: FALSE
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.resource_renditions.navigationType: NONE
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.scrolled*row_column.form.resource_renditions.cursorPositionVisible: FALSE
+*main_window.horizontal_paned.properties_form.header_form.subform.message_box.top.title.labelString: Render Table Editor
+*main_window.horizontal_paned.properties_form.header_form.subform.message_box.top.add.labelString: New
+*main_window.horizontal_paned.properties_form.header_form.subform.message_box.top.delete.labelString: Delete
+*main_window.horizontal_paned.properties_form.header_form.subform.message_box.okLabelString: Apply
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.ada.labelString: Ada
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.ada.notebookChildType: MINOR_TAB
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.renditions.labelString: Render Table
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.renditions.notebookChildType: MINOR_TAB
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.resources.labelString: Resources
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.resources.notebookChildType: MINOR_TAB
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.constraints.labelString: Constraints
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.constraints.notebookChildType: MINOR_TAB
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.callbacks.labelString: Callbacks
+*main_window.horizontal_paned.properties_form.header_form.subform.notebook.callbacks.notebookChildType: MINOR_TAB
 *main_window.horizontal_paned.properties_form.properties_hide.arrowDirection: ARROW_LEFT
 *main_window.horizontal_paned.properties_form.properties_label.labelString: Properties editor
 *main_window.horizontal_paned.properties_form*widget_child.no_widget.labelString:No Widget

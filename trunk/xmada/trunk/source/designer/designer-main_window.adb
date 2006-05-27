@@ -49,6 +49,7 @@ with Xt.Composite_Management;
 with Xt.Instance_Management;
 with Xt.Resource_Management;
 with Xt.Utilities;
+
 with Xm.Class_Management;
 with Xm.Internal;
 with Xm.Resource_Management;
@@ -74,7 +75,7 @@ with Designer.Model_Utilities;
 with Designer.Operations.Debug;
 with Designer.Palette;
 with Designer.Properties_Editor;
-with Designer.Render_Table_Editor;
+with Designer.Properties_Editor.Renditions_Editor;
 with Designer.Tree_Editor;
 with Designer.Visual_Editor;
 with Model.Names;
@@ -124,8 +125,9 @@ package body Designer.Main_Window is
    No_Open_Dialog          : Widget;
    Delete_Application_Item : Widget;
    Delete_Component_Item   : Widget;
+   Rendition_Menu          : Widget;
    File_Name_MW            : Xm_String;
-   On_Exit_Flag            : boolean := False;
+   On_Exit_Flag            : Boolean := False;
 
    Xm_C_New_Application    : constant := 1;
    Xm_C_New_Component      : constant := 2;
@@ -289,6 +291,30 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Rendition_Add
+      --!    <Purpose> Подпрограмма обратного вызова при активации пункта Add
+      --! меню Rendition.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Rendition_Add (The_Widget : in Widget;
+                                  Closure    : in Xt_Pointer;
+                                  Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Rendition_Add);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Rendition_Delete
+      --!    <Purpose> Подпрограмма обратного вызова при активации пункта Delete
+      --! меню Rendition.
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      procedure On_Rendition_Delete (The_Widget : in Widget;
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer);
+      pragma Convention (C, On_Rendition_Delete);
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Save
       --!    <Purpose> Подпрограмма обратного вызова при активации кнопки
       --! сохранения файла.
@@ -430,7 +456,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Xt_Manage_Child (About_Dialog);
@@ -464,6 +491,29 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> Warning_On_Exit_XmMessageBox_Cancel
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure Warning_On_Exit_XmMessageBox_Cancel
+       (The_Widget : in Widget;
+        Closure    : in Xt_Pointer;
+        Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
+
+      begin
+         Xt_App_Set_Exit_Flag (Xt_Widget_To_Application_Context (The_Widget));
+
+      exception
+         when E : others =>
+            Put_Exception_In_Callback ("Cancel_On_Exitx", E);
+      end Warning_On_Exit_XmMessageBox_Cancel;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> Warning_On_Exit_XmMessageBox_Ok
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -473,7 +523,8 @@ package body Designer.Main_Window is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          if Image (File_Name (Project_Node)) = Default_Project_Name
@@ -495,28 +546,6 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
-      --!    <Unit> Warning_On_Exit_XmMessageBox_Cancel
-      --!    <ImplementationNotes>
-      ------------------------------------------------------------------------
-      procedure Warning_On_Exit_XmMessageBox_Cancel
-       (The_Widget : in Widget;
-        Closure    : in Xt_Pointer;
-        Call_Data  : in Xt_Pointer)
-      is
-         pragma Unreferenced (Closure);
-         pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
-
-      begin
-         Xt_App_Set_Exit_Flag (Xt_Widget_To_Application_Context (The_Widget));
-
-      exception
-         when E : others =>
-            Put_Exception_In_Callback ("Cancel_On_Exitx", E);
-      end Warning_On_Exit_XmMessageBox_Cancel;
-
-      ------------------------------------------------------------------------
-      --! <Subprogram>
       --!    <Unit> Warning_On_Exit_XmMessageBox_Help
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -527,7 +556,9 @@ package body Designer.Main_Window is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         pragma Unreferenced (The_Widget);
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Xt_Unmanage_Child (Warning_On_Exit_XmMessageBox);
@@ -550,7 +581,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Xt_Unmanage_Child (Warning_On_New_Project_XmMessageBox);
@@ -585,7 +617,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Xt_Unmanage_Child (Warning_On_New_Project_XmMessageBox);
@@ -610,7 +643,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Xt_Unmanage_Child (Warning_On_Exit_XmMessageBox);
@@ -644,7 +678,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Xt_Unmanage_Child (Warning_On_Exit_XmMessageBox);
@@ -667,7 +702,9 @@ package body Designer.Main_Window is
       is
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         pragma Unreferenced (The_Widget);
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Warning_On_Exit_XmMessageBox_Dialog;
@@ -690,7 +727,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Designer.Operations.Generate_Application_Resource_Files;
@@ -714,7 +752,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Designer.Operations.Generate_Component_Classes_Code;
@@ -735,7 +774,8 @@ package body Designer.Main_Window is
                                      Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметр требуется для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в нём нет фактической необходимости.
 
          Show   : constant Widget := To_Widget (Closure);
          Parent : constant Widget := Xt_Parent (The_Widget);
@@ -773,7 +813,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Warning_On_New_Project_XmMessageBox_Dialog;
@@ -795,7 +836,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Warning_On_Open_Project_XmMessageBox_Dialog;
@@ -815,7 +857,8 @@ package body Designer.Main_Window is
                                                   Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
-         --  Данные переменные не используются.
+         --  Параметр требуется для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в нём нет фактической необходимости.
 
          use type Xm.Xm_Callback_Reason;
 
@@ -828,8 +871,8 @@ package body Designer.Main_Window is
       begin
          if Data.Reason = Xm_CR_Ok then
             if File_Name'Length > 4 then
-               if File_Name (Aux - 3 .. Aux) = Main_Window.Project_Extention
-               then
+               if File_Name (Aux - 3 .. Aux)
+                 = Main_Window.Project_Extention then
                   Operations.Open_Project (File_Name);
 
                else
@@ -869,7 +912,8 @@ package body Designer.Main_Window is
       is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
          Element : Integer := 0;
          Args    : Xt_Arg_List (0 .. 0);
@@ -916,6 +960,44 @@ package body Designer.Main_Window is
 
       ------------------------------------------------------------------------
       --! <Subprogram>
+      --!    <Unit> On_Rendition_Add
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Rendition_Add (The_Widget : in Widget;
+                                  Closure    : in Xt_Pointer;
+                                  Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
+
+      begin
+         Designer.Properties_Editor.Add;
+      end On_Rendition_Add;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> On_Rendition_Delete
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      procedure On_Rendition_Delete (The_Widget : in Widget;
+                                     Closure    : in Xt_Pointer;
+                                     Call_Data  : in Xt_Pointer)
+      is
+         pragma Unreferenced (The_Widget);
+         pragma Unreferenced (Closure);
+         pragma Unreferenced (Call_Data);
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
+
+      begin
+         Designer.Properties_Editor.Delete;
+      end On_Rendition_Delete;
+
+      ------------------------------------------------------------------------
+      --! <Subprogram>
       --!    <Unit> On_Save
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
@@ -926,7 +1008,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          if Image (File_Name (Project_Node)) = Default_Project_Name
@@ -955,7 +1038,8 @@ package body Designer.Main_Window is
          pragma Unreferenced (The_Widget);
          pragma Unreferenced (Closure);
          pragma Unreferenced (Call_Data);
-         --  Данные переменные не используются.
+         --  Параметры требуются для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в них нет фактической необходимости.
 
       begin
          Xt_Manage_Child (Save_As_Dialog);
@@ -976,7 +1060,8 @@ package body Designer.Main_Window is
         Call_Data  : in Xt_Pointer)
       is
          pragma Unreferenced (Closure);
-         --  Данные переменные не используются.
+         --  Параметр требуется для соответствия профилю подпрограмм обратного
+         --  вызова Xt, но в нём нет фактической необходимости.
 
          use type Xm.Xm_Callback_Reason;
 
@@ -1062,11 +1147,20 @@ package body Designer.Main_Window is
    --!    <Unit> Get_App_Shell
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Get_App_Shell return Xt.Widget
-   is
+   function Get_App_Shell return Xt.Widget is
    begin
       return App_Shell_MW;
    end Get_App_Shell;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Hide_Renditions_Menu
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Hide_Rendition_Menu is
+   begin
+      Xt_Unmanage_Child (Rendition_Menu);
+   end Hide_Rendition_Menu;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -1076,21 +1170,21 @@ package body Designer.Main_Window is
    procedure Initialize (App_Shell : in Xt.Widget) is
       use Callbacks;
 
-      Properties_Form   : Widget;
-      Tree_Form         : Widget;
-      Main_Window       : Widget;
-      Args              : Xt_Arg_List (0 .. 6);
-      Palette           : Widget;
-      Paned             : Widget;
-      Menu              : Widget;
-      Paned1            : Widget;
-      Message_Form      : Widget;
-      Button            : Widget;
-      Show_Properties   : Widget;
-      Show_Tree         : Widget;
-      Show_Messages     : Widget;
-      Submenu           : Widget;
-      Element           : Widget;
+      Properties_Form : Widget;
+      Tree_Form       : Widget;
+      Main_Window     : Widget;
+      Args            : Xt_Arg_List (0 .. 6);
+      Palette         : Widget;
+      Paned           : Widget;
+      Menu            : Widget;
+      Paned1          : Widget;
+      Message_Form    : Widget;
+      Button          : Widget;
+      Show_Properties : Widget;
+      Show_Tree       : Widget;
+      Show_Messages   : Widget;
+      Submenu         : Widget;
+      Element         : Widget;
 
    begin
       App_Shell_MW := App_Shell;
@@ -1098,10 +1192,6 @@ package body Designer.Main_Window is
       --  Создание диалога "О программе".
 
       About_Dialog := Xm_Create_Template_Dialog (App_Shell, "about_dialog");
-
-      --  Создание диалога редактирования элементов Render_Table.
-
-      Designer.Render_Table_Editor.Initialize (App_Shell);
 
       --  Создание диалога открытия файлов.
 
@@ -1283,9 +1373,27 @@ package body Designer.Main_Window is
       Xt_Set_Arg (Args (0), Xm_N_Menu_Help_Widget, Button);
       Xt_Set_Values (Menu, Args (0 .. 0));
 
-      --
+      --  Меню "Rendition".
+
+      Submenu := Xm_Create_Pulldown_Menu (Menu, "rendition_menu");
+      Element :=
+        Xm_Create_Managed_Push_Button_Gadget (Submenu, "new", Args (0 .. 0));
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Rendition_Add'Access);
+
+      Element :=
+        Xm_Create_Managed_Push_Button_Gadget
+          (Submenu, "delete", Args (0 .. 0));
+      Xt_Add_Callback (Element,
+                       Xm_N_Activate_Callback,
+                       Callbacks.On_Rendition_Delete'Access);
+
+      Xt_Set_Arg (Args (0), Xm_N_Sub_Menu_Id, Submenu);
+      Rendition_Menu := Xm_Create_Cascade_Button_Gadget
+                         (Menu, "rendition", Args (0 .. 0));
+
       --  Создание панели редактирования свойств.
-      --
 
       Properties_Form := Xm_Create_Managed_Form (Paned, "properties_form");
 
@@ -1293,8 +1401,8 @@ package body Designer.Main_Window is
       --  Для унификации механизма скрытия/отображения панели кнопка создаётся
       --  как самостоятельная панель.
 
-      Show_Properties :=
-        Xm_Create_Arrow_Button_Gadget (Paned, "properties_show");
+      Show_Properties := Xm_Create_Arrow_Button_Gadget
+                          (Paned, "properties_show");
       Xt_Add_Callback (Show_Properties,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Hide_Show_Button'Access,
@@ -1427,9 +1535,7 @@ package body Designer.Main_Window is
       Xt_Set_Arg (Args (4), Xm_N_Bottom_Attachment, Xm_Attach_Form);
       Designer.Tree_Editor.Initialize (Tree_Form, Args (0 .. 4));
 
-      --
       --  Задаем атрибуты главного окна.
-      --
 
       Xt_Set_Arg (Args (0), Xm_N_Command_Window, Palette);
       Xt_Set_Arg (Args (1), Xm_N_Message_Window, Status_Bar);
@@ -1449,7 +1555,7 @@ package body Designer.Main_Window is
       Designer.Tree_Editor.Insert_Item (Node);
       Designer.Visual_Editor.Insert_Item (Node);
       Designer.Properties_Editor.Insert_Item (Node);
-      Designer.Render_Table_Editor.Insert_Item (Node);
+      Designer.Properties_Editor.Renditions_Editor.Insert_Item (Node);
 
       if Node_Kind (Node) = Node_Project then
          Project_Node := Node;
@@ -1468,7 +1574,7 @@ package body Designer.Main_Window is
       File_Name_MW := Xm_String_Generate (File_Name);
       msg := Xm_String_Generate (Wide_String'(File_Name)
                                    & " - XmAda designer");
-      msg := Xm_String_Create_Localized(Xm_String_Unparse(msg));
+      msg := Xm_String_Create_Localized (Xm_String_Unparse (msg));
       Xme_Set_WM_Shell_Title (msg, App_Shell_MW);
    end XmAdaDesigner_title;
 
@@ -1479,7 +1585,7 @@ package body Designer.Main_Window is
    ---------------------------------------------------------------------------
    procedure Warning_On_Exit_XmMessageBox_Dialog is
    begin
-      -- Добавляем диалог подтверждения сохранения проекта.
+      --  Добавляем диалог подтверждения сохранения проекта.
 
       Warning_On_Exit_XmMessageBox
         := Xm_Create_Message_Dialog (App_Shell_MW,
@@ -1509,10 +1615,10 @@ package body Designer.Main_Window is
       msg  : Xm_String;
 
    begin
-      -- Добавляем диалог подтверждения сохранения проекта.
+      --  Добавляем диалог подтверждения сохранения проекта.
 
       msg := Xm_String_Create ("Save project?  "
-                                 & Xm_String_Unparse(File_Name_MW));
+                                 & Xm_String_Unparse (File_Name_MW));
       Xt_Set_Arg (Args (0), Xm_N_Message_String, msg);
       Warning_On_Open_Project_XmMessageBox
         := Xm_Create_Message_Dialog (App_Shell_MW,
@@ -1539,10 +1645,10 @@ package body Designer.Main_Window is
       msg  : Xm_String;
 
    begin
-      -- Добавляем диалог подтверждения сохранения проекта.
+      --  Добавляем диалог подтверждения сохранения проекта.
 
       msg := Xm_String_Create ("Save project?  "
-                                 & Xm_String_Unparse(File_Name_MW));
+                                 & Xm_String_Unparse (File_Name_MW));
       Xt_Set_Arg (Args (0), Xm_N_Message_String, msg);
       Warning_On_New_Project_XmMessageBox
         := Xm_Create_Message_Dialog (App_Shell_MW,
@@ -1612,7 +1718,6 @@ package body Designer.Main_Window is
       Designer.Tree_Editor.Reinitialize;
       Designer.Visual_Editor.Reinitialize;
       Designer.Properties_Editor.Reinitialize;
-      Designer.Render_Table_Editor.Reinitialize;
    end Reinitialize;
 
    ---------------------------------------------------------------------------
@@ -1659,6 +1764,16 @@ package body Designer.Main_Window is
             Xt_Set_Sensitive (Delete_Component_Item,   False);
       end case;
    end Select_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Show_Rendition_Menu
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Show_Rendition_Menu is
+   begin
+      Xt_Manage_Child (Rendition_Menu);
+   end Show_Rendition_Menu;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
