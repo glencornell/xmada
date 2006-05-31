@@ -44,6 +44,7 @@ with GNAT.Table;
 with Xt.Resource_Management;
 with Xm_String_Defs;
 
+with Designer.Properties_Editor.Application;
 with Designer.Properties_Editor.Component_Class;
 with Designer.Properties_Editor.Renditions_Editor;
 with Designer.Properties_Editor.Widget_Instance;
@@ -92,13 +93,15 @@ package body Designer.Properties_Editor is
 
    type Annotation_Kinds is
     (Annotation_Empty,
+     Annotation_Application,
      Annotation_Component_Class,
      Annotation_Widget_Instance);
 
    type Annotation_Record (Kind : Annotation_Kinds := Annotation_Empty) is
    record
       case Kind is
-         when Annotation_Component_Class
+         when Annotation_Application
+           | Annotation_Component_Class
            | Annotation_Widget_Instance
          =>
             Properties_Editor : Node_Properties_Editor_Access;
@@ -222,6 +225,7 @@ package body Designer.Properties_Editor is
       Properties_Parent := Parent;
       WI_Args           := Arg_List;
       WI_Parent         := Parent;
+
       Widget_Instance.Create_Header (WI_Parent, WI_Args);
       Renditions_Editor.Initialize (WI_Parent, WI_Args);
    end Initialize;
@@ -266,7 +270,8 @@ package body Designer.Properties_Editor is
 
       for J in Annotation_Table.First .. Annotation_Table.Last loop
          case Annotation_Table.Table (J).Kind is
-            when Annotation_Component_Class
+            when Annotation_Application
+              | Annotation_Component_Class
               | Annotation_Widget_Instance
             =>
                if Annotation_Table.Table (J).Properties_Editor /= null then
@@ -303,6 +308,11 @@ package body Designer.Properties_Editor is
 
       for J in First .. Node loop
          case Node_Kind (J) is
+            when Node_Application =>
+               Annotation_Table.Table (J) :=
+                (Kind              => Annotation_Application,
+                 Properties_Editor => null);
+
             when Node_Component_Class =>
                Annotation_Table.Table (J) :=
                 (Kind              => Annotation_Component_Class,
@@ -339,7 +349,9 @@ package body Designer.Properties_Editor is
 
       Kind := Node_Kind (Node);
 
-      if Kind /= Node_Widget_Instance and Kind /= Node_Component_Class then
+      if Kind /= Node_Application and Kind /= Node_Widget_Instance
+        and Kind /= Node_Component_Class
+      then
          return;
       end if;
 
@@ -350,6 +362,11 @@ package body Designer.Properties_Editor is
            --  Создание страниц редактора свойств.
 
             case Node_Kind (Node) is
+               when Node_Application =>
+                  Annotation_Table.Table (Node).Properties_Editor :=
+                     Application.Create
+                      (Properties_Parent, Properties_Args, Node);
+
                when Node_Component_Class =>
                   Annotation_Table.Table (Node).Properties_Editor :=
                     Component_Class.Create
