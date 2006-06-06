@@ -83,6 +83,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    use Designer.Model_Utilities;
    use Interfaces.C;
    use Interfaces.C.Wide_Strings;
+
    use Model;
    use Model.Names;
    use Model.Queries;
@@ -267,6 +268,13 @@ package body Designer.Properties_Editor.Widget_Instance is
    procedure Relocate_Annotation_Table (Node : in Node_Id);
 
    package Callbacks is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Has_Widget_Name_Error
+      --!    <Purpose> Производит проверку на правильность имени виджета
+      --!    <Exceptions>
+      ------------------------------------------------------------------------
+      function Has_Widget_Name_Error (Str : in Wide_String) return Boolean;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -455,6 +463,23 @@ package body Designer.Properties_Editor.Widget_Instance is
    end Callbacks;
 
    package body Callbacks is
+      ------------------------------------------------------------------------
+      --! <Subprogram>
+      --!    <Unit> Has_Widget_Name_Error
+      --!    <ImplementationNotes>
+      ------------------------------------------------------------------------
+      function Has_Widget_Name_Error (Str : in Wide_String) return Boolean is
+      begin
+         for J in Str'First .. Str'Last loop
+            case Str (J) is
+               when 'A' .. 'Z' | 'a' .. 'z' | '0' .. '9' | '_' | '-' =>
+                  return True;
+
+               when others =>
+                  return False;
+            end case;
+         end loop;
+      end Has_Widget_Name_Error;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -1329,9 +1354,25 @@ package body Designer.Properties_Editor.Widget_Instance is
          pragma Unreferenced (Call_Data);
 
          Name : Name_Id;
+         Str  : constant Wide_String
+           := Xm_Text_Field_Get_String_Wcs (The_Widget);
 
       begin
          Name := Enter (Xm_Text_Field_Get_String_Wcs (The_Widget));
+
+         if Str'Length < 0 then
+            Designer.Main_Window.Put_Line ("Widget name must not be empty");
+
+         else
+            if Has_Widget_Name_Error (Xm_Text_Field_Get_String_Wcs
+                                       (The_Widget))
+            then
+               Designer.Main_Window.Put_Line
+                ("Erroneous Widget Name "
+                 & Xm_Text_Field_Get_String_Wcs (The_Widget));
+            end if;
+         end if;
+
          Set_Name (Selected_Item, Name);
          Main_Window.Update_Item (Selected_Item);
 
