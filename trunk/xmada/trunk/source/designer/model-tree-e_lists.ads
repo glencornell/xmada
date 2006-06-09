@@ -30,46 +30,35 @@
 --!
 --! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
 --!
---! <Unit> Model
+--! <Unit> Model.Tree.E_lists
 --! <Purpose>
---!   Пакет содержит объявления типов данных для идентификации базовых
---! элементов дерева модели.
+--!   Пакет содержит подпрограммы для работы с расширенным списками узлов.
 --!
 --! <Effects>
 --! <Perfomance>
 ------------------------------------------------------------------------------
---  $Revision$ $Author$
---  $Date$
+--  $Revision: 407 $ $Author: dibala $
+--  $Date: 2006-02-26 14:04:02 +0000 (Вск, 26 Фев 2006) $
 ------------------------------------------------------------------------------
 
-package Model is
+package Model.Tree.E_lists is
 
-   --  Идентификатор узла дерева.
+   procedure Append_Elmt (Node : in Node_Id; To : in Elist_Id);
 
-   type Node_Id is new Natural;
-   Null_Node : constant Node_Id := Node_Id'First;
+   function Elmt_To_Node (Elmt : in Elmt_Id) return Node_Id;
 
-   --  Идентификатор имени.
+   function First_Elmt (List : in Elist_Id) return Elmt_Id;
 
-   type Name_Id is new Natural;
-   Null_Name : constant Name_Id := Name_Id'First;
+   function Last_Elmt (List : in Elist_Id) return Elmt_Id;
 
-   --  Идентификатор строки.
+   function Length (List : in Elist_Id) return Natural;
 
-   type String_Id is new Natural;
-   Null_String : constant String_Id := String_Id'First;
+   function New_Elmt_List return Elist_Id;
 
-   --  Идентификатор списка узлов.
+   function Next_Elmt (Elmt : in Elmt_Id) return Elmt_Id;
 
-   type List_Id is new Natural;
-   Null_List : constant List_Id := List_Id'First;
+   procedure Replace_Elmt (Elmt : in Elmt_Id; New_Node : in Node_Id);
 
-   --  Идентификатор расширенного списка узлов.
+   procedure Remove_Elmt (List : in Elist_Id; Elmt : in Elmt_Id);
 
-   type EList_Id is new Natural;
-   Null_EList : constant EList_Id := EList_Id'First;
-
-   type Elmt_Id is new Natural;
-   Null_Elmt : constant Elmt_Id := Elmt_Id'First;
-
-end Model;
+end Model.Tree.E_lists;

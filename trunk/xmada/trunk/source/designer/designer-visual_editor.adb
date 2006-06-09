@@ -750,6 +750,9 @@ package body Designer.Visual_Editor is
                end;
             end if;
 
+         when Node_Widget_Reference_Resource_Value =>
+            null;
+
          when others =>
             raise Program_Error;
       end case;
