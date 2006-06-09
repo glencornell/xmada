@@ -41,15 +41,15 @@ XmAda maintained by TechnoServ A/S\n\
 
 !!  Диалог "Подтверждения удаления".
 
-*Warning_XmMessageBox.dialogType: DIALOG_QUESTION
+*Warning_XmMessageBox.dialogType: DIALOG_WARNING
 *Warning_XmMessageBox.dialogTitle: XmAda designer
 !!*Warning_XmMessageBox.defaultButtonType:DIALOG_CANCEL_BUTTON
-*Warning_XmMessageBox.messageAlignment: ALIGNMENT_CENTER
+!!*Warning_XmMessageBox.messageAlignment: ALIGNMENT_CENTER
 !!*Warning_XmMessageBox.messageString: Delete?
 
 !!  Диалог "Подтверждения сохранения проекта при выходе".
 
-*warning_on_exit_xmmessageBox.dialogType: DIALOG_QUESTION
+*warning_on_exit_xmmessageBox.dialogType: DIALOG_WARNING
 *warning_on_exit_xmmessageBox.dialogTitle: XmAda designer
 !!*warning_on_exit_xmmessageBox.defaultButtonType:DIALOG_CANCEL_BUTTON
 *warning_on_exit_xmmessageBox.messageAlignment: ALIGNMENT_CENTER
@@ -60,7 +60,7 @@ XmAda maintained by TechnoServ A/S\n\
 
 !!  Диалог "Подтверждения сохранения проекта".
 
-*Warning_On_Open_Project_XmMessageBox.dialogType: DIALOG_QUESTION
+*Warning_On_Open_Project_XmMessageBox.dialogType: DIALOG_WARNING
 *Warning_On_Open_Project_XmMessageBox.dialogTitle: XmAda designer
 !!*Warning_On_Open_Project_XmMessageBox.defaultButtonType:DIALOG_CANCEL_BUTTON
 *Warning_On_Open_Project_XmMessageBox.messageAlignment: ALIGNMENT_CENTER
@@ -69,7 +69,7 @@ XmAda maintained by TechnoServ A/S\n\
 
 !!  Диалог "Подтверждения сохранения проекта".
 
-*Warning_On_New_Project_XmMessageBox.dialogType: DIALOG_QUESTION
+*Warning_On_New_Project_XmMessageBox.dialogType: DIALOG_WARNING
 *Warning_On_New_Project_XmMessageBox.dialogTitle: XmAda designer
 !!*Warning_On_New_Project_XmMessageBox.defaultButtonType:DIALOG_CANCEL_BUTTON
 *Warning_On_New_Project_XmMessageBox.messageAlignment: ALIGNMENT_CENTER

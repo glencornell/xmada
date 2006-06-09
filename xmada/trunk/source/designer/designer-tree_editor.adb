@@ -68,7 +68,9 @@ with Designer.Model_Utilities;
 with Designer.Operations;
 with Designer.Palette;
 with Model.Allocations;
+with Model.Names;
 with Model.Queries;
+with Model.Tree.E_Lists;
 with Model.Tree.Lists;
 with Model.Xt_Motif;
 
@@ -79,8 +81,10 @@ package body Designer.Tree_Editor is
    use Designer.Palette;
    use Model;
    use Model.Allocations;
+   use Model.Names;
    use Model.Queries;
    use Model.Tree;
+   use Model.Tree.E_Lists;
    use Model.Tree.Lists;
    use Xt;
    use Xt.Ancillary_Types;
@@ -105,6 +109,8 @@ package body Designer.Tree_Editor is
    use Xm_Scrolled_Window;
    use Xm_Separator_Gadget;
    use Xm_String_Defs;
+
+   bool_msg_w : Boolean := False;
 
    --  Для каждого узла создаётся (по запросу) свой собственный редактор
    --  дерева. Уже созданные редакторы свойств сохраняются в таблице
@@ -234,6 +240,16 @@ package body Designer.Tree_Editor is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Component_Tree_Icon (Node : in Node_Id) return Widget;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Return_Kind_Constraint_Resurse_Node
+   --!    <Purpose> Возвращает Node_Id Constraint ресурса
+   --! ссылающегося на Node.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   function Return_Kind_Constraint_Resurse_Node (Node : in Node_Id)
+     return EList_Id;
 
    package Callbacks is
 
@@ -469,11 +485,28 @@ package body Designer.Tree_Editor is
          pragma Unreferenced (Call_Data);
          --  Данные переменные не используются.
 
-         Node : Node_Id;
+         Node      : Node_Id;
+         Node_res  : Elmt_Id;
+         Res_EList : Elist_Id;
 
       begin
          Node := Selected_Item;
          Main_Window.Select_Item (Null_Node);
+
+         if bool_msg_w = True then
+            Res_EList  := Return_Kind_Constraint_Resurse_Node (Node);
+            bool_msg_w := False;
+
+            if Res_EList /= Null_EList then
+               Node_res := First_Elmt (Res_EList);
+
+               while Node_res /= Null_Elmt  loop
+                  Delete_Node (Elmt_To_Node (Node_res));
+                  Node_res := Next_Elmt (Node_res);
+               end loop;
+            end if;
+         end if;
+
          Model_Utilities.Delete_Node (Node);
          Xt_Destroy_Widget (The_Widget);
 
@@ -497,6 +530,7 @@ package body Designer.Tree_Editor is
          --  Данные переменные не используются.
 
       begin
+         bool_msg_w := False;
          Xt_Destroy_Widget (The_Widget);
 
       exception
@@ -521,71 +555,49 @@ package body Designer.Tree_Editor is
          pragma Unreferenced (Num_Params);
          --  Данные переменные не используются.
 
-         Args                     : Xt_Arg_List (0 .. 3);
-         msg                      : Xm_String;
-         msg_w                    : Xm_String;
-         bool_msg_w               : Boolean := False;
-         Warning_XmMessageBox     : Widget;
---          Bottom_Attachment_Widget : Node_Id;
---          Left_Attachment_Widget   : Node_Id;
---          Right_Attachment_Widget  : Node_Id;
---          Top_Attachment_Widget    : Node_Id;
---          Current_Widget_Class     : Node_Id;
+         Args                 : Xt_Arg_List (0 .. 1);
+         msg                  : Xm_String;
+         Warning_XmMessageBox : Widget;
+         Node_res             : Elmt_Id;
+         Res_EList            : Elist_Id;
 
       begin
          if Selected_Item /= Null_Node then
-            -- Добавляем диалог подтверждения удаления.
--- --             Current_Widget_Class := First (Imported_Widget_Sets (Node_Widget_Instance (Selected_Item)));
--- --             Current_Widget_Class := First (Imported_Widget_Sets (Node_Id (Selected_Item)));
---             Current_Widget_Class := First (Imported_Widget_Sets (Enclosing_Project (Node_Id(Selected_Item))));
---             while Current_Widget_Class /= Null_Node loop
---                if Current_Widget_Class/= Node_Id (Selected_Item) then
---
---
---                   Xt_Set_Arg (Args (0), Xm_N_Bottom_Attachment, Bottom_Attachment_Widget);
---                   Xt_Set_Arg (Args (1), Xm_N_Left_Attachment, Left_Attachment_Widget);
---                   Xt_Set_Arg (Args (2), Xm_N_Right_Attachment, Right_Attachment_Widget);
---                   Xt_Set_Arg (Args (3), Xm_N_Top_Attachment, Top_Attachment_Widget);
---                   Xt_Get_Values (Selected_Item, Args (0 .. 3))
---
---                   case Node_Id (Selected_Item) is
---                      when Bottom_Attachment_Widget     =>
---                         msg_w := Xm_String_Generate (Xm_String_Unparse(msg_w)
---                                                      & Name_Image (Current_Widget_Class)
---                                                      & " ");
---                         bool_msg_w := True;
---                      when Left_Attachment_Widget =>
---                         msg_w := Xm_String_Generate (Xm_String_Unparse(msg_w)
---                                                & Name_Image (Current_Widget_Class)
---                                                & " ");
---                         bool_msg_w := True;
---                      when Right_Attachment_Widget         =>
---                         msg_w := Xm_String_Generate (Xm_String_Unparse(msg_w)
---                                                & Name_Image (Current_Widget_Class)
---                                                & " ");
---                         bool_msg_w := True;
---                      when Top_Attachment_Widget         =>
---                         msg_w := Xm_String_Generate (Xm_String_Unparse(msg_w)
---                                                & Name_Image (Current_Widget_Class)
---                                                & " ");
---                         bool_msg_w := True;
---                      when others               =>
---                         null;
---                   end case;
---
---                end if;
---
---                Current_Widget_Class := Next (Current_Widget_Class);
---             end loop;
+            Res_EList := Return_Kind_Constraint_Resurse_Node (Selected_Item);
 
-            if bool_msg_w = False then
+            if Res_EList /= Null_EList then
+               Node_res := First_Elmt (Res_EList);
+               bool_msg_w := True;
+
+               while Node_res /= Null_Elmt loop
+                  msg := Xm_String_Generate (Xm_String_Unparse (msg)
+                                              & " "
+                                              & Image
+                                                 (Resource_Name
+                                                   (Resource_Specification
+                                                     (Elmt_To_Node
+                                                       (Node_res))))
+                                              & " - "
+                                              & Name_Image
+                                                 (Node_Id (Parent_Node
+                                                            (Elmt_To_Node
+                                                              (Node_res)))));
+                  Node_res := Next_Elmt (Node_res);
+               end loop;
+
+               msg := Xm_String_Generate ("Warning!!! Widget: "
+                                            & Name_Image (Selected_Item)
+                                            & " applied on resurses for: "
+                                            & Wide_String'(Xm_String_Unparse
+                                                            (msg))
+                                            & ". Ignore and delete ?");
+
+            else
                msg := Xm_String_Generate ("Delete?  "
                                             & Name_Image (Selected_Item));
-            else
---                msg := Xm_String_Generate ("Warning  "
---                                             & Xm_String_Unparse(msg_w));
-               null;
             end if;
+
+            -- Добавляем диалог подтверждения удаления
             Xt_Set_Arg (Args (0), Xm_N_Message_String, msg);
             Warning_XmMessageBox := Xm_Create_Message_Dialog
                                      (Main_Window.Get_App_Shell,
@@ -1748,6 +1760,70 @@ package body Designer.Tree_Editor is
          end case;
       end loop;
    end Relocate_Annotation_Table;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
+   --!    <Unit> Return_Kind_Constraint_Resurse_Node
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   function Return_Kind_Constraint_Resurse_Node (Node : in Node_Id)
+     return EList_Id
+   is
+      Current_Widget : Node_Id;
+      Current        : Node_Id;
+      Current_List   : List_Id;
+      List           : List_Id;
+      List_res       : Node_Id;
+      Res_EList      : Elist_Id;
+
+   begin
+      Res_EList := New_Elmt_List;
+--       Current_Widget
+--         := Root (Enclosing_Component_Class (Node));
+      Current_Widget := Parent_Node (Node);
+
+      if Current_Widget /= Node
+           and Node /= Root (Enclosing_Component_Class (Node))
+           and Node /= Enclosing_Component_Class (Node)
+      then
+         Current_List := Children (Current_Widget);
+
+         if Current_List /= Null_List then
+            Current := First (Current_List);
+
+            while Current /= Null_Node loop
+               if Current /= Node then
+                  List := Constraint_Resources (Current);
+
+                  if List /= Null_List then
+                     List_res := First (List);
+
+                     while List_res /= Null_Node loop
+                        if Node_Kind (List_res)
+                             = Node_Widget_Reference_Resource_Value
+                        then
+                           if Resource_Value (List_res) = Node then
+                              Append_Elmt (List_res, Res_EList);
+                           end if;
+                        end if;
+
+                        List_res := Next (List_res);
+                     end loop;
+                  end if;
+               end if;
+
+               Current := Next (Current);
+            end loop;
+         end if;
+      end if;
+
+      if First_Elmt (Res_EList) = Null_Elmt then
+         return Null_EList;
+
+      else
+         return Res_EList;
+      end if;
+   end Return_Kind_Constraint_Resurse_Node;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

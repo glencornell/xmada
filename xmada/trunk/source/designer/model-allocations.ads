@@ -49,6 +49,13 @@ package Model.Allocations is
    List_Table_Initial                     : constant := 100;
    List_Table_Increment                   : constant := 100;
 
+   --  Таблица расширенных списков узлов дерева (пакет Model.Tree.E_Lists).
+
+   EList_Table_Initial                     : constant := 100;
+   EList_Table_Increment                   : constant := 100;
+   Elmts_Table_Initial                     : constant := 100;
+   Elmts_Table_Increment                   : constant := 100;
+
    --  Таблица символов имён (пакет Model.Names).
 
    Name_Character_Table_Initial           : constant := 100;
