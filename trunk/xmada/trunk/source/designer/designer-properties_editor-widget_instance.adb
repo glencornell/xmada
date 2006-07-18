@@ -38,7 +38,10 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
+pragma Warnings (Off);
 with Interfaces.C.Wide_Strings;
+pragma Warnings (On);
+
 with GNAT.Table;
 
 with Xlib.Events;
@@ -479,6 +482,8 @@ package body Designer.Properties_Editor.Widget_Instance is
                   return False;
             end case;
          end loop;
+
+         return False;
       end Has_Widget_Name_Error;
 
       ------------------------------------------------------------------------
@@ -2109,6 +2114,64 @@ package body Designer.Properties_Editor.Widget_Instance is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Delete_Item
+   --!    <ImplementationNotes>
+   ---------------------------------------------------------------------------
+   procedure Delete_Item (Node : in Node_Id) is
+   begin
+      Relocate_Annotation_Table (Node);
+
+      case Node_Kind (Node) is
+         when Node_Widget_Instance =>
+            declare
+               Menu             : Widget;
+               Selected_Pointer : Xt_Widget_Pointer;
+               Selected_Length  : Cardinal;
+               Args             : Xt_Arg_List (0 .. 1);
+
+            begin
+               --  Если виджет является дочерним, то удаляем его из
+               --  меню родителя.
+
+               if Node_Kind (Parent_Node (Node)) = Node_Widget_Instance then
+                  Menu := Get_Menu (Parent_Node (Node));
+                  Xt_Set_Arg
+                   (Args (0), Xm_N_Children, Selected_Pointer'Address);
+                  Xt_Set_Arg
+                   (Args (1), Xm_N_Num_Children, Selected_Length'Address);
+                  Xt_Get_Values (Menu, Args (0 .. 1));
+
+                  declare
+                     Nom             : Natural := 0;
+                     Sel_Nod         : Node_Id;
+                     Sel_Button      : Widget;
+                     Sel_Widget_List : constant Xt_Widget_List
+                       := To_Xt_Widget_List (Selected_Pointer,
+                                             Selected_Length);
+
+                  begin
+                     while Nom < Natural (Selected_Length) loop
+                        Sel_Button := Sel_Widget_List (Nom);
+                        Xt_Set_Arg (Args (0), Xm_N_User_Data, Sel_Nod'Address);
+                        Xt_Get_Values (Sel_Button, Args (0 .. 0));
+
+                        if Node = Sel_Nod then
+                           Xt_Destroy_Widget (Sel_Button);
+                        end if;
+
+                        Nom := Nom + 1;
+                     end loop;
+                  end;
+               end if;
+            end;
+
+         when others =>
+            null;
+      end case;
+   end Delete_Item;
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Finalize
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
@@ -2842,6 +2905,51 @@ package body Designer.Properties_Editor.Widget_Instance is
    begin
       case Node_Kind (Node) is
          when Node_Widget_Instance =>
+            declare
+               Menu             : Widget;
+               Selected_Pointer : Xt_Widget_Pointer;
+               Selected_Length  : Cardinal;
+               Args             : Xt_Arg_List (0 .. 1);
+
+            begin
+               --  Если виджет является дочерним, то меняем его имя.
+
+               if Node_Kind (Parent_Node (Node)) = Node_Widget_Instance then
+                  Menu := Get_Menu (Parent_Node (Node));
+                  Xt_Set_Arg
+                   (Args (0), Xm_N_Children, Selected_Pointer'Address);
+                  Xt_Set_Arg
+                   (Args (1), Xm_N_Num_Children, Selected_Length'Address);
+                  Xt_Get_Values (Menu, Args (0 .. 1));
+
+                  declare
+                     Nom             : Natural := 0;
+                     Sel_Nod         : Node_Id;
+                     Sel_Button      : Widget;
+                     Name            : Xm_String;
+                     Sel_Widget_List : constant Xt_Widget_List
+                       := To_Xt_Widget_List
+                           (Selected_Pointer, Selected_Length);
+
+                  begin
+                     while Nom < Natural (Selected_Length) loop
+                        Sel_Button := Sel_Widget_List (Nom);
+                        Xt_Set_Arg
+                         (Args (0), Xm_N_User_Data, Sel_Nod'Address);
+                        Xt_Get_Values (Sel_Button, Args (0 .. 0));
+
+                        if Node = Sel_Nod then
+                           Name := Xm_String_Generate (Name_Image (Node));
+                           Xt_Set_Arg (Args (0), Xm_N_Label_String, Name);
+                           Xt_Set_Values (Sel_Button, Args (0 .. 0));
+                        end if;
+
+                        Nom := Nom + 1;
+                     end loop;
+                  end;
+               end if;
+            end;
+
             Visual_Editor.Get_Properties (Node);
             Update_Resource (All_Resources (Node), Resources (Node));
             Update_Resource (All_Constraint_Resources (Node),
