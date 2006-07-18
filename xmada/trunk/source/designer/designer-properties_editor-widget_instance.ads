@@ -71,6 +71,14 @@ private package Designer.Properties_Editor.Widget_Instance is
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
+   --!    <Unit> Delete_Item
+   --!    <Purpose> Производит перерисовку злементов редактора свойств.
+   --!    <Exceptions>
+   ---------------------------------------------------------------------------
+   procedure Delete_Item (Node : in Model.Node_Id);
+
+   ---------------------------------------------------------------------------
+   --! <Subprogram>
    --!    <Unit> Insert_Item
    --!    <Purpose> Обработка добавления нового элемента.
    --!    <Exceptions>

@@ -141,7 +141,7 @@ package body Designer.Properties_Editor is
    ---------------------------------------------------------------------------
    procedure Delete_Item (Node : in Model.Node_Id) is
    begin
-      null;
+      Designer.Properties_Editor.Widget_Instance.Delete_Item (Node);
    end Delete_Item;
 
    ---------------------------------------------------------------------------
