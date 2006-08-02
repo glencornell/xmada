@@ -1988,27 +1988,39 @@ package body Designer.Properties_Editor.Widget_Instance is
       Element    :=
         Xm_Create_Managed_Push_Button_Gadget (Notebook, "resources");
 
-      --  Создаем вкладку "ограничения".
+      if  Node_Kind (Parent_Node (Node)) = Node_Widget_Class or
+          Node_Kind (Parent_Node (Node)) = Node_Widget_Instance
+      then
+         if Constraint_Resources (Class
+                                   (Parent_Node (Node))) /= Null_List then
 
-      Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
-      Element    :=
-        Xm_Create_Managed_Scrolled_Window
-         (Notebook, "scrolled", Args (0 .. 0));
+            --  Создаем вкладку "ограничения".
 
-      --  Так как и Resources и Constraints используют одни и те же
-      --  callback-функции, то необходимо различать когда вызов
-      --  был инициирован из редактора ресурсов, или из редактора ограничений
-      --  для этого в воджете RowColumn устанавливается значение User_Data
-      --  0 - для ресурсов, 1 - для ограничений.
-      --  Далее callback-функции читают поле User_Data их родителя
-      --  (XmRowColumn) и в зависимости от возвращенного значения
-      --  обращаются либо с списку ресурсов, либо к списку ограничений.
+            Xt_Set_Arg (Args (0), Xm_N_Scrolling_Policy, Xm_Automatic);
+            Element    :=
+              Xm_Create_Managed_Scrolled_Window
+               (Notebook, "scrolled", Args (0 .. 0));
 
-      Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (1));
-      Constraints :=
-        Xm_Create_Row_Column (Element, "row_column", Args (0 .. 0));
-      Element     :=
-        Xm_Create_Managed_Push_Button_Gadget (Notebook, "constraints");
+            --  Так как и Resources и Constraints используют одни и те же
+            --  callback-функции, то необходимо различать когда вызов
+            --  был инициирован из редактора ресурсов, или из редактора
+            --  ограничений для этого в воджете RowColumn устанавливается
+            --  значение User_Data
+            --  0 - для ресурсов, 1 - для ограничений.
+            --  Далее callback-функции читают поле User_Data их родителя
+            --  (XmRowColumn) и в зависимости от возвращенного значения
+            --  обращаются либо с списку ресурсов, либо к списку ограничений.
+
+            Xt_Set_Arg (Args (0), Xm_N_User_Data, Xt_Arg_Val (1));
+            Constraints :=
+              Xm_Create_Row_Column (Element, "row_column", Args (0 .. 0));
+            Element  :=
+              Xm_Create_Managed_Push_Button_Gadget (Notebook, "constraints");
+
+            Add_Resource_List (Constraints, All_Constraint_Resources (Node));
+            Xt_Manage_Child (Constraints);
+         end if;
+      end if;
 
       --  Создаем вкладку "функции обратного вызова".
 
@@ -2037,7 +2049,6 @@ package body Designer.Properties_Editor.Widget_Instance is
       --  Заполнение редактора свойств значениями ресурсов.
 
       Add_Resource_List (Properties, All_Resources (Node));
-      Add_Resource_List (Constraints, All_Constraint_Resources (Node));
       Add_Ada_Names (Ada);
 
       Update_Item (Node);
@@ -2045,7 +2056,6 @@ package body Designer.Properties_Editor.Widget_Instance is
       --  Задаем значение ресурсов.
 
       Xt_Manage_Child (Properties);
-      Xt_Manage_Child (Constraints);
       Xt_Manage_Child (Callbacks_Tab);
       Xt_Manage_Child (Ada);
 
