@@ -352,9 +352,11 @@ package body Designer.Palette is
 
          while Current_Widget_Class /= Null_Node loop
             if not Is_Meta_Class (Current_Widget_Class) then
+
                Relocate_Annotation_Table (Current_Widget_Class);
 
-               Str := Xm_String_Generate (Name_Image (Current_Widget_Class));
+               Str := Xm_String_Generate
+                       (Name_Image (Current_Widget_Class));
 
                --  Задаем имя нового компонента.
 
@@ -681,9 +683,15 @@ package body Designer.Palette is
 
             while Current_Widget_Class /= Null_Node loop
                if not Is_Meta_Class (Current_Widget_Class) then
-                  Xt_Set_Sensitive
-                   (Annotation_Table.Table (Current_Widget_Class).Button,
-                    Get_Sensitive_Indication (Current_Widget_Class, Node));
+                  if Is_Primitive (Current_Widget_Class) or
+                     Is_Gadget (Current_Widget_Class) or
+                     Is_Manager (Current_Widget_Class) or
+                     Is_Shell (Current_Widget_Class)
+                  then
+                     Xt_Set_Sensitive
+                      (Annotation_Table.Table (Current_Widget_Class).Button,
+                       Get_Sensitive_Indication (Current_Widget_Class, Node));
+                  end if;
                end if;
 
                Current_Widget_Class := Next (Current_Widget_Class);
