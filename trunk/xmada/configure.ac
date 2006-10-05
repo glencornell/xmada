@@ -64,12 +64,6 @@ AC_CONFIG_FILES([adacompiler], [chmod +x adacompiler])
 AC_CONFIG_FILES([adalinker], [chmod +x adalinker])
 AC_CONFIG_FILES([linker], [chmod +x linker])
 
-# Это условие необходимо заменить специальной обработкой файла при сборке
-# дистрибутива.
-if test -f ${srcdir}/support/run_designer.in; then
-AC_CONFIG_FILES([support/run_designer], [chmod +x support/run_designer])
-fi
-
 AC_OUTPUT([
 	Makefile
 	microline/Makefile
