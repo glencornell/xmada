@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = foreign
-ACLOCAL_AMFLAGS = -I support
+ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = microline source
 
