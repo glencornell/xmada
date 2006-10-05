@@ -1,9 +1,7 @@
 
 include $(top_srcdir)/Makefile.common
 
-SUBDIRS = extensions
-
-alidir = $(includedir)/xmada
+SUBDIRS = . extensions
 
 ADAFLAGS = $(STD_ADAFLAGS)
 
@@ -14,28 +12,29 @@ ADA_SPECS_WITH_BODY = \
 	xlib-graphic_output.ads \
 	xlib-implementation.ads
 
-ADA_SPECS = $(ADA_SPECS_WITH_BODY) \
+ADA_SPECS_WITHOUT_BODY = \
 	xlib-colors.ads \
 	xlib-cursors.ads \
 	xlib-resource_manager.ads
 
+ADA_SPECS = $(ADA_SPECS_WITH_BODY) $(ADA_SPECS_WITHOUT_BODY)
 ADA_BODIES = $(ADA_SPECS_WITH_BODY:.ads=.adb)
+ADA_HDRS = $(ADA_SPECS) $(ADA_BODIES)
+ADA_SRCS = $(ADA_SPECS_WITHOUT_BODY) $(ADA_BODIES)
+ADA_ALIS = $(ADA_SPECS_WITHOUT_BODY:.ads=.ali) $(ADA_BODIES:.adb=.ali)
 
-ADA_LIBADD = $(ADA_SPECS:.ads=.lo)
-
+pkginclude_HEADERS = $(ADA_HDRS)
+ali_DATA = $(ADA_ALIS)
 lib_LTLIBRARIES = libxmadaxlib.la
-libxmadaxlib_la_SOURCES =
-libxmadaxlib_la_LIBADD = $(ADA_LIBADD)
-libxmadaxlib_la_LDFLAGS = -no-undefined -version-info $(XMADAXLIBLIBVERSIONINFO)
 
-install-data-local:
-	$(INSTALL) -d $(DESTDIR)$(alidir)
-	for f in $(srcdir)/*.ad[sb] *.ali; do $(INSTALL) -m 444 $$f $(DESTDIR)$(alidir); done
+libxmadaxlib_la_SOURCES = $(ADA_SRCS)
+libxmadaxlib_la_LDFLAGS = -no-undefined -version-info $(XMADAXLIBLIBVERSIONINFO)
 
 depend-local:
 	for d in $(SUBDIRS); do \
 		(cd $$d && ${MAKE} depend-local); \
 	done
+
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
 xlib-atoms.lo: \
 	$(srcdir)/xlib-atoms.adb \
