@@ -7,9 +7,9 @@
 ##! <Copyright>
 ##!  Copyright (C) 2005  ТехноСерв А/С
 ##!
-##! <Unit> adacompiler.in
+##! <Unit> adalinker.in
 ##! <Purpose>
-##!   Скрипт для запуска компилятора GNAT языка программирования Ada из
+##!   Скрипт для запуска редактора связей языка программирования Ada из
 ##! пакета libtool.
 ##!
 ##! <Effects>
@@ -19,27 +19,20 @@
 ##! <PortabilityIssues>
 ##! <AnticipatedChanges>
 ##----------------------------------------------------------------------------
-##  $Revision: 7 $ $Author: godunko $
-##  $Date: 2005-03-28 17:35:28 +0400 (Mon, 28 Mar 2005) $
+##  $Revision: 3417 $ $Author: godunko $
+##  $Date: 2006-09-16 13:14:47 +0400 (Сбт, 16 Сен 2006) $
 ##----------------------------------------------------------------------------
 
-set -e
-
 ADA="@ADA@"
-SED="@SED@"
+abs_top_builddir="@abs_top_builddir@"
 
-while [ $# -gt 1 ]; do
-  cline="$cline$1 "
-  shift
-done
+if test ${2%.la} != ${2}; then
+    #  Производится сборка библиотеки.
 
-tmp="tmp$$"
-newname=$tmp/`echo $1 | ${SED} -e 's,^\.libs/\(.*\).o$,\1.o,'`
+    ${abs_top_builddir}/libtool --tag=CC --mode=link $ADA "$@"
 
-trap "rm -rf $tmp" 0 1 2 3 15
-mkdir $tmp
+else
+    #  Производится сборка программы.
 
-$ADA $cline$newname
-
-mv $newname $1
-mv $tmp/* .
+    ${abs_top_builddir}/libtool --tag=CC --mode=link ${abs_top_builddir}/adalinker "$@" -bargs -E
+fi

@@ -1,0 +1,200 @@
+#!/bin/sh
+##----------------------------------------------------------------------------
+##
+##  Автоматизированная система организации и управления воздушным движением
+##
+##----------------------------------------------------------------------------
+##! <Copyright>
+##!  Copyright (C) 2005  ТехноСервЪ А/С
+##!
+##! <Unit> adamakedepend
+##! <Purpose>
+##!   Производит генерацию зависимостей Ada модулей для использования в файлах
+##! Makefile.am.
+##!
+##! <Effects>
+##! <ImplementationNotes>
+##! <PortabilityIssues>
+##! <AnticipatedChanges>
+##----------------------------------------------------------------------------
+##  $Revision: 3423 $ $Author: godunko $
+##  $Date: 2006-09-16 14:04:13 +0400 (Сбт, 16 Сен 2006) $
+##----------------------------------------------------------------------------
+
+usage() {
+    echo "Программа создания списка зависимостей"
+    echo "Использование:"
+    echo "  mkdep <top_srcdir> <top_builddir> <src_dir> <build_dir> [-I<dir> ...]"
+    exit 1
+}
+
+#  Для обеспечения генерации одинаковой последовательности файлов при любых
+#  настройках локализации принудительно задаётся очередность сортировки
+#  символов, определяемая их кодом.
+
+unset LANG LANGUAGE LC_ALL
+export LC_COLLATE=C
+
+if [ $# -lt 4 ]; then
+    usage
+fi
+
+#  Проверка наличия и нормализация имени корневого каталога исходных текстов.
+
+if [ ! -d "$1" ]; then
+    echo "Некорректно указан корневой каталог исходных текстов"
+    exit 1
+fi
+
+TOP_SRCDIR=`cd "$1" && pwd`
+shift
+
+#  Проверка наличия и нормализация имени корневого каталога сборки.
+
+if [ ! -d "$1" ]; then
+    echo "Некорректно указан корневой каталог сборки"
+    exit 1
+fi
+
+TOP_BUILDDIR=`cd "$1" && pwd`
+shift
+
+#  Проверка наличия и нормализация имени каталога исходных текстов.
+
+if [ ! -d "$1" ]; then
+    echo "Некорректно указан каталог исходных текстов"
+    exit 1
+fi
+
+SRCDIR=`cd "$1" && pwd`
+shift
+
+##  Проверка наличия и нормализация имени каталога сборки.
+##  Поскольку autotools могут указывать для каталога сборки просто пустую
+##  строку, то заменяем её на текущий рабочий каталог.
+
+if [ -z "$1" ]; then
+    BUILDDIR=`pwd`
+
+elif [ ! -d "$1" ]; then
+    echo "Некорректно указан каталог сборки '$1'"
+    exit 1
+
+else
+    BUILDDIR=`cd "$1" && pwd`
+fi
+
+shift
+
+#  Построение списка каталогов поиска файлов
+
+SEARCHDIRS=
+
+while true; do
+    case "$1" in
+        -I*)
+            SEARCHDIRS="$SEARCHDIRS "`cd "${1#-I}" && pwd`
+            shift
+            ;;
+        *)
+            shift
+            ;;
+    esac
+
+    if [ $# -eq 0 ]; then
+        break;
+    fi
+done
+
+##  Создание резервной копии Makefile.am и генерация новой версии файла.
+
+MAKEFILE=${SRCDIR}/Makefile.am
+MKDEP="### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###"
+cp ${MAKEFILE} ${MAKEFILE}.bak
+(
+    ##  Копируем содержимое Makefile.am до специальной строки.
+
+    sed -e "/${MKDEP}/,\$d" < ${MAKEFILE}.bak
+    echo ${MKDEP}
+
+    ##  Формируем зависимости файлов.
+
+    for alifile in `ls *.ali 2>/dev/null | grep -v '^b~'`; do
+        echo "Processing ${alifile}..." > /dev/stderr
+
+        ##  Формируем список файлов, выделяя имена файлов из ALI файла
+        ##  и производя поиск этих файлов в каталогах подключаемых файлов.
+        ##  Если файл не найден в каталогах подключаемых файлов, то он
+        ##  не попадает в список файлов.
+
+        allwithlist=
+
+        while read key unitfile rest; do
+            case "${key}" in
+                D)
+                    for dir in ${SEARCHDIRS}; do
+                        if [ -f ${dir}/${unitfile} ]; then
+                            allwithlist="${allwithlist} "${unitfile}
+                        fi
+                    done
+                    ;;
+                *)
+                    ;;
+            esac
+        done < ${alifile}
+
+        ##  Сортируем построенный список файлов.
+
+        allwithlist=`echo ${allwithlist} | tr ' ' '\n' | sort`
+
+        ##  Дополняем отсортированный список файлов каталогами расположения
+        ##  файлов.
+
+        withlist=
+
+        for withfile in ${allwithlist}; do
+            for dir in ${SEARCHDIRS}; do
+                if [ -f ${dir}/${withfile} ]; then
+                    withlist="${withlist} "${dir}/${withfile}
+                fi
+            done
+        done
+
+        ##  Сохраняем зависимости, заменяя префиксы у файлов, расположенных
+        ##  в каталогах проекта. Файлы, расположенные вне каталогов
+        ##  исходных текстов и сборки проекта в список зависимостей не
+        ##  вносятся.
+
+        if [ "x${withlist}" != "x" ]; then
+            ##  Формирование списка зависимостей для .lo и .o файлов.
+
+            echo -n "`echo ${alifile} | sed -e 's/\.ali$//'`.lo "
+            echo -n "`echo ${alifile} | sed -e 's/\.ali$//'`.o:"
+
+            for depfile in ${withlist}; do
+                ##  Очередность проверок имеет значение, поскольку SRCDIR
+                ##  всегда расположена внутри TOP_SRCDIR (аналогично для
+                ##  BUILDDIR/TOP_BUILDDIR)!
+
+                if [ "${depfile#${SRCDIR}}" != "${depfile}" ]; then
+                    echo " \\"
+                    echo -en "\t\$(srcdir)${depfile#${SRCDIR}}"
+
+                elif [ "${depfile#${TOP_SRCDIR}}" != "${depfile}" ]; then
+                    echo " \\"
+                    echo -en "\t\$(top_srcdir)${depfile#${TOP_SRCDIR}}"
+
+                elif [ "${depfile#${BUILDDIR}/}" != "${depfile}" ]; then
+                    echo " \\"
+                    echo -en "\t${depfile#${BUILDDIR}/}"
+
+                elif [ "${depfile#${TOP_BUILDDIR}}" != "${depfile}" ]; then
+                    echo " \\"
+                    echo -en "\t\$(top_builddir)${depfile#${TOP_BUILDDIR}}"
+                fi
+            done
+
+            echo
+        fi
+    done
+) > ${MAKEFILE}
