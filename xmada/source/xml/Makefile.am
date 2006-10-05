@@ -20,7 +20,8 @@ ADA_LIBADD = $(ADA_SPECS:.ads=.lo)
 
 lib_LTLIBRARIES = libxmadaxml.la
 libxmadaxml_la_SOURCES =
-libxmadaxml_la_LIBADD = $(ADA_LIBADD)
+libxmadaxml_la_LIBADD = $(ADA_LIBADD) \
+	$(top_builddir)/microline/XmL/libXmL.la
 libxmadaxml_la_LDFLAGS = -no-undefined -version-info $(XMADAXMLLIBVERSIONINFO)
 
 install-data-local:
