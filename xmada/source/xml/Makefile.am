@@ -24,7 +24,8 @@ ali_DATA = $(ADA_ALIS)
 lib_LTLIBRARIES = libxmadaxml.la
 
 libxmadaxml_la_SOURCES = $(ADA_SRCS)
-libxmadaxml_la_LDFLAGS = -no-undefined -version-info $(XMADAXMLLIBVERSIONINFO) \
+libxmadaxml_la_LDFLAGS = -no-undefined -version-info $(XMADAXMLLIBVERSIONINFO)
+libxmadaxml_la_LIBADD = \
 	$(top_builddir)/source/xm/libxmadaxm.la \
 	$(top_builddir)/microline/XmL/libXmL.la
 

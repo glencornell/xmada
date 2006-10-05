@@ -20,7 +20,8 @@ ali_DATA = $(ADA_ALIS)
 lib_LTLIBRARIES = libxmadaxlib-extensions.la
 
 libxmadaxlib_extensions_la_SOURCES = $(ADA_SRCS)
-libxmadaxlib_extensions_la_LDFLAGS = -no-undefined -version-info $(XMADAXLIBLIBVERSIONINFO) \
+libxmadaxlib_extensions_la_LDFLAGS = -no-undefined -version-info $(XMADAXLIBLIBVERSIONINFO)
+libxmadaxlib_extensions_la_LIBADD = \
 	$(top_builddir)/source/xlib/libxmadaxlib.la
 
 depend-local:

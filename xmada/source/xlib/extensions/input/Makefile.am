@@ -18,7 +18,8 @@ ali_DATA = $(ADA_ALIS)
 lib_LTLIBRARIES = libxmadaxlib-extensions-input.la
 
 libxmadaxlib_extensions_input_la_SOURCES = $(ADA_SRCS)
-libxmadaxlib_extensions_input_la_LDFLAGS = -no-undefined -version-info $(XMADAXLIBLIBVERSIONINFO) \
+libxmadaxlib_extensions_input_la_LDFLAGS = -no-undefined -version-info $(XMADAXLIBLIBVERSIONINFO)
+libxmadaxlib_extensions_input_la_LIBADD = \
 	$(top_builddir)/source/xlib/extensions/libxmadaxlib-extensions.la
 
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###

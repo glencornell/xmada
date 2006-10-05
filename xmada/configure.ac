@@ -72,7 +72,6 @@ fi
 
 AC_OUTPUT([
 	Makefile
-	examples/calculator/Makefile
 	microline/Makefile
 	microline/XmL/Makefile
 	source/Makefile
