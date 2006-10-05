@@ -1,5 +1,0 @@
-#!/bin/sh
-
-abs_top_builddir="@abs_top_builddir@"
-
-LD_LIBRARY_PATH=${abs_top_builddir}/source/xlib/.libs:${abs_top_builddir}/source/xt/.libs:${abs_top_builddir}/source/xm/.libs:$LD_LIBRARY_PATH XAPPLRESDIR=${abs_top_builddir}/source/designer ${abs_top_builddir}/source/designer/designer-driver
