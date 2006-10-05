@@ -1,5 +1,9 @@
 
-ADACOMPILER = $(top_builddir)/support/adacompiler
+ADACOMPILER	= $(top_builddir)/adacompiler
+LINKER		= $(top_builddir)/linker
+MKDEP		= $(top_srcdir)/adamakedepend
+
+LINK		= $(LINKER) -o $@
 
 GNAT_PG = -gnatpg
 

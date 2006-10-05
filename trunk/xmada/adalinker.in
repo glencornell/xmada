@@ -1,0 +1,75 @@
+#!/bin/sh
+##----------------------------------------------------------------------------
+##
+##  Автоматизированная система организации и управления воздушным движением
+##
+##----------------------------------------------------------------------------
+##! <Copyright>
+##!  Copyright (C) 2005  ТехноСерв А/С
+##!
+##! <Unit> adalinker.in
+##! <Purpose>
+##!   Скрипт для запуска редактора связей языка программирования Ada из
+##! пакета libtool.
+##!
+##! <Effects>
+##! <ImplementationNotes>
+##!   Начальная версия основана на аналогичном модуле из пакета PolyORB.
+##!
+##! <PortabilityIssues>
+##! <AnticipatedChanges>
+##----------------------------------------------------------------------------
+##  $Revision: 3422 $ $Author: godunko $
+##  $Date: 2006-09-16 13:59:18 +0400 (Сбт, 16 Сен 2006) $
+##----------------------------------------------------------------------------
+
+GNATMAKE="@GNATMAKE@"
+abs_top_builddir="@abs_top_builddir@"
+
+##  Выделение списка объектных файлов.
+
+while [ $# -ne 0 ]; do
+    case "$1" in
+        *.o)
+            allobjs="${allobjs} ${1}"
+            shift
+            ;;
+
+        -I*)
+	    args="${args} ${1}"
+	    SEARCHDIRS="${SEARCHDIRS} "`cd "${1#-I}" && pwd`
+	    shift
+	    ;;
+
+        -largs)
+	    break
+	    ;;
+
+        *)
+            args="${args} ${1}"
+	    shift
+	    ;;
+    esac
+done
+
+##  Удаление объектных файлов, соответствующих единицам компиляции Ada.
+
+for file in ${allobjs}; do
+    incl=1
+
+    for dir in ${SEARCHDIRS}; do
+        if [ -f ${dir}/${file/%.o/.ads} ]; then
+	    incl=0
+	    break
+        fi
+    done
+
+    if [ ${incl} -ne 0 ]; then
+	objs="${objs} ${file}"
+    fi
+done
+
+##  Вызов gnatmake для сборки программы.
+
+echo $GNATMAKE -b -l ${args} -largs "$@" ${objs} -bargs -E
+$GNATMAKE -b -l ${args} -largs "$@" ${objs} -bargs -E

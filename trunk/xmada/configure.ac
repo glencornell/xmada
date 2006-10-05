@@ -60,7 +60,9 @@ AC_SUBST(SED)
 # Output generated files
 ##########################################
 
-AC_CONFIG_FILES([support/adacompiler], [chmod +x support/adacompiler])
+AC_CONFIG_FILES([adacompiler], [chmod +x adacompiler])
+AC_CONFIG_FILES([adalinker], [chmod +x adalinker])
+AC_CONFIG_FILES([linker], [chmod +x linker])
 
 # Это условие необходимо заменить специальной обработкой файла при сборке
 # дистрибутива.
