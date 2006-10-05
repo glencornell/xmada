@@ -1,8 +1,6 @@
 
 include $(top_srcdir)/Makefile.common
 
-alidir = $(includedir)/xmada
-
 ADAFLAGS = $(STD_ADAFLAGS) \
 	-I$(srcdir)/../xlib
 
@@ -23,7 +21,7 @@ ADA_SPECS_WITH_BODY = \
 	xt-translation_management.ads \
 	xt-utilities.ads
 
-ADA_SPECS = $(ADA_SPECS_WITH_BODY) \
+ADA_SPECS_WITHOUT_BODY = \
 	xt_application_shell.ads \
 	xt_composite.ads \
 	xt_constraint.ads \
@@ -39,18 +37,19 @@ ADA_SPECS = $(ADA_SPECS_WITH_BODY) \
 	xt_vendor_shell.ads \
 	xt_wm_shell.ads
 
+ADA_SPECS = $(ADA_SPECS_WITH_BODY) $(ADA_SPECS_WITHOUT_BODY)
 ADA_BODIES = $(ADA_SPECS_WITH_BODY:.ads=.adb)
+ADA_HDRS = $(ADA_SPECS) $(ADA_BODIES)
+ADA_SRCS = $(ADA_SPECS_WITHOUT_BODY) $(ADA_BODIES)
+ADA_ALIS = $(ADA_SPECS_WITHOUT_BODY:.ads=.ali) $(ADA_BODIES:.adb=.ali)
 
-ADA_LIBADD = $(ADA_SPECS:.ads=.lo)
-
+pkginclude_HEADERS = $(ADA_HDRS)
+ali_DATA = $(ADA_ALIS)
 lib_LTLIBRARIES = libxmadaxt.la
-libxmadaxt_la_SOURCES =
-libxmadaxt_la_LIBADD = $(ADA_LIBADD)
-libxmadaxt_la_LDFLAGS = -no-undefined -version-info $(XMADAXTLIBVERSIONINFO)
 
-install-data-local:
-	$(INSTALL) -d $(DESTDIR)$(alidir)
-	for f in $(srcdir)/*.ad[sb] *.ali; do $(INSTALL) -m 444 $$f $(DESTDIR)$(alidir); done
+libxmadaxt_la_SOURCES = $(ADA_SRCS)
+libxmadaxt_la_LDFLAGS = -no-undefined -version-info $(XMADAXTLIBVERSIONINFO) \
+	$(top_builddir)/source/xlib/libxmadaxlib.la
 
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
 xt-ancillary_types.lo: \

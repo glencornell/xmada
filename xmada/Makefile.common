@@ -18,22 +18,22 @@ STD_ADAFLAGS = $(STD_CFLAGS)
 STD_BARGS =
 endif
 
-#ADA_BODIES = $(ADA_SPECS_WITH_BODY:.ads=.adb)
-#
-#ADA_LIBADD = $(ADA_SPECS:.ads=.lo)
+alidir = $(libdir)/@PACKAGE@
+aliDATA_INSTALL = $(INSTALL) -m 444
 
 CLEANFILES = *.ali
 
-SUFFIXES = .adb .ads .lo .ali
-
 .ads.lo:
-	@if [ -f `echo $< | sed -e 's/s$$/b/'` ]; then \
-		$(LIBTOOL) --tag=CC --mode=compile $(ADACOMPILER) \
-			-c $(ADAFLAGS) `echo $< | sed -e 's/s$$/b/'`; \
-	else \
-		$(LIBTOOL) --tag=CC --mode=compile $(ADACOMPILER) \
-			-c $(ADAFLAGS) $<; \
-	fi
+	$(LIBTOOL) --tag=CC --mode=compile $(ADACOMPILER) -c $(ADAFLAGS) $<
 
-depend-local:
-	$(top_srcdir)/support/mkdep $(top_srcdir) $(srcdir) $(ADAFLAGS)
+.adb.lo:
+	$(LIBTOOL) --tag=CC --mode=compile $(ADACOMPILER) -c $(ADAFLAGS) $<
+
+.ads.o:
+	$(ADACOMPILER) -c $(ADAFLAGS) $< -o $@
+
+.adb.o:
+	$(ADACOMPILER) -c $(ADAFLAGS) $< -o $@
+
+depend-local: all
+	$(MKDEP) "$(top_srcdir)" "$(top_builddir)" "$(srcdir)" "$(builddir)" $(ADAFLAGS)

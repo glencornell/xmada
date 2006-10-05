@@ -1,8 +1,6 @@
 
 include $(top_srcdir)/Makefile.common
 
-alidir = $(includedir)/xmada
-
 ADAFLAGS = $(STD_ADAFLAGS) \
 	-I$(srcdir)/../xlib \
 	-I$(srcdir)/../xlib/extensions \
@@ -65,7 +63,7 @@ ADA_SPECS_WITH_BODY = \
 	xm-traversal_management.ads \
 	xm-utilities.ads
 
-ADA_SPECS = $(ADA_SPECS_WITH_BODY) \
+ADA_SPECS_WITHOUT_BODY = \
 	xm_display.ads \
 	xm_drag_context.ads \
 	xm_drag_icon.ads \
@@ -77,22 +75,24 @@ ADA_SPECS = $(ADA_SPECS_WITH_BODY) \
 	xm_screen.ads \
 	xm_string_defs.ads
 
+ADA_SPECS = $(ADA_SPECS_WITH_BODY) $(ADA_SPECS_WITHOUT_BODY)
 ADA_BODIES = $(ADA_SPECS_WITH_BODY:.ads=.adb)
+ADA_HDRS = $(ADA_SPECS) $(ADA_BODIES)
+ADA_SRCS = $(ADA_SPECS_WITHOUT_BODY) $(ADA_BODIES)
+ADA_ALIS = $(ADA_SPECS_WITHOUT_BODY:.ads=.ali) $(ADA_BODIES:.adb=.ali)
 
-ADA_LIBADD = $(ADA_SPECS:.ads=.lo)
-
+pkginclude_HEADERS = $(ADA_HDRS)
+ali_DATA = $(ADA_ALIS)
 lib_LTLIBRARIES = libxmadaxm.la
-libxmadaxm_la_SOURCES =
-libxmadaxm_la_LIBADD = $(ADA_LIBADD)
-libxmadaxm_la_LDFLAGS = -no-undefined -version-info $(XMADAXMLIBVERSIONINFO)
+
+libxmadaxm_la_SOURCES = $(ADA_SRCS)
+libxmadaxm_la_LDFLAGS = -no-undefined -version-info $(XMADAXMLIBVERSIONINFO) \
+	$(top_builddir)/source/xt/libxmadaxt.la \
+	$(top_builddir)/source/xlib/extensions/print/libxmadaxlib-extensions-print.la
 
 i-cwistr.lo: i-cwistr.adb
 	@chmod a+x $(ADACOMPILER)
 	$(LIBTOOL) --tag=CC --mode=compile $(ADACOMPILER) -c $(ADAFLAGS) $(GNAT_PG) $<
-
-install-data-local:
-	$(INSTALL) -d $(DESTDIR)$(alidir)
-	for f in $(srcdir)/*.ad[sb] *.ali; do $(INSTALL) -m 444 $$f $(DESTDIR)$(alidir); done
 
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
 i-cwistr.lo: \
