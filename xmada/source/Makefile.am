@@ -1,11 +1,5 @@
-#AUTOMAKE_OPTIONS = foreign no-dependencies
-#ACLOCAL_AMFLAGS = -I support
 
-SUBDIRS = xlib xt xm
-
-if HAVE_LIBXML
-SUBDIRS += xml
-endif
+SUBDIRS = xlib xt xm xml
 
 SUBDIRS += designer
 
