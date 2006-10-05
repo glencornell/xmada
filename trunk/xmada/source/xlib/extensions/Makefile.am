@@ -1,4 +1,5 @@
-include ../../../support/Makefile.common
+
+include $(top_srcdir)/Makefile.common
 
 SUBDIRS=input print
 

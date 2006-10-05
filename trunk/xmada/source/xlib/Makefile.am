@@ -1,6 +1,7 @@
-include ../../support/Makefile.common
 
-SUBDIRS=extensions
+include $(top_srcdir)/Makefile.common
+
+SUBDIRS = extensions
 
 alidir = $(includedir)/xmada
 

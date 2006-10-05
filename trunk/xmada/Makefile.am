@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = foreign no-dependencies
+AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I support
 
 SUBDIRS = microline source
