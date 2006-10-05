@@ -1,4 +1,4 @@
-include ../../../../support/Makefile.common
+include $(top_srcdir)/Makefile.common
 
 alidir = $(includedir)/xmada
 

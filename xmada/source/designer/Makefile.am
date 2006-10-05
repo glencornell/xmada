@@ -1,4 +1,5 @@
-include $(top_srcdir)/support/Makefile.common
+
+include $(top_srcdir)/Makefile.common
 
 ADAFLAGS = $(STD_ADAFLAGS) \
 	-I$(srcdir) \
