@@ -46,17 +46,17 @@
 
 --  Модули поддержки набора виджетов Microline.
 
-@HAVE_LIBXML@with Model.Initialization.Designer.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Model.Initialization.Designer.Microline);
+with Model.Initialization.Designer.Microline;
+pragma Warnings (Off, Model.Initialization.Designer.Microline);
 
-@HAVE_LIBXML@with Model.Initialization.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Model.Initialization.Microline);
+with Model.Initialization.Microline;
+pragma Warnings (Off, Model.Initialization.Microline);
 
-@HAVE_LIBXML@with Model.Initialization.Xm_Ada.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Model.Initialization.Xm_Ada.Microline);
+with Model.Initialization.Xm_Ada.Microline;
+pragma Warnings (Off, Model.Initialization.Xm_Ada.Microline);
 
-@HAVE_LIBXML@with Designer.Visual_Editor.Microline;
-@HAVE_LIBXML@pragma Warnings (Off, Designer.Visual_Editor.Microline);
+with Designer.Visual_Editor.Microline;
+pragma Warnings (Off, Designer.Visual_Editor.Microline);
 
 package body Designer.Setup is
 

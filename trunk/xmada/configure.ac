@@ -19,7 +19,7 @@ AC_SUBST(XMADAXMLIBVERSIONINFO)
 AC_SUBST(XMADAXMLLIBVERSIONINFO)
 
 AM_ENABLE_SHARED(yes)
-AM_ENABLE_STATIC(yes)
+AM_ENABLE_STATIC(no)
 AM_PROG_LIBTOOL
 
 ##  Поиск всех необходимых бибилотек X Window, X Toolkit Intrinsics и Motif.
@@ -48,20 +48,6 @@ fi
 
 AC_CHECK_LIB(Xm, XmGetDestination)
 
-##  Поиск наличия библиотеки Microline.
-
-AC_CHECK_LIB(XmL, XmLCreateGrid,
-[AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIBXML))
- LIBS="-L$x_libraries $LIBS"
- MISS_LIBXML="--  "
-],
-[HAVE_LIBXML="--  "])
-AC_SUBST(HAVE_LIBXML)
-AC_SUBST(MISS_LIBXML)
- 
-AM_CONDITIONAL(HAVE_LIBXML, [test "x$HAVE_LIBXML" = "x"])
-AC_SUBST(XMADACONFIGLIBPATHS)
-
 AM_PROG_WORKING_ADA
 AM_CROSS_PROG_WORKING_ADA
 AM_HAS_GNAT_SYMBOLIC_TRACEBACK
@@ -85,6 +71,8 @@ fi
 AC_OUTPUT([
 	Makefile
 	examples/calculator/Makefile
+	microline/Makefile
+	microline/XmL/Makefile
 	source/Makefile
 	source/designer/Makefile
 	source/designer/designer
