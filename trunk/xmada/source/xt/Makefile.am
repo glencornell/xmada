@@ -48,7 +48,8 @@ ali_DATA = $(ADA_ALIS)
 lib_LTLIBRARIES = libxmadaxt.la
 
 libxmadaxt_la_SOURCES = $(ADA_SRCS)
-libxmadaxt_la_LDFLAGS = -no-undefined -version-info $(XMADAXTLIBVERSIONINFO) \
+libxmadaxt_la_LDFLAGS = -no-undefined -version-info $(XMADAXTLIBVERSIONINFO)
+libxmadaxt_la_LIBADD = \
 	$(top_builddir)/source/xlib/libxmadaxlib.la
 
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###

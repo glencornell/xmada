@@ -86,7 +86,8 @@ ali_DATA = $(ADA_ALIS)
 lib_LTLIBRARIES = libxmadaxm.la
 
 libxmadaxm_la_SOURCES = $(ADA_SRCS)
-libxmadaxm_la_LDFLAGS = -no-undefined -version-info $(XMADAXMLIBVERSIONINFO) \
+libxmadaxm_la_LDFLAGS = -no-undefined -version-info $(XMADAXMLIBVERSIONINFO)
+libxmadaxm_la_LIBADD = \
 	$(top_builddir)/source/xt/libxmadaxt.la \
 	$(top_builddir)/source/xlib/extensions/print/libxmadaxlib-extensions-print.la
 
