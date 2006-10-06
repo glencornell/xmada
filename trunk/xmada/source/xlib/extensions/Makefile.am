@@ -24,9 +24,6 @@ libxmadaxlib_extensions_la_LDFLAGS = -no-undefined -version-info $(XMADAXLIBLIBV
 libxmadaxlib_extensions_la_LIBADD = \
 	$(top_builddir)/source/xlib/libxmadaxlib.la
 
-depend-local:
-	for d in $(SUBDIRS); do \
-		(cd $$d && ${MAKE} depend-local); \
-	done
-
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
+xlib-extensions.lo xlib-extensions.o: \
+	$(top_srcdir)/source/xlib/xlib.ads

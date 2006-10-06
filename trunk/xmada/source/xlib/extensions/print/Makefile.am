@@ -24,9 +24,7 @@ libxmadaxlib_extensions_print_la_LIBADD = \
 	$(top_builddir)/source/xlib/extensions/libxmadaxlib-extensions.la
 
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
-xlib-extensions-print.lo: \
-	$(srcdir)/xlib-extensions-print.adb \
-	$(srcdir)/xlib-extensions-print.ads \
+xlib-extensions-print.lo xlib-extensions-print.o: \
 	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib.ads

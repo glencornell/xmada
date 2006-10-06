@@ -30,42 +30,4 @@ lib_LTLIBRARIES = libxmadaxlib.la
 libxmadaxlib_la_SOURCES = $(ADA_SRCS)
 libxmadaxlib_la_LDFLAGS = -no-undefined -version-info $(XMADAXLIBLIBVERSIONINFO)
 
-depend-local:
-	for d in $(SUBDIRS); do \
-		(cd $$d && ${MAKE} depend-local); \
-	done
-
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
-xlib-atoms.lo: \
-	$(srcdir)/xlib-atoms.adb \
-	$(srcdir)/xlib-atoms.ads \
-	$(srcdir)/xlib-implementation.ads \
-	$(srcdir)/xlib.ads
-xlib-colors.lo: \
-	$(srcdir)/xlib-colors.ads \
-	$(srcdir)/xlib.ads
-xlib-cursors.lo: \
-	$(srcdir)/xlib-cursors.ads \
-	$(srcdir)/xlib.ads
-xlib-events.lo: \
-	$(srcdir)/xlib-events.adb \
-	$(srcdir)/xlib-events.ads \
-	$(srcdir)/xlib-implementation.ads \
-	$(srcdir)/xlib.ads
-xlib-graphic_output.lo: \
-	$(srcdir)/xlib-graphic_output.adb \
-	$(srcdir)/xlib-graphic_output.ads \
-	$(srcdir)/xlib-implementation.ads \
-	$(srcdir)/xlib.ads
-xlib-implementation.lo: \
-	$(srcdir)/xlib-implementation.adb \
-	$(srcdir)/xlib-implementation.ads \
-	$(srcdir)/xlib.ads
-xlib-resource_manager.lo: \
-	$(srcdir)/xlib-resource_manager.ads \
-	$(srcdir)/xlib.ads
-xlib.lo: \
-	$(srcdir)/xlib-implementation.adb \
-	$(srcdir)/xlib-implementation.ads \
-	$(srcdir)/xlib.adb \
-	$(srcdir)/xlib.ads

@@ -53,260 +53,132 @@ libxmadaxt_la_LIBADD = \
 	$(top_builddir)/source/xlib/libxmadaxlib.la
 
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
-xt-ancillary_types.lo: \
+xt-ancillary_types.lo xt-ancillary_types.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-ancillary_types.adb \
-	$(srcdir)/xt-ancillary_types.ads \
-	$(srcdir)/xt.ads
-xt-boolean_operations.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-boolean_operations.lo xt-boolean_operations.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-boolean_operations.adb \
-	$(srcdir)/xt-boolean_operations.ads \
-	$(srcdir)/xt.ads
-xt-callbacks.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-callbacks.lo xt-callbacks.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-callbacks.adb \
-	$(srcdir)/xt-callbacks.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt.ads
-xt-class_management.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-class_management.lo xt-class_management.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-class_management.adb \
-	$(srcdir)/xt-class_management.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt.ads
-xt-composite_management.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-composite_management.lo xt-composite_management.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-composite_management.adb \
-	$(srcdir)/xt-composite_management.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt.ads
-xt-event_management.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-event_management.lo xt-event_management.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-event_management.adb \
-	$(srcdir)/xt-event_management.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt.ads
-xt-geometry_management.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-geometry_management.lo xt-geometry_management.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-geometry_management.adb \
-	$(srcdir)/xt-geometry_management.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt.ads
-xt-implementation.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-implementation.lo xt-implementation.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-implementation.adb \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt.ads
-xt-initializers.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-initializers.lo xt-initializers.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-ancillary_types.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt-initializers.adb \
-	$(srcdir)/xt-initializers.ads \
-	$(srcdir)/xt.ads
-xt-instance_management.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-instance_management.lo xt-instance_management.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-ancillary_types.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt-instance_management.adb \
-	$(srcdir)/xt-instance_management.ads \
-	$(srcdir)/xt.ads
-xt-popup_management.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-popup_management.lo xt-popup_management.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-ancillary_types.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt-popup_management.adb \
-	$(srcdir)/xt-popup_management.ads \
-	$(srcdir)/xt.ads
-xt-resource_management.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-resource_management.lo xt-resource_management.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-ancillary_types.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt-resource_management.adb \
-	$(srcdir)/xt-resource_management.ads \
-	$(srcdir)/xt-translation_management.ads \
-	$(srcdir)/xt.ads
-xt-translation_management.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-translation_management.lo xt-translation_management.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt-translation_management.adb \
-	$(srcdir)/xt-translation_management.ads \
-	$(srcdir)/xt.ads
-xt-utilities.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt-utilities.lo xt-utilities.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-graphic_output.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt-class_management.ads \
-	$(srcdir)/xt-implementation.ads \
-	$(srcdir)/xt-utilities.adb \
-	$(srcdir)/xt-utilities.ads \
-	$(srcdir)/xt.ads
-xt.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt.lo xt.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.adb \
-	$(srcdir)/xt.ads
-xt_application_shell.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_application_shell.lo xt_application_shell.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_application_shell.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_core.ads \
-	$(srcdir)/xt_shell.ads \
-	$(srcdir)/xt_top_level_shell.ads \
-	$(srcdir)/xt_vendor_shell.ads \
-	$(srcdir)/xt_wm_shell.ads
-xt_composite.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_composite.lo xt_composite.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_core.ads
-xt_constraint.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_constraint.lo xt_constraint.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_constraint.ads \
-	$(srcdir)/xt_core.ads
-xt_core.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_core.lo xt_core.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_core.ads
-xt_object.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_object.lo xt_object.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_object.ads
-xt_override_shell.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_override_shell.lo xt_override_shell.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_core.ads \
-	$(srcdir)/xt_override_shell.ads \
-	$(srcdir)/xt_shell.ads
-xt_rect_obj.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_rect_obj.lo xt_rect_obj.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_object.ads \
-	$(srcdir)/xt_rect_obj.ads
-xt_session_shell.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_session_shell.lo xt_session_shell.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_application_shell.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_core.ads \
-	$(srcdir)/xt_session_shell.ads \
-	$(srcdir)/xt_shell.ads \
-	$(srcdir)/xt_top_level_shell.ads \
-	$(srcdir)/xt_vendor_shell.ads \
-	$(srcdir)/xt_wm_shell.ads
-xt_shell.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_shell.lo xt_shell.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_core.ads \
-	$(srcdir)/xt_shell.ads
-xt_string_defs.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_string_defs.lo xt_string_defs.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_string_defs.ads
-xt_top_level_shell.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_top_level_shell.lo xt_top_level_shell.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_core.ads \
-	$(srcdir)/xt_shell.ads \
-	$(srcdir)/xt_top_level_shell.ads \
-	$(srcdir)/xt_vendor_shell.ads \
-	$(srcdir)/xt_wm_shell.ads
-xt_transient_shell.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_transient_shell.lo xt_transient_shell.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_core.ads \
-	$(srcdir)/xt_shell.ads \
-	$(srcdir)/xt_transient_shell.ads \
-	$(srcdir)/xt_vendor_shell.ads \
-	$(srcdir)/xt_wm_shell.ads
-xt_vendor_shell.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_vendor_shell.lo xt_vendor_shell.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_core.ads \
-	$(srcdir)/xt_shell.ads \
-	$(srcdir)/xt_vendor_shell.ads \
-	$(srcdir)/xt_wm_shell.ads
-xt_wm_shell.lo: \
+	$(top_srcdir)/source/xlib/xlib.ads
+xt_wm_shell.lo xt_wm_shell.o: \
 	$(top_srcdir)/source/xlib/xlib-events.ads \
 	$(top_srcdir)/source/xlib/xlib-resource_manager.ads \
-	$(top_srcdir)/source/xlib/xlib.ads \
-	$(srcdir)/xt.ads \
-	$(srcdir)/xt_composite.ads \
-	$(srcdir)/xt_core.ads \
-	$(srcdir)/xt_shell.ads \
-	$(srcdir)/xt_wm_shell.ads
+	$(top_srcdir)/source/xlib/xlib.ads

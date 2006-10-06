@@ -1,3 +1,4 @@
+
 include $(top_srcdir)/Makefile.common
 
 ADAFLAGS = $(STD_ADAFLAGS) \
@@ -23,11 +24,9 @@ libxmadaxlib_extensions_input_la_LIBADD = \
 	$(top_builddir)/source/xlib/extensions/libxmadaxlib-extensions.la
 
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
-xlib-extensions-input_device.lo: \
-	$(srcdir)/xlib-extensions-input_device.adb \
-	$(srcdir)/xlib-extensions-input_device.ads \
-	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
+xlib-extensions-input_device.lo xlib-extensions-input_device.o: \
 	$(top_srcdir)/source/xlib/xlib-atoms.ads \
+	$(top_srcdir)/source/xlib/extensions/xlib-extensions.ads \
 	$(top_srcdir)/source/xlib/xlib-implementation.adb \
 	$(top_srcdir)/source/xlib/xlib-implementation.ads \
 	$(top_srcdir)/source/xlib/xlib.ads
