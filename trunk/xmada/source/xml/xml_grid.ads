@@ -105,8 +105,6 @@ package XmL_Grid is
 
 private
 
-   pragma Linker_Options ("-lXmL");
-
    pragma Import (C, XmL_Grid_Widget_Class, "xmlGridWidgetClass");
 
 end XmL_Grid;
