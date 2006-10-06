@@ -362,6 +362,8 @@ typedef struct
 #define XmCCellPixmap "CellPixmap"
 #define XmNcellPixmapMask "cellPixmapMask"
 #define XmCCellPixmapMask "CellPixmapMask"
+#define XmNcellRenderTable "cellRenderTable"
+#define XmCCellRenderTable "CellRenderTable"
 #define XmNcellRightBorderType "cellRightBorderType"
 #define XmCCellRightBorderType "CellRightBorderType"
 #define XmNcellRightBorderColor "cellRightBorderColor"

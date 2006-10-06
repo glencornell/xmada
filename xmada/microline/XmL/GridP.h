@@ -440,6 +440,8 @@ typedef struct _XmLGridPart
     /* Edit timer is used for inplace editing */
 	char editTimerSet;
 	XtIntervalId editTimerId;
+    /* Motif 2.x additions */
+        char check_set_render_table;
 	} XmLGridPart;
 
 typedef struct _XmLGridRec
@@ -494,4 +496,4 @@ typedef struct _XmLGridConstraintRec
 	XmLGridConstraintPart grid;
 	} XmLGridConstraintRec, *XmLGridConstraintPtr;
 
-#endif 
+#endif

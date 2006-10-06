@@ -138,7 +138,7 @@ static void TextAction(XmLGridWidget g, int action);
 /* Getting and Setting Values */
 static void GetSubValues(Widget w, ArgList args, Cardinal *nargs);
 static void SetSubValues(Widget w, ArgList args, Cardinal *nargs);
-static Boolean SetValues(Widget curW, Widget, Widget newW, 
+static Boolean SetValues(Widget curW, Widget, Widget newW,
 	ArgList args, Cardinal *nargs);
 static void CopyFontList(XmLGridWidget g);
 static Boolean CvtStringToSizePolicy(Display *dpy, XrmValuePtr args,
@@ -340,6 +340,9 @@ static Boolean XmLGridCellDrawSort(XmLGridCell cell);
 static Boolean XmLGridCellSortAscending(XmLGridCell cell);
 static void XmLGridCellSetDrawSort(XmLGridCell cell, Boolean drawSort);
 static void XmLGridCellSetSortAscending(XmLGridCell cell, Boolean ascending);
+
+/* Motif 2.x additions */
+static void CheckSetRenderTable(Widget wid, int offset, XrmValue *value);
 
 static XtActionsRec actions[] =
 	{
@@ -625,12 +628,36 @@ static XtResource resources[] =
 		XmRString, (XtPointer)editTranslations,
 		},
 		{
+                "pri.vate", "Pri.vate",
+                XmRUnsignedChar, sizeof(unsigned char),
+                XtOffset(XmLGridWidget, grid.check_set_render_table),
+                XmRImmediate, 0
+                },
+                {
 		XmNfontList, XmCFontList,
 		XmRFontList, sizeof(XmFontList),
 		XtOffset(XmLGridWidget, grid.fontList),
-		XmRImmediate, (XtPointer)0
+                XmRCallProc, (XtPointer)CheckSetRenderTable
 		},
 		{
+		XmNcellFontList, XmCCellFontList,
+		XmRFontList, sizeof(XmFontList),
+		XtOffset(XmLGridWidget, grid.cellValues.fontList),
+		XmRCallProc, (XtPointer)CheckSetRenderTable
+		},
+		{
+		XmNrenderTable, XmCRenderTable,
+		XmRRenderTable, sizeof(XmRenderTable),
+		XtOffset(XmLGridWidget, grid.fontList),
+		XmRCallProc, (XtPointer)CheckSetRenderTable
+		},
+		{
+		XmNcellRenderTable, XmCCellRenderTable,
+		XmRRenderTable, sizeof(XmRenderTable),
+		XtOffset(XmLGridWidget, grid.cellValues.fontList),
+		XmRCallProc, (XtPointer)CheckSetRenderTable
+                },
+                {
 		XmNfooterColumns, XmCFooterColumns,
 		XmRInt, sizeof(int),
 		XtOffset(XmLGridWidget, grid.footerColCount),
@@ -920,39 +947,39 @@ static XtResource resources[] =
 		XmRImmediate, (XtPointer)0,
 		},
 		{
-			XmNenterCellCallback, 
+			XmNenterCellCallback,
 			XmCCallback,
-			XmRCallback, 
+			XmRCallback,
 			sizeof(XtCallbackList),
 			XtOffset(XmLGridWidget, grid . enterCellCallback),
-			XmRImmediate, 
+			XmRImmediate,
 			(XtPointer) NULL
 		},
 		{
-			XmNleaveCellCallback, 
+			XmNleaveCellCallback,
 			XmCCallback,
-			XmRCallback, 
+			XmRCallback,
 			sizeof(XtCallbackList),
 			XtOffset(XmLGridWidget, grid . leaveCellCallback),
-			XmRImmediate, 
+			XmRImmediate,
 			(XtPointer) NULL
 		},
 		{
-			XmNenterGridCallback, 
+			XmNenterGridCallback,
 			XmCCallback,
-			XmRCallback, 
+			XmRCallback,
 			sizeof(XtCallbackList),
 			XtOffset(XmLGridWidget, grid . enterGridCallback),
-			XmRImmediate, 
+			XmRImmediate,
 			(XtPointer) NULL
 		},
 		{
-			XmNleaveGridCallback, 
+			XmNleaveGridCallback,
 			XmCCallback,
-			XmRCallback, 
+			XmRCallback,
 			sizeof(XtCallbackList),
 			XtOffset(XmLGridWidget, grid . leaveGridCallback),
-			XmRImmediate, 
+			XmRImmediate,
 			(XtPointer) NULL
 		},
 
@@ -1110,12 +1137,8 @@ static XtResource resources[] =
 		XtOffset(XmLGridWidget, grid.cellValues.editable),
 		XmRImmediate, (XtPointer)False,
 		},
-		{
-		XmNcellFontList, XmCCellFontList,
-		XmRFontList, sizeof(XmFontList),
-		XtOffset(XmLGridWidget, grid.cellValues.fontList),
-		XmRImmediate, (XtPointer)0,
-		},
+                /* Cell's fontList and renderTable moved up for correct
+                   processing */
 		{
 		XmNcellForeground, XmCCellForeground,
 		XmRPixel, sizeof(Pixel),
@@ -1360,7 +1383,7 @@ WidgetClass xmlGridWidgetClass = (WidgetClass)&xmlGridClassRec;
    Create and Destroy
 */
 
-static void 
+static void
 ClassInitialize(void)
 	{
 	int off1, off2;
@@ -1394,7 +1417,7 @@ ClassInitialize(void)
 		fprintf(stderr, "xmlGridClass: fatal error: row pos offset bad\n");
 	}
 
-static void 
+static void
 ClassPartInitialize(WidgetClass wc)
 	{
 	XmLGridWidgetClass c, sc;
@@ -1424,7 +1447,7 @@ ClassPartInitialize(WidgetClass wc)
 #undef INHERIT_PROC
 	}
 
-static void 
+static void
 Initialize(Widget reqW,
 	   Widget newW,
 	   ArgList args,
@@ -1449,7 +1472,7 @@ Initialize(Widget reqW,
 
 #ifdef POINTER_FOCUS_CHECK
 	shell = XmLShellOfWidget(newW);
-	if (shell && XmIsVendorShell(shell)) 
+	if (shell && XmIsVendorShell(shell))
 		{
 		XtVaGetValues(shell,
 			XmNkeyboardFocusPolicy, &kfp,
@@ -1465,9 +1488,9 @@ Initialize(Widget reqW,
 	g->grid.rowArray = XmLArrayNew(1, 1);
 	g->grid.colArray = XmLArrayNew(1, 1);
 
-	if (g->core.width <= 0) 
+	if (g->core.width <= 0)
 		g->core.width = 100;
-	if (g->core.height <= 0) 
+	if (g->core.height <= 0)
 		g->core.height = 100;
 
 	CopyFontList(g);
@@ -1600,7 +1623,7 @@ Initialize(Widget reqW,
 	/*
 	 * Support for:
 	 *
-	 * XmNenterCellCallback 
+	 * XmNenterCellCallback
 	 * XmNenterCellCallback
 	 * XmNenterCallback
 	 * XmNleaveCallback
@@ -1608,7 +1631,7 @@ Initialize(Widget reqW,
 	g->grid.lastCursorMotionRow = -1;
 	g->grid.lastCursorMotionCol = -1;
 
-	XtAddEventHandler(newW, 
+	XtAddEventHandler(newW,
 					  EnterWindowMask | LeaveWindowMask,
 					  True,
 					  (XtEventHandler) GridCrossingEH,
@@ -1740,7 +1763,7 @@ Destroy(Widget w)
    Geometry, Drawing, Entry and Picking
 */
 
-static void 
+static void
 Realize(Widget w,
 	XtValueMask *valueMask,
 	XSetWindowAttributes *attr)
@@ -1830,8 +1853,8 @@ Redisplay(Widget w,
 	if (XtHasCallbacks(w, XmNcellDrawCallback) == XtCallbackHasSome)
 			hasDrawCB = 1;
 
-    /* Add extra shadow around the whole widget 
-     * if 512 is set for shadow regions 
+    /* Add extra shadow around the whole widget
+     * if 512 is set for shadow regions
      */
     if (g->grid.shadowRegions == 512
         && g->manager.shadow_thickness
@@ -1922,7 +1945,7 @@ Redisplay(Widget w,
 				if (g->grid.singleColScrollMode)
 					rRect.x -= g->grid.singleColScrollPos;
 				rRect.width = GetColWidth(g, c);
-#if 0                
+#if 0
                 if (i == 1 && r == reg[1].row && c == reg[1].col - 1)
                     {
                         rRect.width -= 10;
@@ -2242,7 +2265,7 @@ DrawXORRect(XmLGridWidget g,
 	XSetFunction(dpy, gc, GXcopy);
 	}
 
-static void 
+static void
 DefineCursor(XmLGridWidget g,
 	     char defineCursor)
 	{
@@ -2468,7 +2491,7 @@ ExtendSelectRange(XmLGridWidget g,
 		}
 	}
 
-static void 
+static void
 ExtendSelect(XmLGridWidget g,
 	     XEvent *event,
 	     Boolean set,
@@ -2529,7 +2552,7 @@ ExtendSelect(XmLGridWidget g,
 				g->grid.extendSelect, True);
 	}
 
-static void 
+static void
 SelectTypeArea(XmLGridWidget g,
 	       int type,
 	       XEvent *event,
@@ -2681,7 +2704,7 @@ SelectTypeArea(XmLGridWidget g,
 		XmLWarning((Widget)g, "SelectTypeArea() - bad position");
 	}
 
-static int 
+static int
 GetSelectedArea(XmLGridWidget g,
 		int type,
 		int *rowPos,
@@ -2810,13 +2833,13 @@ PlaceScrollbars(XmLGridWidget g)
 		height -= hsb->core.height;
 
 	y = 0;
-	
+
 	if (g->grid.headingRowCount > 0)
 	  {
 	    XmLGridRow rowp;
 
 	    rowp = (XmLGridRow)XmLArrayGet(g->grid.rowArray, 0);
-	    
+
 	    headingRowHeight = XmLGridRowHeightInPixels(rowp) + st;
 	  }
 
@@ -2834,12 +2857,12 @@ PlaceScrollbars(XmLGridWidget g)
 
 		   This is pretty braindead... */
 
-		XtConfigureWidget(g->grid.unhideButton, 
+		XtConfigureWidget(g->grid.unhideButton,
 				  g->core.width - buttonWidth*2 - st,
 				  y + st,
 				  buttonWidth,
 				  headingRowHeight - st, 0);
-		XtConfigureWidget(g->grid.hideButton, 
+		XtConfigureWidget(g->grid.hideButton,
 				  g->core.width - buttonWidth - st,
 				  y + st,
 				  buttonWidth,
@@ -2851,22 +2874,22 @@ PlaceScrollbars(XmLGridWidget g)
 		   Doing it in this order (position, then manage) reduces
 		   screen flickering -- the button doesn't flash on in the
 		   upper left corner for an instant. */
-		if (!XtIsManaged(g->grid.hideButton)) 
+		if (!XtIsManaged(g->grid.hideButton))
 		    XtManageChild(g->grid.hideButton);
-		if (!XtIsManaged(g->grid.unhideButton)) 
+		if (!XtIsManaged(g->grid.unhideButton))
 		    XtManageChild(g->grid.unhideButton);
 	    }
 
 	if (height <= 0)
 		width = 1;
 	x = g->core.width - vsb->core.width;
-	XtConfigureWidget(vsb, 
-			  x, y + headingRowHeight + g->manager.shadow_thickness, 
-			  vsb->core.width, height - headingRowHeight - g->manager.shadow_thickness, 
+	XtConfigureWidget(vsb,
+			  x, y + headingRowHeight + g->manager.shadow_thickness,
+			  vsb->core.width, height - headingRowHeight - g->manager.shadow_thickness,
 			  0);
 	}
 
-void 
+void
 _XmLGridLayout(XmLGridWidget g)
 	{
 	VertLayout(g, 1);
@@ -2937,7 +2960,7 @@ VertLayout(XmLGridWidget g,
 		height += botHeight + g->grid.bottomFixedMargin;
 	if (XtIsManaged(g->grid.hsb))
 		{
-		height += g->grid.hsb->core.height; 
+		height += g->grid.hsb->core.height;
 		height += g->grid.scrollBarMargin;
 		}
 	maxHeight = g->core.height - height;
@@ -3170,7 +3193,7 @@ HorizLayout(XmLGridWidget g,
     else
         colCount = g->grid.colCount + g->grid.headingColCount
             + g->grid.footerColCount;
-    
+
     if (g->grid.hsPolicy == XmRESIZE_IF_POSSIBLE)
         {
         SizeColumnsToFit(g, 0);
@@ -3209,7 +3232,7 @@ HorizLayout(XmLGridWidget g,
 		width += rightWidth + g->grid.rightFixedMargin;
 	if (XtIsManaged(g->grid.vsb))
 		{
-		width += g->grid.vsb->core.width; 
+		width += g->grid.vsb->core.width;
 		width += g->grid.scrollBarMargin;
 		}
 	maxWidth = g->core.width - width;
@@ -3221,7 +3244,7 @@ HorizLayout(XmLGridWidget g,
 		else
 			midWidth = st2;
 
-        /* This assumes the show/hide buttons will be wider 
+        /* This assumes the show/hide buttons will be wider
            than the vertical scrollbar
          */
         if (g->grid.hsPolicy == XmRESIZE_IF_POSSIBLE)
@@ -3518,7 +3541,7 @@ VisPosChanged(XmLGridWidget g,
 		g->grid.recalcHorizVisPos = 1;
 	}
 
-static void 
+static void
 RecalcVisPos(XmLGridWidget g,
 	     int isVert)
 	{
@@ -3559,7 +3582,7 @@ RecalcVisPos(XmLGridWidget g,
 		}
 	}
 
-static int 
+static int
 PosToVisPos(XmLGridWidget g,
 	    int pos,
 	    int isVert)
@@ -3695,7 +3718,7 @@ ColPosToType(XmLGridWidget g,
 	return type;
 	}
 
-static int 
+static int
 ColPosToTypePos(XmLGridWidget g,
 		unsigned char type,
 		int pos)
@@ -3711,7 +3734,7 @@ ColPosToTypePos(XmLGridWidget g,
 	return c;
 	}
 
-static unsigned char 
+static unsigned char
 RowPosToType(XmLGridWidget g,
 	     int pos)
 	{
@@ -3742,7 +3765,7 @@ RowPosToTypePos(XmLGridWidget g,
 	return r;
 	}
 
-static int 
+static int
 ColTypePosToPos(XmLGridWidget g,
 		unsigned char type,
 		int pos,
@@ -3884,7 +3907,7 @@ PosIsResize(XmLGridWidget g,
 {
 	XRectangle rect;
 	int i, nx, ny, margin;
-	
+
 	/* check for bottom resize */
 	if (g->grid.allowRowResize == True)
 		for (i = 0; i < 2; i++)
@@ -3910,7 +3933,7 @@ PosIsResize(XmLGridWidget g,
         {
           XmLGridColumn colp;
           int c;
-                
+
           nx = x - (4 * i);
           ny = y;
 
@@ -3922,16 +3945,16 @@ PosIsResize(XmLGridWidget g,
               Boolean foundResizable = 0;
 
               colp = (XmLGridColumn)XmLArrayGet(g->grid.colArray, *col);
-              
+
               if (!colp->grid.resizable)
                 continue;
-              
+
               for (c = *col + 1;
                    c < XmLArrayGetCount(g->grid.colArray);
                    c ++)
                 {
                   colp = (XmLGridColumn)XmLArrayGet(g->grid.colArray, c);
-                  
+
                   if (colp->grid.resizable
                       && (g->grid.hsPolicy != XmRESIZE_IF_POSSIBLE
                           || (g->grid.visibleCols == 0
@@ -3955,7 +3978,7 @@ PosIsResize(XmLGridWidget g,
 	return 0;
 }
 
-int 
+int
 XmLGridPosIsResize(Widget g,
 		   int x,
 		   int y)
@@ -4083,7 +4106,7 @@ RowColFirstSpan(XmLGridWidget g,
 		int row,
 		int col,
 		int *firstRow,
-		int *firstCol, 
+		int *firstCol,
 		XRectangle *rect,
 		Boolean lookLeft,
 		Boolean lookUp)
@@ -4433,7 +4456,7 @@ ChangeFocus(XmLGridWidget g,
 			}
 		}
 	}
-	
+
 static void
 MakeColVisible(XmLGridWidget g,
 	       int col)
@@ -4551,7 +4574,7 @@ TextAction(XmLGridWidget g,
 		case TEXT_EDIT:
 		case TEXT_EDIT_INSERT:
 			{
-			if (g->grid.inEdit || !isVisible)	
+			if (g->grid.inEdit || !isVisible)
 				return;
 			g->grid.inEdit = 1;
 			if (action == TEXT_EDIT)
@@ -4995,7 +5018,7 @@ SetValues(Widget curW,
 	int tfc, bfc, lfc, rfc;
 	int needsVertLayout, needsHorizLayout, needsRedraw;
 	XmLGridCellRefValues *cellValues;
- 
+
 	g = (XmLGridWidget)newW;
 	cur = (XmLGridWidget)curW;
 	needsRedraw = 0;
@@ -5084,7 +5107,7 @@ SetValues(Widget curW,
 		g->grid.defCellValues = cellValues;
 		}
 	if (NE(grid.allowDrop))
-		DropRegister(g, g->grid.allowDrop); 
+		DropRegister(g, g->grid.allowDrop);
 	if (g->grid.rowStep < 1)
 		{
 		XmLWarning(newW, "SetValues() - rowStep can't be < 1");
@@ -5256,7 +5279,7 @@ SetValues(Widget curW,
 		    {
                 CreateHideUnhideButtons(g);
 		    }
-		else 
+		else
 		    {
 			XtDestroyWidget(g->grid.hideButton);
 			XtDestroyWidget(g->grid.unhideButton);
@@ -5285,7 +5308,9 @@ static void
 CopyFontList(XmLGridWidget g)
 	{
 	if (!g->grid.fontList)
-		g->grid.fontList = XmLFontListCopyDefault((Widget)g);
+		g->grid.fontList =
+			XmFontListCopy(XmeGetDefaultRenderTable((Widget)g,
+							    XmLABEL_FONTLIST));
 	else
 		g->grid.fontList = XmFontListCopy(g->grid.fontList);
 	if (!g->grid.fontList)
@@ -5475,7 +5500,7 @@ SetSimpleWidths(XmLGridWidget g,
 	while (*data)
 		{
 		if (*data >= '0' && *data <= '9')
-			{	
+			{
 			widths[n].width = atoi(data);
 			while (*data >= '0' && *data <= '9')
 				data++;
@@ -5551,7 +5576,7 @@ GetRowValueMask(XmLGridWidget g,
 	}
 
 /* Only to be called through Grid class */
-static void 
+static void
 _GetRowValueMask(XmLGridWidget g,
 		 char *s,
 		 long *mask)
@@ -5586,7 +5611,7 @@ GetRowValue(XmLGridWidget g,
 	}
 
 /* Only to be called through Grid class */
-static void 
+static void
 _GetRowValue(XmLGridWidget g,
 	     XmLGridRow row,
 	     XtArgVal value,
@@ -5595,10 +5620,10 @@ _GetRowValue(XmLGridWidget g,
 	switch (mask)
 		{
 		case XmLGridRowHeight:
-			*((Dimension *)value) = row->grid.height; 
+			*((Dimension *)value) = row->grid.height;
 			break;
 		case XmLGridRowSizePolicy:
-			*((unsigned char *)value) = row->grid.sizePolicy; 
+			*((unsigned char *)value) = row->grid.sizePolicy;
 			break;
 		case XmLGridRowUserData:
 			*((XtPointer *)value) = (XtPointer)row->grid.userData;
@@ -5615,7 +5640,7 @@ SetRowValues(XmLGridWidget g,
 	}
 
 /* Only to be called through Grid class */
-static int 
+static int
 _SetRowValues(XmLGridWidget g, XmLGridRow row, long mask)
 	{
 	int needsResize = 0, visible = 0;
@@ -5669,7 +5694,7 @@ GetColumnValueMask(XmLGridWidget g,
 	}
 
 /* Only to be called through Grid class */
-static void 
+static void
 _GetColumnValueMask(XmLGridWidget g,
 		    char *s,
 		    long *mask)
@@ -5714,7 +5739,7 @@ GetColumnValue(XmLGridWidget g,
 	}
 
 /* Only to be called through Grid class */
-static void 
+static void
 _GetColumnValue(XmLGridWidget g,
 		XmLGridColumn col,
 		XtArgVal value,
@@ -5723,10 +5748,10 @@ _GetColumnValue(XmLGridWidget g,
 	switch (mask)
 		{
 		case XmLGridColumnWidth:
-			*((Dimension *)value) = col->grid.width; 
+			*((Dimension *)value) = col->grid.width;
 			break;
 		case XmLGridColumnSizePolicy:
-			*((unsigned char *)value) = col->grid.sizePolicy; 
+			*((unsigned char *)value) = col->grid.sizePolicy;
 			break;
 		case XmLGridColumnUserData:
 			*((XtPointer *)value) = col->grid.userData;
@@ -5753,7 +5778,7 @@ SetColumnValues(XmLGridWidget g,
 	}
 
 /* Only to be called through Grid class */
-static int 
+static int
 _SetColumnValues(XmLGridWidget g, XmLGridColumn col, long mask)
 	{
 	int needsResize = 0, visible = 0;
@@ -5819,7 +5844,7 @@ CellValueGetMask(char *s,
 	static XrmQuark qLeftBorderColor, qLeftBorderType;
 	static XrmQuark qMarginBottom, qMarginLeft, qMarginRight;
 	static XrmQuark qMarginTop, qPixmap, qPixmapMask;
-	static XrmQuark qRightBorderColor, qRightBorderType;
+	static XrmQuark qRenderTable, qRightBorderColor, qRightBorderType;
 	static XrmQuark qRowSpan, qString, qToggleSet;
 	static XrmQuark qTopBorderColor, qTopBorderType, qType;
 	static XrmQuark qUserData;
@@ -5844,6 +5869,7 @@ CellValueGetMask(char *s,
 		qMarginTop= XrmStringToQuark(XmNcellMarginTop);
 		qPixmap = XrmStringToQuark(XmNcellPixmap);
 		qPixmapMask = XrmStringToQuark(XmNcellPixmapMask);
+                qRenderTable = XrmStringToQuark(XmNcellRenderTable);
 		qRightBorderColor = XrmStringToQuark(XmNcellRightBorderColor);
 		qRightBorderType = XrmStringToQuark(XmNcellRightBorderType);
 		qRowSpan = XrmStringToQuark(XmNcellRowSpan);
@@ -5888,6 +5914,8 @@ CellValueGetMask(char *s,
 			*mask |= XmLGridCellPixmapF;
 	else if (q == qPixmapMask)
 			*mask |= XmLGridCellPixmapMask;
+        else if (q == qRenderTable)
+                        *mask |= XmLGridCellFontList;
 	else if (q == qRightBorderColor)
 			*mask |= XmLGridCellRightBorderColor;
 	else if (q == qRightBorderType)
@@ -5921,10 +5949,10 @@ GetCellValue(XmLGridCell cell,
 	switch (mask)
 		{
 		case XmLGridCellAlignment:
-			*((unsigned char *)value) = values->alignment; 
+			*((unsigned char *)value) = values->alignment;
 			break;
 		case XmLGridCellBackground:
-			*((Pixel *)value) = values->background; 
+			*((Pixel *)value) = values->background;
 			break;
 		case XmLGridCellBottomBorderColor:
 			*((Pixel *)value) = values->bottomBorderColor;
@@ -5939,10 +5967,10 @@ GetCellValue(XmLGridCell cell,
 			*((Boolean *)value) = values->editable;
 			break;
 		case XmLGridCellFontList:
-			*((XmFontList *)value) = values->fontList; 
+			*((XmFontList *)value) = values->fontList;
 			break;
 		case XmLGridCellForeground:
-			*((Pixel *)value) = values->foreground; 
+			*((Pixel *)value) = values->foreground;
 			break;
 		case XmLGridCellLeftBorderColor:
 			*((Pixel *)value) = values->leftBorderColor;
@@ -6130,7 +6158,7 @@ SetCellValuesResize(XmLGridWidget g,
 		cell, mask);
 	}
 
-static int 
+static int
 _SetCellValuesResize(XmLGridWidget g,
 		     XmLGridRow row,
 		     XmLGridColumn col,
@@ -6173,7 +6201,7 @@ _SetCellValuesResize(XmLGridWidget g,
 	return needsResize;
 	}
 
-static void 
+static void
 SetCellValues(XmLGridWidget g,
 	      XmLGridCell cell,
 	      long mask)
@@ -6857,7 +6885,7 @@ ClipRectToReg(XmLGridWidget g,
 	st = g->manager.shadow_thickness;
 	if (!reg->width || !reg->height)
 		i = XmLRectOutside;
-	else 
+	else
 		{
 		regRect.x = reg->x + st;
 		regRect.y = reg->y + st;
@@ -6953,7 +6981,7 @@ CvtXmStringToStr(XmString str)
 	return c;
 	}
 
-static XmLGridWidget 
+static XmLGridWidget
 WidgetToGrid(Widget w,
 	     char *funcname)
 	{
@@ -7209,7 +7237,7 @@ CursorMotion(Widget w,
 				newMotionCol = motionCol;
 
 				invokeEnterCellCallback = True;
-			}			
+			}
 		}
 
 		if (g->grid.lastCursorMotionRow != -1 &&
@@ -7586,7 +7614,7 @@ Select(Widget w,
             else if (!g->grid.editTimerSet && g->grid.lastSelectTime != 0)
                 {
                    /* Only begin an edit when we are sure we don't
-                    * have a double click 
+                    * have a double click
                     */
                    if (!g->grid.singleClickActivation) {
                       g->grid.editTimerId =
@@ -7608,7 +7636,7 @@ Select(Widget w,
 		{
 		g->grid.resizeIsVert = isVert;
 		g->grid.inMode = InResize;
-		g->grid.resizeLineXY = -1; 
+		g->grid.resizeLineXY = -1;
 		g->grid.resizeRow = resizeRow;
 		g->grid.resizeCol = resizeCol;
 		if (isVert)
@@ -7813,7 +7841,7 @@ Select(Widget w,
 		      cbs.rowType = RowPosToType(g, row);
 		      cbs.row = RowPosToTypePos(g, cbs.rowType, row);
 		      XtCallCallbackList((Widget)g, g->grid.activateCallback,
-					 (XtPointer)&cbs);		      
+					 (XtPointer)&cbs);
 		    }
 		  }
 		}
@@ -8300,7 +8328,7 @@ XmLGridRow XmLGridRowNew(Widget grid)
 	}
 
 /* Only to be called through Grid class */
-static XmLGridRow 
+static XmLGridRow
 _GridRowNew(Widget grid)
 	{
 	XmLGridWidget g;
@@ -8450,7 +8478,7 @@ XmLGridColumnNew(Widget grid)
 	}
 
 /* Only to be called through Grid class */
-static XmLGridColumn 
+static XmLGridColumn
 _GridColumnNew(Widget grid)
 	{
 	XmLGridWidget g;
@@ -8942,7 +8970,7 @@ XmLGridCellSetPixmask(XmLGridCell cell,
 		{
 		fprintf(stderr, "XmLGridCellSetPixmask: pixmap must be set ");
 		fprintf(stderr, "before pixmask\n");
-		return; 
+		return;
 		}
 	pix = 0;
 	if (cell->cell.refValues->type == XmPIXMAP_CELL)
@@ -8974,7 +9002,7 @@ XmLGridCellGetPixmap(XmLGridCell cell)
 	}
 
 /* Only to be called by XmLGridCellAction() */
-void 
+void
 _XmLGridCellDrawBackground(XmLGridCell cell,
 			   Widget w,
 			   XRectangle *clipRect,
@@ -8994,7 +9022,7 @@ _XmLGridCellDrawBackground(XmLGridCell cell,
 	}
 
 /* Only to be called by XmLGridCellAction() */
-void 
+void
 _XmLGridCellDrawBorders(XmLGridCell cell,
 			Widget w,
 			XRectangle *clipRect,
@@ -9025,7 +9053,7 @@ _XmLGridCellDrawBorders(XmLGridCell cell,
 	drawRight = 1;
 	drawBot = 1;
 	drawTop = 1;
-	if (cellRect->x != clipRect->x)	
+	if (cellRect->x != clipRect->x)
 		drawLeft = 0;
 	if (cellRect->x + cellRect->width != clipRect->x + clipRect->width)
 		drawRight = 0;
@@ -9052,7 +9080,7 @@ _XmLGridCellDrawBorders(XmLGridCell cell,
 		XDrawLine(dpy, win, gc, x1, y2, x2, y2);
 		if (borderType == XmBORDER_DASH)
 			XSetLineAttributes(dpy, gc, 0, LineSolid, CapButt, JoinMiter);
-		}	
+		}
 	borderType = cell->cell.refValues->topBorderType;
 	if (borderType != XmBORDER_NONE && drawTop)
 		{
@@ -9136,7 +9164,7 @@ _XmLGridCellDrawValue(XmLGridCell cell,
 	g = (XmLGridWidget)w;
 	cellRect = *ds->cellRect;
 	cellValues = cell->cell.refValues;
-	horizMargin = ds->leftMargin + ds->rightMargin; 
+	horizMargin = ds->leftMargin + ds->rightMargin;
 	vertMargin = ds->topMargin + ds->bottomMargin;
 	if (horizMargin >= (int)cellRect.width ||
 		vertMargin >= (int)cellRect.height)
@@ -9205,7 +9233,7 @@ _XmLGridCellDrawValue(XmLGridCell cell,
 		if (arrow_size > 0)
 			{
 			XSetForeground(dpy, ds->gc, ds->background);
-					
+
 			_XmDrawArrow(dpy, XtWindow(w),
 						 ((XmManagerWidget)g)->manager.bottom_shadow_GC,
 						 ((XmManagerWidget)g)->manager.top_shadow_GC,
@@ -9452,6 +9480,42 @@ _XmLGridCellFreeValue(XmLGridCell cell)
 	XmLGridCellSetValueSet(cell, False);
 	}
 
+static void
+CheckSetRenderTable(Widget wid,
+		    int offset,
+		    XrmValue *value)
+{
+
+#define SET_FL(state) (state |= 0x01)
+#define IS_SET_FL(state) (state & 0x01)
+#define SET_CFL(state) (state |= 0x02)
+#define IS_SET_CFL(state) (state & 0x02)
+
+  XmLGridWidget gw = (XmLGridWidget)wid;
+
+  if (((char *)gw + offset) ==
+    (char *) &(gw->grid.fontList))
+  {
+    if (IS_SET_FL(gw->grid.check_set_render_table))
+    {
+      value->addr = NULL;
+    } else {
+      SET_FL(gw->grid.check_set_render_table);
+      value->addr = ((char *)gw + offset);
+    }
+  } else if (((char *)gw + offset) ==
+    (char *) &(gw->grid.cellValues.fontList))
+  {
+    if (IS_SET_CFL(gw->grid.check_set_render_table))
+    {
+      value->addr = NULL;
+    } else {
+      SET_CFL(gw->grid.check_set_render_table);
+      value->addr = ((char *)gw + offset);
+    }
+  }
+}
+
 /*
    Public Functions
 */
@@ -9582,7 +9646,7 @@ XmLGridAddColumns(Widget w,
 			SetFocus(g, g->grid.focusRow, position, 0, 0);
 		else
 			g->grid.focusCol = position;
-		}	
+		}
 	for (i = position; i < position + count; i++)
 		redraw |= ColIsVisible(g, i);
 	if (redraw)
@@ -10158,12 +10222,12 @@ XmLGridEditBegin(Widget w,
 	g = WidgetToGrid(w, "EditBegin()");
 	if (!g)
 		return -1;
-	if (column < 0 || column >= g->grid.colCount) 
+	if (column < 0 || column >= g->grid.colCount)
 		{
 		XmLWarning(w, "EditBegin() - invalid column");
 		return -1;
 		}
-	if (row < 0 || row >= g->grid.rowCount) 
+	if (row < 0 || row >= g->grid.rowCount)
 		{
 		XmLWarning(w, "EditBegin() - invalid row");
 		return -1;
@@ -10182,7 +10246,7 @@ XmLGridEditBegin(Widget w,
 		}
 	if (insert == False)
 		TextAction(g, TEXT_EDIT);
-	else 
+	else
 		TextAction(g, TEXT_EDIT_INSERT);
 	return 0;
 	}
@@ -10937,7 +11001,7 @@ XmLGridSetVisibleColumnCount(Widget w, int new_num_visible)
   for (ii = 0; ii < num_columns; ii ++)
   {
       colp = (XmLGridColumn)XmLArrayGet(g->grid.colArray, ii);
-      
+
       if (colp->grid.hidden && visible_count < new_num_visible)
       {
           colp->grid.hidden = False;
@@ -11024,19 +11088,19 @@ CreateHideUnhideButtons(XmLGridWidget g)
 #endif /*0*/
 }
 
-static void 
-HideAction(Widget w, 
-	   XEvent *event, 
-	   String *params, 
+static void
+HideAction(Widget w,
+	   XEvent *event,
+	   String *params,
 	   Cardinal *num_params)
 {
   XmLGridHideRightColumn(w);
 }
 
-static void 
-UnhideAction(Widget w, 
-	     XEvent *event, 
-	     String *params, 
+static void
+UnhideAction(Widget w,
+	     XEvent *event,
+	     String *params,
 	     Cardinal *num_params)
 {
   XmLGridUnhideRightColumn(w);
@@ -11074,7 +11138,7 @@ XmLGridHideRightColumn(Widget w)
   /* If visibleCols is zero, that means all the columns are visible. */
   if (g->grid.visibleCols == 0 || g->grid.visibleCols > total_columns)
       XmLGridSetVisibleColumnCount(w, total_columns - 1);
-  else 
+  else
       XmLGridSetVisibleColumnCount(w, g->grid.visibleCols - 1);
 }
 
@@ -11089,10 +11153,10 @@ XmLGridUnhideRightColumn(Widget w)
       XmLGridSetVisibleColumnCount(w, g->grid.visibleCols + 1);
 }
 
-static void 
-MenuArm(Widget w, 
-	XEvent *event, 
-	String *params, 
+static void
+MenuArm(Widget w,
+	XEvent *event,
+	String *params,
 	Cardinal *num_params)
 {
     XmLGridWidget g = (XmLGridWidget)w;
@@ -11102,10 +11166,10 @@ MenuArm(Widget w,
     g->grid.inMode = InSelect;
 }
 
-static void 
-MenuDisarm(Widget w, 
-	   XEvent *event, 
-	   String *params, 
+static void
+MenuDisarm(Widget w,
+	   XEvent *event,
+	   String *params,
 	   Cardinal *num_params)
 {
     XmLGridWidget g = (XmLGridWidget)w;
@@ -11126,9 +11190,9 @@ ResizeColumnToFit(XmLGridWidget g, int new_x)
                 (rect.width - GetColWidth(g, g->grid.resizeCol));
         if (width < g->grid.minColWidth)
             width = g->grid.minColWidth;
-        
+
         /*printf("col(%d) resize_xy(%3d) colx(%3d) colw(%3d) column_width(%3d) new_width(%3d)\n", g->grid.resizeCol, g->grid.resizeLineXY, rect.x, rect.width, GetColWidth(g, g->grid.resizeCol), width);*/
-        
+
         /* Resize all columns to the right */
         colp = (XmLGridColumn)XmLArrayGet(g->grid.colArray,
                                           g->grid.resizeCol);
@@ -11149,7 +11213,7 @@ SizeColumnsToFit(XmLGridWidget g, int starting_at)
     float hidden_col_adjust;
 	int ii, num_columns;
     XmLGridColumn colp;
-    
+
     /* Total the width of the columns and
        also total how much of that can be resized */
     delta = g->core.width;
@@ -11159,10 +11223,10 @@ SizeColumnsToFit(XmLGridWidget g, int starting_at)
         {
             delta -= g->grid.unhideButton->core.width;
             delta -= g->grid.hideButton->core.width;
-        } 
+        }
     else if (XtIsManaged(g->grid.vsb))
 		{
-            delta -= g->grid.vsb->core.width; 
+            delta -= g->grid.vsb->core.width;
 		}
 
     num_columns = g->grid.colCount + g->grid.headingColCount
@@ -11170,14 +11234,14 @@ SizeColumnsToFit(XmLGridWidget g, int starting_at)
     for (ii = 0; ii < num_columns; ii ++)
         {
             colp = (XmLGridColumn)XmLArrayGet(g->grid.colArray, ii);
-            
-            if (colp->grid.sizePolicy != XmCONSTANT) 
+
+            if (colp->grid.sizePolicy != XmCONSTANT)
                 {
                     if (g->grid.debugLevel)
                         XmLWarning((Widget)g, "SizeColumnsToFit() - only valid for XmNcolumnSizePolicy == XmCONSTANT");
                     colp->grid.sizePolicy = XmCONSTANT;
                 }
-            if (!g->grid.visibleCols || ii < g->grid.visibleCols) 
+            if (!g->grid.visibleCols || ii < g->grid.visibleCols)
                 {
                     delta -= colp->grid.width;
 
@@ -11195,7 +11259,7 @@ SizeColumnsToFit(XmLGridWidget g, int starting_at)
         }
 
     hidden_col_adjust = (float)delta / resizable_width;
-    
+
     /* Adjust each column to fit based on its percentage of the total width */
 	for (ii = starting_at; ii < num_columns ; ii ++)
 		{
@@ -11214,17 +11278,17 @@ SizeColumnsToFit(XmLGridWidget g, int starting_at)
             else
                 if (col_width < resizable_width && resizable_width > 0)
                     col_delta = delta * ((float)col_width / resizable_width);
-                else                    
+                else
                     col_delta = delta;
 
 			new_col_width = col_width + col_delta;
-			
+
 			if (new_col_width < g->grid.minColWidth)
 				{
 					new_col_width = g->grid.minColWidth;
 					col_delta = col_width - new_col_width;
 				}
-			
+
             if (!colp->grid.hidden)
                 {
                     delta -= col_delta;
@@ -11278,10 +11342,10 @@ XmLGridSetSort(Widget w, int column, unsigned char sortType)
     unsigned char old_sort_type;
 
     /*printf("XmLGridSetSort: (%d,%s)\n", column,
-           sortType == XmSORT_NONE ? "none" : 
+           sortType == XmSORT_NONE ? "none" :
            sortType == XmSORT_ASCENDING ? "ascending" : "descending");
      */
-     
+
     /* Clear old sort resource */
     XmLGridGetSort(w, &old_sort_column, &old_sort_type);
     if (old_sort_type != XmSORT_NONE)
@@ -11299,7 +11363,7 @@ XmLGridSetSort(Widget w, int column, unsigned char sortType)
     if (rowp)
     {
         int ii, count;
-        
+
         count = XmLArrayGetCount(rowp->grid.cellArray);
         for (ii = 0; ii < count; ii++)
         {
@@ -11312,10 +11376,10 @@ XmLGridSetSort(Widget w, int column, unsigned char sortType)
             }
         }
     }
-    
+
     /* Set the cell mask of the heading cell. */
     cellp = GetCell(g, 0, column);
-    
+
     if (cellp)
     {
         XmLGridCellSetDrawSort(cellp, True);
@@ -11328,7 +11392,7 @@ XmLGridSetSort(Widget w, int column, unsigned char sortType)
 
 		DrawArea(g, DrawCell, 0, column);
     }
-    
+
 }
 
 /*----------------------------------------------------------------------*/
@@ -11344,7 +11408,7 @@ GridInvokeCallbacks(Widget			w,
 	if (!g->core.being_destroyed && list)
 	{
 		XmAnyCallbackStruct cbs;
-		
+
 		cbs.event 	= event;
 		cbs.reason	= reason;
 
@@ -11390,9 +11454,9 @@ GridInvokeCellCrossingCallbacks(Widget			w,
 	}
 }
 /*----------------------------------------------------------------------*/
-static void 
-GridCrossingEH(Widget		w, 
-			   XtPointer	closure, 
+static void
+GridCrossingEH(Widget		w,
+			   XtPointer	closure,
 			   XEvent *		event,
 			   Boolean *	ctd)
 {
