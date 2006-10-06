@@ -1,9 +1,6 @@
 
-SUBDIRS = xlib xt xm xml
+include $(top_srcdir)/Makefile.common
 
-SUBDIRS += designer
+SUBDIRS = xlib xt xm xml designer
 
-depend:
-	for d in $(SUBDIRS); do \
-		(cd $$d && ${MAKE} depend-local); \
-	done
+### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###

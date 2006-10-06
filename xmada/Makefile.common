@@ -35,5 +35,15 @@ CLEANFILES = *.ali
 .adb.o:
 	$(ADACOMPILER) -c $(ADAFLAGS) $< -o $@
 
+##  Правила для создания списков зависимостей модулей.
+
+depend:
+	@for dir in $(SUBDIRS); do ( \
+		if [ "$${dir}" != "." ]; then \
+			cd $${dir} || exit 1; ${MAKE} depend; \
+		fi; \
+	) || exit 2; done; \
+	${MAKE} depend-local
+
 depend-local: all
 	$(MKDEP) "$(top_srcdir)" "$(top_builddir)" "$(srcdir)" "$(builddir)" $(ADAFLAGS)
