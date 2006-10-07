@@ -10,4 +10,6 @@ noinst_SCRIPTS = adacompiler adalinker linker
 
 doc:
 
+tests:
+
 ### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###
