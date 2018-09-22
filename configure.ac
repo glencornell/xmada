@@ -1,4 +1,5 @@
 AC_INIT([xmada], [0.3], [vgodunko@rostel.ru])
+AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_SRCDIR([source/xlib/xlib.ads])
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([foreign 1.8])

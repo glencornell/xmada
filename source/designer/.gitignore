@@ -1,0 +1,5 @@
+.deps
+Makefile
+Makefile.in
+designer
+designer-setup.adb
