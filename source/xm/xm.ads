@@ -381,9 +381,10 @@ package Xm is
    type Xm_Include_Status is (Xm_Insert,
                               Xm_Terminate,
                               Xm_Invoke);
-
-   --  На самом деле определены ещё и составляющие из которых формируются
-   --  значения. Необходимо разобраться. Возможно они необходимы как маски ???
+   
+   --  In fact, they also define the components from which the
+   --  values. It is necessary to understand. Perhaps they are
+   --  necessary as masks ???
    type Xm_Indicator_On is (Xm_Indicator_None,
                             Xm_Indicator_Fill,
                             Xm_Indicator_Check,
@@ -488,8 +489,9 @@ package Xm is
 
    type Xm_Scroll_Bar_Display_Policy is (Xm_Static,
                                          Xm_As_Needed);
-
-   --  В оригинале опеределяется через битовые маски. Необходимо-ли это ???
+   
+   --  In the original it is defined through bit masks. Is it
+   --  necessary???
    type Xm_Scroll_Bar_Placement is (Xm_Bottom_Right,
                                     Xm_Top_Right,
                                     Xm_Bottom_Left,
@@ -584,8 +586,9 @@ package Xm is
    type Xm_Spatial_Style is (Xm_None,
                              Xm_Grid,
                              Xm_Cells);
-
-   --  И хотя Xm.h говорит, что может быть ещё и XmPIXMAP, это не так.
+   
+   --  And although Xm.h says that there may be more XmPIXMAP, it is
+   --  not.
    type Xm_Spin_Box_Child_Type is (Xm_String_Child,
                                    Xm_Numeric);
 
@@ -1183,9 +1186,9 @@ package Xm is
       Reason : Xm_Callback_Reason;
       Event  : Xlib.Events.Event;
       Set    : Interfaces.C.int;
---  Должно быть как указано ниже, но тут возникает потребность в указании
---  правил расположения, что снизит переносимость.
---      Set    : Xm_Toggle_Button_State;
+      --  Should be as indicated below, but there is a need to specify
+      --  location rules, which will reduce portability.  
+      -- Set : Xm_Toggle_Button_State;
    end record;
 
    type Xm_Toggle_Button_Callback_Struct_Access is access all Xm_Toggle_Button_Callback_Struct;

@@ -1,7 +1,7 @@
 #!/bin/sh
 ##----------------------------------------------------------------------------
 ##
-##  Автоматизированная система организации и управления воздушным движением
+##  Automated system of air traffic management and management
 ##
 ##----------------------------------------------------------------------------
 ##! <Copyright>
@@ -9,12 +9,13 @@
 ##!
 ##! <Unit> adacompiler.in
 ##! <Purpose>
-##!   Скрипт для запуска компилятора GNAT языка программирования Ada из
-##! пакета libtool.
+##!   A script for running the GNAT compiler of the Ada programming
+##!   language from the libtool package.
 ##!
 ##! <Effects>
 ##! <ImplementationNotes>
-##!   Начальная версия основана на аналогичном модуле из пакета PolyORB.
+##!   The initial version is based on a similar module from the
+##!   PolyORB package.
 ##!
 ##! <PortabilityIssues>
 ##! <AnticipatedChanges>

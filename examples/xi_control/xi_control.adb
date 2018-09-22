@@ -103,7 +103,7 @@ package body Xi_Control is
 
    procedure Initialize_Device_Type_Mapping is
    begin
-      --  Загрузка атомов для идентификации устройств.
+      -- Loading atoms to identify devices.
       for J in Device_Type_Mapping'Range loop
          declare
             Item : Device_Type_Mapping_Item renames Device_Type_Mapping (J);
@@ -428,12 +428,12 @@ null;
 
    procedure Reload_Device_List is
    begin
-      --  Загрузка списка устройств ввода.
+      -- Load the list of input devices.
       Input_Device_Info :=
         X_List_Input_Devices (Xt_Display (App_Shell),
                               Input_Device_Count'Access);
-
-      --  Заполнение списка устройств.
+      
+      -- Filling in the list of devices.
       Xm_List_Deselect_All_Items (Device_List);
       declare
          Devices : constant X_Device_Info_List

@@ -1,0 +1,199 @@
+#!/bin/sh
+##----------------------------------------------------------------------------
+##
+##  Automated system of air traffic management and management
+##
+##----------------------------------------------------------------------------
+##! <Copyright>
+##!  Copyright (C) 2005  ТехноСервЪ А/С
+##!
+##! <Unit> adamakedepend
+##! <Purpose>
+##!   Generates Ada module dependencies for use in Makefile.am files.
+##!
+##! <Effects>
+##! <ImplementationNotes>
+##! <PortabilityIssues>
+##! <AnticipatedChanges>
+##----------------------------------------------------------------------------
+##  $Revision: 3423 $ $Author: godunko $
+##  $Date: 2006-09-16 14:04:13 +0400 (Сбт, 16 Сен 2006) $
+##----------------------------------------------------------------------------
+
+usage() {
+    echo "The program for creating a list of dependencies"
+    echo "Usage:"
+    echo "  mkdep <top_srcdir> <top_builddir> <src_dir> <build_dir> [-I<dir> ...]"
+    exit 1
+}
+
+# To ensure the generation of the same file sequence for any
+# localization settings are forced to set the order of sorting
+# characters, defined by their code.
+
+unset LANG LANGUAGE LC_ALL
+export LC_COLLATE=C
+
+if [ $# -lt 4 ]; then
+    usage
+fi
+
+# Check the presence and normalization of the root directory of the source code.
+
+if [ ! -d "$1" ]; then
+    echo "The source directory is not properly specified"
+    exit 1
+fi
+
+TOP_SRCDIR=`cd "$1" && pwd`
+shift
+
+# Check for presence and normalization of the name of the root of the assembly.
+
+if [ ! -d "$1" ]; then
+    echo "The root directory of the assembly is not specified correctly"
+    exit 1
+fi
+
+TOP_BUILDDIR=`cd "$1" && pwd`
+shift
+
+# Check availability and normalization of the source directory name.
+
+if [ ! -d "$1" ]; then
+    echo "The source directory is not listed correctly"
+    exit 1
+fi
+
+SRCDIR=`cd "$1" && pwd`
+shift
+
+## Check for the presence and normalization of the assembly directory
+## name.  Because autotools can point to an assembly directory just
+## empty string, then replace it with the current working directory.
+
+if [ -z "$1" ]; then
+    BUILDDIR=`pwd`
+
+elif [ ! -d "$1" ]; then
+    echo "The build directory '$1' is not specified correctly"
+    exit 1
+else
+    BUILDDIR=`cd "$1" && pwd`
+fi
+
+shift
+
+# Build a list of file search directories
+
+SEARCHDIRS=
+
+while true; do
+    case "$1" in
+        -I*)
+            SEARCHDIRS="$SEARCHDIRS "`cd "${1#-I}" && pwd`
+            shift
+            ;;
+        *)
+            shift
+            ;;
+    esac
+
+    if [ $# -eq 0 ]; then
+        break;
+    fi
+done
+
+## Make a backup Makefile.am and generate a new version of the file.
+
+MAKEFILE=${SRCDIR}/Makefile.am
+MKDEP="### DO NOT REMOVE THIS LINE, IT IS USED BY MAKEDEPEND ###"
+cp ${MAKEFILE} ${MAKEFILE}.bak
+(
+    ## Copy the contents of the Makefile.am to a special line.
+
+    sed -e "/${MKDEP}/,\$d" < ${MAKEFILE}.bak
+    echo ${MKDEP}
+
+    ## We form the dependencies of the files.
+
+    for alifile in `ls *.ali 2>/dev/null | grep -v '^b~'`; do
+        echo "Processing ${alifile}..." > /dev/stderr
+
+	## We create a list of files, highlighting file names from the
+	## ALI file and searching these files in the directories of
+	## the connected files.  If the file is not found in the
+	## directories of the connected files, then it does not fall
+	## into the file list.
+
+        allwithlist=
+
+        while read key unitfile rest; do
+            case "${key}" in
+                D)
+                    for dir in ${SEARCHDIRS}; do
+                        if [ -f ${dir}/${unitfile} ]; then
+                            allwithlist="${allwithlist} "${unitfile}
+                        fi
+                    done
+                    ;;
+                *)
+                    ;;
+            esac
+        done < ${alifile}
+
+	## Sort the built-in list of files.
+
+        allwithlist=`echo ${allwithlist} | tr ' ' '\n' | sort`
+
+	## Complement the sorted list of files with location
+	## directories files.
+
+        withlist=
+
+        for withfile in ${allwithlist}; do
+            for dir in ${SEARCHDIRS}; do
+                if [ -f ${dir}/${withfile} ]; then
+                    withlist="${withlist} "${dir}/${withfile}
+                fi
+            done
+        done
+
+	# Save dependencies, replacing prefixes with files located in
+	# the project directories. Files located outside the catalogs
+	# source code and project build in the dependency list is not
+	# are entered.
+
+        if [ "x${withlist}" != "x" ]; then
+	    ## Forming a dependency list for .lo and .o files.
+
+            echo -n "`echo ${alifile} | sed -e 's/\.ali$//'`.lo "
+            echo -n "`echo ${alifile} | sed -e 's/\.ali$//'`.o:"
+
+            for depfile in ${withlist}; do
+		## The order of the checks is important because SRCDIR
+		## is always located inside TOP_SRCDIR (similarly for
+		## BUILDDIR / TOP_BUILDDIR)!
+
+                if [ "${depfile#${SRCDIR}}" != "${depfile}" ]; then
+                    echo " \\"
+                    echo -en "\t\$(srcdir)${depfile#${SRCDIR}}"
+
+                elif [ "${depfile#${TOP_SRCDIR}}" != "${depfile}" ]; then
+                    echo " \\"
+                    echo -en "\t\$(top_srcdir)${depfile#${TOP_SRCDIR}}"
+
+                elif [ "${depfile#${BUILDDIR}/}" != "${depfile}" ]; then
+                    echo " \\"
+                    echo -en "\t${depfile#${BUILDDIR}/}"
+
+                elif [ "${depfile#${TOP_BUILDDIR}}" != "${depfile}" ]; then
+                    echo " \\"
+                    echo -en "\t\$(top_builddir)${depfile#${TOP_BUILDDIR}}"
+                fi
+            done
+
+            echo
+        fi
+    done
+) > ${MAKEFILE}

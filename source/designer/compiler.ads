@@ -30,9 +30,9 @@
 --!
 --! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
 --!
---! <Unit> Designer
+--! <Unit> Compiler
 --! <Purpose>
---!   Корневой пакет иерархической библиотеки дизайнера.
+--!    The root package of the hierarchical library of the compiler.
 --!
 --! <Effects>
 --! <Perfomance>
@@ -41,8 +41,8 @@
 --  $Date$
 ------------------------------------------------------------------------------
 
-package Designer is
+package Compiler is
 
-   pragma Pure (Designer);
+   pragma Pure;
 
-end Designer;
+end Compiler;

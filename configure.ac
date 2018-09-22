@@ -1,5 +1,5 @@
-AC_INIT(xmada, 0.3, vgodunko@rostel.ru)
-AC_CONFIG_SRCDIR(source/xlib/xlib.ads)
+AC_INIT([xmada], [0.3], [vgodunko@rostel.ru])
+AC_CONFIG_SRCDIR([source/xlib/xlib.ads])
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([foreign 1.8])
 
@@ -21,7 +21,7 @@ AM_ENABLE_SHARED(yes)
 AM_ENABLE_STATIC(no)
 AM_PROG_LIBTOOL
 
-##  Поиск всех необходимых бибилотек X Window, X Toolkit Intrinsics и Motif.
+## Find all required X, X Toolkit Intrinsics and Motif.
 AC_PATH_X
 if test "$x_includes" != "" ; then
     CFLAGS="$CFLAGS -I$x_includes"

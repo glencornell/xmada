@@ -9,12 +9,13 @@
 ##!
 ##! <Unit> adalinker.in
 ##! <Purpose>
-##!   Скрипт для запуска редактора связей языка программирования Ada из
-##! пакета libtool.
+##!   A script for running the Ada programming language editor from
+##!   the libtool package.
 ##!
 ##! <Effects>
 ##! <ImplementationNotes>
-##!   Начальная версия основана на аналогичном модуле из пакета PolyORB.
+##!   The initial version is based on a similar module from the
+##!   PolyORB package.
 ##!
 ##! <PortabilityIssues>
 ##! <AnticipatedChanges>
@@ -27,12 +28,12 @@ ADA="@ADA@"
 abs_top_builddir="@abs_top_builddir@"
 
 if test ${2%.la} != ${2}; then
-    #  Производится сборка библиотеки.
+    # Build the library.
 
     ${abs_top_builddir}/libtool --tag=CC --mode=link $ADA "$@"
 
 else
-    #  Производится сборка программы.
+    # Link the program.
 
     ${abs_top_builddir}/libtool --tag=CC --mode=link ${abs_top_builddir}/adalinker "$@" -bargs -E
 fi

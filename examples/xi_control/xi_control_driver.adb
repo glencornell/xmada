@@ -152,8 +152,8 @@ begin
    Xt_Add_Callback (Class_List,
                     Xm_N_Browse_Selection_Callback,
                     On_Class_Browse_Selection'Access);
-
-   --  Панель информации о классе Key_Class.
+   
+   -- Information panel about the class Key_Class.
 
    Key_Pane := Xm_Create_Form (Work, "key_pane");
 
@@ -222,8 +222,8 @@ begin
    Xt_Set_Arg (Argl (6), Xm_N_Bottom_Widget, Key_Num_Keys);
    Label :=
      Xm_Create_Managed_Label_Gadget (Key_Pane, "num_keys", Argl (0 .. 6));
-
-   --  Панель информации о классе Button_Class.
+   
+   -- Information panel about the Button_Class class.
 
    Button_Pane := Xm_Create_Form (Work, "button_pane");
 
@@ -249,7 +249,7 @@ begin
                                      "num_buttons",
                                      Argl (0 .. 6));
 
-   --  Панель информации о классе Valuator_Class.
+   -- Information panel about the class Valuator_Class.
 
    Valuator_Pane := Xm_Create_Form (Work, "valuator_pane");
 

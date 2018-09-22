@@ -90,8 +90,8 @@ package Xlib is
    type Time is new Interfaces.C.unsigned_long;
 
    type Pixel is new Interfaces.C.unsigned_long;
---   !!!  Временно перенесено в Xm.Utilities. Если больше нигде не потребуется,
---   то необходимо отсюда удалить  !!!
+   -- !!! Temporarily moved to Xm.Utilities. If you do not need to get
+   --  anywhere else, then it is necessary to remove from here !!!
 --   type Pixel_Access is access all Pixel;
 --   Null_Pixel_Access : constant Pixel_Access := null;
 

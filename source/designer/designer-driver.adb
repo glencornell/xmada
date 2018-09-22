@@ -69,8 +69,8 @@ begin
                         The_Widget_Class => Application_Shell_Widget_Class);
    Designer.Main_Window.Initialize (App_Shell);
 
-   --  Если в командной строке указано имя файла проекта, то открываем этот
-   --  файл. В противном случае создаём новый проект.
+   --  If the project file name is specified on the command line, open
+   --  this file. Otherwise, we create a new project.
 
    begin
       if Argument_Count = 0 then
@@ -90,8 +90,8 @@ begin
 
 exception
    when others =>
-      --  При обнаружении любых необработанных исключений производим попытку
-      --  сохранения текущей модели в специальном файле.
+      --  If any unhandled exceptions are found, try to save the
+      --  current model in a special file.
 
       begin
          Designer.Operations.Save_Project ("autosave.xmada");

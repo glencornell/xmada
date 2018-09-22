@@ -30,9 +30,9 @@
 --!
 --! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
 --!
---! <Unit> Desiger.Driver
+--! <Unit> Designer
 --! <Purpose>
---!   Главная подпрограмма дизайнера.
+--!   The root package of the designer's hierarchical library.
 --!
 --! <Effects>
 --! <Perfomance>
@@ -41,4 +41,8 @@
 --  $Date$
 ------------------------------------------------------------------------------
 
-procedure Designer.Driver;
+package Designer is
+
+   pragma Pure (Designer);
+
+end Designer;

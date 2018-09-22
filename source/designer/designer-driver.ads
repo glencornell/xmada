@@ -30,9 +30,9 @@
 --!
 --! XmAda maintained by TechnoServ A/S (email: vgodunko@rostel.ru)
 --!
---! <Unit> Compiler
+--! <Unit> Desiger.Driver
 --! <Purpose>
---!   Корневой пакет иерархической библиотеки компилятора.
+--!   The main subroutine of the designer.
 --!
 --! <Effects>
 --! <Perfomance>
@@ -41,8 +41,4 @@
 --  $Date$
 ------------------------------------------------------------------------------
 
-package Compiler is
-
-   pragma Pure;
-
-end Compiler;
+procedure Designer.Driver;
