@@ -1,4 +1,8 @@
 project xlib is
+  package Compiler is
+     for Default_Switches ("Ada") use ("-ggdb");
+     for Default_Switches ("C") use ("-g");
+  end Compiler;
   for Object_Dir use ".objs";
   for Exec_Dir use ".";
   for Source_Dirs use (".", "extensions", "extensions/input", "extensions/print");

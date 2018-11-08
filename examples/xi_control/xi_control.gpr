@@ -1,12 +1,14 @@
+with "../../source/xm/xm.gpr";
+with "../../source/xt/xt.gpr";
 with "../../source/xlib/xlib.gpr";
 
-project xt is
+project xi_control is
   package Compiler is
      for Default_Switches ("Ada") use ("-ggdb");
-     for Default_Switches ("C") use ("-g");
   end Compiler;
   for Object_Dir use ".objs";
   for Exec_Dir use ".";
   for Source_Dirs use (".");
   for Languages use ("Ada");
-end xt;
+  for Main use ("xi_control_driver");
+end xi_control;

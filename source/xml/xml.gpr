@@ -4,6 +4,10 @@ with "../../source/xlib/xlib.gpr";
 with "../../microline/XmL/xml_c.gpr";
 
 project xml is
+  package Compiler is
+     for Default_Switches ("Ada") use ("-ggdb");
+     for Default_Switches ("C") use ("-g");
+  end Compiler;
   for Object_Dir use ".objs";
   for Exec_Dir use ".";
   for Source_Dirs use (".");

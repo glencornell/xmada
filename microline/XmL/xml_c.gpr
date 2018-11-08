@@ -4,6 +4,6 @@ project Xml_C is
    for Exec_Dir use ".";
    for Source_Dirs use (".");
    package Compiler is
-      for Default_Switches ("C") use ("-I../../microline");
+      for Default_Switches ("C") use ("-I../../microline", "-g");
    end Compiler;
 end Xml_C;

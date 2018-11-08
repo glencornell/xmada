@@ -125,7 +125,7 @@ package Xlib.Extensions.Input_Device is
             null;
       end case;
    end record;
-   pragma Convention (C_Pass_By_Value, X_Any_Class_Info);
+   pragma Convention (C, X_Any_Class_Info);
 
    subtype X_Key_Info      is X_Any_Class_Info (Key_Class);
    subtype X_Button_Info   is X_Any_Class_Info (Button_Class);

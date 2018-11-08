@@ -77,8 +77,7 @@ begin
    if Argument_Count = 2 then
       if Argument (1) = "--application-resources" then
          Project :=
-           Model.Tools.XML_To_Project
-            (Ada.Characters.Handling.To_String (Argument (2)));
+           Model.Tools.XML_To_Project (Argument (2));
 
          Application := First (Applications (Project));
 
@@ -89,8 +88,7 @@ begin
 
       elsif Argument (1) = "--code" then
          Project :=
-           Model.Tools.XML_To_Project
-            (Ada.Characters.Handling.To_String (Argument (2)));
+           Model.Tools.XML_To_Project (Argument (2));
 
          Application := First (Applications (Project));
 
