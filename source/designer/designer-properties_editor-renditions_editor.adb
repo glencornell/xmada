@@ -38,7 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Interfaces.C.Wide_Strings;
+with Interfaces.C.Strings;
 with GNAT.Table;
 
 with Xt.Ancillary_Types;
@@ -81,7 +81,7 @@ package body Designer.Properties_Editor.Renditions_Editor is
    use Designer.Model_Utilities;
    use Designer.Visual_Editor;
    use Interfaces.C;
-   use Interfaces.C.Wide_Strings;
+   use Interfaces.C.Strings;
    use Model;
    use Model.Names;
    use Model.Queries;
@@ -418,8 +418,8 @@ package body Designer.Properties_Editor.Renditions_Editor is
          Status              : Xm_Notebook_Page_Status;
          Rendition           : Node_Id := Null_Node;
          Page_Number         : Xm_Notebook_Page_Number;
-         Name                : constant Wide_String
-           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+         Name                : constant String
+           := Xm_Text_Field_Get_String (The_Widget);
 
          Rendition_Resources : List_Id;
          Rendition_Resource  : Node_Id;
@@ -1187,7 +1187,7 @@ package body Designer.Properties_Editor.Renditions_Editor is
                         end if;
 
                      when Node_Xm_String_Resource_Type =>
-                        Xm_Text_Field_Set_String_Wcs
+                        Xm_Text_Field_Set_String
                           (Annotation_Table.Table (Current_Resource).Value,
                            Image (Resource_Value (Rendition_Resource)));
 

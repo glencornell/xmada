@@ -44,119 +44,119 @@ with Model.Tree.Lists;
 
 package body Model.Debug is
 
-   use Ada.Wide_Text_IO;
+   use Ada.Text_IO;
    use Model.Queries;
    use Model.Strings;
    use Model.Tree;
    use Model.Tree.Lists;
 
-   procedure Print_Project (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Project (File   : in Ada.Text_IO.File_Type;
                             Node   : in Node_Id;
-                            Offset : in Ada.Wide_Text_IO.Count);
+                            Offset : in Ada.Text_IO.Count);
 
-   procedure Print_Application (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Application (File   : in Ada.Text_IO.File_Type;
                                 Node   : in Node_Id;
-                                Offset : in Ada.Wide_Text_IO.Count);
+                                Offset : in Ada.Text_IO.Count);
 
    procedure Print_Colormap_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
-   procedure Print_Component_Class (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Component_Class (File   : in Ada.Text_IO.File_Type;
                                     Node   : in Node_Id;
-                                    Offset : in Ada.Wide_Text_IO.Count);
+                                    Offset : in Ada.Text_IO.Count);
 
    procedure Print_Predefined_Resource_Type
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Enumerated_Resource_Type
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Enumeration_Value_Specification
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Enumeration_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Integer_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Pixel_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Pixmap_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Screen_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Translation_Data_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Resource_Specification
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
-   procedure Print_Widget_Class (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Widget_Class (File   : in Ada.Text_IO.File_Type;
                                  Node   : in Node_Id;
-                                 Offset : in Ada.Wide_Text_IO.Count);
+                                 Offset : in Ada.Text_IO.Count);
 
-   procedure Print_Widget_Instance (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Widget_Instance (File   : in Ada.Text_IO.File_Type;
                                     Node   : in Node_Id;
-                                    Offset : in Ada.Wide_Text_IO.Count);
+                                    Offset : in Ada.Text_IO.Count);
 
    procedure Print_Widget_Reference_Resource_Type
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Widget_Reference_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
-   procedure Print_Widget_Set (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Widget_Set (File   : in Ada.Text_IO.File_Type;
                                Node   : in Node_Id;
-                               Offset : in Ada.Wide_Text_IO.Count);
+                               Offset : in Ada.Text_IO.Count);
 
    procedure Print_Xm_String_Resource_Type
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    procedure Print_Xm_String_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count);
+     Offset : in Ada.Text_IO.Count);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Print
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print (File   : in Ada.Text_IO.File_Type;
                     List   : in List_Id;
-                    Offset : in Ada.Wide_Text_IO.Count)
+                    Offset : in Ada.Text_IO.Count)
    is
       Aux : Node_Id := First (List);
 
@@ -172,16 +172,16 @@ package body Model.Debug is
    --!    <Unit> Print
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print (File   : in Ada.Text_IO.File_Type;
                     Node   : in Node_Id;
-                    Offset : in Ada.Wide_Text_IO.Count := 1)
+                    Offset : in Ada.Text_IO.Count := 1)
    is
-      Node_Image   : constant Wide_String
-        := Node_Id'Wide_Image (Node);
-      Parent_Image : constant Wide_String
-        := Node_Id'Wide_Image (Parent_Node (Node));
-      Kind_Image   : constant Wide_String
-        := Node_Kinds'Wide_Image (Node_Kind (Node));
+      Node_Image   : constant String
+        := Node_Id'Image (Node);
+      Parent_Image : constant String
+        := Node_Id'Image (Parent_Node (Node));
+      Kind_Image   : constant String
+        := Node_Kinds'Image (Node_Kind (Node));
 
    begin
       Set_Col (File, Offset);
@@ -273,9 +273,9 @@ package body Model.Debug is
    --!    <Unit> Print_Application
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Print_Application (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Application (File   : in Ada.Text_IO.File_Type;
                                 Node   : in Node_Id;
-                                Offset : in Ada.Wide_Text_IO.Count)
+                                Offset : in Ada.Text_IO.Count)
    is
    begin
       Put (File, ' ' & Application_Class_Name_Image (Node));
@@ -293,9 +293,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Colormap_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -319,9 +319,9 @@ package body Model.Debug is
    --!    <Unit> Print_Component_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Print_Component_Class (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Component_Class (File   : in Ada.Text_IO.File_Type;
                                     Node   : in Node_Id;
-                                    Offset : in Ada.Wide_Text_IO.Count)
+                                    Offset : in Ada.Text_IO.Count)
    is
    begin
       Put (File, ' ' & Name_Image (Node));
@@ -337,9 +337,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Enumerated_Resource_Type
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
    begin
       if Name (Node) /= Null_Name then
@@ -356,9 +356,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Enumeration_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -388,9 +388,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Enumeration_Value_Specification
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -405,9 +405,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Integer_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -423,7 +423,7 @@ package body Model.Debug is
       Put (File,
            " : " & Name_Image (Resource_Type (Resource_Specification (Node))));
 
-      Put (File, " :=" & Integer'Wide_Image (Resource_Value (Node)));
+      Put (File, " :=" & Integer'Image (Resource_Value (Node)));
    end Print_Integer_Resource_Value;
 
    ---------------------------------------------------------------------------
@@ -432,9 +432,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Pixel_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -459,9 +459,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Pixmap_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -486,9 +486,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Predefined_Resource_Type
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -506,9 +506,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Project
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
    begin
       Put (File, ' ' & Name_Image (Node));
@@ -530,9 +530,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Resource_Specification
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
    begin
       if not Can_Be_Set_At_Creation_Time (Node)
@@ -600,9 +600,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Screen_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -627,9 +627,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Translation_Data_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -653,9 +653,9 @@ package body Model.Debug is
    --!    <Unit> Print_Widget_Class
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Print_Widget_Class (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Widget_Class (File   : in Ada.Text_IO.File_Type;
                                  Node   : in Node_Id;
-                                 Offset : in Ada.Wide_Text_IO.Count)
+                                 Offset : in Ada.Text_IO.Count)
    is
    begin
       if Is_Meta_Class (Node) then
@@ -686,9 +686,9 @@ package body Model.Debug is
    --!    <Unit> Print_Widget_Instance
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Print_Widget_Instance (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Widget_Instance (File   : in Ada.Text_IO.File_Type;
                                     Node   : in Node_Id;
-                                    Offset : in Ada.Wide_Text_IO.Count)
+                                    Offset : in Ada.Text_IO.Count)
    is
    begin
       Put (File, ' ' & Name_Image (Node) & " : " & Name_Image (Class (Node)));
@@ -718,9 +718,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Widget_Reference_Resource_Type
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -738,9 +738,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Widget_Reference_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -764,9 +764,9 @@ package body Model.Debug is
    --!    <Unit> Print_Widget_Set
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Print_Widget_Set (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print_Widget_Set (File   : in Ada.Text_IO.File_Type;
                                Node   : in Node_Id;
-                               Offset : in Ada.Wide_Text_IO.Count)
+                               Offset : in Ada.Text_IO.Count)
    is
    begin
       Set_Col (File, Offset);
@@ -784,9 +784,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Xm_String_Resource_Type
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 
@@ -804,9 +804,9 @@ package body Model.Debug is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Print_Xm_String_Resource_Value
-    (File   : in Ada.Wide_Text_IO.File_Type;
+    (File   : in Ada.Text_IO.File_Type;
      Node   : in Node_Id;
-     Offset : in Ada.Wide_Text_IO.Count)
+     Offset : in Ada.Text_IO.Count)
    is
       pragma Unreferenced (Offset);
 

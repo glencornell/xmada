@@ -38,7 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Wide_Text_IO;
+with Ada.Text_IO;
 with Ada.Characters.Handling;
 
 with Model;
@@ -50,7 +50,7 @@ with Model.Strings;
 
 package body Generator.Application_Resources is
 
-   use Ada.Wide_Text_IO;
+   use Ada.Text_IO;
    use Ada.Characters.Handling;
 
    use Model;
@@ -73,7 +73,7 @@ package body Generator.Application_Resources is
       --!    <Exceptions>
       ------------------------------------------------------------------------
       function Create_Full_Name_Widget (Node : in Node_Id)
-        return Wide_String;
+        return String;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -82,7 +82,7 @@ package body Generator.Application_Resources is
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure Generate_Resources (Res_List    : in List_Id;
-                                    Tmp_Path    : in Wide_String;
+                                    Tmp_Path    : in String;
                                     Output_File : in File_Type);
 
       ------------------------------------------------------------------------
@@ -93,7 +93,7 @@ package body Generator.Application_Resources is
       ------------------------------------------------------------------------
       procedure Generate_Widget_Resources (Widget_Example : in Node_Id;
                                            Output_File    : in File_Type;
-                                           Current_Path   : in Wide_String);
+                                           Current_Path   : in String);
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -101,7 +101,7 @@ package body Generator.Application_Resources is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       function Convert_To_Resource_Filename (Node : in Node_Id)
-         return Wide_String;
+         return String;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -109,9 +109,9 @@ package body Generator.Application_Resources is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       function Convert_To_Resource_Filename (Node : in Node_Id)
-         return Wide_String
+         return String
       is
-         Str : constant Wide_String
+         Str : constant String
            := Image (Application_Class_Name (Node));
       begin
          return Str & ".ad";
@@ -123,7 +123,7 @@ package body Generator.Application_Resources is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       function Create_Full_Name_Widget (Node : in Node_Id)
-        return Wide_String
+        return String
       is
     
          ----------------------------------------------------------------------
@@ -133,7 +133,7 @@ package body Generator.Application_Resources is
          --!    <Exceptions>
          ----------------------------------------------------------------------
          function Create_Full_Name_Widget_Function (Node : in Node_Id)
-           return Wide_String;
+           return String;
 
          ----------------------------------------------------------------------
          --! <Subprogram>
@@ -141,7 +141,7 @@ package body Generator.Application_Resources is
          --!    <ImplementationNotes>
          ----------------------------------------------------------------------
          function Create_Full_Name_Widget_Function (Node : in Node_Id)
-           return Wide_String
+           return String
          is
             Aux : constant Node_Id := Node;
 
@@ -155,7 +155,7 @@ package body Generator.Application_Resources is
                 (Parent_Node (Aux)) & "." & Name_Image (Aux);
          end Create_Full_Name_Widget_Function;    
       
-         Tmp : constant Wide_String := Create_Full_Name_Widget_Function (Node);
+         Tmp : constant String := Create_Full_Name_Widget_Function (Node);
 
       begin
          return Tmp (Tmp'First + 1 .. Tmp'Last);
@@ -168,7 +168,7 @@ package body Generator.Application_Resources is
       --!    <Exceptions>
       ------------------------------------------------------------------------
       procedure Generate_Resources (Res_List    : in List_Id;
-                                    Tmp_Path    : in Wide_String;
+                                    Tmp_Path    : in String;
                                     Output_File : in File_Type)
       is
          Current_Resource  : Node_Id;
@@ -249,7 +249,7 @@ package body Generator.Application_Resources is
                when Node_Integer_Resource_Value =>
                   if not Is_Hardcoded (Current_Resource) then 
                      declare
-                        Tmp_Value : constant Wide_String := Integer'Wide_Image
+                        Tmp_Value : constant String := Integer'Image
                          (Resource_Value (Current_Resource));
                         Index     : Positive := Tmp_Value'First;
 
@@ -302,14 +302,14 @@ package body Generator.Application_Resources is
       ------------------------------------------------------------------------
       procedure Generate_Widget_Resources (Widget_Example : in Node_Id;
                                            Output_File    : in File_Type;
-                                           Current_Path   : in Wide_String)
+                                           Current_Path   : in String)
       is
          Children_List    : constant List_Id := Children (Widget_Example);
          Current_Children : Node_Id;
 
       begin
          declare
-            Tmp_Path : constant Wide_String :=
+            Tmp_Path : constant String :=
                Current_Path & Image (Name (Widget_Example));
          begin
 
@@ -342,7 +342,7 @@ package body Generator.Application_Resources is
 
       Output_File       : File_Type;
       Filename          : constant Standard.String
-        := To_String (Convert_To_Resource_Filename (Node));
+        := Convert_To_Resource_Filename (Node);
       Current_Component : Node_Id;
       Widget_Example    : Node_Id;
 

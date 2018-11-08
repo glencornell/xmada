@@ -82,6 +82,6 @@ package Designer.Model_Utilities is
    --! сгенерированный численный суффикс.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function New_Name (Prefix : in Wide_String) return Model.Name_Id;
+   function New_Name (Prefix : in String) return Model.Name_Id;
 
 end Designer.Model_Utilities;

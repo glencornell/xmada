@@ -125,7 +125,7 @@ package body Designer.Properties_Editor.Application is
          Xt_Get_Values (The_Widget, Args (0 .. 0));
 
          pragma Assert (Node /= Null_Node);
-         Name := Enter (Xm_Text_Field_Get_String_Wcs (The_Widget));
+         Name := Enter (Xm_Text_Field_Get_String (The_Widget));
          Set_Application_Class_Name (Node, Name);
          Main_Window.Update_Item (Node);
 
@@ -171,7 +171,7 @@ package body Designer.Properties_Editor.Application is
       Element := Xm_Create_Managed_Text_Field
                   (Form, "application_name", Args (0 .. 3));
 
-      Xm_Text_Field_Set_String_Wcs (Element,
+      Xm_Text_Field_Set_String (Element,
                                     Application_Class_Name_Image (Node));
 
       Xt_Add_Callback (Element,

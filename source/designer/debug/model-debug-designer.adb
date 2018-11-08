@@ -42,7 +42,7 @@ with Model.Tree.Designer;
 
 package body Model.Debug.Designer is
 
-   use Ada.Wide_Text_IO;
+   use Ada.Text_IO;
    use Model.Tree;
    use Model.Tree.Designer;
 
@@ -53,18 +53,18 @@ package body Model.Debug.Designer is
    --! специфическую для дизайнера.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print (File   : in Ada.Text_IO.File_Type;
                     Node   : in Model.Node_Id;
-                    Offset : in Ada.Wide_Text_IO.Count);
+                    Offset : in Ada.Text_IO.Count);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Print
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print (File   : in Ada.Text_IO.File_Type;
                     Node   : in Model.Node_Id;
-                    Offset : in Ada.Wide_Text_IO.Count)
+                    Offset : in Ada.Text_IO.Count)
    is
    begin
       case Node_Kind (Node) is

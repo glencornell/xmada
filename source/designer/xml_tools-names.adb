@@ -58,7 +58,7 @@ package body XML_Tools.Names is
 
    package Name_Characters is
      new GNAT.Table
-          (Table_Component_Type => Wide_Character,
+          (Table_Component_Type => Character,
            Table_Index_Type     => Natural,
            Table_Low_Bound      => Natural'First + 1,
            Table_Initial        => Allocation.Name_Characters_Initial,
@@ -68,12 +68,12 @@ package body XML_Tools.Names is
    -- Image --
    -----------
 
-   function Image (Name : in Name_Id) return Wide_String is
+   function Image (Name : in Name_Id) return String is
    begin
       pragma Assert (Name in Names.First .. Names.Last);
 
       return
-        Wide_String
+        String
          (Name_Characters.Table
            (Names.Table (Name).First .. Names.Table (Name).Last));
    end Image;
@@ -92,14 +92,14 @@ package body XML_Tools.Names is
    -- Store --
    -----------
 
-   function Store (Item : in Wide_String) return Name_Id is
+   function Store (Item : in String) return Name_Id is
    begin
       for J in Names.First .. Names.Last loop
          declare
             N : Name_Record renames Names.Table (J);
 
          begin
-            if Wide_String (Name_Characters.Table (N.First .. N.Last))
+            if String (Name_Characters.Table (N.First .. N.Last))
                  = Item
             then
                return J;

@@ -110,12 +110,12 @@ private
 
    pragma Convention (C, Xp_Finish_Proc);
 
-   pragma Convention (C, Xp_Get_Doc_Status);
+   --pragma Convention (C, Xp_Get_Doc_Status);
    for Xp_Get_Doc_Status'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xp_Hinter_Proc);
 
-   pragma Convention (C, Xp_Save_Data);
+   --pragma Convention (C, Xp_Save_Data);
    for Xp_Save_Data use (Spool => 1, Get_Data => 2);
    for Xp_Save_Data'Size use Interfaces.C.unsigned_char'Size;
 

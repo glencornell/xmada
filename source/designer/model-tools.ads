@@ -51,7 +51,7 @@ package Model.Tools is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Project_To_XML (Project   : in Node_Id;
-                             File_Name : in Wide_String);
+                             File_Name : in String);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -60,6 +60,6 @@ package Model.Tools is
    --! Возвращает Node_Id нового проекта.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function XML_To_Project (File_Name : in Wide_String) return Node_Id;
+   function XML_To_Project (File_Name : in String) return Node_Id;
 
 end Model.Tools;

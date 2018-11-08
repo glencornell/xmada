@@ -46,12 +46,12 @@ package body Model.Strings is
    --!    <Unit> Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Image (Item : in String_Id) return Wide_String is
+   function Image (Item : in String_Id) return String is
    begin
       pragma Assert (Item in String_Table.First .. String_Table.Last);
 
       return
-        Wide_String
+        String
          (String_Character_Table.Table
            (String_Table.Table (Item).First
               .. String_Table.Table (Item).Last));
@@ -73,14 +73,14 @@ package body Model.Strings is
    --!    <Unit> Store
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Store (Item : in Wide_String) return String_Id is
+   function Store (Item : in String) return String_Id is
    begin
       for J in String_Table.First .. String_Table.Last loop
          declare
             N : String_Record renames String_Table.Table (J);
 
          begin
-            if Wide_String (String_Character_Table.Table (N.First .. N.Last))
+            if String (String_Character_Table.Table (N.First .. N.Last))
                  = Item
             then
                return J;

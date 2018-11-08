@@ -39,8 +39,8 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
-with Ada.Strings.Wide_Unbounded;
-with Ada.Wide_Text_IO;
+with Ada.Strings.Unbounded;
+with Ada.Text_IO;
 
 with XML_Tools.Attributes;
 with XML_Tools.Elements;
@@ -97,7 +97,7 @@ package body Model.Tools is
    --!    <Purpose> Выводит сообщение в Standard_Error.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Error_Message (Message : in Wide_String);
+   procedure Error_Message (Message : in String);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -131,9 +131,9 @@ package body Model.Tools is
    --!    <Unit> Error_Message
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Error_Message (Message : in Wide_String) is
+   procedure Error_Message (Message : in String) is
    begin
-      Ada.Wide_Text_IO.Put_Line (Ada.Wide_Text_IO.Standard_Error,
+      Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error,
                                  "*** ERROR: " & Message);
    end Error_Message;
 
@@ -304,10 +304,10 @@ package body Model.Tools is
                                  Parent        : in Element_Id;
                                  Is_Constraint : in Boolean)
       is
-         function Create_Full_Node_Name (N : in Node_Id) return Wide_String;
+         function Create_Full_Node_Name (N : in Node_Id) return String;
 
-         function Create_Full_Node_Name (N : in Node_Id) return Wide_String is
-            Res : Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+         function Create_Full_Node_Name (N : in Node_Id) return String is
+            Res : Ada.Strings.Unbounded.Unbounded_String;
             Aux : Node_Id := N;
 
          begin
@@ -318,11 +318,11 @@ package body Model.Tools is
 
                exit when Node_Kind (Aux) = Node_Component_Class;
 
-               if Ada.Strings.Wide_Unbounded.Length (Res) > 0 then
-                  Ada.Strings.Wide_Unbounded.Insert (Res, 1, ".");
+               if Ada.Strings.Unbounded.Length (Res) > 0 then
+                  Ada.Strings.Unbounded.Insert (Res, 1, ".");
                end if;
 
-               Ada.Strings.Wide_Unbounded.Insert
+               Ada.Strings.Unbounded.Insert
                 (Res,
                  1,
                  Model.Names.Image (Name (Aux)));
@@ -330,7 +330,7 @@ package body Model.Tools is
                Aux := Model.Tree.Parent_Node (Aux);
             end loop;
 
-            return Ada.Strings.Wide_Unbounded.To_Wide_String (Res);
+            return Ada.Strings.Unbounded.To_String (Res);
          end Create_Full_Node_Name;
 
          Tag                : Element_Id;
@@ -338,7 +338,7 @@ package body Model.Tools is
            := Internal_Resource_Name (Resource_Specification (Resource));
 
       begin
-         --  Error_Message (Node_Kinds'Wide_Image (Node_Kind (Resource)));
+         --  Error_Message (Node_Kinds'Image (Node_Kind (Resource)));
 
          if Is_Constraint then
             Tag := Elements.Create_Tag (Parent, Constraint_Resource_Tag);
@@ -389,7 +389,7 @@ package body Model.Tools is
             when Node_Integer_Resource_Value =>
                declare
                   Value : constant Integer := Resource_Value (Resource);
-                  Str   : constant Wide_String := Integer'Wide_Image (Value);
+                  Str   : constant String := Integer'Image (Value);
 
                begin
                   Attributes.Create_Attribute
@@ -437,7 +437,7 @@ package body Model.Tools is
 
             when others =>
                Error_Message ("Unhandled resource node kind: "
-                 & Node_Kinds'Wide_Image (Node_Kind (Resource)));
+                 & Node_Kinds'Image (Node_Kind (Resource)));
                raise Program_Error;
          end case;
 
@@ -567,12 +567,12 @@ package body Model.Tools is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Project_To_XML (Project   : in Node_Id;
-                             File_Name : in Wide_String)
+                             File_Name : in String)
    is
    begin
       Set_File_Name (Project, Enter (File_Name));
       Model.Tools.Project_To_XML (Project);
-      XML_Tools.Printer.Print (Ada.Characters.Handling.To_String (File_Name));
+      XML_Tools.Printer.Print (File_Name);
    end Project_To_XML;
 
    ---------------------------------------------------------------------------
@@ -963,14 +963,14 @@ package body Model.Tools is
                                  Resource : in Node_Id)
       is
          function Get_Enumeration_Value_By_Name (Specification : in Node_Id;
-                                                 Name : in Wide_String)
+                                                 Name : in String)
            return Node_Id;
 
-         function Get_Widget_Instance_By_Name (Name : in Wide_String)
+         function Get_Widget_Instance_By_Name (Name : in String)
            return Node_Id;
 
          function Get_Enumeration_Value_By_Name (Specification : in Node_Id;
-                                                 Name : in Wide_String)
+                                                 Name : in String)
            return Node_Id
          is
             Specifications      : constant List_Id
@@ -998,7 +998,7 @@ package body Model.Tools is
             return Res;
          end Get_Enumeration_Value_By_Name;
 
-         function Get_Widget_Instance_By_Name (Name : in Wide_String)
+         function Get_Widget_Instance_By_Name (Name : in String)
            return Node_Id
          is
             Component : constant Node_Id
@@ -1116,7 +1116,7 @@ package body Model.Tools is
 
                elsif Attributes.Name (A) = Value_Attr then
                   declare
-                     Value : constant Wide_String
+                     Value : constant String
                         := XML_Tools.Strings.Image (Attributes.Value (A));
 
                   begin
@@ -1134,7 +1134,7 @@ package body Model.Tools is
                         when Node_Integer_Resource_Value =>
                            declare
                               Int : constant Integer
-                                := Integer'Wide_Value (Value);
+                                := Integer'Value (Value);
                            begin
                               Set_Resource_Value (Resource, Int);
                            end;
@@ -1150,7 +1150,7 @@ package body Model.Tools is
 
                         when others =>
                            Error_Message ("Unhandled resource value : "
-                             & Node_Kinds'Wide_Image (Node_Kind (Resource)));
+                             & Node_Kinds'Image (Node_Kind (Resource)));
                            raise Program_Error;
                      end case;
                   end;
@@ -1423,12 +1423,12 @@ package body Model.Tools is
    --!    <Unit> XML_To_Project
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function XML_To_Project (File_Name : in Wide_String) return Node_Id is
+   function XML_To_Project (File_Name : in String) return Node_Id is
       Project : Node_Id;
 
    begin
       Init_XML_Tools;
-      XML_Tools.Parser.Parse (Ada.Characters.Handling.To_String (File_Name));
+      XML_Tools.Parser.Parse (File_Name);
       Project := XML_To_Project;
       Set_File_Name (Project, Enter (File_Name));
 

@@ -41,7 +41,7 @@
 --  $Source$
 --  $Revision$ $Date$ $Author$
 ------------------------------------------------------------------------------
-with Ada.Wide_Text_IO;
+with Ada.Text_IO;
 
 package Model.Debug is
 
@@ -52,9 +52,9 @@ package Model.Debug is
    --! узла в файл.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print (File   : in Ada.Text_IO.File_Type;
                     Node   : in Node_Id;
-                    Offset : in Ada.Wide_Text_IO.Count := 1);
+                    Offset : in Ada.Text_IO.Count := 1);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -63,16 +63,16 @@ package Model.Debug is
    --! содержащихся в указанном список.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Print (File   : in Ada.Wide_Text_IO.File_Type;
+   procedure Print (File   : in Ada.Text_IO.File_Type;
                     List   : in List_Id;
-                    Offset : in Ada.Wide_Text_IO.Count);
+                    Offset : in Ada.Text_IO.Count);
 
 private
 
    type Print_Hook is
-     access procedure (File   : in Ada.Wide_Text_IO.File_Type;
+     access procedure (File   : in Ada.Text_IO.File_Type;
                        Node   : in Node_Id;
-                       Offset : in Ada.Wide_Text_IO.Count);
+                       Offset : in Ada.Text_IO.Count);
 
    Designer_Hook : Print_Hook := null;
 

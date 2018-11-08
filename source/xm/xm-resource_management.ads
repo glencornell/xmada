@@ -38,7 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Interfaces.C.Wide_Strings;
+--with Interfaces.C.Wide_Strings;
 
 package Xm.Resource_Management is
 
@@ -58,9 +58,9 @@ package Xm.Resource_Management is
     (Item : in out Xm_Secondary_Resource_Data_List_Access);
 
 
-   procedure Xt_Set_Arg (Arg   : in out Xt.Ancillary_Types.Xt_Arg;
-                         Name  : in     Xt.Xt_Resource_Name_String;
-                         Value : in     Interfaces.C.Wide_Strings.wchars_ptr);
+   --  procedure Xt_Set_Arg (Arg   : in out Xt.Ancillary_Types.Xt_Arg;
+   --                        Name  : in     Xt.Xt_Resource_Name_String;
+   --                        Value : in     Interfaces.C.Wide_Strings.wchars_ptr);
 
 
    procedure Xt_Set_Arg (Arg   : in out Xt.Ancillary_Types.Xt_Arg;

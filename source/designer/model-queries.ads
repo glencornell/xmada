@@ -44,19 +44,19 @@
 
 package Model.Queries is
 
-   function Name_Image (Node : in Node_Id) return Wide_String;
+   function Name_Image (Node : in Node_Id) return String;
 
    function Application_Class_Name_Image (Node : in Node_Id)
-     return Wide_String;
+     return String;
 
-   function Internal_Name_Image (Node : in Node_Id) return Wide_String;
+   function Internal_Name_Image (Node : in Node_Id) return String;
 
-   function Resource_Name_Image (Node : in Node_Id) return Wide_String;
+   function Resource_Name_Image (Node : in Node_Id) return String;
 
    function Internal_Resource_Name_Image (Node : in Node_Id)
-     return Wide_String;
+     return String;
 
-   function Resource_Class_Name_Image (Node : in Node_Id) return Wide_String;
+   function Resource_Class_Name_Image (Node : in Node_Id) return String;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

@@ -38,8 +38,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Strings.Wide_Unbounded;
-with Ada.Wide_Text_IO;
+with Ada.Strings.Unbounded;
+with Ada.Text_IO;
 
 with XML_Tools.Attributes;
 with XML_Tools.Elements;
@@ -48,19 +48,19 @@ with XML_Tools.Strings;
 
 package body XML_Tools.Printer is
 
-   use Ada.Strings.Wide_Unbounded;
-   use Ada.Wide_Text_IO;
+   use Ada.Strings.Unbounded;
+   use Ada.Text_IO;
    use XML_Tools.Attributes;
    use XML_Tools.Elements;
    use XML_Tools.Names;
    use XML_Tools.Strings;
 
-   procedure Print (File    : in Ada.Wide_Text_IO.File_Type;
+   procedure Print (File    : in Ada.Text_IO.File_Type;
                     Element : in Element_Id);
 
-   procedure Print_Xml (File : in Ada.Wide_Text_IO.File_Type);
+   procedure Print_Xml (File : in Ada.Text_IO.File_Type);
 
-   Indent : Ada.Wide_Text_IO.Count;
+   Indent : Ada.Text_IO.Count;
 
    -----------
    -- Print --
@@ -75,7 +75,7 @@ package body XML_Tools.Printer is
    -- Print --
    -----------
 
-   procedure Print (File    : in Ada.Wide_Text_IO.File_Type;
+   procedure Print (File    : in Ada.Text_IO.File_Type;
                     Element : in Element_Id)
    is
    begin
@@ -91,7 +91,7 @@ package body XML_Tools.Printer is
             begin
                while Aux /= Null_Attribute_Id loop
                   declare
-                     Str : constant Wide_String
+                     Str : constant String
                        := ' '
                             & Image (Name (Aux))
                             & " = '"
@@ -135,9 +135,9 @@ package body XML_Tools.Printer is
 
          when A_String =>
             declare
-               Str   : constant Wide_String := Image (Value (Element));
+               Str   : constant String := Image (Value (Element));
                Start : Natural := Str'First;
-               Res   : Unbounded_Wide_String;
+               Res   : Unbounded_String;
 
             begin
                loop
@@ -161,7 +161,7 @@ package body XML_Tools.Printer is
                end loop;
 
                if Length (Res) > 0 then
-                  Put_Line (File, To_Wide_String (Res));
+                  Put_Line (File, To_String (Res));
                end if;
             end;
       end case;
@@ -172,7 +172,7 @@ package body XML_Tools.Printer is
    -----------
 
    procedure Print (Filename : in String) is
-      File : Ada.Wide_Text_IO.File_Type;
+      File : Ada.Text_IO.File_Type;
 
    begin
       Create (File, Out_File, Filename, "wcem=8");
@@ -184,7 +184,7 @@ package body XML_Tools.Printer is
    -- Print_Xml --
    ---------------
 
-   procedure Print_Xml (File : in Ada.Wide_Text_IO.File_Type) is
+   procedure Print_Xml (File : in Ada.Text_IO.File_Type) is
    begin
       Put (File, "<?xml version = '1.0' encoding = 'UTF8' ?>");
 

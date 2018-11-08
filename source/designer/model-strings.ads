@@ -46,9 +46,9 @@ with Model.Allocations;
 
 package Model.Strings is
 
-   function Store (Item : in Wide_String) return String_Id;
+   function Store (Item : in String) return String_Id;
 
-   function Image (Item : in String_Id) return Wide_String;
+   function Image (Item : in String_Id) return String;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -64,7 +64,7 @@ private
 
    package String_Character_Table is
      new GNAT.Table
-          (Table_Component_Type => Wide_Character,
+          (Table_Component_Type => Character,
            Table_Index_Type     => Natural,
            Table_Low_Bound      => Natural'First + 1,
            Table_Initial        => Allocations.String_Character_Table_Initial,

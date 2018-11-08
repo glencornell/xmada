@@ -41,9 +41,9 @@
 
 package XML_Tools.Names is
 
-   function Store (Item : in Wide_String) return Name_Id;
+   function Store (Item : in String) return Name_Id;
 
-   function Image (Name : in Name_Id) return Wide_String;
+   function Image (Name : in Name_Id) return String;
 
    procedure Initialize;
 

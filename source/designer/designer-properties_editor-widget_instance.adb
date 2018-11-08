@@ -39,7 +39,7 @@
 --  $Date$
 ------------------------------------------------------------------------------
 pragma Warnings (Off);
-with Interfaces.C.Wide_Strings;
+with Interfaces.C.Strings;
 pragma Warnings (On);
 
 with GNAT.Table;
@@ -79,13 +79,13 @@ with Model.Tree.Designer;
 with Model.Tree.Lists;
 with Model.Tree.Xm_Ada;
 
-with Ada.Strings.Wide_Unbounded;
+with Ada.Strings.Unbounded;
 
 package body Designer.Properties_Editor.Widget_Instance is
 
    use Designer.Model_Utilities;
    use Interfaces.C;
-   use Interfaces.C.Wide_Strings;
+   use Interfaces.C.Strings;
 
    use Model;
    use Model.Names;
@@ -208,7 +208,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <Exceptions>
    ----------------------------------------------------------------------
    procedure Add_Rendition_Name
-    (Set_String : in out Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+    (Set_String : in out Ada.Strings.Unbounded.Unbounded_String;
      Added_Node : in     Node_Id);
 
    ---------------------------------------------------------------------------
@@ -277,7 +277,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <Purpose> Производит проверку на правильность имени виджета
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      function Has_Widget_Name_Error (Str : in Wide_String) return Boolean;
+      function Has_Widget_Name_Error (Str : in String) return Boolean;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -471,7 +471,7 @@ package body Designer.Properties_Editor.Widget_Instance is
       --!    <Unit> Has_Widget_Name_Error
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function Has_Widget_Name_Error (Str : in Wide_String) return Boolean is
+      function Has_Widget_Name_Error (Str : in String) return Boolean is
       begin
          for J in Str'First .. Str'Last loop
             case Str (J) is
@@ -517,10 +517,10 @@ package body Designer.Properties_Editor.Widget_Instance is
 
             if In_Record_Name (Node) = Null_String then
                declare
-                  Name : constant Wide_String := Name_Image (Node);
+                  Name : constant String := Name_Image (Node);
 
                begin
-                  Xm_Text_Field_Set_String_Wcs
+                  Xm_Text_Field_Set_String
                    (Annotation_Table.Table (Node).In_Record_Name, Name);
 
                   Set_In_Record_Name (Node, Store (Name));
@@ -533,7 +533,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          elsif Data.Set = Xm_C_Unset then
             Set_Create_In_Record (Node, False);
 
-            Xm_Text_Field_Set_String_Wcs
+            Xm_Text_Field_Set_String
              (Annotation_Table.Table (Node).In_Record_Name, "");
             Set_In_Record_Name (Node, Null_String);
 
@@ -677,8 +677,8 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          Args     : Xt_Arg_List (0 .. 0);
          Node     : Node_Id;
-         Name     : constant Wide_String
-           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+         Name     : constant String
+           := Xm_Text_Field_Get_String (The_Widget);
 
       begin
          --  Извлекаем узел ресурса.
@@ -1044,7 +1044,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          --  Параметры требуются для соответствия профилю подпрограмм обратного
          --  вызова Xt, но в них нет фактической необходимости.
 
-         Data : constant Xm_Text_Verify_Callback_Struct_Wcs_Access
+         Data : constant Xm_Text_Verify_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
 
       begin
@@ -1056,7 +1056,7 @@ package body Designer.Properties_Editor.Widget_Instance is
          --  отрицательным).
 
          declare
-            Image : constant Wide_String := Value (Data.Text.Pointer);
+            Image : constant String := Value (Data.Text.Pointer);
 
          begin
             for J in Image'Range loop
@@ -1111,18 +1111,18 @@ package body Designer.Properties_Editor.Widget_Instance is
 
          if Status = Xm_Minimum_Value or Status = Xm_Maximum_Value then
             declare
-               Image : constant Wide_String
-                 := Xm_Spin_Box_Position'Wide_Image (Pos);
+               Image : constant String
+                 := Xm_Spin_Box_Position'Image (Pos);
 
             begin
                --  Если число не отрицательное, то первый пробел
                --  необходимо игнорировать.
 
                if Pos < 0 then
-                  Xm_Text_Field_Set_String_Wcs (The_Widget, Image);
+                  Xm_Text_Field_Set_String (The_Widget, Image);
 
                else
-                  Xm_Text_Field_Set_String_Wcs (The_Widget,
+                  Xm_Text_Field_Set_String (The_Widget,
                                                 Image (2 .. Image'Last));
                end if;
             end;
@@ -1184,8 +1184,8 @@ package body Designer.Properties_Editor.Widget_Instance is
          Args : Xt_Arg_List (0 .. 0);
          Node : Node_Id;
          Name : String_Id;
-         Text : constant Wide_String
-           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+         Text : constant String
+           := Xm_Text_Field_Get_String (The_Widget);
 
       begin
          --  Получаем значение узла, для которого вызвался callback.
@@ -1359,22 +1359,22 @@ package body Designer.Properties_Editor.Widget_Instance is
          pragma Unreferenced (Call_Data);
 
          Name : Name_Id;
-         Str  : constant Wide_String
-           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+         Str  : constant String
+           := Xm_Text_Field_Get_String (The_Widget);
 
       begin
-         Name := Enter (Xm_Text_Field_Get_String_Wcs (The_Widget));
+         Name := Enter (Xm_Text_Field_Get_String (The_Widget));
 
          if Str'Length < 0 then
             Designer.Main_Window.Put_Line ("Widget name must not be empty");
 
          else
-            if Has_Widget_Name_Error (Xm_Text_Field_Get_String_Wcs
+            if Has_Widget_Name_Error (Xm_Text_Field_Get_String
                                        (The_Widget))
             then
                Designer.Main_Window.Put_Line
                 ("Erroneous Widget Name "
-                 & Xm_Text_Field_Get_String_Wcs (The_Widget));
+                 & Xm_Text_Field_Get_String (The_Widget));
             end if;
          end if;
 
@@ -1395,12 +1395,12 @@ package body Designer.Properties_Editor.Widget_Instance is
    --!    <ImplementationNotes>
    ----------------------------------------------------------------------
    procedure Add_Rendition_Name
-    (Set_String : in out Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+    (Set_String : in out Ada.Strings.Unbounded.Unbounded_String;
      Added_Node : in     Node_Id)
    is
    begin
-      Ada.Strings.Wide_Unbounded.Append (Set_String, " ");
-      Ada.Strings.Wide_Unbounded.Append
+      Ada.Strings.Unbounded.Append (Set_String, " ");
+      Ada.Strings.Unbounded.Append
        (Set_String, Image (Resource_Value (Added_Node)));
    end Add_Rendition_Name;
 
@@ -1575,7 +1575,7 @@ package body Designer.Properties_Editor.Widget_Instance is
            True);
 
          if In_Record_Name (Node) /= Null_String then
-            Xm_Text_Field_Set_String_Wcs
+            Xm_Text_Field_Set_String
              (Annotation_Table.Table (Node).In_Record_Name,
               Image (In_Record_Name (Node)));
          end if;
@@ -1706,7 +1706,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                         Current_Rendition : Node_Id;
                         Current_Resource  : Node_Id;
                         Set_String        :
-                          Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+                          Ada.Strings.Unbounded.Unbounded_String;
 
                      begin
                         if Rendition_List /= Null_List then
@@ -1732,9 +1732,9 @@ package body Designer.Properties_Editor.Widget_Instance is
                            end loop;
                         end if;
 
-                        Xm_Text_Field_Set_String_Wcs
+                        Xm_Text_Field_Set_String
                          (Annotation_Table.Table (Node).Value,
-                          Ada.Strings.Wide_Unbounded.To_Wide_String
+                          Ada.Strings.Unbounded.To_String
                            (Set_String));
                      end;
 
@@ -1783,7 +1783,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                                     Args (0 .. 0));
                      Xt_Add_Callback
                       (Text,
-                       Xm_N_Modify_Verify_Callback_Wcs,
+                       Xm_N_Modify_Verify_Callback,
                        Callbacks.On_Numeric_Resource_Modify_Verify'Access);
                      Xt_Add_Callback
                       (Text,
@@ -2679,7 +2679,7 @@ package body Designer.Properties_Editor.Widget_Instance is
    begin
       --  Заполнение заголовка выбранного Widget-а
 
-      Xm_Text_Field_Set_String_Wcs (Name, Name_Image (Selected_Item));
+      Xm_Text_Field_Set_String (Name, Name_Image (Selected_Item));
       Xm_Toggle_Button_Gadget_Set_State (Is_Managed,
                                          Model.Tree.Is_Managed (Selected_Item),
                                          False);
@@ -2836,7 +2836,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                      end case;
 
                   when Node_String_Resource_Type =>
-                     Xm_Text_Field_Set_String_Wcs
+                     Xm_Text_Field_Set_String
                       (Annotation_Table.Table (Current).Value,
                        Image (Resource_Value (Current)));
 
@@ -2866,7 +2866,7 @@ package body Designer.Properties_Editor.Widget_Instance is
                         Current_Rendition : Node_Id;
                         Current_Resource  : Node_Id;
                         Set_String        :
-                          Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+                          Ada.Strings.Unbounded.Unbounded_String;
 
                      begin
                         if Rendition_List /= Null_List then
@@ -2892,14 +2892,14 @@ package body Designer.Properties_Editor.Widget_Instance is
                            end loop;
                         end if;
 
-                        Xm_Text_Field_Set_String_Wcs
+                        Xm_Text_Field_Set_String
                          (Annotation_Table.Table (Current).Value,
-                          Ada.Strings.Wide_Unbounded.To_Wide_String
+                          Ada.Strings.Unbounded.To_String
                            (Set_String));
                      end;
 
                   when Node_Xm_String_Resource_Type =>
-                     Xm_Text_Field_Set_String_Wcs
+                     Xm_Text_Field_Set_String
                       (Annotation_Table.Table (Current).Value,
                        Image (Resource_Value (Current)));
 

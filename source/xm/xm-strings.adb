@@ -40,14 +40,14 @@
 ------------------------------------------------------------------------------
 with Interfaces.C;              use Interfaces.C;
 with Interfaces.C.Strings;      use Interfaces.C.Strings;
-with Interfaces.C.Wide_Strings; use Interfaces.C.Wide_Strings;
-pragma Warnings (Off, Interfaces.C.Wide_Strings);
+--with Interfaces.C.Wide_Strings; use Interfaces.C.Wide_Strings;
+--pragma Warnings (Off, Interfaces.C.Wide_Strings);
 
 package body Xm.Strings is
 
    use Interfaces.C;
    use Interfaces.C.Strings;
-   use Interfaces.C.Wide_Strings;
+   --use Interfaces.C.Wide_Strings;
    use Xt;
    use Xt.Ancillary_Types;
 
@@ -276,23 +276,23 @@ package body Xm.Strings is
    --!    <Unit> Xm_String_Generate
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Xm_String_Generate
-    (Text      : in Wide_String;
-     Tag       : in Xm_String_Tag := Null_Xm_String_Tag;
-     Rendition : in Xm_String_Tag := Null_Xm_String_Tag)
-       return Xm_String
-   is
-      C_Text : wchar_array := To_C (Text);
+   --  function Xm_String_Generate
+   --   (Text      : in Wide_String;
+   --    Tag       : in Xm_String_Tag := Null_Xm_String_Tag;
+   --    Rendition : in Xm_String_Tag := Null_Xm_String_Tag)
+   --      return Xm_String
+   --  is
+   --     C_Text : wchar_array := To_C (Text);
 
-      function XmStringGenerate (Text      : in wchar_array;
-                                 Tag       : in Xm_String_Tag;
-                                 Text_Type : in Xm_Text_Type;
-                                 Rendition : in Xm_String_Tag)
-        return Xm_String;
-      pragma Import (C, XmStringGenerate, "XmStringGenerate");
-   begin
-      return XmStringGenerate (C_Text, Tag, Xm_Widechar_Text, Rendition);
-   end Xm_String_Generate;
+   --     function XmStringGenerate (Text      : in wchar_array;
+   --                                Tag       : in Xm_String_Tag;
+   --                                Text_Type : in Xm_Text_Type;
+   --                                Rendition : in Xm_String_Tag)
+   --       return Xm_String;
+   --     pragma Import (C, XmStringGenerate, "XmStringGenerate");
+   --  begin
+   --     return XmStringGenerate (C_Text, Tag, Xm_Widechar_Text, Rendition);
+   --  end Xm_String_Generate;
 
 
    ---------------------------------------------------------------------------
@@ -419,32 +419,32 @@ package body Xm.Strings is
    end Xm_String_Parse_Text;
 
 
-   function Xm_String_Parse_Text
-    (Text        : in Wide_String;
-     Tag         : in Xm_String_Tag  := Null_Xm_String_Tag;
-     Parse_Table : in Xm_Parse_Table := Null_Xm_Parse_Table;
-     Call_Data   : in Xt_Pointer     := Null_Xt_Pointer)
-       return Xm_String
-   is
-      function XmStringParseText (Text        : in wchar_array;
-                                  Text_End    : in wchars_ptr;
-                                  Tag         : in Xm_String_Tag;
-                                  Text_Type   : in Xm_Text_Type;
-                                  Parse_Table : in Xm_Parse_Table;
-                                  Parse_Count : in Cardinal;
-                                  Call_Data   : in Xt_Pointer)
-        return Xm_String;
-      pragma Import (C, XmStringParseText, "XmStringParseText");
-   begin
-      return
-        XmStringParseText (To_C (Text),
-                           Interfaces.C.Wide_Strings.Null_Ptr,
-                           Tag,
-                           Xm_Widechar_Text,
-                           Parse_Table,
-                           Parse_Table'Length,
-                           Call_Data);
-   end Xm_String_Parse_Text;
+   --  function Xm_String_Parse_Text
+   --   (Text        : in Wide_String;
+   --    Tag         : in Xm_String_Tag  := Null_Xm_String_Tag;
+   --    Parse_Table : in Xm_Parse_Table := Null_Xm_Parse_Table;
+   --    Call_Data   : in Xt_Pointer     := Null_Xt_Pointer)
+   --      return Xm_String
+   --  is
+   --     function XmStringParseText (Text        : in wchar_array;
+   --                                 Text_End    : in wchars_ptr;
+   --                                 Tag         : in Xm_String_Tag;
+   --                                 Text_Type   : in Xm_Text_Type;
+   --                                 Parse_Table : in Xm_Parse_Table;
+   --                                 Parse_Count : in Cardinal;
+   --                                 Call_Data   : in Xt_Pointer)
+   --       return Xm_String;
+   --     pragma Import (C, XmStringParseText, "XmStringParseText");
+   --  begin
+   --     return
+   --       XmStringParseText (To_C (Text),
+   --                          Interfaces.C.Wide_Strings.Null_Ptr,
+   --                          Tag,
+   --                          Xm_Widechar_Text,
+   --                          Parse_Table,
+   --                          Parse_Table'Length,
+   --                          Call_Data);
+   --  end Xm_String_Parse_Text;
 
 
    function Xm_String_Tab_Create return Xm_String is
@@ -532,38 +532,38 @@ package body Xm.Strings is
    --!    <ImplementationNotes> Проверка The_Xm_String на нуль значение
    --!  производится в Xm.
    ---------------------------------------------------------------------------
-   function Xm_String_Unparse
-    (The_Xm_String : in Xm_String;
-     Tag           : in Xm_String_Tag  := Null_Xm_String_Tag;
-     Tag_Type      : in Xm_Text_Type   := Xm_No_Text;
-     Parse_Table   : in Xm_Parse_Table := Null_Xm_Parse_Table;
-     Parse_Model   : in Xm_Parse_Model := Xm_Output_All)
-       return Wide_String
-   is
-      Tmp : wchars_ptr;
+   --  function Xm_String_Unparse
+   --   (The_Xm_String : in Xm_String;
+   --    Tag           : in Xm_String_Tag  := Null_Xm_String_Tag;
+   --    Tag_Type      : in Xm_Text_Type   := Xm_No_Text;
+   --    Parse_Table   : in Xm_Parse_Table := Null_Xm_Parse_Table;
+   --    Parse_Model   : in Xm_Parse_Model := Xm_Output_All)
+   --      return Wide_String
+   --  is
+   --     Tmp : wchars_ptr;
 
-      function XmStringUnparse (The_Xm_String : in Xm_String;
-                                Tag           : in Xm_String_Tag;
-                                Tag_Type      : in Xm_Text_Type;
-                                Output_Type   : in Xm_Text_Type;
-                                Parse_Table   : in Xm_Parse_Table;
-                                Parse_Count   : in Cardinal;
-                                Parse_Model   : in Xm_Parse_Model)
-        return wchars_ptr;
-      pragma Import (C, XmStringUnparse, "XmStringUnparse");
+   --     function XmStringUnparse (The_Xm_String : in Xm_String;
+   --                               Tag           : in Xm_String_Tag;
+   --                               Tag_Type      : in Xm_Text_Type;
+   --                               Output_Type   : in Xm_Text_Type;
+   --                               Parse_Table   : in Xm_Parse_Table;
+   --                               Parse_Count   : in Cardinal;
+   --                               Parse_Model   : in Xm_Parse_Model)
+   --       return wchars_ptr;
+   --     pragma Import (C, XmStringUnparse, "XmStringUnparse");
 
-      procedure XtFree (X : in wchars_ptr);
-      pragma Import (C, XtFree, "XtFree");
-   begin
-      Tmp := XmStringUnparse (The_Xm_String, Tag, Tag_Type, Xm_Widechar_Text,
-                              Parse_Table, Parse_Table'Length, Parse_Model);
-      declare
-         Return_String : constant Wide_String := Value (Tmp);
-      begin
-         XtFree (Tmp);
-         return Return_String;
-      end;
-   end Xm_String_Unparse;
+   --     procedure XtFree (X : in wchars_ptr);
+   --     pragma Import (C, XtFree, "XtFree");
+   --  begin
+   --     Tmp := XmStringUnparse (The_Xm_String, Tag, Tag_Type, Xm_Widechar_Text,
+   --                             Parse_Table, Parse_Table'Length, Parse_Model);
+   --     declare
+   --        Return_String : constant Wide_String := Value (Tmp);
+   --     begin
+   --        XtFree (Tmp);
+   --        return Return_String;
+   --     end;
+   --  end Xm_String_Unparse;
 
 
 end Xm.Strings;

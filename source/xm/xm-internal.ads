@@ -259,7 +259,7 @@ private
    pragma Convention (C, Xm_Focus_Moved_Callback_Struct);
    pragma No_Strict_Aliasing (Xm_Focus_Moved_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Render_Table_Type);
+   --pragma Convention (C, Xm_Render_Table_Type);
    for Xm_Render_Table_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Render_Table_Type use (Xm_Label_Render_Table  => 1,
                                  Xm_Button_Render_Table => 2,

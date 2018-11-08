@@ -38,8 +38,8 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Characters.Wide_Latin_1;
-with Ada.Wide_Text_IO;
+--with Ada.Characters.Wide_Latin_1;
+with Ada.Text_IO;
 
 with GNAT.Table;
 
@@ -51,8 +51,7 @@ with XML_Tools.Strings;
 
 package body XML_Tools.Parser is
 
-   use Ada.Characters.Wide_Latin_1;
-   use Ada.Wide_Text_IO;
+   use Ada.Text_IO;
    use XML_Tools.Attributes;
    use XML_Tools.Elements;
    use XML_Tools.Names;
@@ -89,7 +88,7 @@ package body XML_Tools.Parser is
    procedure Scan_PI_End;
    procedure Scan_Data;
    procedure Scan_Name;
-   procedure Scan_String (Delimiter : in Wide_Character);
+   procedure Scan_String (Delimiter : in Character);
    procedure Skip_Spaces;
 
    procedure Parse_Tag;
@@ -101,14 +100,14 @@ package body XML_Tools.Parser is
 
    --  Буфер ввода.
 
-   Buffer      : Wide_String (1 .. 16384);
+   Buffer      : Standard.String (1 .. 16384);
    First       : Positive;
    Last        : Natural;
    Slice_First : Positive;
 
    --  Буфер накопления строки.
 
-   String_Buffer : Wide_String (1 .. 32768);
+   String_Buffer : Standard.String (1 .. 32768);
    String_Last   : Natural;
 
    --  Признак выделения тега.
@@ -386,7 +385,7 @@ package body XML_Tools.Parser is
 
    procedure Scan_Data is
       Is_Waiting_For_Semicolon : Boolean := False;
-      Special_Symbol           : Wide_String (1 .. 255);
+      Special_Symbol           : Standard.String (1 .. 255);
       Special_Symbol_Last      : Natural := 0;
 
    begin
@@ -402,7 +401,7 @@ package body XML_Tools.Parser is
             First := Buffer'First;
 
             String_Last := String_Last + 1;
-            String_Buffer (String_Last) := LF;
+            String_Buffer (String_Last) := Ascii.LF;
          end if;
 
          while First <= Last loop
@@ -438,7 +437,7 @@ package body XML_Tools.Parser is
                      String_Last := String_Last + 1;
 
                      declare
-                        Str : constant Wide_String
+                        Str : constant Standard.String
                           := Special_Symbol (1 .. Special_Symbol_Last);
 
                      begin
@@ -472,7 +471,7 @@ package body XML_Tools.Parser is
 
       while String_Last >= String_Buffer'First
               and then (String_Buffer (String_Last) = ' '
-                          or else String_Buffer (String_Last) = LF)
+                          or else String_Buffer (String_Last) = Ascii.LF)
       loop
          String_Last := String_Last - 1;
       end loop;
@@ -540,7 +539,7 @@ package body XML_Tools.Parser is
       Token := (Kind => PI_End);
    end Scan_PI_End;
 
-   procedure Scan_String (Delimiter : in Wide_Character) is
+   procedure Scan_String (Delimiter : in Character) is
       Delimiter_Found : Boolean := False;
 
    begin

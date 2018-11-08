@@ -40,7 +40,7 @@
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
 with Ada.Command_Line;
-with Ada.Wide_Text_IO;
+with Ada.Text_IO;
 
 with Generator.Application_Resources;
 with Generator.Prototype.Component_Class;
@@ -59,10 +59,10 @@ procedure Compiler.Driver is
 
    procedure Usage is
    begin
-      Ada.Wide_Text_IO.Put_Line ("compiler <mode> <file>");
-      Ada.Wide_Text_IO.Put_Line
+      Ada.Text_IO.Put_Line ("compiler <mode> <file>");
+      Ada.Text_IO.Put_Line
        ("   --application-resources   Generate application resources files");
-      Ada.Wide_Text_IO.Put_Line
+      Ada.Text_IO.Put_Line
        ("   --code                    Generate Ada source code");
    end Usage;
 
@@ -78,7 +78,7 @@ begin
       if Argument (1) = "--application-resources" then
          Project :=
            Model.Tools.XML_To_Project
-            (Ada.Characters.Handling.To_Wide_String (Argument (2)));
+            (Ada.Characters.Handling.To_String (Argument (2)));
 
          Application := First (Applications (Project));
 
@@ -90,7 +90,7 @@ begin
       elsif Argument (1) = "--code" then
          Project :=
            Model.Tools.XML_To_Project
-            (Ada.Characters.Handling.To_Wide_String (Argument (2)));
+            (Ada.Characters.Handling.To_String (Argument (2)));
 
          Application := First (Applications (Project));
 

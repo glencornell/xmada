@@ -1,0 +1,9 @@
+with "../../source/xt/xt.gpr";
+with "../../source/xlib/xlib.gpr";
+
+project xm is
+  for Object_Dir use ".objs";
+  for Exec_Dir use ".";
+  for Source_Dirs use (".");
+  for Languages use ("Ada");
+end xm;

@@ -203,19 +203,19 @@ package XmL is
 
 private
 
-   pragma Convention (C, Xm_Border_Type);
+   --pragma Convention (C, Xm_Border_Type);
    for Xm_Border_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Border_Type use (Xm_Border_None => 0,
                            Xm_Border_Line => 1,
                            Xm_Border_Dash => 2);
 
-   pragma Convention (C, Xm_Cell_Type);
+   --pragma Convention (C, Xm_Cell_Type);
    for Xm_Cell_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Cell_Type use (Xm_Icon_Cell   => 0,
                          Xm_Pixmap_Cell => 1,
                          Xm_String_Cell => 2);
 
-   pragma Convention (C, Xm_Column_Type);
+   --pragma Convention (C, Xm_Column_Type);
    for Xm_Column_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Column_Type use (Xm_Content   => 0,
                            Xm_Heading   => 1,
@@ -223,7 +223,7 @@ private
                            Xm_All_Types => 3);
 --                         Xm_Invalid_Type => 4);
 
-   pragma Convention (C, Xm_Row_Type);
+   --pragma Convention (C, Xm_Row_Type);
    for Xm_Row_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Row_Type use (Xm_Content   => 0,
                         Xm_Heading   => 1,

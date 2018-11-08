@@ -54,7 +54,7 @@ package body Model.Queries is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    function Application_Class_Name_Image (Node : in Node_Id)
-     return Wide_String
+     return String
    is
    begin
       return Image (Application_Class_Name (Node));
@@ -105,7 +105,7 @@ package body Model.Queries is
    --!    <Unit> Internal_Name_Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Internal_Name_Image (Node : in Node_Id) return Wide_String is
+   function Internal_Name_Image (Node : in Node_Id) return String is
    begin
       return Image (Internal_Name (Node));
    end Internal_Name_Image;
@@ -116,7 +116,7 @@ package body Model.Queries is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    function Internal_Resource_Name_Image (Node : in Node_Id)
-     return Wide_String
+     return String
    is
    begin
       return Image (Internal_Resource_Name (Node));
@@ -231,7 +231,7 @@ package body Model.Queries is
    --!    <Unit> Name_Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Name_Image (Node : in Node_Id) return Wide_String is
+   function Name_Image (Node : in Node_Id) return String is
    begin
       return Image (Name (Node));
    end Name_Image;
@@ -241,7 +241,7 @@ package body Model.Queries is
    --!    <Unit> Resource_Class_Name_Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Resource_Class_Name_Image (Node : in Node_Id) return Wide_String is
+   function Resource_Class_Name_Image (Node : in Node_Id) return String is
    begin
       return Image (Resource_Class_Name (Node));
    end Resource_Class_Name_Image;
@@ -251,7 +251,7 @@ package body Model.Queries is
    --!    <Unit> Resource_Name_Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Resource_Name_Image (Node : in Node_Id) return Wide_String is
+   function Resource_Name_Image (Node : in Node_Id) return String is
    begin
       return Image (Resource_Name (Node));
    end Resource_Name_Image;

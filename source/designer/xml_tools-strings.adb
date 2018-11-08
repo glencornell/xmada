@@ -58,7 +58,7 @@ package body XML_Tools.Strings is
 
    package String_Characters is
      new GNAT.Table
-          (Table_Component_Type => Wide_Character,
+          (Table_Component_Type => Character,
            Table_Index_Type     => Natural,
            Table_Low_Bound      => Natural'First + 1,
            Table_Initial        => Allocation.String_Characters_Initial,
@@ -68,12 +68,12 @@ package body XML_Tools.Strings is
    -- Image --
    -----------
 
-   function Image (Item : in String_Id) return Wide_String is
+   function Image (Item : in String_Id) return String is
    begin
       pragma Assert (Item in Strings.First .. Strings.Last);
 
       return
-        Wide_String
+        String
          (String_Characters.Table
            (Strings.Table (Item).First .. Strings.Table (Item).Last));
    end Image;
@@ -92,14 +92,14 @@ package body XML_Tools.Strings is
    -- Store --
    -----------
 
-   function Store (Item : in Wide_String) return String_Id is
+   function Store (Item : in String) return String_Id is
    begin
       for J in Strings.First .. Strings.Last loop
          declare
             N : String_Record renames Strings.Table (J);
 
          begin
-            if Wide_String (String_Characters.Table (N.First .. N.Last))
+            if String (String_Characters.Table (N.First .. N.Last))
                  = Item
             then
                return J;

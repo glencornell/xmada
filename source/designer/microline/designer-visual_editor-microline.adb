@@ -99,7 +99,7 @@ package body Designer.Visual_Editor.Microline is
    --! ресурсов.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function Get_Resource_Value (Node : in Node_Id; Name : in Wide_String)
+   function Get_Resource_Value (Node : in Node_Id; Name : in String)
      return Node_Id;
 
    ---------------------------------------------------------------------------
@@ -111,7 +111,7 @@ package body Designer.Visual_Editor.Microline is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Get_Resource_Specification (Node : in Node_Id;
-                                        Name : in Wide_String)
+                                        Name : in String)
      return Node_Id;
 
    function Get_Row_Type (Node : in Node_Id) return Xm_Row_Type;
@@ -130,9 +130,9 @@ package body Designer.Visual_Editor.Microline is
 
    procedure Set_Column (Node : in Node_Id; Value : in Interfaces.C.int);
 
-   function Get_Cell_String_Image (Node : in Node_Id) return Wide_String;
+   function Get_Cell_String_Image (Node : in Node_Id) return String;
 
-   procedure Set_Cell_String (Node : in Node_Id; Value : in Wide_String);
+   procedure Set_Cell_String (Node : in Node_Id; Value : in String);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -248,7 +248,7 @@ package body Designer.Visual_Editor.Microline is
    --!    <Unit> Get_Cell_String_Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Get_Cell_String_Image (Node : in Node_Id) return Wide_String is
+   function Get_Cell_String_Image (Node : in Node_Id) return String is
       Aux : constant Node_Id := Get_Resource_Value (Node, "cellString");
 
    begin
@@ -305,7 +305,7 @@ package body Designer.Visual_Editor.Microline is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    function Get_Resource_Specification (Node : in Node_Id;
-                                        Name : in Wide_String)
+                                        Name : in String)
      return Node_Id
    is
    begin
@@ -332,7 +332,7 @@ package body Designer.Visual_Editor.Microline is
    --!    <Unit> Get_Resource_Value
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Get_Resource_Value (Node : in Node_Id; Name : in Wide_String)
+   function Get_Resource_Value (Node : in Node_Id; Name : in String)
      return Node_Id
    is
    begin
@@ -500,7 +500,7 @@ package body Designer.Visual_Editor.Microline is
 
             --  Устанавливаем в текстовом поле строку, используемую в ячейке.
 
-            Xm_Text_Field_Set_String_Wcs (Text, "");
+            Xm_Text_Field_Set_String (Text, "");
 
             if Children (Node) /= Null_List then
                declare
@@ -513,7 +513,7 @@ package body Designer.Visual_Editor.Microline is
                        and then Column_Type = Get_Column_Type (Child)
                        and then Column = Get_Column (Child)
                      then
-                        Xm_Text_Field_Set_String_Wcs
+                        Xm_Text_Field_Set_String
                          (Text, Get_Cell_String_Image (Child));
                      end if;
 
@@ -593,7 +593,7 @@ package body Designer.Visual_Editor.Microline is
          Append (Children (Grid_Node), Aux);
       end if;
 
-      Set_Cell_String (Aux, Xm_Text_Field_Get_String_Wcs (Text));
+      Set_Cell_String (Aux, Xm_Text_Field_Get_String (Text));
 
       Xt_Set_Values (Grid_Widget, Make_Set_Arg_List (Resources (Aux)));
    end Save_Text;
@@ -603,7 +603,7 @@ package body Designer.Visual_Editor.Microline is
    --!    <Unit> Set_Cell_String
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Set_Cell_String (Node : in Node_Id; Value : in Wide_String) is
+   procedure Set_Cell_String (Node : in Node_Id; Value : in String) is
       Aux : Node_Id := Get_Resource_Value (Node, "cellString");
 
    begin

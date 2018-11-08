@@ -40,7 +40,7 @@
 ------------------------------------------------------------------------------
 with Interfaces.C;
 with Interfaces.C.Strings;
-with Interfaces.C.Wide_Strings;
+--with Interfaces.C.Wide_Strings;
 
 with Xt.Composite_Management;
 
@@ -50,7 +50,7 @@ package body Xm_Text_Field is
 
    use Interfaces.C;
    use Interfaces.C.Strings;
-   use Interfaces.C.Wide_Strings;
+   --use Interfaces.C.Wide_Strings;
    use Xlib;
    use Xm;
    use Xm.Implementation;
@@ -276,35 +276,35 @@ package body Xm_Text_Field is
    end Xm_Text_Field_Get_Selection_Position;
 
 
-   function Xm_Text_Field_Get_Selection_Wcs
-    (The_Widget : in Xm_Text_Field_Widget)
-       return Wide_String
-   is
-      C_Return_Value : wchars_ptr;
+   --  function Xm_Text_Field_Get_Selection_Wcs
+   --   (The_Widget : in Xm_Text_Field_Widget)
+   --      return Wide_String
+   --  is
+   --     C_Return_Value : wchars_ptr;
 
-      function XmTextFieldGetSelectionWcs (The_Widget : in Widget)
-        return wchars_ptr;
-      pragma Import (C, XmTextFieldGetSelectionWcs,
-                     "XmTextFieldGetSelectionWcs");
+   --     function XmTextFieldGetSelectionWcs (The_Widget : in Widget)
+   --       return wchars_ptr;
+   --     pragma Import (C, XmTextFieldGetSelectionWcs,
+   --                    "XmTextFieldGetSelectionWcs");
 
-      procedure XtFree (Item : in wchars_ptr);
-      pragma Import (C, XtFree, "XtFree");
-   begin
-      Check (The_Widget);
+   --     procedure XtFree (Item : in wchars_ptr);
+   --     pragma Import (C, XtFree, "XtFree");
+   --  begin
+   --     Check (The_Widget);
 
-      C_Return_Value := XmTextFieldGetSelectionWcs (The_Widget);
+   --     C_Return_Value := XmTextFieldGetSelectionWcs (The_Widget);
 
-      if C_Return_Value = Interfaces.C.Wide_Strings.Null_Ptr then
-         return "";
-      end if;
+   --     if C_Return_Value = Interfaces.C.Wide_Strings.Null_Ptr then
+   --        return "";
+   --     end if;
 
-      declare
-         Return_Value : constant Wide_String := Value (C_Return_Value);
-      begin
-         XtFree (C_Return_Value);
-         return Return_Value;
-      end;
-   end Xm_Text_Field_Get_Selection_Wcs;
+   --     declare
+   --        Return_Value : constant Wide_String := Value (C_Return_Value);
+   --     begin
+   --        XtFree (C_Return_Value);
+   --        return Return_Value;
+   --     end;
+   --  end Xm_Text_Field_Get_Selection_Wcs;
 
 
    function Xm_Text_Field_Get_String (The_Widget : in Xm_Text_Field_Widget)
@@ -330,27 +330,27 @@ package body Xm_Text_Field is
    end Xm_Text_Field_Get_String;
 
 
-   function Xm_Text_Field_Get_String_Wcs (The_Widget : in Xm_Text_Field_Widget)
-     return Wide_String
-   is
-      C_Return_Value : wchars_ptr;
+   --  function Xm_Text_Field_Get_String_Wcs (The_Widget : in Xm_Text_Field_Widget)
+   --    return Wide_String
+   --  is
+   --     C_Return_Value : wchars_ptr;
 
-      function XmTextFieldGetStringWcs (The_Widget : in Widget)
-        return wchars_ptr;
-      pragma Import (C, XmTextFieldGetStringWcs, "XmTextFieldGetStringWcs");
+   --     function XmTextFieldGetStringWcs (The_Widget : in Widget)
+   --       return wchars_ptr;
+   --     pragma Import (C, XmTextFieldGetStringWcs, "XmTextFieldGetStringWcs");
 
-      procedure XtFree (Pointer : in wchars_ptr);
-      pragma Import (C, XtFree, "XtFree");
-   begin
-      Check (The_Widget);
-      C_Return_Value := XmTextFieldGetStringWcs (The_Widget);
-      declare
-         Return_Value : constant Wide_String := Value (C_Return_Value);
-      begin
-         XtFree (C_Return_Value);
-         return Return_Value;
-      end;
-   end Xm_Text_Field_Get_String_Wcs;
+   --     procedure XtFree (Pointer : in wchars_ptr);
+   --     pragma Import (C, XtFree, "XtFree");
+   --  begin
+   --     Check (The_Widget);
+   --     C_Return_Value := XmTextFieldGetStringWcs (The_Widget);
+   --     declare
+   --        Return_Value : constant Wide_String := Value (C_Return_Value);
+   --     begin
+   --        XtFree (C_Return_Value);
+   --        return Return_Value;
+   --     end;
+   --  end Xm_Text_Field_Get_String_Wcs;
 
 
    procedure Xm_Text_Field_Get_Substring
@@ -393,45 +393,45 @@ package body Xm_Text_Field is
    end Xm_Text_Field_Get_Substring;
 
 
-   procedure Xm_Text_Field_Get_Substring_Wcs
-    (The_Widget : in     Xm_Text_Field_Widget;
-     Start      : in     Xm.Xm_Text_Position;
-     Num_Chars  : in     Natural;
-     Buffer     :    out Wide_String;
-     Last       :    out Natural;
-     Status     :    out Xm_Text_Substring_Status)
-   is
-      pragma Warnings (Off);
-      C_Buffer : wchar_array (0 .. Buffer'Length);
-      pragma Warnings (On);
+   --  procedure Xm_Text_Field_Get_Substring_Wcs
+   --   (The_Widget : in     Xm_Text_Field_Widget;
+   --    Start      : in     Xm.Xm_Text_Position;
+   --    Num_Chars  : in     Natural;
+   --    Buffer     :    out Wide_String;
+   --    Last       :    out Natural;
+   --    Status     :    out Xm_Text_Substring_Status)
+   --  is
+   --     pragma Warnings (Off);
+   --     C_Buffer : wchar_array (0 .. Buffer'Length);
+   --     pragma Warnings (On);
 
-      function XmTextFieldGetSubstringWcs (The_Widget  : in Widget;
-                                           Start       : in Xm_Text_Position;
-                                           Num_Chars   : in int;
-                                           Buffer_Size : in int;
-                                           Buffer      : in wchar_array)
-        return Xm_Text_Substring_Status;
-      pragma Import (C, XmTextFieldGetSubstringWcs,
-                     "XmTextFieldGetSubstringWcs");
-   begin
-      Check (The_Widget);
+   --     function XmTextFieldGetSubstringWcs (The_Widget  : in Widget;
+   --                                          Start       : in Xm_Text_Position;
+   --                                          Num_Chars   : in int;
+   --                                          Buffer_Size : in int;
+   --                                          Buffer      : in wchar_array)
+   --       return Xm_Text_Substring_Status;
+   --     pragma Import (C, XmTextFieldGetSubstringWcs,
+   --                    "XmTextFieldGetSubstringWcs");
+   --  begin
+   --     Check (The_Widget);
 
-      Status := XmTextFieldGetSubstringWcs (The_Widget,
-                                            Start,
-                                            int (Num_Chars),
-                                            C_Buffer'Length,
-                                            C_Buffer);
-      if Status /= Xm_Copy_Failed then
-         declare
-            Tmp : constant Wide_String := To_Ada (C_Buffer);
-         begin
-            Last := Buffer'First + Tmp'Length - 1;
-            Buffer (Buffer'First .. Last) := Tmp;
-         end;
-      else
-         Last := 0;
-      end if;
-   end Xm_Text_Field_Get_Substring_Wcs;
+   --     Status := XmTextFieldGetSubstringWcs (The_Widget,
+   --                                           Start,
+   --                                           int (Num_Chars),
+   --                                           C_Buffer'Length,
+   --                                           C_Buffer);
+   --     if Status /= Xm_Copy_Failed then
+   --        declare
+   --           Tmp : constant Wide_String := To_Ada (C_Buffer);
+   --        begin
+   --           Last := Buffer'First + Tmp'Length - 1;
+   --           Buffer (Buffer'First .. Last) := Tmp;
+   --        end;
+   --     else
+   --        Last := 0;
+   --     end if;
+   --  end Xm_Text_Field_Get_Substring_Wcs;
 
 
    procedure Xm_Text_Field_Insert (The_Widget : in Xm_Text_Field_Widget;
@@ -448,18 +448,18 @@ package body Xm_Text_Field is
    end Xm_Text_Field_Insert;
 
 
-   procedure Xm_Text_Field_Insert_Wcs (The_Widget : in Xm_Text_Field_Widget;
-                                       Position   : in Xm_Text_Position;
-                                       Value      : in Wide_String)
-   is
-      procedure XmTextFieldInsertWcs (The_Widget : in Widget;
-                                      Position   : in Xm_Text_Position;
-                                      Value      : in wchar_array);
-      pragma Import (C, XmTextFieldInsertWcs, "XmTextFieldInsertWcs");
-   begin
-      Check (The_Widget);
-      XmTextFieldInsertWcs (The_Widget, Position, To_C (Value));
-   end Xm_Text_Field_Insert_Wcs;
+   --  procedure Xm_Text_Field_Insert_Wcs (The_Widget : in Xm_Text_Field_Widget;
+   --                                      Position   : in Xm_Text_Position;
+   --                                      Value      : in Wide_String)
+   --  is
+   --     procedure XmTextFieldInsertWcs (The_Widget : in Widget;
+   --                                     Position   : in Xm_Text_Position;
+   --                                     Value      : in wchar_array);
+   --     pragma Import (C, XmTextFieldInsertWcs, "XmTextFieldInsertWcs");
+   --  begin
+   --     Check (The_Widget);
+   --     XmTextFieldInsertWcs (The_Widget, Position, To_C (Value));
+   --  end Xm_Text_Field_Insert_Wcs;
 
 
    function Xm_Text_Field_Paste (The_Widget : in Xm_Text_Field_Widget)
@@ -540,20 +540,20 @@ package body Xm_Text_Field is
    end Xm_Text_Field_Replace;
 
 
-   procedure Xm_Text_Field_Replace_Wcs (The_Widget : in Xm_Text_Field_Widget;
-                                        From_Pos   : in Xm.Xm_Text_Position;
-                                        To_Pos     : in Xm.Xm_Text_Position;
-                                        Value      : in Wide_String)
-   is
-      procedure XmTextFieldReplaceWcs (The_Widget : in Widget;
-                                       From_Pos   : in Xm_Text_Position;
-                                       To_Pos     : in Xm_Text_Position;
-                                       Value      : in wchar_array);
-      pragma Import (C, XmTextFieldReplaceWcs, "XmTextFieldReplaceWcs");
-   begin
-      Check (The_Widget);
-      XmTextFieldReplaceWcs (The_Widget, From_Pos, To_Pos, To_C (Value));
-   end Xm_Text_Field_Replace_Wcs;
+   --  procedure Xm_Text_Field_Replace_Wcs (The_Widget : in Xm_Text_Field_Widget;
+   --                                       From_Pos   : in Xm.Xm_Text_Position;
+   --                                       To_Pos     : in Xm.Xm_Text_Position;
+   --                                       Value      : in Wide_String)
+   --  is
+   --     procedure XmTextFieldReplaceWcs (The_Widget : in Widget;
+   --                                      From_Pos   : in Xm_Text_Position;
+   --                                      To_Pos     : in Xm_Text_Position;
+   --                                      Value      : in wchar_array);
+   --     pragma Import (C, XmTextFieldReplaceWcs, "XmTextFieldReplaceWcs");
+   --  begin
+   --     Check (The_Widget);
+   --     XmTextFieldReplaceWcs (The_Widget, From_Pos, To_Pos, To_C (Value));
+   --  end Xm_Text_Field_Replace_Wcs;
 
 
    procedure Xm_Text_Field_Set_Add_Mode (The_Widget : in Xm_Text_Field_Widget;
@@ -653,17 +653,17 @@ package body Xm_Text_Field is
    end Xm_Text_Field_Set_String;
 
 
-   procedure Xm_Text_Field_Set_String_Wcs
-    (The_Widget : in Xm_Text_Field_Widget;
-     The_String : in Wide_String)
-   is
-      procedure XmTextFieldSetStringWcs (The_Widget : in Widget;
-                                         The_String : in wchar_array);
-      pragma Import (C, XmTextFieldSetStringWcs, "XmTextFieldSetStringWcs");
-   begin
-      Check (The_Widget);
-      XmTextFieldSetStringWcs (The_Widget, To_C (The_String));
-   end Xm_Text_Field_Set_String_Wcs;
+   --  procedure Xm_Text_Field_Set_String_Wcs
+   --   (The_Widget : in Xm_Text_Field_Widget;
+   --    The_String : in Wide_String)
+   --  is
+   --     procedure XmTextFieldSetStringWcs (The_Widget : in Widget;
+   --                                        The_String : in wchar_array);
+   --     pragma Import (C, XmTextFieldSetStringWcs, "XmTextFieldSetStringWcs");
+   --  begin
+   --     Check (The_Widget);
+   --     XmTextFieldSetStringWcs (The_Widget, To_C (The_String));
+   --  end Xm_Text_Field_Set_String_Wcs;
 
 
    procedure Xm_Text_Field_Show_Position (The_Widget : in Xm_Text_Field_Widget;

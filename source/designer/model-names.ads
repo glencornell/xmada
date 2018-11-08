@@ -46,11 +46,11 @@ with Model.Allocations;
 
 package Model.Names is
 
-   function Find (Name : in Wide_String) return Name_Id;
+   function Find (Name : in String) return Name_Id;
 
-   function Enter (Name : in Wide_String) return Name_Id;
+   function Enter (Name : in String) return Name_Id;
 
-   function Image (Name : in Name_Id) return Wide_String;
+   function Image (Name : in Name_Id) return String;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -66,7 +66,7 @@ private
 
    package Name_Character_Table is
      new GNAT.Table
-          (Table_Component_Type => Wide_Character,
+          (Table_Component_Type => Character,
            Table_Index_Type     => Natural,
            Table_Low_Bound      => Natural'First + 1,
            Table_Initial        => Allocations.Name_Character_Table_Initial,

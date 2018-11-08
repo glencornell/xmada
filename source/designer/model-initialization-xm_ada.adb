@@ -45,7 +45,7 @@ with Model.Tree.Xm_Ada;
 with Model.Xt_Motif;
 
 with Ada.Characters.Handling;
-with Ada.Strings.Wide_Unbounded;
+with Ada.Strings.Unbounded;
 
 package body Model.Initialization.Xm_Ada is
 
@@ -1540,8 +1540,8 @@ package body Model.Initialization.Xm_Ada is
       --!    <Purpose>
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      function Create_Resource_Name (Label_String : in Wide_String)
-        return Wide_String;
+      function Create_Resource_Name (Label_String : in String)
+        return String;
 
        ------------------------------------------------------------------------
       --! <Subprogram>
@@ -1556,10 +1556,10 @@ package body Model.Initialization.Xm_Ada is
       --!    <Unit> Create_Resource_Name
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function Create_Resource_Name (Label_String : in Wide_String)
-        return Wide_String
+      function Create_Resource_Name (Label_String : in String)
+        return String
       is
-         Created_String      : constant Wide_String
+         Created_String      : constant String
            :=  Label_String (Label_String'First .. Label_String'First + 1)
                              & "_String_Defs."
                              & Label_String
@@ -1567,31 +1567,28 @@ package body Model.Initialization.Xm_Ada is
                              & "_"
                              & Label_String (Label_String'First + 2)
                              & "_"
-                             & Ada.Characters.Handling.To_Wide_Character
-                              (Ada.Characters.Handling.To_Upper
-                               (Ada.Characters.Handling.To_Character
-                                (Label_String (Label_String'First + 3))));
+                             & Ada.Characters.Handling.To_Upper
+                               (Label_String (Label_String'First + 3));
 
       begin
          if Label_String'Length > 4 then
 
             declare
                Suffix              :
-                 Ada.Strings.Wide_Unbounded.Unbounded_Wide_String
-                  := Ada.Strings.Wide_Unbounded.To_Unbounded_Wide_String
+                 Ada.Strings.Unbounded.Unbounded_String
+                  := Ada.Strings.Unbounded.To_Unbounded_String
                    (Label_String
                     (Label_String'First + 4 .. Label_String'Last));
                 Current_Char_Number : Integer := 1;
 
             begin
                while Current_Char_Number
-                 /= Ada.Strings.Wide_Unbounded.Length (Suffix) loop
+                 /= Ada.Strings.Unbounded.Length (Suffix) loop
                   if Ada.Characters.Handling.Is_Upper
-                   (Ada.Characters.Handling.To_Character
-                    (Ada.Strings.Wide_Unbounded.Element
-                     (Suffix, Current_Char_Number)))
+                   (Ada.Strings.Unbounded.Element
+                     (Suffix, Current_Char_Number))
                   then
-                     Ada.Strings.Wide_Unbounded.Insert
+                     Ada.Strings.Unbounded.Insert
                       (Suffix, Current_Char_Number, "_");
                      Current_Char_Number := Current_Char_Number + 1;
                   end if;
@@ -1600,7 +1597,7 @@ package body Model.Initialization.Xm_Ada is
                end loop;
 
                return Created_String
-                 & Ada.Strings.Wide_Unbounded.To_Wide_String (Suffix);
+                 & Ada.Strings.Unbounded.To_String (Suffix);
             end;
          end if;
 
@@ -1625,13 +1622,13 @@ package body Model.Initialization.Xm_Ada is
          while Current_Resource /= Null_Node loop
 
             declare
-               Resource_Label_String : constant Wide_String
+               Resource_Label_String : constant String
                  := Create_Resource_Name
                   (Model.Names.Image
                    (Resource_Name
                     (Current_Resource)));
 
-               Class_Label_String : constant Wide_String
+               Class_Label_String : constant String
                  := Create_Resource_Name
                   (Model.Names.Image
                    (Resource_Class_Name

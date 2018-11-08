@@ -383,7 +383,7 @@ package body Designer.Operations is
    --!    <Unit> Open_Project
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Open_Project (File_Name : in Wide_String) is
+   procedure Open_Project (File_Name : in String) is
    begin
       Initialize;
       Project := Model.Tools.XML_To_Project (File_Name);
@@ -396,7 +396,7 @@ package body Designer.Operations is
    --!    <Unit> Save_Project
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Save_Project (File_Name : in Wide_String) is
+   procedure Save_Project (File_Name : in String) is
       Aux : constant Natural := File_Name'Last;
 
    begin
@@ -428,7 +428,7 @@ package body Designer.Operations is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Save_Project is
-      Full_File_Name : constant Wide_String := Image (File_Name (Project));
+      Full_File_Name : constant String := Image (File_Name (Project));
       Aux            : constant Natural := Full_File_Name'Last;
 
    begin

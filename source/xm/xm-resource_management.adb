@@ -46,7 +46,7 @@ with Xm.Implementation;
 package body Xm.Resource_Management is
 
    use Interfaces.C;
-   use Interfaces.C.Wide_Strings;
+   --use Interfaces.C.Wide_Strings;
    use Xm.Implementation;
    use Xt;
    use Xt.Ancillary_Types;
@@ -198,15 +198,15 @@ package body Xm.Resource_Management is
    end Xm_Secondary_Resource_Data_List_Access_Free;
 
 
-   procedure Xt_Set_Arg (Arg   : in out Xt_Arg;
-                         Name  : in     Xt_Resource_Name_String;
-                         Value : in     wchars_ptr)
-   is
-      function To_Xt_Arg_Val is
-        new Ada.Unchecked_Conversion (wchars_ptr, Xt_Arg_Val);
-   begin
-      Arg := (Name, To_Xt_Arg_Val (Value));
-   end Xt_Set_Arg;
+   --  procedure Xt_Set_Arg (Arg   : in out Xt_Arg;
+   --                        Name  : in     Xt_Resource_Name_String;
+   --                        Value : in     wchars_ptr)
+   --  is
+   --     function To_Xt_Arg_Val is
+   --       new Ada.Unchecked_Conversion (wchars_ptr, Xt_Arg_Val);
+   --  begin
+   --     Arg := (Name, To_Xt_Arg_Val (Value));
+   --  end Xt_Set_Arg;
 
 
    procedure Xt_Set_Arg (Arg   : in out Xt_Arg;

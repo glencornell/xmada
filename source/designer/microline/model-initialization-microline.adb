@@ -2450,7 +2450,7 @@ package body Model.Initialization.Microline is
    --------------------------------------------------------------------------
    procedure Tree_Widget_Class is
       Resources   : constant List_Id := New_List;
-      Resource    : Node_Id;
+--      Resource    : Node_Id;
 
    begin
       Microline_Tree_Widget_Class := Create_Widget_Class;

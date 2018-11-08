@@ -211,12 +211,12 @@ package body Designer.Model_Utilities is
    --!    <Unit> New_Name
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function New_Name (Prefix : in Wide_String) return Name_Id is
+   function New_Name (Prefix : in String) return Name_Id is
    begin
       for J in Positive'Range loop
          declare
-            Suffix : constant Wide_String := Positive'Wide_Image (J);
-            Name   : constant Wide_String
+            Suffix : constant String := Positive'Image (J);
+            Name   : constant String
               := Prefix & Suffix (Suffix'First + 1 .. Suffix'Last);
 
          begin

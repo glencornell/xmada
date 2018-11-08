@@ -115,12 +115,12 @@ package Xm_Text is
                                   Found      :    out Boolean);
 
 
-   procedure Xm_Text_Find_String_Wcs (The_Widget : in     Xm_Text_Widget;
-                                      Start      : in     Xm.Xm_Text_Position;
-                                      The_String : in     Wide_String;
-                                      Direction  : in     Xm.Xm_Text_Direction;
-                                      Position   :    out Xm.Xm_Text_Position;
-                                      Found      :    out Boolean);
+   --  procedure Xm_Text_Find_String_Wcs (The_Widget : in     Xm_Text_Widget;
+   --                                     Start      : in     Xm.Xm_Text_Position;
+   --                                     The_String : in     Wide_String;
+   --                                     Direction  : in     Xm.Xm_Text_Direction;
+   --                                     Position   :    out Xm.Xm_Text_Position;
+   --                                     Found      :    out Boolean);
 
 
    function Xm_Text_Get_Baseline (The_Widget : in Xm_Text_Widget)
@@ -158,15 +158,15 @@ package Xm_Text is
      Own_Selection :    out Boolean);
 
 
-   function Xm_Text_Get_Selection_Wcs (The_Widget : in Xm_Text_Widget)
-     return Wide_String;
+   --  function Xm_Text_Get_Selection_Wcs (The_Widget : in Xm_Text_Widget)
+   --    return Wide_String;
 
 
    function Xm_Text_Get_String (The_Widget : in Xm_Text_Widget) return String;
 
 
-   function Xm_Text_Get_String_Wcs (The_Widget : in Xm_Text_Widget)
-     return Wide_String;
+   --  function Xm_Text_Get_String_Wcs (The_Widget : in Xm_Text_Widget)
+   --    return Wide_String;
 
 
    procedure Xm_Text_Get_Substring
@@ -178,13 +178,13 @@ package Xm_Text is
      Status     :    out Xm.Xm_Text_Substring_Status);
 
 
-   procedure Xm_Text_Get_Substring_Wcs
-    (The_Widget : in     Xm_Text_Widget;
-     Start      : in     Xm.Xm_Text_Position;
-     Num_Chars  : in     Natural;
-     Buffer     :    out Wide_String;
-     Last       :    out Natural;
-     Status     :    out Xm.Xm_Text_Substring_Status);
+   --  procedure Xm_Text_Get_Substring_Wcs
+   --   (The_Widget : in     Xm_Text_Widget;
+   --    Start      : in     Xm.Xm_Text_Position;
+   --    Num_Chars  : in     Natural;
+   --    Buffer     :    out Wide_String;
+   --    Last       :    out Natural;
+   --    Status     :    out Xm.Xm_Text_Substring_Status);
 
 
    function Xm_Text_Get_Top_Character (The_Widget : in Xm_Text_Widget)
@@ -196,9 +196,9 @@ package Xm_Text is
                              Value      : in String);
 
 
-   procedure Xm_Text_Insert_Wcs (The_Widget : in Xm_Text_Widget;
-                                 Position   : in Xm.Xm_Text_Position;
-                                 Value      : in Wide_String);
+   --  procedure Xm_Text_Insert_Wcs (The_Widget : in Xm_Text_Widget;
+   --                                Position   : in Xm.Xm_Text_Position;
+   --                                Value      : in Wide_String);
 
 
    function Xm_Text_Paste (The_Widget : in Xm_Text_Widget)
@@ -225,10 +225,10 @@ package Xm_Text is
                               Value      : in String);
 
 
-   procedure Xm_Text_Replace_Wcs (The_Widget : in Xm_Text_Widget;
-                                  From_Pos   : in Xm.Xm_Text_Position;
-                                  To_Pos     : in Xm.Xm_Text_Position;
-                                  Value      : in Wide_String);
+   --  procedure Xm_Text_Replace_Wcs (The_Widget : in Xm_Text_Widget;
+   --                                 From_Pos   : in Xm.Xm_Text_Position;
+   --                                 To_Pos     : in Xm.Xm_Text_Position;
+   --                                 Value      : in Wide_String);
 
 
    procedure Xm_Text_Scroll (The_Widget : in Xm_Text_Widget;
@@ -268,8 +268,8 @@ package Xm_Text is
                                  The_String : in String);
 
 
-   procedure Xm_Text_Set_String_Wcs (The_Widget : in Xm_Text_Widget;
-                                     The_String : in Wide_String);
+   --  procedure Xm_Text_Set_String_Wcs (The_Widget : in Xm_Text_Widget;
+   --                                    The_String : in Wide_String);
 
 
    procedure Xm_Text_Show_Position (The_Widget : in Xm_Text_Widget;

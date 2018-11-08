@@ -51,7 +51,6 @@ package Xt.Ancillary_Types is
       Name  : Xt_String;
       Value : Xt_Arg_Val;
    end record;
-   for Xt_Arg'Size use 64;
    pragma Convention (C, Xt_Arg);
 
    type Xt_Arg_List is array (Natural range <>) of Xt_Arg;

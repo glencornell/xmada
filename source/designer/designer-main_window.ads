@@ -47,8 +47,8 @@ with Xt;
 with Model;
 
 package Designer.Main_Window is
-   Project_Extention    : constant Wide_String := ".xad";
-   Default_Project_Name : constant Wide_String := "untitled";
+   Project_Extention    : constant String := ".xad";
+   Default_Project_Name : constant String := "untitled";
    -- Расширение файлов по умолчанию.
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -138,7 +138,7 @@ package Designer.Main_Window is
    --!    <Purpose> Выводит строку текста в окно диагностически сообщений.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Put_Line (Item : in Wide_String);
+   procedure Put_Line (Item : in String);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -148,7 +148,7 @@ package Designer.Main_Window is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    procedure Put_Exception_In_Callback
-    (Name       : in Wide_String;
+    (Name       : in String;
      Occurrence : in Ada.Exceptions.Exception_Occurrence);
 
    ---------------------------------------------------------------------------
@@ -166,7 +166,7 @@ package Designer.Main_Window is
    --!    <Purpose> Выводит заголовок главного окна дизайнера.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure XmAdaDesigner_title (File_Name : in Wide_String);
+   procedure XmAdaDesigner_title (File_Name : in String);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -203,7 +203,7 @@ private
 
    type Symbolic_Traceback is
      access function (X : in Ada.Exceptions.Exception_Occurrence)
-       return Wide_String;
+       return String;
 
    Symbolic_Traceback_Hook : Symbolic_Traceback := null;
 

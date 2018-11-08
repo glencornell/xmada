@@ -38,21 +38,21 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Integer_Wide_Text_IO;
+with Ada.Integer_Text_IO;
 
 package body Model.Names.Debug is
 
-   use Ada.Integer_Wide_Text_IO;
-   use Ada.Wide_Text_IO;
+   use Ada.Integer_Text_IO;
+   use Ada.Text_IO;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
    --!    <Unit> Print_Statistics
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Print_Statistics (File         : in Ada.Wide_Text_IO.File_Type;
-                               Title_Offset : in Ada.Wide_Text_IO.Count;
-                               Data_Offset  : in Ada.Wide_Text_IO.Count)
+   procedure Print_Statistics (File         : in Ada.Text_IO.File_Type;
+                               Title_Offset : in Ada.Text_IO.Count;
+                               Data_Offset  : in Ada.Text_IO.Count)
    is
    begin
       Set_Col (File, Title_Offset);

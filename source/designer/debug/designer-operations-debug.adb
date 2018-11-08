@@ -38,7 +38,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Wide_Text_IO;
+with Ada.Text_IO;
 
 with Model.Debug;
 with Model.Debug.Designer;
@@ -52,7 +52,7 @@ with Model.Tree.Debug;
 
 package body Designer.Operations.Debug is
 
-   use Ada.Wide_Text_IO;
+   use Ada.Text_IO;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

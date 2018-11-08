@@ -52,7 +52,7 @@ package Designer.Utilities is
    --! используемое в текущей локали библиотеки C.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   function To_Locale_String (Item : in Wide_String) return String;
+   function To_Locale_String (Item : in String) return String;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -62,7 +62,7 @@ package Designer.Utilities is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function From_Locale_String (Item : in Interfaces.C.Strings.chars_ptr)
-     return Wide_String;
+     return String;
 
 --   ---------------------------------------------------------------------------
 --   --! <Subprogram>
@@ -71,7 +71,7 @@ package Designer.Utilities is
 --   --! используемое в текущей локали библиотеки C.
 --   --!    <Exceptions>
 --   ---------------------------------------------------------------------------
---   function To_Locale_String (Item : in Wide_String)
+--   function To_Locale_String (Item : in String)
 --     return Interfaces.C.Strings.chars_ptr;
 
 --   ---------------------------------------------------------------------------
@@ -81,7 +81,7 @@ package Designer.Utilities is
 --   --! используемое в текущей локали библиотеки C.
 --   --!    <Exceptions>
 --   ---------------------------------------------------------------------------
---   function To_Locale_String (Item : in Wide_String)
+--   function To_Locale_String (Item : in String)
 --     return Interfaces.C.char_array;
 
 end Designer.Utilities;

@@ -51,7 +51,7 @@ package body Designer.Main_Window.Traceback is
    --!    <Exceptions>
    ---------------------------------------------------------------------------
    function Symbolic_Traceback (X : in Ada.Exceptions.Exception_Occurrence)
-     return Wide_String;
+     return String;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -59,12 +59,11 @@ package body Designer.Main_Window.Traceback is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    function Symbolic_Traceback (X : in Ada.Exceptions.Exception_Occurrence)
-     return Wide_String
+     return String
    is
    begin
       return
-        Ada.Characters.Handling.To_Wide_String
-         (GNAT.Traceback.Symbolic.Symbolic_Traceback (X));
+        GNAT.Traceback.Symbolic.Symbolic_Traceback (X);
    end Symbolic_Traceback;
 
 begin

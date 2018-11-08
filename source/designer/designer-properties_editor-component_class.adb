@@ -39,8 +39,9 @@
 --  $Date$
 ------------------------------------------------------------------------------
 
-with Interfaces.C.Wide_Strings;
+with Interfaces.C.Strings;
 
+with System;
 with Xm;
 with Xm.Resource_Management;
 with Xm_Form;
@@ -61,7 +62,7 @@ with Model.Strings;
 package body Designer.Properties_Editor.Component_Class is
 
    use Interfaces.C;
-   use Interfaces.C.Wide_Strings;
+   use Interfaces.C.Strings;
 
    use Model;
    use Model.Queries;
@@ -81,6 +82,8 @@ package body Designer.Properties_Editor.Component_Class is
    use Xt.Composite_Management;
    use Xt.Instance_Management;
    use Xt.Resource_Management;
+   
+   use type Xt.Xt_Pointer;
 
    package Callbacks is
 
@@ -91,7 +94,7 @@ package body Designer.Properties_Editor.Component_Class is
       --! соответствие стандарту именования идентификаторов
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      function Has_Identifier_Error (Str : in Wide_String) return Boolean;
+      function Has_Identifier_Error (Str : in String) return Boolean;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -100,7 +103,7 @@ package body Designer.Properties_Editor.Component_Class is
       --! имени идентификатора ключевому слову.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      function Has_Key_Word_Error (Tmp_Str : in Wide_String) return Boolean;
+      function Has_Key_Word_Error (Tmp_Str : in String) return Boolean;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -109,7 +112,7 @@ package body Designer.Properties_Editor.Component_Class is
       --! имени идентификатора.
       --!    <Exceptions>
       ------------------------------------------------------------------------
-      function Has_Underline_Dup (Str : in Wide_String) return Boolean;
+      function Has_Underline_Dup (Str : in String) return Boolean;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -179,7 +182,7 @@ package body Designer.Properties_Editor.Component_Class is
       --!    <Unit> Has_Identifier_Error
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function Has_Identifier_Error (Str : in Wide_String) return Boolean is
+      function Has_Identifier_Error (Str : in String) return Boolean is
          Result : Boolean;
 
       begin
@@ -217,32 +220,32 @@ package body Designer.Properties_Editor.Component_Class is
       --!    <Unit> Has_Key_Word_Error
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function Has_Key_Word_Error (Tmp_Str : in Wide_String) return Boolean is
+      function Has_Key_Word_Error (Tmp_Str : in String) return Boolean is
 
          ---------------------------------------------------------------------
          --! <Subprogram>
          --!    <Unit> To_Lower
          --!    <Purpose> Подпрограмма перевода символов строки типа
-         --! Wide_String в нижний регистр.
+         --! String в нижний регистр.
          --!    <Exceptions>
          ---------------------------------------------------------------------
-         function To_Lower (Str : in Wide_String) return Wide_String;
+         function To_Lower (Str : in String) return String;
 
          ---------------------------------------------------------------------
          --! <Subprogram>
          --!    <Unit> To_Lower
          --!    <ImplementationNotes>
          ---------------------------------------------------------------------
-         function To_Lower (Str : in Wide_String) return Wide_String is
-            Result : Wide_String (Str'First .. Str'Last);
+         function To_Lower (Str : in String) return String is
+            Result : String (Str'First .. Str'Last);
 
          begin
             for J in Str'First .. Str'Last loop
                case Str (J) is
                   when 'A' .. 'Z' =>
                      Result (J) :=
-                        Wide_Character'Val
-                         (Wide_Character'Pos (Str (J)) + 32);
+                        Character'Val
+                         (Character'Pos (Str (J)) + 32);
 
                   when others =>
                      Result (J) := Str (J);
@@ -252,7 +255,7 @@ package body Designer.Properties_Editor.Component_Class is
             return Result;
          end To_Lower;
 
-         Str : constant Wide_String := To_Lower (Tmp_Str);
+         Str : constant String := To_Lower (Tmp_Str);
       begin
          if Str = "abort"
            or else Str = "abs"
@@ -339,7 +342,7 @@ package body Designer.Properties_Editor.Component_Class is
       --!    <Unit> Has_Underline_Dup
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function Has_Underline_Dup (Str : in Wide_String) return Boolean is
+      function Has_Underline_Dup (Str : in String) return Boolean is
       begin
          for J in Str'First + 1 .. Str'Last loop
             if Str (J - 1) = '_' and then Str (J) = '_' then
@@ -375,7 +378,7 @@ package body Designer.Properties_Editor.Component_Class is
 
          pragma Assert (Node /= Null_Node);
 
-         Name := Enter (Xm_Text_Field_Get_String_Wcs (The_Widget));
+         Name := Enter (Xm_Text_Field_Get_String (The_Widget));
          Set_Name (Node, Name);
          Main_Window.Update_Item (Node);
 
@@ -400,8 +403,8 @@ package body Designer.Properties_Editor.Component_Class is
 
          Node : Node_Id;
          Args : Xt_Arg_List (0 .. 0);
-         Name : constant Wide_String
-           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+         Name : constant String
+           := Xm_Text_Field_Get_String (The_Widget);
 
       begin
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
@@ -437,11 +440,11 @@ package body Designer.Properties_Editor.Component_Class is
          Node : Node_Id;
          Args : Xt_Arg_List (0 .. 0);
 
-         Verify_Text : constant Xm_Text_Verify_Callback_Struct_Wcs_Access
+         Verify_Text : constant Xm_Text_Verify_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
-         Name        : constant Wide_String
-           := Xm_Text_Field_Get_String_Wcs (The_Widget);
-         Text_Name   : constant Xm_Text_Block_Wcs
+         Name        : constant String
+           := Xm_Text_Field_Get_String (The_Widget);
+         Text_Name   : constant Xm_Text_Block
            := Verify_Text.Text;
          Start_Pos   : constant Integer
            := Integer (Verify_Text.Start_Pos);
@@ -455,16 +458,16 @@ package body Designer.Properties_Editor.Component_Class is
          pragma Assert (Node /= Null_Node);
          pragma Assert (Node_Kind (Node) = Node_Component_Class);
 
-         if Text_Name.Pointer /= Null_Ptr
-           and then Interfaces.C.Wide_Strings.Wcslen (Text_Name.Pointer) /= 0
+         if Text_Name.Pointer /= Interfaces.C.Strings.Null_Ptr 
+           and then Interfaces.C.Strings.strlen (Text_Name.Pointer) /= 0
          then
             declare
-               Str : constant Wide_String
+               Str : constant String
                  := Value (Text_Name.Pointer,
-                           Interfaces.C.Wide_Strings.Wcslen
+                           Interfaces.C.Strings.strlen
                             (Text_Name.Pointer));
 
-               Aux : Wide_String
+               Aux : String
                       (Name'First
                        .. Name'Last + Str'Length + Start_Pos - End_Pos);
 
@@ -507,8 +510,8 @@ package body Designer.Properties_Editor.Component_Class is
 
          Node : Node_Id;
          Args : Xt_Arg_List (0 .. 0);
-         Name : constant Wide_String
-           := Xm_Text_Field_Get_String_Wcs (The_Widget);
+         Name : constant String
+           := Xm_Text_Field_Get_String (The_Widget);
 
       begin
          Xt_Set_Arg (Args (0), Xm_N_User_Data, Node'Address);
@@ -544,11 +547,11 @@ package body Designer.Properties_Editor.Component_Class is
          Node : Node_Id;
          Args : Xt_Arg_List (0 .. 0);
 
-         Verify_Text : constant Xm_Text_Verify_Callback_Struct_Wcs_Access
+         Verify_Text : constant Xm_Text_Verify_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
-         Name        : constant Wide_String
-           := Xm_Text_Field_Get_String_Wcs (The_Widget);
-         Text_Name   : constant Xm_Text_Block_Wcs
+         Name        : constant String
+           := Xm_Text_Field_Get_String (The_Widget);
+         Text_Name   : constant Xm_Text_Block
            := Verify_Text.Text;
          Start_Pos   : constant Integer
            := Integer (Verify_Text.Start_Pos);
@@ -563,13 +566,13 @@ package body Designer.Properties_Editor.Component_Class is
          pragma Assert (Node_Kind (Node) = Node_Component_Class);
 
          if Text_Name.Pointer /= Null_Ptr
-           and then Interfaces.C.Wide_Strings.Wcslen (Text_Name.Pointer) /= 0
+           and then Interfaces.C.Strings.strlen (Text_Name.Pointer) /= 0
          then
             declare
-               Str : constant Wide_String
+               Str : constant String
                  := Value (Text_Name.Pointer,
-                        Interfaces.C.Wide_Strings.Wcslen (Text_Name.Pointer));
-               Aux : Wide_String
+                        Interfaces.C.Strings.strlen (Text_Name.Pointer));
+               Aux : String
                       (Name'First
                          .. Name'Last + Str'Length + Start_Pos - End_Pos);
             begin
@@ -633,7 +636,7 @@ package body Designer.Properties_Editor.Component_Class is
       Element := Xm_Create_Managed_Text_Field
                   (Form, "class_name", Args (0 .. 3));
 
-      Xm_Text_Field_Set_String_Wcs (Element, Name_Image (Node));
+      Xm_Text_Field_Set_String (Element, Name_Image (Node));
       Xt_Add_Callback (Element,
                        Xm_N_Activate_Callback,
                        Callbacks.On_Class_Name_Changed'Access);
@@ -669,7 +672,7 @@ package body Designer.Properties_Editor.Component_Class is
       --  с "s" на конце.
 
       if Package_Name (Node) = Null_String then
-         Xm_Text_Field_Set_String_Wcs (Element, Name_Image (Node) & "s");
+         Xm_Text_Field_Set_String (Element, Name_Image (Node) & "s");
          Set_Package_Name (Node, Store (Name_Image (Node) & "s"));
       end if;
 
@@ -680,7 +683,7 @@ package body Designer.Properties_Editor.Component_Class is
                        Xm_N_Losing_Focus_Callback,
                        Callbacks.On_Package_Name_Activate'Access);
       Xt_Add_Callback (Element,
-                       Xm_N_Modify_Verify_Callback_Wcs,
+                       Xm_N_Modify_Verify_Callback,
                        Callbacks.On_Package_Name_Text_Verify'Access);
 
       Alignment (2).L_Widget := Label;
@@ -713,7 +716,7 @@ package body Designer.Properties_Editor.Component_Class is
       --  имя компонента.
 
       if Type_Name (Node) = Null_String then
-         Xm_Text_Field_Set_String_Wcs (Element, Name_Image (Node));
+         Xm_Text_Field_Set_String (Element, Name_Image (Node));
          Set_Package_Name (Node, Store (Name_Image (Node)));
       end if;
 
@@ -724,7 +727,7 @@ package body Designer.Properties_Editor.Component_Class is
                        Xm_N_Losing_Focus_Callback,
                        Callbacks.On_Record_Name_Activate'Access);
       Xt_Add_Callback (Element,
-                       Xm_N_Modify_Verify_Callback_Wcs,
+                       Xm_N_Modify_Verify_Callback,
                        Callbacks.On_Record_Name_Text_Verify'Access);
       Alignment (3).L_Widget := Label;
       Alignment (3).R_Widget := Element;

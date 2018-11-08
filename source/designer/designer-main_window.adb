@@ -39,9 +39,8 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
-with Ada.Characters.Wide_Latin_1;
-with Ada.Strings.Wide_Unbounded;
 with Ada.Unchecked_Conversion;
+with Ada.Strings.Unbounded;
 
 with Xt.Ancillary_Types;
 with Xt.Callbacks;
@@ -433,7 +432,7 @@ package body Designer.Main_Window is
    Save_As_Dialog                       : Widget;
    Message_Text                         : Widget;
    Message_Buffer                       :
-     Ada.Strings.Wide_Unbounded.Unbounded_Wide_String;
+     Ada.Strings.Unbounded.Unbounded_String;
    --  Временный буфер для хранения текста диагностических сообщений,
    --  выводимых до фактического создания виджета отображения диагностических
    --  сообщений.
@@ -864,7 +863,7 @@ package body Designer.Main_Window is
 
          Data      : constant Xm_File_Selection_Box_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
-         File_Name : constant Wide_String
+         File_Name : constant String
            := Xm_String_Unparse (Data.Value);
          Aux : constant Natural := File_Name'Last;
 
@@ -1067,7 +1066,7 @@ package body Designer.Main_Window is
 
          Data      : constant Xm_File_Selection_Box_Callback_Struct_Access
            := To_Callback_Struct_Access (Call_Data);
-         File_Name : constant Wide_String
+         File_Name : constant String
            := Xm_String_Unparse (Data.Value);
 
       begin
@@ -1484,9 +1483,9 @@ package body Designer.Main_Window is
       Message_Text :=
         Xm_Create_Managed_Scrolled_Text
          (Message_Form, "message_text", Args (0 .. 6));
-      Xm_Text_Set_String_Wcs
+      Xm_Text_Set_String
        (Message_Text,
-        Ada.Strings.Wide_Unbounded.To_Wide_String (Message_Buffer));
+        Ada.Strings.Unbounded.To_String (Message_Buffer));
       Xm_Text_Set_Insertion_Position
        (Message_Text, Xm_Text_Get_Last_Position (Message_Text));
 
@@ -1567,12 +1566,12 @@ package body Designer.Main_Window is
    --!    <Unit> XmAdaDesigner_title
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure XmAdaDesigner_title (File_Name : in Wide_String) is
+   procedure XmAdaDesigner_title (File_Name : in String) is
       msg : Xm_String;
 
    begin
       File_Name_MW := Xm_String_Generate (File_Name);
-      msg := Xm_String_Generate (Wide_String'(File_Name)
+      msg := Xm_String_Generate (File_Name
                                    & " - XmAda designer");
       msg := Xm_String_Create_Localized (Xm_String_Unparse (msg));
       Xme_Set_WM_Shell_Title (msg, App_Shell_MW);
@@ -1671,14 +1670,12 @@ package body Designer.Main_Window is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    procedure Put_Exception_In_Callback
-    (Name       : in Wide_String;
+    (Name       : in String;
      Occurrence : in Ada.Exceptions.Exception_Occurrence)
    is
    begin
       Put_Line ("Unhandled exception in " & Name & ':');
-      Put_Line
-       (Ada.Characters.Handling.To_Wide_String
-         (Ada.Exceptions.Exception_Information (Occurrence)));
+      Put_Line (Ada.Exceptions.Exception_Information (Occurrence));
 
       if Symbolic_Traceback_Hook /= null then
          Put_Line (Symbolic_Traceback_Hook (Occurrence));
@@ -1690,20 +1687,20 @@ package body Designer.Main_Window is
    --!    <Unit> Put_Line
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   procedure Put_Line (Item : in Wide_String) is
+   procedure Put_Line (Item : in String) is
    begin
       if Message_Text /= Null_Widget then
-         Xm_Text_Insert_Wcs
+         Xm_Text_Insert
           (Message_Text,
            Xm_Text_Get_Last_Position (Message_Text),
-           Item & Ada.Characters.Wide_Latin_1.LF);
+           Item & Ascii.LF);
          Xm_Text_Set_Insertion_Position
           (Message_Text, Xm_Text_Get_Last_Position (Message_Text));
          Xm_Update_Display (Message_Text);
 
       else
-         Ada.Strings.Wide_Unbounded.Append
-          (Message_Buffer, Item & Ada.Characters.Wide_Latin_1.LF);
+         Ada.Strings.Unbounded.Append
+          (Message_Buffer, Item & Ascii.LF);
       end if;
    end Put_Line;
 

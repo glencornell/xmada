@@ -39,8 +39,8 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Ada.Characters.Handling;
-with Ada.Strings.Wide_Fixed;
-with Ada.Wide_Text_IO;
+with Ada.Strings.Fixed;
+with Ada.Text_IO;
 with Interfaces.C.Strings;
 
 with Xt.Ancillary_Types;
@@ -55,8 +55,8 @@ with Model.Tree.Lists;
 
 package body Designer.RTL_Consistency is
 
-   use Ada.Strings.Wide_Fixed;
-   use Ada.Wide_Text_IO;
+   use Ada.Strings.Fixed;
+   use Ada.Text_IO;
    use Model;
    use Model.Names;
    use Model.Queries;
@@ -104,10 +104,9 @@ package body Designer.RTL_Consistency is
    begin
       for J in Xt_Resources'Range loop
          declare
-            X_Name : constant Wide_String
-              := Ada.Characters.Handling.To_Wide_String
-                  (Interfaces.C.Strings.Value
-                    (Xt_Resources (J).Resource_Name));
+            X_Name : constant String
+              := Interfaces.C.Strings.Value
+                    (Xt_Resources (J).Resource_Name);
             M_Name : constant Name_Id := Find (X_Name);
 
          begin
@@ -158,9 +157,8 @@ package body Designer.RTL_Consistency is
                            W_Resources (J) := True;
                            All_Resources (K) := True;
 
-                           if Ada.Characters.Handling.To_Wide_String
-                               (Interfaces.C.Strings.Value
-                                 (Xt_Resources (J).Resource_Type))
+                           if Interfaces.C.Strings.Value
+                                 (Xt_Resources (J).Resource_Type)
                                 /= Internal_Name_Image
                                     (Resource_Type (Aux))
                            then
@@ -170,9 +168,8 @@ package body Designer.RTL_Consistency is
                                   & Internal_Name_Image
                                      (Resource_Type (Aux))
                                   & " (should be "
-                                  & Ada.Characters.Handling.To_Wide_String
-                                     (Interfaces.C.Strings.Value
-                                       (Xt_Resources (J).Resource_Type))
+                                  & Interfaces.C.Strings.Value
+                                       (Xt_Resources (J).Resource_Type)
                                   & ')');
                            end if;
                         end if;
@@ -191,9 +188,8 @@ package body Designer.RTL_Consistency is
          then
             Put_Line
              ("Resource "
-                & Ada.Characters.Handling.To_Wide_String
-                   (Interfaces.C.Strings.Value
-                     (Xt_Resources (J).Resource_Name))
+                & Interfaces.C.Strings.Value
+                     (Xt_Resources (J).Resource_Name)
                 & " not defined in model");
          end if;
       end loop;

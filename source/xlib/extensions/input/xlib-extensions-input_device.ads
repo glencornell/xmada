@@ -47,7 +47,7 @@ package Xlib.Extensions.Input_Device is
    type X_Input_Device_Usage_Type is (Is_X_Pointer,
                                       Is_X_Keyboard,
                                       Is_X_Extension_Device);
-   pragma Convention (C, X_Input_Device_Usage_Type);
+   --pragma Convention (C, X_Input_Device_Usage_Type);
    for X_Input_Device_Usage_Type'Size use Interfaces.C.unsigned_char'Size;
 
    type X_Input_Device_Class_Type is (Key_Class,
@@ -57,13 +57,13 @@ package Xlib.Extensions.Input_Device is
                                       Proximity_Class,
                                       Focus_Class,
                                       Other_Class);
-   pragma Convention (C, X_Input_Device_Class_Type);
+   --pragma Convention (C, X_Input_Device_Class_Type);
    for X_Input_Device_Class_Type'Size use X_Id'Size;
 
 
    type X_Input_Device_Valuator_Mode_Type is (Relative,
                                               Absolute);
-   pragma Convention (C, X_Input_Device_Valuator_Mode_Type);
+   --pragma Convention (C, X_Input_Device_Valuator_Mode_Type);
    for X_Input_Device_Valuator_Mode_Type'Size
      use Interfaces.C.unsigned_char'Size;
 
@@ -125,7 +125,7 @@ package Xlib.Extensions.Input_Device is
             null;
       end case;
    end record;
-   pragma Convention (C, X_Any_Class_Info);
+   pragma Convention (C_Pass_By_Value, X_Any_Class_Info);
 
    subtype X_Key_Info      is X_Any_Class_Info (Key_Class);
    subtype X_Button_Info   is X_Any_Class_Info (Button_Class);

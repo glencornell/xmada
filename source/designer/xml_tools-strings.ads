@@ -41,9 +41,9 @@
 
 package XML_Tools.Strings is
 
-   function Store (Item : in Wide_String) return String_Id;
+   function Store (Item : in String) return String_Id;
 
-   function Image (Item : in String_Id) return Wide_String;
+   function Image (Item : in String_Id) return String;
 
    procedure Initialize;
 

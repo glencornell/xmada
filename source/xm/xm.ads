@@ -39,7 +39,6 @@
 --  $Date$
 ------------------------------------------------------------------------------
 with Interfaces.C.Strings;
-with Interfaces.C.Wide_Strings;
 
 with Xlib.Atoms;
 with Xlib.Events;
@@ -141,7 +140,7 @@ package Xm is
    subtype Xm_Text_Format is Xlib.Atoms.Atom;
 
    type Xm_Text_Block_Record is record
-      Pointer : Xt.Xt_Pointer;
+      Pointer : Interfaces.C.Strings.Chars_ptr;
       Length  : Interfaces.C.int;
       Format  : Xm_Text_Format;
    end record;
@@ -149,7 +148,7 @@ package Xm is
    type Xm_Text_Block is access all Xm_Text_Block_Record;
 
    type Xm_Text_Block_Wcs_Record is record
-      Pointer : Interfaces.C.Wide_Strings.wchars_ptr;
+      Pointer : access Interfaces.C.wchar_array;
       Length  : Interfaces.C.int;
    end record;
 
@@ -1312,7 +1311,7 @@ private
 
    Null_Xm_Render_Table : constant Xm_Render_Table := null;
 
-   pragma Convention (C, Xm_Alignment);
+   --pragma Convention (C, Xm_Alignment);
    for Xm_Alignment'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Any_Callback_Struct);
@@ -1323,63 +1322,63 @@ private
 
    pragma No_Strict_Aliasing (Xm_Arrow_Button_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Arrow_Direction);
+   --pragma Convention (C, Xm_Arrow_Direction);
    for Xm_Arrow_Direction'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Arrow_Layout);
+   --pragma Convention (C, Xm_Arrow_Layout);
    for Xm_Arrow_Layout'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Arrow_Orientation);
+   --pragma Convention (C, Xm_Arrow_Orientation);
    for Xm_Arrow_Orientation'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Arrow_Sensitivity);
+   --pragma Convention (C, Xm_Arrow_Sensitivity);
    for Xm_Arrow_Sensitivity'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Attachment);
+   --pragma Convention (C, Xm_Attachment);
    for Xm_Attachment'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Audible_Warning);
+   --pragma Convention (C, Xm_Audible_Warning);
    for Xm_Audible_Warning'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Auto_Drag_Model);
+   --pragma Convention (C, Xm_Auto_Drag_Model);
    for Xm_Auto_Drag_Model'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Automatic_Selection);
+   --pragma Convention (C, Xm_Automatic_Selection);
    for Xm_Automatic_Selection'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Auto_Selection_Type);
+   --pragma Convention (C, Xm_Auto_Selection_Type);
    for Xm_Auto_Selection_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Binding_Type);
+   --pragma Convention (C, Xm_Binding_Type);
    for Xm_Binding_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Bitmap_Conversion_Model);
+   --pragma Convention (C, Xm_Bitmap_Conversion_Model);
    for Xm_Bitmap_Conversion_Model'Size use Interfaces.C.unsigned_char'Size;
 
 --   pragma Convention (C, Xm_Child_Horizontal_Alignment);
 --   for Xm_Child_Horizontal_Alignment'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Child_Placement);
+   --pragma Convention (C, Xm_Child_Placement);
    for Xm_Child_Placement'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Child_Type);
+   --pragma Convention (C, Xm_Child_Type);
    for Xm_Child_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Child_Vertical_Alignment);
+   --pragma Convention (C, Xm_Child_Vertical_Alignment);
    for Xm_Child_Vertical_Alignment'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Combo_Box_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Combo_Box_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Combo_Box_Type);
+   --pragma Convention (C, Xm_Combo_Box_Type);
    for Xm_Combo_Box_Type'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Command_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Command_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Command_Window_Location);
+   --pragma Convention (C, Xm_Command_Window_Location);
    for Xm_Command_Window_Location'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Container_Outline_Callback_Struct);
@@ -1399,37 +1398,37 @@ private
 
    pragma Convention (C, Xm_Clipboard_Status);
 
-   pragma Convention (C, Xm_Default_Button_Emphasis);
+   --pragma Convention (C, Xm_Default_Button_Emphasis);
    for Xm_Default_Button_Emphasis'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Default_Button_Type);
+   --pragma Convention (C, Xm_Default_Button_Type);
    for Xm_Default_Button_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Default_Button_Type use (Xm_Dialog_None          => 0,
                                    Xm_Dialog_Cancel_Button => 2,
                                    Xm_Dialog_Ok_Button     => 4,
                                    Xm_Dialog_Help_Button   => 7);
 
-   pragma Convention (C, Xm_Delete_Response);
+   --pragma Convention (C, Xm_Delete_Response);
    for Xm_Delete_Response'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Destination_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Destination_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Destination_Operation);
+   --pragma Convention (C, Xm_Destination_Operation);
    for Xm_Destination_Operation'Size use Xt.Ancillary_Types.Xt_Enum'Size;
    for Xm_Destination_Operation use (Xm_Move  => 0,
                                      Xm_Copy  => 1,
                                      Xm_Link  => 2,
                                      Xm_Other => 4);
 
-   pragma Convention (C, Xm_Dialog_Child_Type);
+   --pragma Convention (C, Xm_Dialog_Child_Type);
    for Xm_Dialog_Child_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Dialog_Style);
+   --pragma Convention (C, Xm_Dialog_Style);
    for Xm_Dialog_Style'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Dialog_Type);
+   --pragma Convention (C, Xm_Dialog_Type);
    for Xm_Dialog_Type'Size use Interfaces.C.unsigned_char'Size;
 
    type Xm_Direction is new Interfaces.C.unsigned_char;
@@ -1451,19 +1450,19 @@ private
 
    pragma No_Strict_Aliasing (Xm_Drawn_Button_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Edit_Mode);
+   --pragma Convention (C, Xm_Edit_Mode);
    for Xm_Edit_Mode'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Enable_Btn1_Transfer);
+   --pragma Convention (C, Xm_Enable_Btn1_Transfer);
    for Xm_Enable_Btn1_Transfer'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Enable_Warp);
+   --pragma Convention (C, Xm_Enable_Warp);
    for Xm_Enable_Warp'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Entry_View_Type);
+   --pragma Convention (C, Xm_Entry_View_Type);
    for Xm_Entry_View_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_File_Filter_Style);
+   --pragma Convention (C, Xm_File_Filter_Style);
    for Xm_File_Filter_Style'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_File_Selection_Box_Callback_Struct);
@@ -1472,10 +1471,10 @@ private
 
    pragma Convention (C, Xm_Highlight_Mode);
 
-   pragma Convention (C, Xm_Include_Status);
+   --pragma Convention (C, Xm_Include_Status);
    for Xm_Include_Status'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Indicator_On);
+   --pragma Convention (C, Xm_Indicator_On);
    for Xm_Indicator_On'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Indicator_On use (Xm_Indicator_None      => 0,
                             Xm_Indicator_Fill      => 1,
@@ -1485,31 +1484,31 @@ private
                             Xm_Indicator_Cross_Box => 33,
                             Xm_Indicator_Box       => 255);
 
-   pragma Convention (C, Xm_Indicator_Type);
+   --pragma Convention (C, Xm_Indicator_Type);
    for Xm_Indicator_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Indicator_Type use (Xm_N_Of_Many           => 1,
                               Xm_One_Of_Many         => 2,
                               Xm_One_Of_Many_Round   => 3,
                               Xm_One_Of_Many_Diamond => 4);
 
-   pragma Convention (C, Xm_Input_Policy);
+   --pragma Convention (C, Xm_Input_Policy);
    for Xm_Input_Policy'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Input_Policy use (Xm_Per_Shell      => 0,
                             Xm_Per_Widget     => 1,
                             Xm_Inherit_Policy => 255);
 
-   pragma Convention (C, Xm_Keyboard_Focus_Policy);
+   --pragma Convention (C, Xm_Keyboard_Focus_Policy);
    for Xm_Keyboard_Focus_Policy'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Label_Type);
+   --pragma Convention (C, Xm_Label_Type);
    for Xm_Label_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Label_Type use (Xm_Pixmap => 1,
                           Xm_Label_String => 2);
 
-   pragma Convention (C, Xm_Layout_Type);
+   --pragma Convention (C, Xm_Layout_Type);
    for Xm_Layout_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Line_Style);
+   --pragma Convention (C, Xm_Line_Style);
    for Xm_Line_Style'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_List_Callback_Struct);
@@ -1518,25 +1517,25 @@ private
 
    pragma No_Strict_Aliasing (Xm_List_Position_Pointer);
 
-   pragma Convention (C, Xm_List_Selection_Type);
+   --pragma Convention (C, Xm_List_Selection_Type);
    for Xm_List_Selection_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Match_Behavior);
+   --pragma Convention (C, Xm_Match_Behavior);
    for Xm_Match_Behavior'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Merge_Mode);
 
-   pragma Convention (C, Xm_Multi_Click);
+   --pragma Convention (C, Xm_Multi_Click);
    for Xm_Multi_Click'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Navigation_Type);
+   --pragma Convention (C, Xm_Navigation_Type);
    for Xm_Navigation_Type'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Notebook_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Notebook_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Notebook_Child_Type);
+   --pragma Convention (C, Xm_Notebook_Child_Type);
    for Xm_Notebook_Child_Type'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Notebook_Page_Info);
@@ -1545,58 +1544,58 @@ private
 
    pragma Convention (C, Xm_Offset_Model);
 
-   pragma Convention (C, Xm_Orientation);
+   --pragma Convention (C, Xm_Orientation);
    for Xm_Orientation'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Outline_Button_Policy);
+   --pragma Convention (C, Xm_Outline_Button_Policy);
    for Xm_Outline_Button_Policy'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Outline_State);
+   --pragma Convention (C, Xm_Outline_State);
    for Xm_Outline_State'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Packing);
+   --pragma Convention (C, Xm_Packing);
    for Xm_Packing'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Parse_Model);
 
-   pragma Convention (C, Xm_Path_Mode);
+   --pragma Convention (C, Xm_Path_Mode);
    for Xm_Path_Mode'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Popup_Enabled);
+   --pragma Convention (C, Xm_Popup_Enabled);
    for Xm_Popup_Enabled'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Popup_Handler_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Popup_Handler_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Position_Mode);
+   --pragma Convention (C, Xm_Position_Mode);
    for Xm_Position_Mode'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Position_Type);
+   --pragma Convention (C, Xm_Position_Type);
    for Xm_Position_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Primary_Ownership);
+   --pragma Convention (C, Xm_Primary_Ownership);
    for Xm_Primary_Ownership'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Print_Shell_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Print_Shell_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Processing_Direction);
+   --pragma Convention (C, Xm_Processing_Direction);
    for Xm_Processing_Direction'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Push_Button_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Push_Button_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Resize_Policy);
+   --pragma Convention (C, Xm_Resize_Policy);
    for Xm_Resize_Policy'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Row_Column_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Row_Column_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Row_Column_Type);
+   --pragma Convention (C, Xm_Row_Column_Type);
    for Xm_Row_Column_Type'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Scale_Callback_Struct);
@@ -1607,16 +1606,16 @@ private
 
    pragma No_Strict_Aliasing (Xm_Scroll_Bar_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Scroll_Bar_Display_Policy);
+   --pragma Convention (C, Xm_Scroll_Bar_Display_Policy);
    for Xm_Scroll_Bar_Display_Policy'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Scroll_Bar_Placement);
+   --pragma Convention (C, Xm_Scroll_Bar_Placement);
    for Xm_Scroll_Bar_Placement'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Scrolled_Window_Child_Type);
+   --pragma Convention (C, Xm_Scrolled_Window_Child_Type);
    for Xm_Scrolled_Window_Child_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Scrolling_Policy);
+   --pragma Convention (C, Xm_Scrolling_Policy);
    for Xm_Scrolling_Policy'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Secondary_Resource_Data_Record);
@@ -1625,66 +1624,66 @@ private
 
    pragma No_Strict_Aliasing (Xm_Selection_Box_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Selection_Policy);
+   --pragma Convention (C, Xm_Selection_Policy);
    for Xm_Selection_Policy'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Selection_Technique);
+   --pragma Convention (C, Xm_Selection_Technique);
    for Xm_Selection_Technique'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Selection_Type);
+   --pragma Convention (C, Xm_Selection_Type);
    for Xm_Selection_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Separator_Type);
+   --pragma Convention (C, Xm_Separator_Type);
    for Xm_Separator_Type'Size use Interfaces.C.unsigned_char'Size;
 
    pragma No_Strict_Aliasing (Xm_String_Pointer);
 
-   pragma Convention (C, Xm_Toggle_Button_State);
+   --pragma Convention (C, Xm_Toggle_Button_State);
    for Xm_Toggle_Button_State'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Traversal_Obscured_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Traversal_Obscured_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Shadow_Type);
+   --pragma Convention (C, Xm_Shadow_Type);
    for Xm_Shadow_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Shadow_Type use (Xm_Shadow_Etched_In  => 5,
                            Xm_Shadow_Etched_Out => 6,
                            Xm_Shadow_In         => 7,
                            Xm_Shadow_Out        => 8);
 
-   pragma Convention (C, Xm_Show_Arrows);
+   --pragma Convention (C, Xm_Show_Arrows);
    for Xm_Show_Arrows'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Show_Value);
+   --pragma Convention (C, Xm_Show_Value);
    for Xm_Show_Value'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Slider_Mark);
+   --pragma Convention (C, Xm_Slider_Mark);
    for Xm_Slider_Mark'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Slider_Visual);
+   --pragma Convention (C, Xm_Slider_Visual);
    for Xm_Slider_Visual'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Sliding_Mode);
+   --pragma Convention (C, Xm_Sliding_Mode);
    for Xm_Sliding_Mode'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Spatial_Include_Model);
+   --pragma Convention (C, Xm_Spatial_Include_Model);
    for Xm_Spatial_Include_Model'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Spatial_Resize_Model);
+   --pragma Convention (C, Xm_Spatial_Resize_Model);
    for Xm_Spatial_Resize_Model'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Spatial_Snap_Model);
+   --pragma Convention (C, Xm_Spatial_Snap_Model);
    for Xm_Spatial_Snap_Model'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Spatial_Style);
+   --pragma Convention (C, Xm_Spatial_Style);
    for Xm_Spatial_Style'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Spin_Box_Callback_Struct);
 
    pragma No_Strict_Aliasing (Xm_Spin_Box_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Spin_Box_Child_Type);
+   --pragma Convention (C, Xm_Spin_Box_Child_Type);
    for Xm_Spin_Box_Child_Type'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Spin_Box_Child_Type use (Xm_String_Child  => 2,
                                    Xm_Numeric       => 3);
@@ -1695,14 +1694,14 @@ private
    pragma Convention (C, Xm_String_Component_Type);
    for Xm_String_Component_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_String_Direction);
+   --pragma Convention (C, Xm_String_Direction);
    for Xm_String_Direction'Size use Interfaces.C.unsigned_char'Size;
    for Xm_String_Direction use (Xm_String_Direction_L_To_R  => 0,
                                 Xm_String_Direction_R_To_L  => 1,
                                 Xm_String_Direction_Unset   => 3,
                                 Xm_String_Direction_Default => 255);
 
-   pragma Convention (C, Xm_Tear_Off_Model);
+   --pragma Convention (C, Xm_Tear_Off_Model);
    for Xm_Tear_Off_Model'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Text_Block);
@@ -1732,30 +1731,30 @@ private
 
    pragma No_Strict_Aliasing (Xm_Toggle_Button_Callback_Struct_Access);
 
-   pragma Convention (C, Xm_Toggle_Mode);
+   --pragma Convention (C, Xm_Toggle_Mode);
    for Xm_Toggle_Mode'Size use Interfaces.C.unsigned_char'Size;
 
    pragma Convention (C, Xm_Traversal_Direction);
 
-   pragma Convention (C, Xm_Unit_Type);
+   --pragma Convention (C, Xm_Unit_Type);
    for Xm_Unit_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Unpost_Behavior);
+   --pragma Convention (C, Xm_Unpost_Behavior);
    for Xm_Unpost_Behavior'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Vertical_Alignment);
+   --pragma Convention (C, Xm_Vertical_Alignment);
    for Xm_Vertical_Alignment'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_View_Type);
+   --pragma Convention (C, Xm_View_Type);
    for Xm_View_Type'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Visual_Emphasis);
+   --pragma Convention (C, Xm_Visual_Emphasis);
    for Xm_Visual_Emphasis'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Visual_Policy);
+   --pragma Convention (C, Xm_Visual_Policy);
    for Xm_Visual_Policy'Size use Interfaces.C.unsigned_char'Size;
 
-   pragma Convention (C, Xm_Which_Button);
+   --pragma Convention (C, Xm_Which_Button);
    for Xm_Which_Button'Size use Interfaces.C.unsigned_char'Size;
    for Xm_Which_Button use (Xm_Button1 => 1,
                             Xm_Button2 => 2,

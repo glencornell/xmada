@@ -38,10 +38,10 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Characters.Wide_Latin_1;
-with Ada.Strings.Wide_Fixed;
-with Ada.Strings.Wide_Unbounded;
-with Ada.Wide_Text_IO;
+
+with Ada.Strings.Fixed;
+with Ada.Strings.Unbounded;
+with Ada.Text_IO;
 
 with GNAT.Table;
 
@@ -56,8 +56,8 @@ with Model.Widget_Instances_Ordering;
 
 package body Generator.Prototype.Component_Class is
 
-   use Ada.Strings.Wide_Unbounded;
-   use Ada.Wide_Text_IO;
+   use Ada.Strings.Unbounded;
+   use Ada.Text_IO;
    use Model;
    use Model.Tree;
    use Model.Tree.Lists;
@@ -95,8 +95,8 @@ package body Generator.Prototype.Component_Class is
       procedure Append_Package_Name (Value : in Name_Id);
 
       procedure Generate_Package (File : File_Type;
-                                  Package_Name : Wide_String;
-                                  Type_Name : Wide_String);
+                                  Package_Name : String;
+                                  Type_Name : String);
 
       procedure Generate_Resource (File     : in File_Type;
                                    Resource : in Node_Id;
@@ -104,14 +104,14 @@ package body Generator.Prototype.Component_Class is
 
       procedure Generate_Widget_Creation (File : File_Type; Widget : Node_Id);
 
-      function Integer_Image (Value : in Integer) return Wide_String;
+      function Integer_Image (Value : in Integer) return String;
 
-      function Resource_Value_String (Node : in Node_Id) return Wide_String;
+      function Resource_Value_String (Node : in Node_Id) return String;
 
       procedure Sort_Package_Names;
 
       function Variable_Widget_Name_Image (Node : in Node_Id)
-        return Wide_String;
+        return String;
 
       ------------------------------------------------------------------------
       --! <Subprogram>
@@ -140,8 +140,8 @@ package body Generator.Prototype.Component_Class is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       procedure Generate_Package (File : File_Type;
-                                  Package_Name : Wide_String;
-                                  Type_Name : Wide_String)
+                                  Package_Name : String;
+                                  Type_Name : String)
       is
          procedure Process_Resources (Resources : in List_Id);
 
@@ -167,21 +167,21 @@ package body Generator.Prototype.Component_Class is
                            --  длинных строк (или многострочного текста).
 
                            declare
-                              Str : constant Wide_String
+                              Str : constant String
                                 := Model.Strings.Image
                                     (Resource_Value (Resource));
 
-                              Token : constant Wide_String (1 .. 1)
-                                := (others => Ada.Characters.Wide_Latin_1.LF);
+                              Token : constant String (1 .. 1)
+                                := (others => Ascii.LF);
 
                               Is_Need_Format : constant Boolean
-                                := Ada.Strings.Wide_Fixed.Index
+                                := Ada.Strings.Fixed.Index
                                     (Str, Token) > 0;
                            begin
                               if Str'Length > 60 or else Is_Need_Format then
                                  Append_Package_Name
                                   (Model.Names.Enter
-                                    ("Ada.Characters.Wide_Latin_1"));
+                                    ("Ada.Characters.Latin_1"));
                               end if;
                            end;
 
@@ -404,8 +404,8 @@ package body Generator.Prototype.Component_Class is
       ------------------------------------------------------------------------
       procedure Generate_Widget_Creation (File : File_Type; Widget : Node_Id)
       is
-         function Format_String_Value (Value : in Wide_String)
-           return Wide_String;
+         function Format_String_Value (Value : in String)
+           return String;
 
          function Generate_Resources (Resources : in List_Id;
                                       Counter   : in Natural)
@@ -418,28 +418,28 @@ package body Generator.Prototype.Component_Class is
          --!    <Unit> Format_String_Value
          --!    <ImplementationNotes>
          ---------------------------------------------------------------------
-         function Format_String_Value (Value : in Wide_String)
-           return Wide_String
+         function Format_String_Value (Value : in String)
+           return String
          is
             Indent : constant Natural := 19;
-            Res    : Unbounded_Wide_String;
+            Res    : Unbounded_String;
             Len    : Natural := Indent;
 
          begin
             for J in Value'First .. Value'Last loop
                Len := Len + 1;
 
-               if Value (J) = Ada.Characters.Wide_Latin_1.LF then
+               if Value (J) = Ascii.LF then
                   --  Встретили символ перевода строки.
 
                   declare
-                     Quote_Str : constant Wide_String (1 .. Indent)
+                     Quote_Str : constant String (1 .. Indent)
                        := (others => ' ');
-                     Str       : constant Wide_String
+                     Str       : constant String
                        := """"
-                          & Ada.Characters.Wide_Latin_1.LF
-                          & Quote_Str & "& Ada.Characters.Wide_Latin_1.LF"
-                          & Ada.Characters.Wide_Latin_1.LF
+                          & Ascii.LF
+                          & Quote_Str & "& Ascii.LF"
+                          & Ascii.LF
                           & Quote_Str & "& """;
 
                   begin
@@ -452,11 +452,11 @@ package body Generator.Prototype.Component_Class is
                   --  Длина строки больше максимума.
 
                   declare
-                     Quote_Str : constant Wide_String (1 .. Indent)
+                     Quote_Str : constant String (1 .. Indent)
                        := (others => ' ');
-                     Str       : constant Wide_String
+                     Str       : constant String
                        := """"
-                          & Ada.Characters.Wide_Latin_1.LF
+                          & Ascii.LF
                           & Quote_Str & "& """;
 
                   begin
@@ -483,7 +483,7 @@ package body Generator.Prototype.Component_Class is
                end if;
             end loop;
 
-            return To_Wide_String (Res);
+            return To_String (Res);
          end Format_String_Value;
 
          ---------------------------------------------------------------------
@@ -662,7 +662,7 @@ package body Generator.Prototype.Component_Class is
                      Put_Line (File, "              "
                        & ":= Xm.Strings.Xm_String_Generate");
                      Put_Line (File, "              "
-                       & "    (Wide_String'("
+                       & "    (String'("
                        & Format_String_Value (Resource_Value_String (Resource))
                        & "));");
                      New_Line (File);
@@ -782,8 +782,8 @@ package body Generator.Prototype.Component_Class is
       --!    <Unit> Integer_Image
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function Integer_Image (Value : in Integer) return Wide_String is
-         Str : constant Wide_String := Integer'Wide_Image (Value);
+      function Integer_Image (Value : in Integer) return String is
+         Str : constant String := Integer'Image (Value);
 
       begin
          return  Str (Str'First + 1 .. Str'Last);
@@ -794,7 +794,7 @@ package body Generator.Prototype.Component_Class is
       --!    <Unit> Resource_Value_String
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
-      function Resource_Value_String (Node : in Node_Id) return Wide_String is
+      function Resource_Value_String (Node : in Node_Id) return String is
       begin
          case Node_Kind (Node) is
             when Node_Enumeration_Resource_Value =>
@@ -814,9 +814,9 @@ package body Generator.Prototype.Component_Class is
                return """" & Model.Strings.Image (Resource_Value (Node)) & """";
 
             when others =>
-               Ada.Wide_Text_IO.Put_Line
+               Ada.Text_IO.Put_Line
                 (Standard_Error, "ERROR: Unhandled resource type : "
-                 & Node_Kinds'Wide_Image (Node_Kind (Node)));
+                 & Node_Kinds'Image (Node_Kind (Node)));
                raise Program_Error;
          end case;
       end Resource_Value_String;
@@ -831,9 +831,9 @@ package body Generator.Prototype.Component_Class is
          for J1 in Package_Names.First .. Package_Names.Last loop
             for J2 in J1 + 1 .. Package_Names.Last loop
                declare
-                  Str1 : constant Wide_String
+                  Str1 : constant String
                     := Model.Names.Image (Package_Names.Table (J1));
-                  Str2 : constant Wide_String
+                  Str2 : constant String
                     := Model.Names.Image (Package_Names.Table (J2));
 
                begin
@@ -857,7 +857,7 @@ package body Generator.Prototype.Component_Class is
       --!    <ImplementationNotes>
       ------------------------------------------------------------------------
       function Variable_Widget_Name_Image (Node : in Node_Id)
-        return Wide_String
+        return String
       is
          pragma Assert (Node_Kind (Node) = Node_Widget_Instance);
 

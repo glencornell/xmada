@@ -588,7 +588,7 @@ package body Designer.Tree_Editor is
                msg := Xm_String_Generate ("Warning!!! Widget: "
                                             & Name_Image (Selected_Item)
                                             & " applied on resurses for: "
-                                            & Wide_String'(Xm_String_Unparse
+                                            & String'(Xm_String_Unparse
                                                             (msg))
                                             & ". Ignore and delete ?");
 

@@ -76,7 +76,7 @@ package Designer.Operations is
    --! проекта из указанного файла.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Open_Project (File_Name : in Wide_String);
+   procedure Open_Project (File_Name : in String);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -84,7 +84,7 @@ package Designer.Operations is
    --!    <Purpose> Производит сохранение проекта в указанном файле.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Save_Project (File_Name : in Wide_String);
+   procedure Save_Project (File_Name : in String);
 
    ---------------------------------------------------------------------------
    --! <Subprogram>

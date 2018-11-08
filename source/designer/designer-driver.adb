@@ -78,7 +78,7 @@ begin
 
       else
          Designer.Operations.Open_Project
-          (Ada.Characters.Handling.To_Wide_String (Argument (1)));
+          (Argument (1));
       end if;
 
    exception

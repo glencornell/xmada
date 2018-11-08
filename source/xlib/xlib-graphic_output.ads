@@ -73,6 +73,10 @@ package Xlib.Graphic_Output is
       GC_Arc_Mode              : Boolean;
    end record;
 
+   function "=" (Left  : GC_Value_Mask_Type;
+                 Right : GC_Value_Mask_Type)
+     return Boolean;
+
    type GX_Function_Type is private;
 
    GX_Clear         : constant GX_Function_Type;
@@ -324,11 +328,9 @@ private
       GC_Dash_List             at 0 range 21 .. 21;
       GC_Arc_Mode              at 0 range 22 .. 22;
    end record;
+   pragma Warnings (Off, "bits of*unused");
    for GC_Value_Mask_Type'Size use Interfaces.C.unsigned_long'Size;
-
-   function "=" (Left  : GC_Value_Mask_Type;
-                 Right : GC_Value_Mask_Type)
-     return Boolean;
+   pragma Warnings (On, "bits of*unused");
 
    function "<" (Left  : GC_Value_Mask_Type;
                  Right : GC_Value_Mask_Type)

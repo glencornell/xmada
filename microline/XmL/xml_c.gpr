@@ -1,0 +1,9 @@
+project Xml_C is
+   for Languages use ("C");
+   for Object_Dir use ".objs";
+   for Exec_Dir use ".";
+   for Source_Dirs use (".");
+   package Compiler is
+      for Default_Switches ("C") use ("-I../../microline");
+   end Compiler;
+end Xml_C;

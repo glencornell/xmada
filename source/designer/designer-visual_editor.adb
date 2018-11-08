@@ -548,9 +548,8 @@ package body Designer.Visual_Editor is
 
       C_Image : constant Xlib.X_String
         := Interfaces.C.To_C
-            (Ada.Characters.Handling.To_String
-              (Internal_Name_Image
-                (Enumeration_Resource_Value_Specification)));
+            (Internal_Name_Image
+                (Enumeration_Resource_Value_Specification));
 
 
    begin
@@ -572,10 +571,9 @@ package body Designer.Visual_Editor is
                        (Drawing_Area,
                         "String",
                         From,
-                        Ada.Characters.Handling.To_String
-                         (Internal_Name_Image
+                        Internal_Name_Image
                            (Parent_Node
-                             (Enumeration_Resource_Value_Specification))),
+                             (Enumeration_Resource_Value_Specification)),
                         To)
                then
                   Main_Window.Put_Line
@@ -585,7 +583,7 @@ package body Designer.Visual_Editor is
                            (Enumeration_Resource_Value_Specification))
                       & "' conversion to small, should be"
                       & " at least"
-                      & Interfaces.C.unsigned'Wide_Image
+                      & Interfaces.C.unsigned'Image
                          (From.Size * System.Storage_Unit)
                       & " bits.");
 
@@ -610,10 +608,9 @@ package body Designer.Visual_Editor is
                        (Drawing_Area,
                         "String",
                         From,
-                        Ada.Characters.Handling.To_String
-                         (Internal_Name_Image
+                        Internal_Name_Image
                            (Parent_Node
-                             (Enumeration_Resource_Value_Specification))),
+                             (Enumeration_Resource_Value_Specification)),
                         To)
                then
                   Main_Window.Put_Line
@@ -623,7 +620,7 @@ package body Designer.Visual_Editor is
                            (Enumeration_Resource_Value_Specification))
                       & "' conversion to small, should be"
                       & " at least"
-                      & Interfaces.C.unsigned'Wide_Image
+                      & Interfaces.C.unsigned'Image
                          (From.Size * System.Storage_Unit)
                       & " bits.");
 
@@ -1327,7 +1324,7 @@ package body Designer.Visual_Editor is
 
                when Node_String_Resource_Type =>
                   declare
-                     Str : constant Wide_String
+                     Str : constant String
                        := From_Locale_String
                            (Annotation_Table.Table (Aux).String_Value);
 
@@ -1371,7 +1368,7 @@ package body Designer.Visual_Editor is
 
                when Node_Xm_String_Resource_Type =>
                   declare
-                     Str : constant Wide_String
+                     Str : constant String
                        := Xm_String_Unparse
                            (Annotation_Table.Table (Aux).Xm_String_Value);
 
@@ -1473,9 +1470,8 @@ package body Designer.Visual_Editor is
                              Value_Kind    => Value_C_Short,
                              Name          =>
                                Interfaces.C.Strings.New_String
-                                (Ada.Characters.Handling.To_String
-                                  (Internal_Resource_Name_Image
-                                    (Resource_Specification (J)))),
+                                (Internal_Resource_Name_Image
+                                    (Resource_Specification (J))),
                              C_Short_Value => 0);
 
                          when Type_C_Int =>
@@ -1484,9 +1480,8 @@ package body Designer.Visual_Editor is
                              Value_Kind  => Value_C_Int,
                              Name        =>
                                Interfaces.C.Strings.New_String
-                                (Ada.Characters.Handling.To_String
-                                  (Internal_Resource_Name_Image
-                                    (Resource_Specification (J)))),
+                                (Internal_Resource_Name_Image
+                                    (Resource_Specification (J))),
                              C_Int_Value => 0);
 
                          when Type_Dimension =>
@@ -1495,9 +1490,8 @@ package body Designer.Visual_Editor is
                              Value_Kind      => Value_Dimension,
                              Name            =>
                                Interfaces.C.Strings.New_String
-                                (Ada.Characters.Handling.To_String
-                                  (Internal_Resource_Name_Image
-                                    (Resource_Specification (J)))),
+                                (Internal_Resource_Name_Image
+                                    (Resource_Specification (J))),
                              Dimension_Value => 0);
 
                          when Type_Position =>
@@ -1506,9 +1500,8 @@ package body Designer.Visual_Editor is
                              Value_Kind     => Value_Position,
                              Name           =>
                                Interfaces.C.Strings.New_String
-                                (Ada.Characters.Handling.To_String
-                                  (Internal_Resource_Name_Image
-                                    (Resource_Specification (J)))),
+                                (Internal_Resource_Name_Image
+                                    (Resource_Specification (J))),
                              Position_Value => 0);
 
                          when Type_Translation_Data =>
@@ -1546,9 +1539,8 @@ package body Designer.Visual_Editor is
                        Value_Kind            => Value_C_Unsigned_Char,
                        Name                  =>
                          Interfaces.C.Strings.New_String
-                          (Ada.Characters.Handling.To_String
-                            (Internal_Resource_Name_Image
-                              (Resource_Specification (J)))),
+                          (Internal_Resource_Name_Image
+                              (Resource_Specification (J))),
                        C_Unsigned_Char_Value => 0);
 
                   when Node_String_Resource_Type =>
@@ -1557,9 +1549,8 @@ package body Designer.Visual_Editor is
                        Value_Kind   => Value_String,
                        Name         =>
                          Interfaces.C.Strings.New_String
-                          (Ada.Characters.Handling.To_String
-                            (Internal_Resource_Name_Image
-                              (Resource_Specification (J)))),
+                          (Internal_Resource_Name_Image
+                              (Resource_Specification (J))),
                        String_Value => Interfaces.C.Strings.Null_Ptr);
 
                   when Node_Widget_Reference_Resource_Type =>
@@ -1568,9 +1559,8 @@ package body Designer.Visual_Editor is
                        Value_Kind             => Value_Widget_Reference,
                        Name                   =>
                          Interfaces.C.Strings.New_String
-                          (Ada.Characters.Handling.To_String
-                            (Internal_Resource_Name_Image
-                              (Resource_Specification (J)))),
+                          (Internal_Resource_Name_Image
+                              (Resource_Specification (J))),
                        Widget_Reference_Value => Null_Widget);
 
                   when Node_Xm_String_Resource_Type =>
@@ -1579,9 +1569,8 @@ package body Designer.Visual_Editor is
                        Value_Kind      => Value_Xm_String,
                        Name            =>
                          Interfaces.C.Strings.New_String
-                          (Ada.Characters.Handling.To_String
-                            (Internal_Resource_Name_Image
-                              (Resource_Specification (J)))),
+                          (Internal_Resource_Name_Image
+                              (Resource_Specification (J))),
                        Xm_String_Value => Null_Xm_String);
 
                   when others =>

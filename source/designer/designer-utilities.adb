@@ -38,39 +38,39 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Interfaces.C.Wide_Strings;
+with Interfaces.C.Strings;
 
 package body Designer.Utilities is
 
    use Interfaces.C;
-   use Interfaces.C.Wide_Strings;
+   use Interfaces.C.Strings;
 
-   package Thin is
+--     package Thin is
 
-      function MB_CUR_MAX return Interfaces.C.size_t;
+--        function MB_CUR_MAX return Interfaces.C.size_t;
 
-      function wcstombs (Destination : in Interfaces.C.char_array;
-                         Source      : in Interfaces.C.wchar_array;
-                         Length      : in Interfaces.C.size_t)
-        return Interfaces.C.size_t;
+--        --  function wcstombs (Destination : in Interfaces.C.char_array;
+--        --                     Source      : in Interfaces.C.wchar_array;
+--        --                     Length      : in Interfaces.C.size_t)
+--        --    return Interfaces.C.size_t;
 
-      function mbstowcs (Destination : in Interfaces.C.Wide_Strings.wchars_ptr;
-                         Source      : in Interfaces.C.Strings.chars_ptr;
-                         Length      : in Interfaces.C.size_t)
-        return Interfaces.C.size_t;
+--        --  function mbstowcs (Destination : in Interfaces.C.Strings.wchars_ptr;
+--        --                     Source      : in Interfaces.C.Strings.chars_ptr;
+--        --                     Length      : in Interfaces.C.size_t)
+--        --    return Interfaces.C.size_t;
 
-      function mbstowcs (Destination : in Interfaces.C.wchar_array;
-                         Source      : in Interfaces.C.Strings.chars_ptr;
-                         Length      : in Interfaces.C.size_t)
-        return Interfaces.C.size_t;
+--        --  function mbstowcs (Destination : in Interfaces.C.wchar_array;
+--        --                     Source      : in Interfaces.C.Strings.chars_ptr;
+--        --                     Length      : in Interfaces.C.size_t)
+--        --    return Interfaces.C.size_t;
 
-   private
+--     private
 
-      pragma Import (C, MB_CUR_MAX, "__XmAdaDesigner_MB_CUR_MAX");
-      pragma Import (C, mbstowcs, "mbstowcs");
-      pragma Import (C, wcstombs, "wcstombs");
+--        pragma Import (C, MB_CUR_MAX, "__XmAdaDesigner_MB_CUR_MAX");
+--  --      pragma Import (C, mbstowcs, "mbstowcs");
+--  --      pragma Import (C, wcstombs, "wcstombs");
 
-   end Thin;
+--     end Thin;
 
    ---------------------------------------------------------------------------
    --! <Subprogram>
@@ -78,26 +78,10 @@ package body Designer.Utilities is
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
    function From_Locale_String (Item : in Interfaces.C.Strings.chars_ptr)
-     return Wide_String
+     return String
    is
-      Length : size_t := Thin.mbstowcs (Null_Ptr, Item, 0);
-
    begin
-      if Length /= Interfaces.C.size_t'Last then
-         declare
-            Buffer : Interfaces.C.wchar_array (0 .. Length);
-            pragma Warnings (Off, Buffer);
-            --  Буффер заполняется неявно при вызове функции mbstowcs.
-
-         begin
-            Length := Thin.mbstowcs (Buffer, Item, Buffer'Length);
-
-            return Interfaces.C.To_Ada (Buffer);
-         end;
-
-      else
-         raise Program_Error;
-      end if;
+      return Interfaces.C.Strings.Value(Item);
    end From_Locale_String;
 
    ---------------------------------------------------------------------------
@@ -105,24 +89,9 @@ package body Designer.Utilities is
    --!    <Unit> To_Locale_String
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function To_Locale_String (Item : in Wide_String) return String is
-      C_Item : constant wchar_array := To_C (Item);
-      Result : char_array (0 .. C_Item'Length * Thin.MB_CUR_MAX);
-      pragma Warnings (Off, Result);
-      --  Result неявно заполняется в wcstombs.
-
-      Length : constant size_t
-        := Thin.wcstombs (Result, C_Item, Result'Length);
-
+   function To_Locale_String (Item : in String) return String is
    begin
-      if Length = size_t'Last then
-         --  XXX Этот факт необходимо проверить. В соответствии со
-         --  спецификацией wcstombs должно быть (size_t)(-1).
-
-         raise Program_Error;
-      end if;
-
-      return To_Ada (Result (Result'First .. Length));
+      return Item;
    end To_Locale_String;
 
 --   ---------------------------------------------------------------------------
@@ -130,7 +99,7 @@ package body Designer.Utilities is
 --   --!    <Unit> To_Locale_String
 --   --!    <ImplementationNotes>
 --   ---------------------------------------------------------------------------
---   function To_Locale_String (Item : in Wide_String)
+--   function To_Locale_String (Item : in String)
 --     return Interfaces.C.char_array
 --   is
 --      C_Item : constant wchar_array := To_C (Item);

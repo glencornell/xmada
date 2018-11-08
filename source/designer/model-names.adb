@@ -46,7 +46,7 @@ package body Model.Names is
    --!    <Unit> Enter
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Enter (Name : in Wide_String) return Name_Id is
+   function Enter (Name : in String) return Name_Id is
       Aux   : constant Name_Id := Find (Name);
       First : Positive;
 
@@ -72,10 +72,10 @@ package body Model.Names is
    --!    <Unit> Find
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Find (Name : in Wide_String) return Name_Id is
+   function Find (Name : in String) return Name_Id is
    begin
       for J in Name_Table.First .. Name_Table.Last loop
-         if Wide_String
+         if String
              (Name_Character_Table.Table
                (Name_Table.Table (J).First .. Name_Table.Table (J).Last))
               = Name
@@ -92,12 +92,12 @@ package body Model.Names is
    --!    <Unit> Image
    --!    <ImplementationNotes>
    ---------------------------------------------------------------------------
-   function Image (Name : in Name_Id) return Wide_String is
+   function Image (Name : in Name_Id) return String is
    begin
       pragma Assert (Name in Name_Table.First .. Name_Table.Last);
 
       return
-        Wide_String
+        String
          (Name_Character_Table.Table
            (Name_Table.Table (Name).First .. Name_Table.Table (Name).Last));
    end Image;

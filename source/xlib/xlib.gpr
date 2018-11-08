@@ -1,0 +1,6 @@
+project xlib is
+  for Object_Dir use ".objs";
+  for Exec_Dir use ".";
+  for Source_Dirs use (".", "extensions", "extensions/input", "extensions/print");
+  for Languages use ("Ada");
+end xlib;

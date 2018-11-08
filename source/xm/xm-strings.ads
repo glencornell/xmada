@@ -52,11 +52,11 @@ package Xm.Strings is
    function Xm_String_Create_Localized (Text : in String) return Xm_String;
 
 
-   function Xm_String_Generate
-    (Text      : in Wide_String;
-     Tag       : in Xm_String_Tag := Null_Xm_String_Tag;
-     Rendition : in Xm_String_Tag := Null_Xm_String_Tag)
-       return Xm_String;
+   --  function Xm_String_Generate
+   --   (Text      : in Wide_String;
+   --    Tag       : in Xm_String_Tag := Null_Xm_String_Tag;
+   --    Rendition : in Xm_String_Tag := Null_Xm_String_Tag)
+   --      return Xm_String;
 
 
    --  Raise Invalid_Text_Type if Text_Type not Xm_Charset_Text or
@@ -145,12 +145,12 @@ package Xm.Strings is
        return Xm_String;
 
 
-   function Xm_String_Parse_Text
-    (Text        : in Wide_String;
-     Tag         : in Xm_String_Tag  := Null_Xm_String_Tag;
-     Parse_Table : in Xm_Parse_Table := Null_Xm_Parse_Table;
-     Call_Data   : in Xt.Xt_Pointer  := Xt.Null_Xt_Pointer)
-       return Xm_String;
+   --  function Xm_String_Parse_Text
+   --   (Text        : in Wide_String;
+   --    Tag         : in Xm_String_Tag  := Null_Xm_String_Tag;
+   --    Parse_Table : in Xm_Parse_Table := Null_Xm_Parse_Table;
+   --    Call_Data   : in Xt.Xt_Pointer  := Xt.Null_Xt_Pointer)
+   --      return Xm_String;
 
 
    function Xm_String_Unparse
@@ -163,13 +163,13 @@ package Xm.Strings is
        return String;
 
 
-   function Xm_String_Unparse
-    (The_Xm_String : in Xm_String;
-     Tag           : in Xm_String_Tag  := Null_Xm_String_Tag;
-     Tag_Type      : in Xm_Text_Type   := Xm_No_Text;
-     Parse_Table   : in Xm_Parse_Table := Null_Xm_Parse_Table;
-     Parse_Model   : in Xm_Parse_Model := Xm_Output_All)
-       return Wide_String;
+   --  function Xm_String_Unparse
+   --   (The_Xm_String : in Xm_String;
+   --    Tag           : in Xm_String_Tag  := Null_Xm_String_Tag;
+   --    Tag_Type      : in Xm_Text_Type   := Xm_No_Text;
+   --    Parse_Table   : in Xm_Parse_Table := Null_Xm_Parse_Table;
+   --    Parse_Model   : in Xm_Parse_Model := Xm_Output_All)
+   --      return Wide_String;
 
 
    ---------------------------------------------------------------------------

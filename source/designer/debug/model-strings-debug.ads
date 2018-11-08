@@ -40,7 +40,7 @@
 --  $Revision$ $Author$
 --  $Date$
 ------------------------------------------------------------------------------
-with Ada.Wide_Text_IO;
+with Ada.Text_IO;
 
 package Model.Strings.Debug is
 
@@ -50,8 +50,8 @@ package Model.Strings.Debug is
    --!    <Purpose> Выводит статистические данные по таблицам имён.
    --!    <Exceptions>
    ---------------------------------------------------------------------------
-   procedure Print_Statistics (File         : in Ada.Wide_Text_IO.File_Type;
-                               Title_Offset : in Ada.Wide_Text_IO.Count;
-                               Data_Offset  : in Ada.Wide_Text_IO.Count);
+   procedure Print_Statistics (File         : in Ada.Text_IO.File_Type;
+                               Title_Offset : in Ada.Text_IO.Count;
+                               Data_Offset  : in Ada.Text_IO.Count);
 
 end Model.Strings.Debug;
